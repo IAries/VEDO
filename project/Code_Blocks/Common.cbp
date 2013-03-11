@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Common" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../lib/Code_Blocks/VEDO-Common-Debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/Code_Blocks/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../../lib/Code_Blocks/VEDO-Common" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/Code_Blocks/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add directory="../../src/" />
+		</Compiler>
+		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiCylinder.cpp" />
+		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiCylinderAT.cpp" />
+		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/CDSphere2Sphere.cpp" />
+		<Unit filename="../../src/Common/Implementation/CDSphere2SphereAT.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOConstrainedQuasiCylinder.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOConstrainedQuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOFixedQuasiCylinder.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOFixedQuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOFixedSphere.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOQuasiCylinder.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOQuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOSphere.cpp" />
+		<Unit filename="../../src/Common/Implementation/GSComplexShape.cpp" />
+		<Unit filename="../../src/Common/Implementation/GSCylinder.cpp" />
+		<Unit filename="../../src/Common/Implementation/GSEllipsoid.cpp" />
+		<Unit filename="../../src/Common/Implementation/GSRectangle.cpp" />
+		<Unit filename="../../src/Common/Implementation/GSSphere.cpp" />
+		<Unit filename="../../src/Common/Implementation/ISwBSDBF.cpp" />
+		<Unit filename="../../src/Common/Implementation/ISwBtSDBF.cpp" />
+		<Unit filename="../../src/Common/Implementation/ISwH.cpp" />
+		<Unit filename="../../src/Common/Implementation/ISwHWS.cpp" />
+		<Unit filename="../../src/Common/Implementation/ISwTest1.cpp" />
+		<Unit filename="../../src/Common/Implementation/ISwTest2.cpp" />
+		<Unit filename="../../src/Common/Implementation/LeapConsultant.cpp" />
+		<Unit filename="../../src/Common/Implementation/LeapConsultant2.cpp" />
+		<Unit filename="../../src/Common/Implementation/NBSConsultant.cpp" />
+		<Unit filename="../../src/Common/Implementation/NearConsultant.cpp" />
+		<Unit filename="../../src/Common/Implementation/SafeConsultant.cpp" />
+		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiCylinder.h" />
+		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiCylinderAT.h" />
+		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/CDSphere2Sphere.h" />
+		<Unit filename="../../src/Common/Interfaces/CDSphere2SphereAT.h" />
+		<Unit filename="../../src/Common/Interfaces/DOConstrainedQuasiCylinder.h" />
+		<Unit filename="../../src/Common/Interfaces/DOConstrainedQuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/DOFixedQuasiCylinder.h" />
+		<Unit filename="../../src/Common/Interfaces/DOFixedQuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/DOFixedSphere.h" />
+		<Unit filename="../../src/Common/Interfaces/DOQuasiCylinder.h" />
+		<Unit filename="../../src/Common/Interfaces/DOQuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/DOSphere.h" />
+		<Unit filename="../../src/Common/Interfaces/GSComplexShape.h" />
+		<Unit filename="../../src/Common/Interfaces/GSCylinder.h" />
+		<Unit filename="../../src/Common/Interfaces/GSEllipsoid.h" />
+		<Unit filename="../../src/Common/Interfaces/GSRectangle.h" />
+		<Unit filename="../../src/Common/Interfaces/GSSphere.h" />
+		<Unit filename="../../src/Common/Interfaces/ISwBSDBF.h" />
+		<Unit filename="../../src/Common/Interfaces/ISwBtSDBF.h" />
+		<Unit filename="../../src/Common/Interfaces/ISwH.h" />
+		<Unit filename="../../src/Common/Interfaces/ISwHWS.h" />
+		<Unit filename="../../src/Common/Interfaces/ISwTest1.h" />
+		<Unit filename="../../src/Common/Interfaces/ISwTest2.h" />
+		<Unit filename="../../src/Common/Interfaces/LeapConsultant.h" />
+		<Unit filename="../../src/Common/Interfaces/LeapConsultant2.h" />
+		<Unit filename="../../src/Common/Interfaces/NBSConsultant.h" />
+		<Unit filename="../../src/Common/Interfaces/NearConsultant.h" />
+		<Unit filename="../../src/Common/Interfaces/SafeConsultant.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

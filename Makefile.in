@@ -1,0 +1,141 @@
+PREFIX           = /d/Code/VEDO/VEDO/
+
+USR_INC          = /usr/include/
+USR_CXX_FLAG     = -I${USR_INC}
+USR_LIB          = /usr/lib/
+USR_LNK_FLAG     = -L${USR_LIB}
+
+# Xerces-C (Apache XML Parser)
+XERCESC_ROOT     = /c/usr/xercesc/GCC/
+XERCESC_INC      = ${XERCESC_ROOT}include/
+XERCESC_CXX_FLAG = -I${XERCESC_INC}
+XERCESC_LIB      = ${XERCESC_ROOT}lib/
+XERCESC_LNK_FLAG = -L${XERCESC_LIB} -lxerces-c
+
+# ParMetis (Graph Theory Library)
+#PARMETIS_ROOT    = ${HOME}/usr/local/ParMetis/
+#PARMETIS_INC     = -I${PARMETIS_ROOT} \
+#                   -I${PARMETIS_ROOT}ParMETISLib \
+#                   -I${PARMETIS_ROOT}METISLib \
+#                   -I${PARMETIS_ROOT}Programs
+#PARMETIS_LIB     = -L${PARMETIS_ROOT} \
+#                   -L${PARMETIS_ROOT}ParMETISLib \
+#                   -L${PARMETIS_ROOT}METISLib \
+#                   -L${PARMETIS_ROOT}Programs
+
+VEDO_BIN         = ${PREFIX}bin/GCC/
+VEDO_OBJ         = ${PREFIX}obj/GCC/
+VEDO_SRC         = ${PREFIX}src/
+VEDO_CXX_FLAG    = -I${VEDO_SRC}
+VEDO_LIB         = ${PREFIX}lib/GCC/
+VEDO_LNK_FLAG    = -L${VEDO_LIB} -lVEDO-Common -lVEDO-Framework -lVEDO-NJR
+VEDO_LNK_FLAGx   = -L${VEDO_LIB} -lVEDO-Common -lVEDO-FrameworkX -lVEDO-NJR
+IMP              = Implementation/
+INC              = Interfaces/
+
+SHARE_CXX_FLAG   = ${VEDO_CXX_FLAG} ${USR_CXX_FLAG}
+SHARE_CXX_FLAGx  = ${VEDO_CXX_FLAG} ${XERCESC_CXX_FLAG} ${USR_CXX_FLAG}
+
+SHARE_LNK_FLAG   = ${VEDO_LNK_FLAG} ${USR_LNK_FLAG}
+SHARE_LNK_FLAGx  = ${VEDO_LNK_FLAGx} ${XERCESC_LNK_FLAG} ${USR_LNK_FLAG}
+
+MAKE             = /bin/make
+
+COMPILER_MODE := GNU
+#COMPILER_MODE := INTEL
+#COMPILER_MODE := PGI
+
+ifeq ($(COMPILER_MODE), GNU)
+   MPICH_ROOT     = /c/usr/mpich2/32/
+   MPICH_INC      = ${MPICH_ROOT}include/
+   MPICH_CXX_FLAG = -I${MPICH_INC}
+   MPICH_LIB      = ${MPICH_ROOT}lib/
+   MPICH_LNK_FLAG = -L${MPICH_LIB} -lmpi
+   COMPILER_ROOT = /usr/
+   COMPILER_INC  = ${COMPILER_ROOT}include/
+   COMPILER_LIB  = ${COMPILER_ROOT}lib/
+   CXX           = /mingw/bin/g++
+   CXX_FLAG      = ${SHARE_CXX_FLAG} -I${COMPILER_INC}
+   CXX_FLAGx     = ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
+   mCXX          = ${CXX}
+   #mCXX          = ${MPICH_ROOT}bin/mpicxx
+   mCXX_FLAG     = ${MPICH_CXX_FLAG} ${CXX_FLAG}
+   #mCXX_FLAGg    = ${PARMETIS_INC} ${mCXX_FLAG}
+   LNK           = ${CXX}
+   LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB}
+   LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB}
+   mLNK          = ${mCXX}
+   mLNK_FLAG     = ${MPICH_LNK_FLAG} ${SHARE_LNK_FLAG}
+   #mLNK_FLAGg    = ${PARMETIS_LIB} -lparmetis -lmetis ${MPICH_LIB} ${SHARE_LNK_FLAG}
+   #mLNK_FLAGpo   = ${MPICH_LIB} ${SHARE_LNK_FLAGpo}
+else
+ifeq ($(COMPILER_MODE), INTEL)
+   #MPICH_ROOT    = /opt/mpich2-intel/
+   #MPICH_ROOT    = /opt/openmpi/openmpi-1.4.2.intel/
+   #MPICH_ROOT    = /opt/openmpi/openmpi-1.4.1.node13.inst/
+   MPICH_ROOT    = /opt/openmpi/1.4.3/intel/
+   MPICH_INC     = -I${MPICH_ROOT}include/
+   #MPICH_LIB     = -L${MPICH_ROOT}lib/ -lmpich -lstd
+   MPICH_LIB     = -L${MPICH_ROOT}lib/ -lmpi_cxx -lmpi -lstd -lm
+   COMPILER_ROOT = /opt/intel/Compiler/11.0/074/
+   COMPILER_INC  = -I${COMPILER_ROOT}include/
+   COMPILER_LIB  = -L${COMPILER_ROOT}lib/intel64/
+   CXX           = ${COMPILER_ROOT}bin/intel64/icpc
+   #CXX           = ${COMPILER_ROOT}bin/ia32/icpc
+   CXX_FLAG      = ${COMPILER_INC} ${SHARE_CXX_FLAG}
+   CXX_FLAGo     = ${COMPILER_INC} ${SHARE_CXX_FLAGo}
+   CXX_FLAGx     = ${COMPILER_INC} ${SHARE_CXX_FLAGx}
+   CXX_FLAGg     = ${PARMETIS_INC} ${SHARE_CXX_FLAG}
+   mCXX          = ${MPICH_ROOT}bin/mpicxx
+   mCXX_FLAG     = ${MPICH_INC} ${CXX_FLAG}
+   mCXX_FLAGg    = ${PARMETIS_INC} ${mCXX_FLAG}
+   mCXX_FLAGpo   = ${SHARE_CXX_FLAGpo} ${mCXX_FLAG}
+   LNK           = ${CXX}
+   #LNK_FLAG      = ${SHARE_LNK_FLAG} ${COMPILER_LIB} -lstd -limf
+   #LNK_FLAGo     = ${SHARE_LNK_FLAGo} ${COMPILER_LIB} -lstd -limf
+   #LNK_FLAGx     = ${SHARE_LNK_FLAGx} ${COMPILER_LIB} -lstd -limf
+   LNK_FLAG      = ${SHARE_LNK_FLAG} ${COMPILER_LIB} -lstd
+   LNK_FLAGo     = ${SHARE_LNK_FLAGo} ${COMPILER_LIB} -lstd
+   LNK_FLAGx     = ${SHARE_LNK_FLAGx} ${COMPILER_LIB} -lstd
+   mLNK          = ${mCXX}
+   mLNK_FLAG     = ${MPICH_LIB} ${SHARE_LNK_FLAG}
+   mLNK_FLAGg    = ${PARMETIS_LIB} -lparmetis -lmetis ${MPICH_LIB} ${SHARE_LNK_FLAG}
+   mLNK_FLAGpo   = ${MPICH_LIB} ${SHARE_LNK_FLAGpo}
+else
+ifeq ($(COMPILER_MODE), PGI)
+   #MPICH_ROOT    = /opt/mpich2-pgi/
+   #MPICH_ROOT    = /opt/openmpi/openmpi-1.4.1.node13.inst/
+   MPICH_ROOT    = /opt/openmpi/1.4.3/intel/
+   MPICH_INC     = -I${MPICH_ROOT}include/
+   #MPICH_LIB     = -L${MPICH_ROOT}lib/ -lmpich -lstd
+   MPICH_LIB     = -L${MPICH_ROOT}lib/ -lmpi_cxx -lmpi -lstd -lm
+   COMPILER_ROOT = /opt/pgi/linux86-64/7.1-6/
+   #COMPILER_ROOT = /opt/pgi/linux86/7.1-6/
+   COMPILER_INC  = -I${COMPILER_ROOT}include/
+   COMPILER_LIB  = -L${COMPILER_ROOT}lib/
+   CXX           = ${COMPILER_ROOT}bin/pgCC
+   CXX_FLAG      = ${COMPILER_INC} ${SHARE_CXX_FLAG}
+   CXX_FLAGo     = ${COMPILER_INC} ${SHARE_CXX_FLAGo}
+   CXX_FLAGx     = ${COMPILER_INC} ${SHARE_CXX_FLAGx}
+   CXX_FLAGg     = ${PARMETIS_INC} ${SHARE_CXX_FLAG}
+   mCXX          = ${MPICH_ROOT}bin/mpicxx
+   mCXX_FLAG     = ${MPICH_INC} ${CXX_FLAG}
+   mCXX_FLAGg    = ${PARMETIS_INC} ${mCXX_FLAG}
+   mCXX_FLAGpo   = ${SHARE_CXX_FLAGpo} ${mCXX_FLAG}
+   LNK           = ${CXX}
+   LNK_FLAG      = ${SHARE_LNK_FLAG} ${COMPILER_LIB} -lstd
+   LNK_FLAGo     = ${SHARE_LNK_FLAGo} ${COMPILER_LIB} -lstd
+   LNK_FLAGx     = ${SHARE_LNK_FLAGx} ${COMPILER_LIB} -lstd
+   mLNK          = ${mCXX}
+   mLNK_FLAG     = ${MPICH_LIB} ${SHARE_LNK_FLAG}
+   mLNK_FLAGg    = ${PARMETIS_LIB} -lparmetis -lmetis ${MPICH_LIB} ${SHARE_LNK_FLAG}
+   mLNK_FLAGpo   = ${MPICH_LIB} ${SHARE_LNK_FLAGpo}
+else
+
+endif
+endif
+endif
+
+AR        = /mingw/bin/ar
+AR_FLAG   = -r
+AR_FLAGx  = -r

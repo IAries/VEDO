@@ -1,0 +1,14 @@
+# ============================== #
+# Parameters of 32-bits Compiler #
+# ============================== #
+
+CXX_FLAG  = ${PARMETIS_INC} ${SHARE_CXX_FLAG}
+
+mCXX_FLAG = ${PARMETIS_INC} -I${MPI_INC} ${SHARE_CXX_FLAG}
+
+AR_FLAG   = -r
+
+LNK_FLAG  = -lm ${SHARE_LNK_FLAG}
+
+mLNK_FLAG = ${PARMETIS_LIB} -L${MPI_LIB} ${SHARE_LNK_FLAG} -lmpi -lmpi_r -lparmetis -lmetis
+#mLNK_FLAG = ${PARMETIS_LIB} -L${MPI_LIB} ${SHARE_LNK_FLAG} -lmpich -lmpichcxx -lparmetis -lmetis

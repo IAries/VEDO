@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8EE79D93-E8C1-465D-909A-F2D47DAD53FB}</ProjectGuid>
+    <RootNamespace>NJR</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\VC11\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\Debug\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\VC11\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\Release\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libVEDO-$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\NJR\Interfaces\acadxf.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\dxfsolid.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\GeoUtility.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\halfspace.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\LinearProgramming.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\matrix.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\ParticularVector.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\polygon.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\polyhedra.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\random.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\RickyRandom.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\Utility.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\vector2d.h" />
+    <ClInclude Include="..\..\src\NJR\Interfaces\vector3d.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\NJR\Implementation\acadxf.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\dxfsolid.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\GeoUtility.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\halfspace.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\LinearProgramming.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\matrix.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\polygon.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\polyhedra.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\random.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\RickyRandom.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\Utility.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\vector2d.cpp" />
+    <ClCompile Include="..\..\src\NJR\Implementation\vector3d.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

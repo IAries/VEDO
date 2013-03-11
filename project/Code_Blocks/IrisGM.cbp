@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="IrisGM" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../bin/Code_Blocks/IrisGM-Debug" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/Code_Blocks/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="../../lib/Code_Blocks/libVEDO-Common-Debug.a" />
+					<Add library="../../lib/Code_Blocks/libVEDO-Framework-Debug.a" />
+					<Add library="../../lib/Code_Blocks/libVEDO-NJR-Debug.a" />
+					<Add library="C:/usr/mpich2/32/lib/mpi.lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="../../bin/Code_Blocks/IrisGM" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/Code_Blocks/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="../../lib/Code_Blocks/libVEDO-Common.a" />
+					<Add library="../../lib/Code_Blocks/libVEDO-Framework.a" />
+					<Add library="../../lib/Code_Blocks/libVEDO-NJR.a" />
+					<Add library="C:/usr/mpich2/32/lib/mpi.lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="../../src/" />
+			<Add directory="C:/usr/mpich2/32/include/" />
+		</Compiler>
+		<Linker>
+			<Add directory="../../lib/Code_Blocks/" />
+			<Add directory="C:/usr/mpich2/32/lib/" />
+		</Linker>
+		<Unit filename="../../src/Iris/Implementation/Iris_geometric.cpp" />
+		<Unit filename="../../src/Iris/Implementation/NBSParallelConsultant.cpp" />
+		<Unit filename="../../src/Iris/Interfaces/NBSParallelConsultant.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

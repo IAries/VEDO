@@ -1,0 +1,321 @@
+# depslib dependency file v1.0
+1361243338 source:t:\codecenter\code\vedo\vedo\src\iris\implementation\iris_geometric.cpp
+	<mpi.h>
+	<NJR/Interfaces/Utility.h>
+	<FrameWork/Interfaces/Assembler.h>
+	<FrameWork/Interfaces/Consultant.h>
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/GeometricShape.h>
+	<FrameWork/Interfaces/SimMediator.h>
+	<Common/Interfaces/CDSphere2QuasiCylinder.h>
+	<Common/Interfaces/CDSphere2QuasiCylinderAT.h>
+	<Common/Interfaces/CDSphere2QuasiPlate.h>
+	<Common/Interfaces/CDSphere2Sphere.h>
+	<Common/Interfaces/CDSphere2SphereAT.h>
+	<Common/Interfaces/DOConstrainedQuasiCylinder.h>
+	<Common/Interfaces/DOConstrainedQuasiPlate.h>
+	<Common/Interfaces/DOFixedQuasiCylinder.h>
+	<Common/Interfaces/DOFixedQuasiPlate.h>
+	<Common/Interfaces/DOFixedSphere.h>
+	<Common/Interfaces/DOQuasiCylinder.h>
+	<Common/Interfaces/DOQuasiPlate.h>
+	<Common/Interfaces/DOSphere.h>
+	<Common/Interfaces/ISwBSDBF.h>
+	<Common/Interfaces/ISwBtSDBF.h>
+	<Common/Interfaces/ISwH.h>
+	<Common/Interfaces/ISwHWS.h>
+	<Common/Interfaces/ISwTest1.h>
+	<Common/Interfaces/ISwTest2.h>
+	<Iris/Interfaces/NBSParallelConsultant.h>
+	<cstdio>
+	<cstring>
+	<ctime>
+	<fstream>
+	<iostream>
+
+1314860358 c:\usr\mpich2\32\include\\mpi.h
+	"mpio.h"
+	"mpicxx.h"
+
+1314860358 c:\usr\mpich2\32\include\\mpio.h
+	"mpi.h"
+
+1314860360 c:\usr\mpich2\32\include\\mpicxx.h
+	<stdio.h>
+
+1252117352 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\utility.h
+	<algorithm>
+	<list>
+	<fstream>
+	<string>
+	<vector>
+
+1250582032 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\assembler.h
+	<FrameWork/Interfaces/CDCFactoryDecorator.h>
+	<FrameWork/Interfaces/DOCFactoryDecorator.h>
+	<FrameWork/Interfaces/ISCFactoryDecorator.h>
+	<FrameWork/Interfaces/Interaction.h>
+	<list>
+
+1250582008 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\cdcfactorydecorator.h
+	<FrameWork/Interfaces/CDFactory.h>
+	<list>
+
+1250582002 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\cdfactory.h
+	<FrameWork/Interfaces/ContactDetector.h>
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<string>
+
+1272905967 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\contactdetector.h
+	<FrameWork/Interfaces/Boundary.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<FrameWork/Interfaces/IactModel.h>
+
+1361241903 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\boundary.h
+	<NJR/Interfaces/vector3d.h>
+	<string>
+
+1322473871 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\vector3d.h
+	<NJR/Interfaces/ParticularVector.h>
+	<string>
+	<iostream>
+
+1286124678 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\particularvector.h
+
+1297697332 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\discreteobject.h
+	<NJR/Interfaces/vector3d.h>
+	<FrameWork/Interfaces/Boundary.h>
+	<FrameWork/Interfaces/DOWorld.h>
+	<string>
+
+1361242527 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\doworld.h
+	<FrameWork/Interfaces/DOModel.h>
+	<FrameWork/Interfaces/DOStatus.h>
+	<FrameWork/Interfaces/IactModel.h>
+	<FrameWork/Interfaces/SystemParameter.h>
+	<algorithm>
+	<list>
+	<string>
+	<vector>
+
+1348131938 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\domodel.h
+	<NJR/Interfaces/acadxf.h>
+	<NJR/Interfaces/polyhedra.h>
+	<FrameWork/Interfaces/Boundary.h>
+	<fstream>
+	<iostream>
+	<string>
+	<vector>
+
+1297695245 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\acadxf.h
+	<NJR/Interfaces/vector3d.h>
+	<fstream>
+	<iostream>
+	<list>
+
+1297695208 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\polyhedra.h
+	<NJR/Interfaces/halfspace.h>
+	<NJR/Interfaces/polygon.h>
+	<NJR/Interfaces/vector3d.h>
+	<vector>
+
+1297695230 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\halfspace.h
+	<NJR/Interfaces/vector3d.h>
+	<fstream>
+
+1297695214 t:\codecenter\code\vedo\vedo\src\\njr\interfaces\polygon.h
+	<NJR/Interfaces/vector3d.h>
+	<vector>
+
+1297697319 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\dostatus.h
+	<NJR/Interfaces/vector3d.h>
+	<fstream>
+	<string>
+
+1297697308 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\iactmodel.h
+	<NJR/Interfaces/vector3d.h>
+	<fstream>
+	<string>
+	<vector>
+
+1297697289 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\systemparameter.h
+	<NJR/Interfaces/vector3d.h>
+	<FrameWork/Interfaces/Boundary.h>
+	<string>
+	<fstream>
+
+1252117304 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\docfactorydecorator.h
+	<FrameWork/Interfaces/DOFactory.h>
+
+1250582028 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\dofactory.h
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<list>
+	<string>
+
+1252117304 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\iscfactorydecorator.h
+	<FrameWork/Interfaces/ISFactory.h>
+
+1269616591 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\isfactory.h
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<FrameWork/Interfaces/ImpactSolver.h>
+	<list>
+	<string>
+
+1336112923 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\impactsolver.h
+	<FrameWork/Interfaces/ContactDetector.h>
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<FrameWork/Interfaces/ISwModels.h>
+	<FrameWork/Interfaces/ImpactStatus.h>
+
+1349407742 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\iswmodels.h
+	<NJR/Interfaces/vector3d.h>
+	<algorithm>
+
+1336635308 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\impactstatus.h
+	<FrameWork/Interfaces/Constants.h>
+	<NJR/Interfaces/vector3d.h>
+
+1357885524 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\constants.h
+
+1336219031 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\interaction.h
+	<FrameWork/Interfaces/Boundary.h>
+	<FrameWork/Interfaces/ContactDetector.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1336220427 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\consultant.h
+	<FrameWork/Interfaces/Constants.h>
+	<FrameWork/Interfaces/DOContainer.h>
+	<FrameWork/Interfaces/DOMap.h>
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/IactContainer.h>
+	<FrameWork/Interfaces/IactRecordTab.h>
+	<ctime>
+	<vector>
+
+1299857459 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\docontainer.h
+	<FrameWork/Interfaces/Boundary.h>
+	<FrameWork/Interfaces/DiscreteObject.h>
+	<vector>
+
+1297700666 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\domap.h
+	<FrameWork/Interfaces/DOWorld.h>
+
+1336112762 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\iactcontainer.h
+	<FrameWork/Interfaces/Constants.h>
+	<FrameWork/Interfaces/Interaction.h>
+	<vector>
+
+1336380062 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\iactrecordtab.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+	<FrameWork/Interfaces/ImpactStatus.h>
+	<map>
+	<vector>
+
+1297697313 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\geometricshape.h
+	<NJR/Interfaces/vector3d.h>
+	<FrameWork/Interfaces/DOStatus.h>
+	<list>
+	<string>
+
+1336397866 t:\codecenter\code\vedo\vedo\src\\framework\interfaces\simmediator.h
+	<FrameWork/Interfaces/Assembler.h>
+	<FrameWork/Interfaces/Consultant.h>
+	<FrameWork/Interfaces/DOContainer.h>
+	<FrameWork/Interfaces/DOWorld.h>
+	<FrameWork/Interfaces/IactContainer.h>
+	<ctime>
+	<string>
+	<fstream>
+
+1252117282 t:\codecenter\code\vedo\vedo\src\\common\interfaces\cdsphere2quasicylinder.h
+	<FrameWork/Interfaces/ContactDetector.h>
+
+1252117282 t:\codecenter\code\vedo\vedo\src\\common\interfaces\cdsphere2quasicylinderat.h
+	<Common/Interfaces/CDSphere2QuasiCylinder.h>
+
+1252117282 t:\codecenter\code\vedo\vedo\src\\common\interfaces\cdsphere2quasiplate.h
+	<FrameWork/Interfaces/ContactDetector.h>
+
+1252117282 t:\codecenter\code\vedo\vedo\src\\common\interfaces\cdsphere2sphere.h
+	<FrameWork/Interfaces/ContactDetector.h>
+
+1252117282 t:\codecenter\code\vedo\vedo\src\\common\interfaces\cdsphere2sphereat.h
+	<Common/Interfaces/CDSphere2Sphere.h>
+
+1297175413 t:\codecenter\code\vedo\vedo\src\\common\interfaces\doconstrainedquasicylinder.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175459 t:\codecenter\code\vedo\vedo\src\\common\interfaces\doconstrainedquasiplate.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175452 t:\codecenter\code\vedo\vedo\src\\common\interfaces\dofixedquasicylinder.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175448 t:\codecenter\code\vedo\vedo\src\\common\interfaces\dofixedquasiplate.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175444 t:\codecenter\code\vedo\vedo\src\\common\interfaces\dofixedsphere.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175441 t:\codecenter\code\vedo\vedo\src\\common\interfaces\doquasicylinder.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175437 t:\codecenter\code\vedo\vedo\src\\common\interfaces\doquasiplate.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1297175433 t:\codecenter\code\vedo\vedo\src\\common\interfaces\dosphere.h
+	<FrameWork/Interfaces/DiscreteObject.h>
+
+1304568232 t:\codecenter\code\vedo\vedo\src\\common\interfaces\iswbsdbf.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1304569751 t:\codecenter\code\vedo\vedo\src\\common\interfaces\iswbtsdbf.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1288328946 t:\codecenter\code\vedo\vedo\src\\common\interfaces\iswh.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1288328940 t:\codecenter\code\vedo\vedo\src\\common\interfaces\iswhws.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1336699747 t:\codecenter\code\vedo\vedo\src\\common\interfaces\iswtest1.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1337147991 t:\codecenter\code\vedo\vedo\src\\common\interfaces\iswtest2.h
+	<FrameWork/Interfaces/ImpactSolver.h>
+
+1362113807 t:\codecenter\code\vedo\vedo\src\\iris\interfaces\nbsparallelconsultant.h
+	<mpi.h>
+	<FrameWork/Interfaces/Consultant.h>
+	<Common/Interfaces/NBSConsultant.h>
+	<algorithm>
+	<cmath>
+	<ctime>
+	<iterator>
+	<limits>
+	<map>
+	<utility>
+	<vector>
+
+1348163998 t:\codecenter\code\vedo\vedo\src\\common\interfaces\nbsconsultant.h
+	<FrameWork/Interfaces/Consultant.h>
+	<utility>
+
+1361353278 source:t:\codecenter\code\vedo\vedo\src\iris\implementation\nbsparallelconsultant.cpp
+	<mpi.h>
+	<Iris/Interfaces/NBSParallelConsultant.h>
+	<Common/Interfaces/NBSConsultant.h>
+	<FrameWork/Interfaces/Constants.h>
+	<NJR/Interfaces/Utility.h>
+	<algorithm>
+	<cmath>
+	<limits>
+	<iostream>
+	<iterator>
+	<map>
+

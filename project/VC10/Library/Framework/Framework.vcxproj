@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A8B27909-5F6A-4CC7-A156-9FDB5A818DB0}</ProjectGuid>
+    <RootNamespace>framework</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\lib\VC10\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\obj\VC10\Debug\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\lib\VC10\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\obj\VC10\Release\$(ProjectName)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libVEDO-$(ProjectName)-Debug</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libVEDO-$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\src\;C:\usr\xercesc\include\win32\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\src\;C:\usr\xercesc\include\win32\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)libVEDO-$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\Assembler.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\Boundary.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\Boundary2d.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\CDCFactoryDecorator.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\CDFactory.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\Constants.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\Consultant.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\ContactDetector.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DiscreteObject.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOCFactoryDecorator.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOContainer.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOFactory.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOMap.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOModel.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOStatus.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOWorld.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\DOWorld_WriteVTK.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\GeometricShape.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\IactContainer.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\IactModel.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\IactRecordTab.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\ImpactSolver.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\ImpactStatus.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\Interaction.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\ISCFactoryDecorator.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\ISFactory.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\ISwModels.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\SimMediator.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\SystemParameter.h" />
+    <ClInclude Include="..\..\..\..\src\FrameWork\Interfaces\SystemParameter2d.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\Assembler.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\Boundary.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\Boundary2d.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\CDCFactoryDecorator.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\Consultant.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\ContactDetector.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DiscreteObject.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOCFactoryDecorator.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOContainer.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOMap.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOModel.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOStatus.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOWorld.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOWorld_DrawDxf.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOWorld_ReadXML.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOWorld_RWIDO.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOWorld_WriteVPF.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\DOWorld_WriteXML.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\GeometricShape.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\IactContainer.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\IactModel.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\IactRecordTab.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\ImpactSolver.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\ImpactStatus.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\Interaction.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\ISCFactoryDecorator.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\ISwModels.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\SimMediator.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\SystemParameter.cpp" />
+    <ClCompile Include="..\..\..\..\src\FrameWork\Implementation\SystemParameter2d.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

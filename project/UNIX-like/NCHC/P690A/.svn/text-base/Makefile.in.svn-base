@@ -1,0 +1,5 @@
+PREFIX = ${HOME}/usr/local/KnightAnne/
+
+include ${PREFIX}Makefile.prefix
+include ${PREFIX}Makefile.in.common
+include ${PREFIX}Makefile.in.64

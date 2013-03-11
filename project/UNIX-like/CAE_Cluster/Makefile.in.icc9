@@ -1,0 +1,22 @@
+# ===================================== #
+# Parameters of Intel ICC Compiler 9.x  #
+# ===================================== #
+
+PARMETIS_ROOT    = /usr/local/ParMetis/icc
+PARMETIS_INCLUDE = -I${PARMETIS_ROOT} -I${PARMETIS_ROOT}/ParMETISLib -I${PARMETIS_ROOT}/METISLib -I${PARMETIS_ROOT}/Programs
+PARMETIS_LIB     = -L${PARMETIS_ROOT} -L${PARMETIS_ROOT}/ParMETISLib -L${PARMETIS_ROOT}/METISLib -L${PARMETIS_ROOT}/Programs
+
+INTEL_ROOT       = /opt/intel/cc/9.0/
+
+CXX              = ${INTEL_ROOT}bin/icpc
+mCXX             = ${MPICH_ROOT}bin/mpicxx_intel
+CXX_FLAG         = -I${INTEL_ROOT}include ${PARMETIS_INCLUDE} ${SHARE_CXX_FLAG}
+
+AR               = ${INTEL_ROOT}bin/xiar
+AR_FLAG          = -cru
+
+LNK              = ${INTEL_ROOT}bin/icpc
+LNK_FLAG         = -L${INTEL_ROOT}lib ${SHARE_LNK_FLAG} -limf
+
+mLNK             = ${MPICH_ROOT}bin/mpicxx_intel
+mLNK_FLAG        = -L${INTEL_ROOT}lib -L${MPICH_ROOT}lib ${PARMETIS_LIB} ${SHARE_LNK_FLAG} -lmpich -lmpichcxx -limf -lparmetis -lmetis

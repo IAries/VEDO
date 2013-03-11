@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{21F378B0-A1D0-4B65-A1DF-A692F11E6560}</ProjectGuid>
+    <RootNamespace>Common</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\VC11\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\Debug\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\VC11\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\Release\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libVEDO-$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinder.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinderAT.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiPlate.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2Sphere.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2SphereAT.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOConstrainedQuasiCylinder.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOConstrainedQuasiPlate.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOFixedQuasiCylinder.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOFixedQuasiPlate.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOFixedSphere.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiCylinder.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiPlate.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOSphere.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\GSComplexShape.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\GSCylinder.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\GSEllipsoid.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\GSRectangle.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\GSSphere.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwBSDBF.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwBtSDBF.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwH.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwHWS.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwTest1.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwTest2.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant2.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\NBSConsultant.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\NearConsultant.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\SafeConsultant.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiCylinder.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiCylinderAT.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiPlate.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2Sphere.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2SphereAT.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOConstrainedQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOConstrainedQuasiPlate.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOFixedQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOFixedQuasiPlate.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOFixedSphere.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOQuasiPlate.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOSphere.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\GSComplexShape.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\GSCylinder.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\GSEllipsoid.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\GSRectangle.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\GSSphere.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\ISwBSDBF.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\ISwBtSDBF.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\ISwH.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\ISwHWS.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\ISwTest1.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\ISwTest2.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant2.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\NBSConsultant.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\NearConsultant.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\SafeConsultant.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

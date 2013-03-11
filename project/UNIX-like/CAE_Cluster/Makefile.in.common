@@ -1,0 +1,16 @@
+# ================= #
+# Common Parameters #
+# ================= #
+
+TLS_LIB        = /lib/tls
+USR_LIB        = /usr/lib
+
+XERCESC_ROOT   = /usr/local/xercesc/
+
+MPICH_ROOT     = /usr/local/mpich2/
+
+SHARE_CXX_FLAG = -I${SRC} -I${XERCESC_ROOT}include -I${MPICH_ROOT}include
+SHARE_LNK_FLAG = -L${LIB} -L${TLS_LIB} -L${USR_LIB} -L${XERCESC_ROOT}lib -lxerces-c -lsccpack -lalgorithm -lVEDO -lNJR
+
+MAKE           = make
+
