@@ -81,10 +81,6 @@
     <ClInclude Include="..\..\src\Common\Interfaces\GSSphere.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\ISwBSDBF.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\ISwBtSDBF.h" />
-    <ClInclude Include="..\..\src\Common\Interfaces\ISwH.h" />
-    <ClInclude Include="..\..\src\Common\Interfaces\ISwHWS.h" />
-    <ClInclude Include="..\..\src\Common\Interfaces\ISwTest1.h" />
-    <ClInclude Include="..\..\src\Common\Interfaces\ISwTest2.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant2.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\NBSConsultant.h" />
@@ -112,10 +108,6 @@
     <ClCompile Include="..\..\src\Common\Implementation\GSSphere.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\ISwBSDBF.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\ISwBtSDBF.cpp" />
-    <ClCompile Include="..\..\src\Common\Implementation\ISwH.cpp" />
-    <ClCompile Include="..\..\src\Common\Implementation\ISwHWS.cpp" />
-    <ClCompile Include="..\..\src\Common\Implementation\ISwTest1.cpp" />
-    <ClCompile Include="..\..\src\Common\Implementation\ISwTest2.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant2.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\NBSConsultant.cpp" />

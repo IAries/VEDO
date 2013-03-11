@@ -29,10 +29,6 @@
 
 #include <Common/Interfaces/ISwBSDBF.h>
 #include <Common/Interfaces/ISwBtSDBF.h>
-#include <Common/Interfaces/ISwH.h>
-#include <Common/Interfaces/ISwHWS.h>
-#include <Common/Interfaces/ISwTest1.h>
-#include <Common/Interfaces/ISwTest2.h>
 
 //#include <Iris/Interfaces/DConsultant.h>
 //#include <Iris/Interfaces/NBSGPConsultant.h>
@@ -109,14 +105,10 @@ int main (int argc, char* argv[])
 
 	pAssembler->AddIS(new IScf<ISwBSDBF>("ISwBSDBF"));
 	pAssembler->AddIS(new IScf<ISwBtSDBF>("ISwBtSDBF"));
-	pAssembler->AddIS(new IScf<ISwH>("ISwH"));
-	pAssembler->AddIS(new IScf<ISwHWS>("ISwHWS"));
-	pAssembler->AddIS(new IScf<ISwTest1>("ISwTest1"));
-	pAssembler->AddIS(new IScf<ISwTest2>("ISwTest2"));
 
-    pAssembler->AddCD(new CDcf<CDSphere_Sphere>          (Sphere, Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHWS <CT>ISwTest1 <CT>ISwTest2"));
-    pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinder>   (Sphere, QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHWS <CT>ISwTest1 <CT>ISwTest2"));
-	pAssembler->AddCD(new CDcf<CDSphere_QuasiPlate>      (Sphere, QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHWS <CT>ISwTest1 <CT>ISwTest2"));
+    pAssembler->AddCD(new CDcf<CDSphere_Sphere>          (Sphere, Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinder>   (Sphere, QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+	pAssembler->AddCD(new CDcf<CDSphere_QuasiPlate>      (Sphere, QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
     //pAssembler->AddCD(new CDcf<CDSphere_SphereAT>        (Sphere, Sphere       , "List- <CT>ISwLSDAT"));
     //pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinderAT> (Sphere, QuasiCylinder, "List- <CT>ISwLSDAT"));
 
