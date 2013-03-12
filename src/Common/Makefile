@@ -24,10 +24,6 @@ ${VEDO_LIB}libVEDO-Common.a: ${TMP}CDSphere2QuasiCylinder.o     \
                              ${TMP}GSSphere.o                   \
                              ${TMP}ISwBSDBF.o                   \
                              ${TMP}ISwBtSDBF.o                  \
-                             ${TMP}ISwH.o                       \
-                             ${TMP}ISwHWS.o                     \
-                             ${TMP}ISwTest1.o                   \
-                             ${TMP}ISwTest2.o                   \
                              ${TMP}LeapConsultant.o             \
                              ${TMP}LeapConsultant2.o            \
                              ${TMP}NBSConsultant.o              \
