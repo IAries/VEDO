@@ -6,7 +6,8 @@
 #include <map>
 #include <limits>
 
-using namespace std;
+namespace VEDO
+{
 
 NBSConsultant::NBSConsultant
 	(DOWorld* DOWorld,
@@ -98,20 +99,20 @@ bool NBSConsultant::Reset()
 
 	const SystemParameter* csp = pDOWorld->GetSystemParameter();
 	unsigned long numberDO = csp->GetDONumber();
-	NJRvector3d vFieldForce = csp->GetFieldForce();
+	NJR::NJRvector3d vFieldForce = csp->GetFieldForce();
 	double dt = culUpIact * csp->GetTimeInterval();
 
-	vector<DOMap> vDOMap;
-	vector<DOMap> FTab;
-	vector<DOMap> MTab;
-	vector<DOMap> WorkTab;
+	std::vector<DOMap> vDOMap;
+	std::vector<DOMap> FTab;
+	std::vector<DOMap> MTab;
+	std::vector<DOMap> WorkTab;
 
-	double xmin = numeric_limits<double>::max();
-	double xmax = numeric_limits<double>::min();
-	double ymin = numeric_limits<double>::max();
-	double ymax = numeric_limits<double>::min();
-	double zmin = numeric_limits<double>::max();
-	double zmax = numeric_limits<double>::min();
+	double xmin = std::numeric_limits<double>::max();
+	double xmax = std::numeric_limits<double>::min();
+	double ymin = std::numeric_limits<double>::max();
+	double ymax = std::numeric_limits<double>::min();
+	double zmin = std::numeric_limits<double>::max();
+	double zmax = std::numeric_limits<double>::min();
 	double vmax = 0.0;
 	double rmax = 0.0;
 
@@ -131,15 +132,15 @@ bool NBSConsultant::Reset()
 			+ (cpdos->GetVelocity()).length() * 1.1 * dt
 			+ 0.5 * dt * dt * vFieldForce.length();
 
-		if(cpdoml->GetScope() == "local")
+		if (cpdoml->GetScope() == "local")
 		{
-			xmin = min( xmin, cpdos->GetPosition().x() );
-			xmax = max( xmax, cpdos->GetPosition().x() );
-			ymin = min( ymin, cpdos->GetPosition().y() );
-			ymax = max( ymax, cpdos->GetPosition().y() );
-			zmin = min( zmin, cpdos->GetPosition().z() );
-			zmax = max( zmax, cpdos->GetPosition().z() );
-			vmax = max( vmax, cpdos->GetVelocity().length() );
+			xmin = std::min( xmin, cpdos->GetPosition().x() );
+			xmax = std::max( xmax, cpdos->GetPosition().x() );
+			ymin = std::min( ymin, cpdos->GetPosition().y() );
+			ymax = std::max( ymax, cpdos->GetPosition().y() );
+			zmin = std::min( zmin, cpdos->GetPosition().z() );
+			zmax = std::max( zmax, cpdos->GetPosition().z() );
+			vmax = std::max( vmax, cpdos->GetVelocity().length() );
 			rmax = cpdoml->GetRange();
 			// Update max safe distance
 			// maxS = max(maxS,safeD);
@@ -154,7 +155,7 @@ bool NBSConsultant::Reset()
 	int ncely = ceil( (ymax-ymin)/ZoneRange );
 	int ncelz = ceil( (zmax-zmin)/ZoneRange );
 
-	cout
+	std::cout
 		<< "(ncelx,necly,ncelz) = ("
 		<< ncelx
 		<< ','
@@ -162,15 +163,15 @@ bool NBSConsultant::Reset()
 		<< ','
 		<<ncelz << ")\n";
 
-	map<Trir, vector<DOMap>*, TrirLeY> locMap;
+	std::map<Trir, std::vector<DOMap>*, TrirLeY> locMap;
 
-	vector<DOMap> GlobalElement;
+	std::vector<DOMap> GlobalElement;
 
 	for (ul=0; ul<numberDO; ++ul)
 	{
 		if (vDOMap[ul].cpdoml()->GetScope() == "local")
 		{
-			NJRvector3d p = vDOMap[ul].cpdos()->GetPosition();
+			NJR::NJRvector3d p = vDOMap[ul].cpdos()->GetPosition();
 			Trir zone
 				(static_cast<int>((p.x()-xmin)/ZoneRange),
 				static_cast<int>((p.y()-ymin)/ZoneRange),
@@ -178,7 +179,7 @@ bool NBSConsultant::Reset()
 
 			if (locMap.find(zone) == locMap.end())
 			{
-				locMap.insert(make_pair(zone, new vector<DOMap>()));
+				locMap.insert(std::make_pair(zone, new std::vector<DOMap>()));
 			}
 			locMap[zone]->push_back(vDOMap[ul]);
 		}
@@ -188,7 +189,7 @@ bool NBSConsultant::Reset()
 		}
 	}
 
-	map<Trir, vector<DOMap>*, TrirLeY>::iterator iter1, iter2;
+	std::map<Trir, std::vector<DOMap>*, TrirLeY>::iterator iter1, iter2;
 	for (int ix=0; ix<ncelx; ++ix)
 	{
 		for (int iy=0; iy<ncely; ++iy)
@@ -196,13 +197,13 @@ bool NBSConsultant::Reset()
 			for (int iz=0; iz<ncelz; ++iz)
 			{
 
-				//cout << "zone (" << ix << ',' << iy << ',' << iz << " )\n";
+				//std::cout << "zone (" << ix << ',' << iy << ',' << iz << " )\n";
 				iter1 = locMap.find(Trir(ix, iy, iz));
 				if (iter1 == locMap.end())
 				{
 					continue;
 				}
-				vector<DOMap>* pvec1 = iter1->second;
+				std::vector<DOMap>* pvec1 = iter1->second;
 
 				// Self and neightbor zone check
 				if ( (iter2 = locMap.find(Trir(ix-1, iy-1, iz-1)))
@@ -292,7 +293,7 @@ bool NBSConsultant::Reset()
 		}
 	}
 /*
-	cout
+	std::cout
 		<< "(Iact size = "
 		<< (unsigned int)(NBSConsultant::IactPairTab.size())
 		<< ")\n";
@@ -306,7 +307,7 @@ bool NBSConsultant::Reset()
 			NBSConsultant::IactPairTab.end()),
 			NBSConsultant::IactPairTab.end()    );
 
-	cout
+	std::cout
 		<< "(SafeDistance = "
 		<< SD
 		<< ") (Cutting Range = "
@@ -315,7 +316,7 @@ bool NBSConsultant::Reset()
 		<< (unsigned int)(IactPairTab.size())
 		<< ")\n";
 */
-	cout
+	std::cout
 		<< "(SafeDistance = "
 		<< maxS
 		<< ") (Cutting Range = "
@@ -339,7 +340,7 @@ bool NBSConsultant::Reset()
 	return true;
 };
 
-void NBSConsultant::BuildIactTab(vector<DOMap>& v1, vector<DOMap>& v2)
+void NBSConsultant::BuildIactTab(std::vector<DOMap>& v1, std::vector<DOMap>& v2)
 {
 	for (unsigned long i=0; i<v1.size(); ++i)
 	{
@@ -363,18 +364,18 @@ void NBSConsultant::BuildIactTab(vector<DOMap>& v1, vector<DOMap>& v2)
 			if (v1[i].id() < v2[j].id())
 			{
 				NBSConsultant::IactPairTab.push_back
-					(make_pair(v1[i].id(), v2[j].id()));
+					(std::make_pair(v1[i].id(), v2[j].id()));
 			}
 			else
 			{
 				NBSConsultant::IactPairTab.push_back
-					(make_pair(v2[j].id(), v1[i].id()));
+					(std::make_pair(v2[j].id(), v1[i].id()));
 			}
 		}
 	}
 }
 
-void NBSConsultant::BuildIactTab(vector<DOMap>& v)
+void NBSConsultant::BuildIactTab(std::vector<DOMap>& v)
 {
 	for (unsigned long i=0; i<v.size(); ++i)
 	{
@@ -398,12 +399,12 @@ void NBSConsultant::BuildIactTab(vector<DOMap>& v)
 			if (v[i].id() < v[j].id())
 			{
 				NBSConsultant::IactPairTab.push_back
-					(make_pair(v[i].id(), v[j].id()));
+					(std::make_pair(v[i].id(), v[j].id()));
 			}
 			else
 			{
 				NBSConsultant::IactPairTab.push_back
-					(make_pair(v[j].id(), v[i].id()));
+					(std::make_pair(v[j].id(), v[i].id()));
 			}
 		}
 	}
@@ -426,12 +427,14 @@ void NBSConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		}
 	}
 
-	cout
+	std::cout
 		<< "At RebuildIactRecordTab: size  = "
 		<< pIRTbl->GetTabSize()
 		<< '\n';
-	cout
+	std::cout
 		<< "At the instant, pDOWorld->time = "
 		<< pDOWorld->GetSystemParameter()->GetTimeCurrent()
 		<< '\n';
-}
+};
+
+};   // namespace VEDO

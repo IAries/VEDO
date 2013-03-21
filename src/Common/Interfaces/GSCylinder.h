@@ -4,6 +4,9 @@
 #include <NJR/Interfaces/vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
+namespace VEDO
+{
+
 class GSCylinder : public GeometricShape
 {
 
@@ -21,15 +24,18 @@ public:
 		return _dHeight;
 	};
 
-	bool Inside(const NJRvector3d&);
+	bool Inside(const NJR::NJRvector3d&);
 
 protected:
 
 	double _dRadius;
 	double _dHeight;
-
-private:
-
 };
+
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream&, VEDO::GSCylinder&);
 
 #endif // _GS_CYLINDER_H

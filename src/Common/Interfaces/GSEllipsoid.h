@@ -4,6 +4,9 @@
 #include <NJR/Interfaces/vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
+namespace VEDO
+{
+
 class GSEllipsoid : public GeometricShape
 {
 
@@ -27,16 +30,19 @@ public:
 		return _dZLength;
 	};
 
-	bool Inside(const NJRvector3d&);
+	bool Inside(const NJR::NJRvector3d&);
 
 protected:
 
 	double _dXLength;
 	double _dYLength;
 	double _dZLength;
-
-private:
-
 };
+
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream&, VEDO::GSEllipsoid&);
 
 #endif // _GS_ELLIPSOID_H

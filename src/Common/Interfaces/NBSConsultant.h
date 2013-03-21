@@ -4,6 +4,9 @@
 #include <FrameWork/Interfaces/Consultant.h>
 #include <utility>
 
+namespace VEDO
+{
+
 class NBSConsultant : public Consultant
 {
 
@@ -123,5 +126,7 @@ public:
 		return (t1.yIdx < t2.yIdx);
 	}
 };
+
+};   // namespace VEDO
 
 #endif // _NBS_CONSULTANT_H

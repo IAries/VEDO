@@ -4,6 +4,9 @@
 #include <FrameWork/Interfaces/ImpactSolver.h>
 // Interaction model with a "transient" shear spring
 
+namespace VEDO
+{
+
 class ISwBtSDBF : public ImpactSolver
 {
 
@@ -14,7 +17,7 @@ public:
 		const DiscreteObject* cpdoMaster,
 		const IactModel* cpiactml        );
 
-	NJRvector3d NextStep
+	NJR::NJRvector3d NextStep
 		(const ContactDetector* pcd,
 		DiscreteObject* pdoSlave,
 		DiscreteObject* pdoMaster,
@@ -44,5 +47,7 @@ private:
 	// Friction coefficient
 	double fc;
 };
+
+};   // namespace VEDO
 
 #endif // _ISwBSDBF_H

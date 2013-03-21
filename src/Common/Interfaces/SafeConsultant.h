@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/Consultant.h>
 
+namespace VEDO
+{
+
 class SafeConsultant : public Consultant
 {
 
@@ -20,5 +23,7 @@ public:
 
 	virtual void RebuildIactRecordTab(IactContainer& cIact);
 };
+
+};   // namespace VEDO
 
 #endif  // _SAFE_CONSULTANT_H

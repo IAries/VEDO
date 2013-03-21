@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/DiscreteObject.h>
 
+namespace VEDO
+{
+
 class DOQuasiPlate : public DiscreteObject
 {
 
@@ -32,5 +35,7 @@ private:
 
 	DOQuasiPlate();
 };
+
+};   // namespace VEDO
 
 #endif // _DO_QUASIPLATE_H

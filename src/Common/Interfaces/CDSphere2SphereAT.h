@@ -3,6 +3,9 @@
 
 #include <Common/Interfaces/CDSphere2Sphere.h>
 
+namespace VEDO
+{
+
 class CDSphere_SphereAT : public CDSphere_Sphere
 {
 
@@ -12,5 +15,7 @@ public:
 		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 };
+
+};   // namespace VEDO
 
 #endif // _CDSPHERE_2_SPHEREAT_H

@@ -1,7 +1,8 @@
 #include <Common/Interfaces/DOFixedQuasiPlate.h>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
 DOFixedQuasiPlate::DOFixedQuasiPlate
 	(const DOStatus* cpdos, const DOModel* cpdoml)
@@ -13,6 +14,7 @@ DOFixedQuasiPlate::DOFixedQuasiPlate
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = 0.0;
-	vMassMomentInertia = NJRvector3d();
-	pDOStatus->SetRange(max(max(Width, Height), Length));
+	vMassMomentInertia = NJR::NJRvector3d();
 };
+
+};   // namespace VEDO

@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/ContactDetector.h>
 
+namespace VEDO
+{
+
 class CDSphere_Sphere : public ContactDetector
 {
 
@@ -19,5 +22,7 @@ public:
 		return "CDSphere_Sphere";
 	};
 };
+
+};   // namespace VEDO
 
 #endif // _CDSPHERE_2_SPHERE_H

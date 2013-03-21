@@ -1,23 +1,27 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <Common/Interfaces/CDSphere2QuasiCylinder.h>
 #include <Common/Interfaces/DOFixedQuasiCylinder.h>
 #include <Common/Interfaces/DOSphere.h>
 #include <cmath>
 
+namespace VEDO
+{
+
 void CDSphere_QuasiCylinder::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	NJR::NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiCylinder)
-	NJRvector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
+	NJR::NJRvector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Half height of Master
 	double dHHb
 		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.height;
 
 	// The center axial of Master (QuasiCylinder)
-	NJRvector3d vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
+	NJR::NJRvector3d vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
 
 	// The projected point of vCa on vAxial
 	double Dap = (vCa - vCb) % vAxial;
@@ -34,8 +38,8 @@ void CDSphere_QuasiCylinder::CalDistance
      * The distance from vCaps to vCa is the shortest distance between surface
      * of Slave and Master
 	 **************************************************************************/
-	NJRvector3d vCaps = vCb + Dap * vAxial;
-	NJRvector3d vIm   = vCaps - vCa;
+	NJR::NJRvector3d vCaps = vCb + Dap * vAxial;
+	NJR::NJRvector3d vIm   = vCaps - vCa;
 
 	double dRs = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
 	double dRc = pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.radius;
@@ -44,7 +48,7 @@ void CDSphere_QuasiCylinder::CalDistance
 	if(cInfo.dImpactDepth > 0.0)
 	{
 		double dS          = dRs - cInfo.dImpactDepth * dRc / (dRs + dRc);
-		cInfo.dOverlapArea = (dRs * dRs - dS * dS) * 3.14159267;
+		cInfo.dOverlapArea = (dRs * dRs - dS * dS) * NJR::dPI;
 	}
 	else
 	{
@@ -76,3 +80,5 @@ void CDSphere_QuasiCylinder::Detect
 		cInfo.bUnBalance = false;
 	}
 };
+
+};   // namespace VEDO

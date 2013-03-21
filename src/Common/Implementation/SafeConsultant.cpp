@@ -1,7 +1,8 @@
 #include <Common/Interfaces/SafeConsultant.h>
 #include <string>
 
-using namespace std;
+namespace VEDO
+{
 
 SafeConsultant::SafeConsultant
 	(DOWorld* DOWorld,
@@ -23,7 +24,7 @@ bool SafeConsultant::Reset()
 	unsigned long ulDONum = pDOWorld->GetSystemParameter()->GetDONumber();
     unsigned long ul, uj;
 	const IactModel* cpiactml;
-	string doname1, doname2;
+	std::string doname1, doname2;
 
 	vcDO.clear();
 	vcIactMaster.clear();
@@ -63,10 +64,12 @@ bool SafeConsultant::Reset()
 		}
 	}
 
-	cerr
-		<< "Interaction size = "
-		<< (unsigned int) vcIactMaster.size()
-		<< '\n';
+	#ifdef _VEDO_DEBUG
+		std::cout
+			<< "Interaction size = "
+			<< (unsigned int) vcIactMaster.size()
+			<< std::endl;
+	#endif   // _VEDO_DEBUG
 
 	return true;
 };
@@ -75,3 +78,5 @@ void SafeConsultant::RebuildIactRecordTab(IactContainer& cIact)
 {
 	CollectUserDefinedData(cIact);
 };
+
+};   // namespace VEDO

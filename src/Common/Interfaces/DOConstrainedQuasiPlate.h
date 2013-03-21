@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/DiscreteObject.h>
 
+namespace VEDO
+{
+
 class DOConstrainedQuasiPlate : public DiscreteObject
 {
 
@@ -32,5 +35,7 @@ private:
 
 	DOConstrainedQuasiPlate();
 };
+
+};   // namespace VEDO
 
 #endif // _DO_CONSTRAINEDQUASIPLATE_H

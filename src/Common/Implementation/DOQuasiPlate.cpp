@@ -1,7 +1,8 @@
 #include <Common/Interfaces/DOQuasiPlate.h>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
 DOQuasiPlate::DOQuasiPlate
 	(const DOStatus* cpdos, const DOModel* cpdoml)
@@ -13,20 +14,19 @@ DOQuasiPlate::DOQuasiPlate
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = 0.0;
-	vMassMomentInertia = NJRvector3d();
-	pDOStatus->SetRange(max(max(Width, Height), Length));
+	vMassMomentInertia = NJR::NJRvector3d();
 };
 
 void DOQuasiPlate::Response(double dt)
 {
-	NJRvector3d V  = pDOStatus->GetVelocity();
-	NJRvector3d AV = pDOStatus->GetAngularVelocity();
-	NJRvector3d P  = pDOStatus->GetPosition();
-	NJRvector3d Ox = pDOStatus->GetOrientationX();
-	NJRvector3d Oz = pDOStatus->GetOrientationZ();
+	NJR::NJRvector3d V  = pDOStatus->GetVelocity();
+	NJR::NJRvector3d AV = pDOStatus->GetAngularVelocity();
+	NJR::NJRvector3d P  = pDOStatus->GetPosition();
+	NJR::NJRvector3d Ox = pDOStatus->GetOrientationX();
+	NJR::NJRvector3d Oz = pDOStatus->GetOrientationZ();
 
-	NJRvector3d dp =  V * dt;
-	NJRvector3d dw = AV * dt;
+	NJR::NJRvector3d dp =  V * dt;
+	NJR::NJRvector3d dw = AV * dt;
 
 	pDOStatus->SetPosition(P + dp);
 	pDOStatus->SetOrientation(Ox.RotateAround(dw), Oz.RotateAround(dw));
@@ -34,3 +34,5 @@ void DOQuasiPlate::Response(double dt)
 	//pDOStatus->SetAngularVelocity(AV);
 	ClearImpact();
 };
+
+};   // namespace VEDO

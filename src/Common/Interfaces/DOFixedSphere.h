@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/DiscreteObject.h>
 
+namespace VEDO
+{
+
 class DOFixedSphere : public DiscreteObject
 {
 
@@ -30,5 +33,7 @@ private:
 
 	DOFixedSphere();
 };
+
+};   // namespace VEDO
 
 #endif // _DO_FIXEDSPHERE_H

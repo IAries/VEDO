@@ -1,13 +1,15 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <Common/Interfaces/CDSphere2Sphere.h>
 #include <Common/Interfaces/DOSphere.h>
 
-using namespace std;
+namespace VEDO
+{
 
 void CDSphere_Sphere::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
-	// Impact vector form slave to master
-	NJRvector3d vIm
+	// Impact std::vector form slave to master
+	NJR::NJRvector3d vIm
 		= pdoMaster->GetDOStatus()->GetPosition()
 		- pdoSlave->GetDOStatus()->GetPosition();
 
@@ -23,7 +25,7 @@ void CDSphere_Sphere::CalDistance
 	if(cInfo.dImpactDepth > 0.0)
 	{
 		double dS          = dRa - cInfo.dImpactDepth * dRb / (dRa + dRb);
-		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * 3.14159267;
+		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * NJR::dPI;
 	}
 	else
 	{
@@ -54,3 +56,5 @@ void CDSphere_Sphere::Detect
 		cInfo.bUnBalance = false;
 	}
 };
+
+};   // namespace VEDO

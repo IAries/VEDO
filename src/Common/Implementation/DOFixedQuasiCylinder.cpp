@@ -1,6 +1,7 @@
 #include <Common/Interfaces/DOFixedQuasiCylinder.h>
 
-using namespace std;
+namespace VEDO
+{
 
 DOFixedQuasiCylinder::DOFixedQuasiCylinder
 	(const DOStatus* cpdos, const DOModel* cpdoml)
@@ -11,6 +12,7 @@ DOFixedQuasiCylinder::DOFixedQuasiCylinder
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = 0.0;
-	vMassMomentInertia = NJRvector3d();
-	pDOStatus->SetRange(max(Radius, Height));
+	vMassMomentInertia = NJR::NJRvector3d();
 };
+
+};   // namespace VEDO

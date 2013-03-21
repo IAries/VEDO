@@ -1,11 +1,12 @@
 #include <Common/Interfaces/GSComplexShape.h>
 #include <cmath>
 
-using namespace std;
-
-bool GSComplexShape::Inside(const NJRvector3d& p)
+namespace VEDO
 {
-	list<GeometricShape*>::iterator _lgsp;
+
+bool GSComplexShape::Inside(const NJR::NJRvector3d& p)
+{
+	std::list<GeometricShape*>::iterator _lgsp;
 	for (_lgsp=_ListGS.begin(); _lgsp!=_ListGS.end(); _lgsp++)
 	{
 		if(!(*_lgsp)->Inside(p))
@@ -16,7 +17,11 @@ bool GSComplexShape::Inside(const NJRvector3d& p)
 	return true;
 };
 
-ostream& operator << (ostream& os, GSComplexShape& gs)
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream& os, VEDO::GSComplexShape& gs)
 {
 	return os;
 };

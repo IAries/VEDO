@@ -1,5 +1,9 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <Common/Interfaces/DOFixedSphere.h>
 #include <cmath>
+
+namespace VEDO
+{
 
 DOFixedSphere::DOFixedSphere
 	(const DOStatus* cpdos, const DOModel* cpdoml)
@@ -7,25 +11,21 @@ DOFixedSphere::DOFixedSphere
 {
 //	double Radius = cpdoml->GetShapeAttributes().sphere.radius;
 /*
-	DiscreteObject::dVolume = 3.141592654 * Radius*Radius*Radius * 4.0 / 3.0;
-	DiscreteObject::dMass
-		= DiscreteObject::cpDOModel->GetDensity() * DiscreteObject::dVolume;
 	double mmi = 0.4 * dMass * Radius * Radius;
-	vMassMomentInertia = NJRvector3d(mmi, mmi, mmi);
+	vMassMomentInertia = NJR::NJRvector3d(mmi, mmi, mmi);
 */
-	dVolume            = cpDOModel->GetVolume();
-	dMass              = cpDOModel->GetMass();
-	dSudoMass          = cpDOModel->GetSudoMass();
-	vMassMomentInertia = cpDOModel->GetMassMomentInertia();
-	pDOStatus->SetRange(cpdoml->GetShapeAttributes().sphere.radius);
+	dVolume            = cpdoml->GetVolume();
+	dMass              = cpdoml->GetMass();
+	dSudoMass          = cpdoml->GetSudoMass();
+	vMassMomentInertia = cpdoml->GetMassMomentInertia();
 };
 
 double DOFixedSphere::CrossAreaToSurface
 	(double& a, double& b, double& c, double& d) const
 {
 	//Surface: ax+by+cz=d
-	NJRvector3d vSurfaceNormal(a, b, c);
-	NJRvector3d p = pDOStatus->GetPosition();
+	NJR::NJRvector3d vSurfaceNormal(a, b, c);
+	NJR::NJRvector3d p = pDOStatus->GetPosition();
 	double r = cpDOModel->GetShapeAttributes().sphere.radius;
 
 	double dSphere2Surface = fabs(d-(p%vSurfaceNormal)/vSurfaceNormal.length());
@@ -36,6 +36,8 @@ double DOFixedSphere::CrossAreaToSurface
 	}
 	else
 	{
-		return (r * r - dSphere2Surface * dSphere2Surface) * 3.14159267;
+		return (r * r - dSphere2Surface * dSphere2Surface) * NJR::dPI;
 	}
 };
+
+};   // namespace VEDO

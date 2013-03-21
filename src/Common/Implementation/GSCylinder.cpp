@@ -1,9 +1,10 @@
 #include <Common/Interfaces/GSCylinder.h>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
-GSCylinder::GSCylinder(const string& nm, const double& r, const double& h):
+GSCylinder::GSCylinder(const std::string& nm, const double& r, const double& h):
 	_dRadius(r), _dHeight(h)
 {
 	_sType = "Cylinder";
@@ -11,9 +12,9 @@ GSCylinder::GSCylinder(const string& nm, const double& r, const double& h):
 	_Status = new DOStatus("No Name");
 };
 
-bool GSCylinder::Inside(const NJRvector3d& p)
+bool GSCylinder::Inside(const NJR::NJRvector3d& p)
 {
-	NJRvector3d localP(p);
+	NJR::NJRvector3d localP(p);
 	localP = localP - _Status->GetPosition();
 	double localX = localP % (_Status->GetOrientationX());
 	double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());
@@ -29,9 +30,14 @@ bool GSCylinder::Inside(const NJRvector3d& p)
 	}
 };
 
-ostream& operator << (ostream& os, GSCylinder& gs)
+
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream& os, VEDO::GSCylinder& gs)
 {
-	cout << "Radius: " << gs.GetRadius() << '\n';
-	cout << "Height: " << gs.GetHeight() << '\n';
+	std::cout << "Radius: " << gs.GetRadius() << '\n';
+	std::cout << "Height: " << gs.GetHeight() << '\n';
 	return os;
 };

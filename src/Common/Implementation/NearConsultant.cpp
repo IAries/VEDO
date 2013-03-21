@@ -1,7 +1,8 @@
 #include <Common/Interfaces/NearConsultant.h>
 #include <string>
 
-using namespace std;
+namespace VEDO
+{
 
 NearConsultant::NearConsultant
 	(DOWorld* DOWorld,
@@ -45,7 +46,7 @@ static bool Detect
 	if (   (doml1->GetShapeType() == Sphere)
 		&& (doml2->GetShapeType() == Sphere) )
 	{
-		NJRvector3d vIm = dos1->GetPosition() - dos2->GetPosition();
+		NJR::NJRvector3d vIm = dos1->GetPosition() - dos2->GetPosition();
 		return
 			vIm.length()
 			<= ( (doml1->GetShapeAttributes().sphere.radius
@@ -56,13 +57,13 @@ static bool Detect
 		&& (doml2->GetShapeType() == QuasiCylinder) )
 	{
 		double dHHb = 0.5 * doml2->GetShapeAttributes().quasicylinder.height;
-		NJRvector3d     Ca = dos1->GetPosition();
-		NJRvector3d     Cb = dos2->GetPosition();
-		NJRvector3d Vaxial = dos2->GetOrientationZ();
-		NJRvector3d    Cap;
+		NJR::NJRvector3d     Ca = dos1->GetPosition();
+		NJR::NJRvector3d     Cb = dos2->GetPosition();
+		NJR::NJRvector3d Vaxial = dos2->GetOrientationZ();
+		NJR::NJRvector3d    Cap;
 		double Dap = (Ca - Cb)%Vaxial;
 		Cap = Cb + (Vaxial * Dap);
-		NJRvector3d vIm;
+		NJR::NJRvector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -82,8 +83,11 @@ static bool Detect
 			<= ((doml1->GetShapeAttributes().sphere.radius
 				+doml2->GetShapeAttributes().quasicylinder.radius) * 1.05);
 	}
-	cerr << "DOShape is not in the list of LeapConsultant\n";
-	exit(0);
+
+	std::cerr
+		<< "Error!! Code: NearConsultant.cpp" << std::endl
+		<< "        Note: DOShape is not in the std::list of NearConsultant" << std::endl;
+	exit(-1);
 };
 
 static bool DetectSphere
@@ -92,7 +96,7 @@ static bool DetectSphere
 	const DOModel* doml1,
 	const DOModel* doml2  )
 {
-	NJRvector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
+	NJR::NJRvector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
 	return
 		vIm.length()
 		<= ((doml1->GetShapeAttributes().sphere.radius
@@ -103,7 +107,7 @@ bool NearConsultant::Reset()
 {
 	unsigned long ulDONum = pDOWorld->GetSystemParameter()->GetDONumber();
 	unsigned long ul, uj;
-	string doname1, doname2;
+	std::string doname1, doname2;
 
 	vcDO.clear();
 	vcIactMaster.clear();
@@ -152,7 +156,10 @@ bool NearConsultant::Reset()
 			vcIactSlave.push_back(uj);
 		}
 	}
-	cerr << "Near Consultant Interaction size = " << vcIactMaster.size() << '\n';
+
+	#ifdef _VEDO_DEBUG
+		std::cout << "Near Consultant Interaction size = " << vcIactMaster.size() << '\n';
+	#endif   // _VEDO_DEBUG
 
 	return true;
 };
@@ -161,3 +168,5 @@ void NearConsultant::RebuildIactRecordTab(IactContainer& cIact)
 {
 	CollectUserDefinedData(cIact);
 };
+
+};   // namespace VEDO

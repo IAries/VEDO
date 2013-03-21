@@ -1,23 +1,27 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <Common/Interfaces/CDSphere2QuasiPlate.h>
 #include <Common/Interfaces/DOFixedQuasiPlate.h>
 #include <Common/Interfaces/DOSphere.h>
+
+namespace VEDO
+{
 
 void CDSphere_QuasiPlate::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	NJR::NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiPlate)
-	NJRvector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
+	NJR::NJRvector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Local axials of Master (QuasiPlate)
-	NJRvector3d vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
-	NJRvector3d vOx = pdoMaster->GetDOStatus()->GetOrientationX();
-	NJRvector3d vOy = vOz * vOx;
+	NJR::NJRvector3d vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
+	NJR::NJRvector3d vOx = pdoMaster->GetDOStatus()->GetOrientationX();
+	NJR::NJRvector3d vOy = vOz * vOx;
 
 	// The projection of Ca on Vaxial
-	NJRvector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+	NJR::NJRvector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 	// Half height of Master
 	double dHHb
@@ -54,8 +58,8 @@ void CDSphere_QuasiPlate::CalDistance
      * The distance from vCaps to vCa is the shortest distance between surface
      * of Slave and Master
 	 **************************************************************************/
-	NJRvector3d vCaps      = (vOx * Dapx) + (vOy * Dapy) + vCb;
-	NJRvector3d vIm        = vCaps - vCa;
+	NJR::NJRvector3d vCaps      = (vOx * Dapx) + (vOy * Dapy) + vCb;
+	NJR::NJRvector3d vIm        = vCaps - vCa;
 	cInfo.vCenterToCenter  = vIm;
 
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
@@ -64,7 +68,7 @@ void CDSphere_QuasiPlate::CalDistance
 	if(cInfo.dImpactDepth > 0.0)
 	{
 		double dS          = dRa - cInfo.dImpactDepth;
-		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * 3.14159267;
+		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * NJR::dPI;
 	}
 	else
 	{
@@ -95,3 +99,5 @@ void CDSphere_QuasiPlate::Detect
 		cInfo.bUnBalance = false;
 	}
 };
+
+};   // namespace VEDO

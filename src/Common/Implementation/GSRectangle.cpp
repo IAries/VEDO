@@ -1,10 +1,11 @@
 #include <Common/Interfaces/GSRectangle.h>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
 GSRectangle::GSRectangle
-	(const string& nm, const double& w, const double& l, const double& h):
+	(const std::string& nm, const double& w, const double& l, const double& h):
 	_dWidth(w), _dLength(l), _dHeight(h)
 {
 	_sType = "Rectangle";
@@ -12,9 +13,9 @@ GSRectangle::GSRectangle
 	_Status = new DOStatus("No Name");
 };
 
-bool GSRectangle::Inside(const NJRvector3d& p)
+bool GSRectangle::Inside(const NJR::NJRvector3d& p)
 {
-	NJRvector3d localP(p);
+	NJR::NJRvector3d localP(p);
 	localP = localP - _Status->GetPosition();
 	double localX = localP % (_Status->GetOrientationX());
 	double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());
@@ -31,10 +32,14 @@ bool GSRectangle::Inside(const NJRvector3d& p)
 	}
 };
 
-ostream& operator << (ostream& os, GSRectangle& gs)
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream& os, VEDO::GSRectangle& gs)
 {
-	cout << "Width : " << gs.GetWidth()  << '\n';
-	cout << "Length: " << gs.GetLength() << '\n';
-	cout << "Height: " << gs.GetHeight() << '\n';
+	std::cout << "Width : " << gs.GetWidth()  << '\n';
+	std::cout << "Length: " << gs.GetLength() << '\n';
+	std::cout << "Height: " << gs.GetHeight() << '\n';
 	return os;
 };
