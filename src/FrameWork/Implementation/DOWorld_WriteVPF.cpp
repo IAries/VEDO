@@ -3,7 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 
-using namespace std;
+namespace VEDO
+{
 
 void DOWorld::WriteVPF (const char* filename) const
 {
@@ -11,15 +12,17 @@ void DOWorld::WriteVPF (const char* filename) const
     double Radius, Height, Width, Length;
     double dX, dY, dZ, thickness = 0.001;
     const DOModel* pdoml;
-	vector<DOStatus *>::const_iterator idos;
-	NJRpolyhedra polyhedra;
-	vector<NJRpolygon> faces;
-	NJRvector3d Vt;
+	std::vector<DOStatus *>::const_iterator idos;
+	NJR::NJRpolyhedra polyhedra;
+	std::vector<NJR::NJRpolygon> faces;
+	NJR::NJRvector3d Vt;
 
 	if ((fpvpf = fopen(filename, "w"))== NULL )
 	{
-		cerr << "DOWorld write vpf failed" << endl;
-		exit (0);
+		std::cerr
+			<< "Error!! Code: DOWorld::WriteVPF(const char*)" << std::endl
+			<< "        Note: DOWorld cannot write vpf file" << std::endl;
+		exit(-1);
 	};
 
 	fprintf(fpvpf,"<Header>\n");
@@ -38,9 +41,9 @@ void DOWorld::WriteVPF (const char* filename) const
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
 	if(ZoneOfInterest.Active())
 	{
-		NJRvector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
-		NJRvector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
-		NJRvector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+		NJR::NJRvector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
+		NJR::NJRvector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
+		NJR::NJRvector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
 		dX                      = vUpperPoint.x() - vLowerPoint.x();
 		dY                      = vUpperPoint.y() - vLowerPoint.y();
 		dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -81,9 +84,9 @@ void DOWorld::WriteVPF (const char* filename) const
 
 	if(PeriodicBoundaryConditions.Active())
 	{
-		NJRvector3d	vLowerPoint = PeriodicBoundaryConditions.GetLowerPoint();
-		NJRvector3d	vUpperPoint = PeriodicBoundaryConditions.GetUpperPoint();
-		NJRvector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+		NJR::NJRvector3d	vLowerPoint = PeriodicBoundaryConditions.GetLowerPoint();
+		NJR::NJRvector3d	vUpperPoint = PeriodicBoundaryConditions.GetUpperPoint();
+		NJR::NJRvector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
 		dX                      = vUpperPoint.x() - vLowerPoint.x();
 		dY                      = vUpperPoint.y() - vLowerPoint.y();
 		dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -271,19 +274,19 @@ void DOWorld::WriteVPF (const char* filename) const
 //					(*idos)->GetGranularTemperatureAV());
 				break;
 			default:
-				cerr << "Unknown vpf shape" << endl;
+				std::cerr << "Unknown VPF shape" << std::endl;
 		}
 	}
 	fprintf (fpvpf, "</DiscreteObject>\n");
 	fclose (fpvpf);
 };
 
-vector<unsigned long> GetObjectTypeNumber(const DOWorld* DOW)
+std::vector<unsigned long> GetObjectTypeNumber(const DOWorld* DOW)
 {
-	vector<DOStatus*>                 DOS = DOW->GetDOStatus();
-	vector<DOStatus*>::const_iterator DOSP;
-	string LastDOName = (*(DOS.begin()))->GetDOName();
-	vector<unsigned long> DataStructure;
+	std::vector<DOStatus*>                 DOS = DOW->GetDOStatus();
+	std::vector<DOStatus*>::const_iterator DOSP;
+	std::string LastDOName = (*(DOS.begin()))->GetDOName();
+	std::vector<unsigned long> DataStructure;
 	unsigned long DataNumber = 0;
 	for (DOSP = DOS.begin(); DOSP != DOS.end(); ++DOSP, DataNumber++)
 	{
@@ -301,36 +304,38 @@ vector<unsigned long> GetObjectTypeNumber(const DOWorld* DOW)
 void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 {
 	// "opw" is the "DOWorld" status of original system
-	vector<unsigned long> OriginalDataStructure = GetObjectTypeNumber(opw);
-	vector<unsigned long> CurrentDataStructure  = GetObjectTypeNumber(this);
+	std::vector<unsigned long> OriginalDataStructure = GetObjectTypeNumber(opw);
+	std::vector<unsigned long> CurrentDataStructure  = GetObjectTypeNumber(this);
 /*
 	for (unsigned long i=0; i!=OriginalDataStructure.size(); i++)
 	{
-		cout << OriginalDataStructure[i] << '\t';
+		std::cout << OriginalDataStructure[i] << '\t';
 	}
-	cout << endl;
+	std::cout << std::endl;
 	for (unsigned long i=0; i!=CurrentDataStructure.size(); i++)
 	{
-		cout << CurrentDataStructure[i] << '\t';
+		std::cout << CurrentDataStructure[i] << '\t';
 	}
-	cout << endl;
+	std::cout << std::endl;
 */
 
 	FILE *fpvpf;
     double Radius, Height, Width, Length;
     double dX, dY, dZ, thickness = 0.001;
     const DOModel* pdoml;
-	vector<DOStatus *>::const_iterator  idos;
-	vector<DOStatus *> ocDOStatus = opw->GetDOStatus();
-	vector<DOStatus *>::const_iterator oidos;
-	NJRpolyhedra polyhedra;
-	vector<NJRpolygon> faces;
-	NJRvector3d Vt;
+	std::vector<DOStatus *>::const_iterator  idos;
+	std::vector<DOStatus *> ocDOStatus = opw->GetDOStatus();
+	std::vector<DOStatus *>::const_iterator oidos;
+	NJR::NJRpolyhedra polyhedra;
+	std::vector<NJR::NJRpolygon> faces;
+	NJR::NJRvector3d Vt;
 
 	if ((fpvpf = fopen(filename, "w")) == NULL)
 	{
-		cerr << "DOWorld write vpf failed" << endl;
-		exit (0);
+		std::cerr
+			<< "Error!! Code: DOWorld::WriteVPF(const char*, const DOWorld*)" << std::endl
+			<< "        Note: DOWorld cannot write vpf file"                  << std::endl;
+		exit(-1);
 	};
 
 	fprintf(fpvpf,"<Header>\n");
@@ -347,10 +352,10 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 
 /*
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
-	NJRvector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
-	NJRvector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
-	NJRvector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
-	NJRvector3d	vRedundant  = vCenter + NJRvector3d(0.0, dY, 0.0);
+	NJR::NJRvector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
+	NJR::NJRvector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
+	NJR::NJRvector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+	NJR::NJRvector3d	vRedundant  = vCenter + NJR::NJRvector3d(0.0, dY, 0.0);
 	dX                      = vUpperPoint.x() - vLowerPoint.x();
 	dY                      = vUpperPoint.y() - vLowerPoint.y();
 	dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -543,13 +548,13 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 //						(*idos)->GetGranularTemperatureAV());
 					break;
 				default:
-					cerr << "Unknown vpf shape" << endl;
+					std::cerr << "Unknown VPF shape" << std::endl;
 			}
 			idos++;
 			oidos++;
 		}
 		// Add redundant DiscreteObjects
-		NJRvector3d	vRedundant(ZERO);
+		NJR::NJRvector3d	vRedundant(NJRDXF::ZERO);
 		if(gap != 0)
 		{
 			switch(GetDOModel((*oidos)->GetDOName())->GetShapeType())
@@ -645,10 +650,12 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 					}
 					break;
 				default:
-					cerr << "Unknown vpf shape" << endl;
+					std::cerr << "Unknown VPF shape" << std::endl;
 			}
 		}
 	}
 	fprintf (fpvpf, "</DiscreteObject>\n");
 	fclose (fpvpf);
 };
+
+};   // namespace VEDO

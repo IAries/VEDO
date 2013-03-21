@@ -1,17 +1,18 @@
 #include <NJR/Interfaces/Utility.h>
 #include <FrameWork/Interfaces/SystemParameter.h>
 
-using namespace std;
+namespace VEDO
+{
 
 SystemParameter::SystemParameter
-	(const string& title,
-	 const string& note,
+	(const std::string& title,
+	 const std::string& note,
 	 const double& timestart,
 	 const double& timestop,
 	 const double& timeinterval,
 	 const double& timecurrent,
      const unsigned long& DONumber,
-	 const NJRvector3d& fieldforce,
+	 const NJR::NJRvector3d& fieldforce,
 	 const Boundary& ZOI,
 	 const Boundary& PBC           ):
 	 ZoneOfInterest(ZOI),
@@ -37,12 +38,12 @@ SystemParameter::SystemParameter(const SystemParameter& sp)
 	*this = sp;
 };
 
-SystemParameter::SystemParameter(ifstream& idof)
+SystemParameter::SystemParameter(std::ifstream& idof)
 {
 	*this << idof;
 };
 
-SystemParameter::SystemParameter(ifstream& idof, unsigned int version)
+SystemParameter::SystemParameter(std::ifstream& idof, unsigned int version)
 {
 	NJR::ReadString(sPublish, idof);
 	NJR::ReadString(sTitle, idof);
@@ -51,11 +52,11 @@ SystemParameter::SystemParameter(ifstream& idof, unsigned int version)
 	idof.read((char*) &dTimeStop, sizeof(double));
 	idof.read((char*) &dTimeCurrent, sizeof(double));
 	idof.read((char*) &dTimeInterval, sizeof(double));
-	idof.read((char*) &vFieldForce, sizeof(NJRvector3d));
-	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJRvector3d));
-	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJRvector3d));
+	idof.read((char*) &vFieldForce, sizeof(NJR::NJRvector3d));
+	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::NJRvector3d));
+	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::NJRvector3d));
 	ZoneOfInterest.Correct();
-	NJRvector3d vPBC_Point(ZERO);
+	NJR::NJRvector3d vPBC_Point(NJRDXF::ZERO);
 	PeriodicBoundaryConditions.SetLowerPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.SetUpperPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.Correct();
@@ -89,7 +90,7 @@ const SystemParameter& SystemParameter::operator = (const SystemParameter& sp)
 	return *this;
 };
 
-ofstream& SystemParameter::operator >> (ofstream& idof) const
+std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 {
 	NJR::WriteString(sPublish, idof);
 	NJR::WriteString(sTitle, idof);
@@ -98,18 +99,18 @@ ofstream& SystemParameter::operator >> (ofstream& idof) const
 	idof.write((char*) &dTimeStop, sizeof(double));
 	idof.write((char*) &dTimeCurrent, sizeof(double));
 	idof.write((char*) &dTimeInterval, sizeof(double));
-	idof.write((char*) &vFieldForce, sizeof(NJRvector3d));
+	idof.write((char*) &vFieldForce, sizeof(NJR::NJRvector3d));
 	idof.write((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*3);
-	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJRvector3d));
-	idof.write((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJRvector3d));
+	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::NJRvector3d));
+	idof.write((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::NJRvector3d));
 	idof.write((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*3);
-	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJRvector3d));
-	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJRvector3d));
+	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJR::NJRvector3d));
+	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJR::NJRvector3d));
 	idof.write((char*) &ulDONumber, sizeof(unsigned long));
 	return idof;
 };
 
-ifstream& SystemParameter::operator << (ifstream& idof)
+std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 {
 	NJR::ReadString(sPublish, idof);
 	NJR::ReadString(sTitle, idof);
@@ -118,15 +119,17 @@ ifstream& SystemParameter::operator << (ifstream& idof)
 	idof.read((char*) &dTimeStop, sizeof(double));
 	idof.read((char*) &dTimeCurrent, sizeof(double));
 	idof.read((char*) &dTimeInterval, sizeof(double));
-	idof.read((char*) &vFieldForce, sizeof(NJRvector3d));
+	idof.read((char*) &vFieldForce, sizeof(NJR::NJRvector3d));
 	idof.read((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*3);
-	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJRvector3d));
-	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJRvector3d));
+	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::NJRvector3d));
+	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::NJRvector3d));
 	ZoneOfInterest.Correct();
 	idof.read((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*3);
-	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJRvector3d));
-	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJRvector3d));
+	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJR::NJRvector3d));
+	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJR::NJRvector3d));
 	PeriodicBoundaryConditions.Correct();
 	idof.read((char*) &ulDONumber, sizeof(unsigned long));
 	return idof;
 };
+
+};   // namespace VEDO

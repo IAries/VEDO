@@ -7,6 +7,9 @@
 #include <cstdlib>
 #include <sstream>
 
+namespace VEDO
+{
+
 struct NullExternalFieldVTKWriter
 {	static void writeExternalFields(std::FILE *fpvpf) {} };
 
@@ -84,10 +87,8 @@ void DOWorld::WriteVTK (const char* filename) const
 	std::FILE *fpvpf;
 	if ((fpvpf = std::fopen(filename, "w"))== NULL )
 	{
-		std::cerr
-			<< "DOWorld write VTK unstructured grid file (.vtu)  failed"
-			<< std::endl;
-		std::exit (0);
+		std::cout << "Error!! Code: DOWorld::WriteVTK (const char*)" << std::endl;
+		exit(-1);
 	};
 
 	/// raw data arrays
@@ -129,7 +130,10 @@ void DOWorld::WriteVTK (const char* filename) const
 				// TODO:
 				break;
 			default:
-				std::cerr << "Unknown VTK shape" << std::endl;
+				std::cerr
+					<< "Error!! Code: DOWorld_WriteVTK.h" << std::endl
+					<< "        Note: Unknown VTK shape" << std::endl;
+				std::exit(-1);
 		}
 	}
 
@@ -165,5 +169,7 @@ void DOWorld::WriteVTK (const char* filename) const
 	fclose (fpvpf);
 };
 */
+
+};   // namespace VEDO
 
 #endif // _DOWORLD_WRITE_VTK__H

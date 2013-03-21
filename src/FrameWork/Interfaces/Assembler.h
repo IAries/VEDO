@@ -13,6 +13,9 @@
 #include <FrameWork/Interfaces/Interaction.h>
 #include <list>
 
+namespace VEDO
+{
+
 class Assembler
 {
 
@@ -53,5 +56,7 @@ private:
 	Assembler (const Assembler&);
 
 };
+
+};   // namespace VEDO
 
 #endif // _ASSEMBLER_H

@@ -2,7 +2,8 @@
 #include <NJR/Interfaces/Utility.h>   // for NJR::Delete_ptr()
 #include <algorithm>
 
-using namespace std;
+namespace VEDO
+{
 
 DOCFactoryDecorator::DOCFactoryDecorator() : lcDOCFactory(0)
 {
@@ -15,7 +16,7 @@ DOCFactoryDecorator::~DOCFactoryDecorator()
 
 void DOCFactoryDecorator::AddDOCFactory(DOFactory* pdof)
 {
-	list<DOFactory *>::const_iterator idof;
+	std::list<DOFactory *>::const_iterator idof;
 
 	for (idof=lcDOCFactory.begin(); idof!=lcDOCFactory.end(); ++idof)
 	{
@@ -34,7 +35,7 @@ void DOCFactoryDecorator::AddDOCFactory(DOFactory* pdof)
 DiscreteObject* DOCFactoryDecorator::Create
 	(const DOModel* pdoml, const DOStatus* pdos) const
 {
-	list<DOFactory *>::const_iterator idof;
+	std::list<DOFactory *>::const_iterator idof;
 	DiscreteObject* pdo;
 	for (idof=lcDOCFactory.begin(); idof!=lcDOCFactory.end(); ++idof)
 	{
@@ -45,9 +46,10 @@ DiscreteObject* DOCFactoryDecorator::Create
 		};
     };
 
-	cerr
-		<< "Unkown Discrete Object (DO factory decorator) DOModel "
-		<< pdoml->GetDOName().c_str()
-		<< endl;
-	exit (0);
+	std::cerr
+		<< "Error!! Code: DOCFactoryDecorator::Create (const DOModel*, const DOStatus*)" << std::endl
+		<< "        Note: Unkown Discrete Object (DO factory decorator) DOModel \'" << pdoml->GetDOName().c_str() << '\'' << std::endl;
+	exit(-1);
 };
+
+};   // namespace VEDO

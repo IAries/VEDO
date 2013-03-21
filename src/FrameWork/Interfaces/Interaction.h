@@ -6,6 +6,9 @@
 #include <FrameWork/Interfaces/DiscreteObject.h>
 #include <FrameWork/Interfaces/ImpactSolver.h>
 
+namespace VEDO
+{
+
 class Interaction
 {
 
@@ -96,5 +99,7 @@ private:
 	Interaction& operator = (const Interaction&);
 	Interaction();
 };
+
+};   // namespace VEDO
 
 #endif // _INTERACTION_H

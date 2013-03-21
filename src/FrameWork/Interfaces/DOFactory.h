@@ -6,6 +6,9 @@
 #include <list>
 #include <string>
 
+namespace VEDO
+{
+
 class DOFactory
 {
 
@@ -71,5 +74,7 @@ private:
 	DOcf& operator == (DOcf&);
 
 };
+
+};   // namespace VEDO
 
 #endif // _DISCRETE_OBJECT_FACTORY_H

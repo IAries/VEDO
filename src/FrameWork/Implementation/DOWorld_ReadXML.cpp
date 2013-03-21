@@ -50,18 +50,18 @@ public:
 		fSawErrors = true;
 		if (domError.getSeverity() == DOMError::DOM_SEVERITY_WARNING)
 		{
-			std::cerr << std::endl << "Warning at file ";
+			std::cout << std::endl << "Warning at file ";
 		}
 		else if (domError.getSeverity() == DOMError::DOM_SEVERITY_ERROR)
 		{
-			std::cerr << std::endl << "Error at file ";
+			std::cout << std::endl << "Error at file ";
 		}
 		else
 		{
-			std::cerr << std::endl << "Fatal Error at file ";
+			std::cout << std::endl << "Fatal Error at file ";
 		}
 
-		std::cerr
+		std::cout
 			<< trans (domError.getLocation()->getURI() )
 			<< ", line "
 			<< domError.getLocation()->getLineNumber()
@@ -144,7 +144,7 @@ static bool node2data(unsigned long& des, const DOMNode* node)
 	return true;
 };
 
-static bool node2data(DOShapeColor& des, const DOMNode* node)
+static bool node2data(VEDO::DOShapeColor& des, const DOMNode* node)
 {
 	std::string sTmp;
 	if (node == 0)
@@ -191,7 +191,7 @@ static bool node2data(DOShapeColor& des, const DOMNode* node)
 };
 
 static bool node2data
-	(DOShapeType& st, DOShapeAttributes& sa, const DOMNode* node)
+	(VEDO::DOShapeType& st, VEDO::DOShapeAttributes& sa, const DOMNode* node)
 {
 	const DOMElement* element = (DOMElement*) node;
 	const DOMElement* shape;
@@ -200,7 +200,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans("Sphere"))->item(0);
 	if (shape != 0)
 	{
-		st = Sphere;
+		st = VEDO::Sphere;
 		node2data
 			(sa.sphere.radius, shape->getAttributeNode(XMLtrans("Radius")));
 		return true;
@@ -210,7 +210,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans("QuasiPlate"))->item(0);
 	if (shape != 0)
 	{
-		st = QuasiPlate;
+		st = VEDO::QuasiPlate;
 		node2data(sa.quasiplate.width , shape->getAttributeNode(XMLtrans("Width" )));
 		node2data(sa.quasiplate.length, shape->getAttributeNode(XMLtrans("Length")));
 		node2data(sa.quasiplate.height, shape->getAttributeNode(XMLtrans("Height")));
@@ -221,7 +221,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans("QuasiCylinder"))->item(0);
 	if (shape != 0)
 	{
-		st = QuasiCylinder;
+		st = VEDO::QuasiCylinder;
 		node2data(sa.quasicylinder.radius, shape->getAttributeNode(XMLtrans("Radius")));
 		node2data(sa.quasicylinder.height, shape->getAttributeNode(XMLtrans("Height")));
 		return true;
@@ -231,7 +231,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans ("Ellipsoid"))->item(0);
 	if (shape != 0)
 	{
-		st = Ellipsoid;
+		st = VEDO::Ellipsoid;
 		node2data(sa.ellipsoid.xlength, shape->getAttributeNode(XMLtrans("XLength")));
 		node2data(sa.ellipsoid.ylength, shape->getAttributeNode(XMLtrans("YLength")));
 		node2data(sa.ellipsoid.zlength, shape->getAttributeNode(XMLtrans("ZLength")));
@@ -242,15 +242,15 @@ static bool node2data
 		->getElementsByTagName(XMLtrans ("Polyhedra"))->item(0);
 	if (shape != 0)
 	{
-		st = Polyhedra;
+		st = VEDO::Polyhedra;
 		return true;
 	}
 
-	st = NoType;
+	st = VEDO::NoType;
 	return false;
 };
 
-static bool node2data(NJRvector3d& des, const DOMNode *node)
+static bool node2data(NJR::NJRvector3d& des, const DOMNode *node)
 {
 	double x, y, z;
 	if (node == 0)
@@ -267,7 +267,7 @@ static bool node2data(NJRvector3d& des, const DOMNode *node)
 	return true;
 };
 
-static bool node2data(NJRhalfspace& des, const DOMNode *node)
+static bool node2data(NJR::NJRhalfspace& des, const DOMNode *node)
 {
 	double a, b, c, d;
 	std::string sense;
@@ -303,24 +303,24 @@ static bool node2data(NJRhalfspace& des, const DOMNode *node)
 	return true;
 };
 
-static DOModel* node2doml(const DOMNode* node)
+static VEDO::DOModel* node2doml(const DOMNode* node)
 {
-	std::string         sDOName;
-	std::string         sDOGroup;
-	DOShapeColor        cColor;
-	std::string         sBehavior;
-	std::string         sScope;
-	double              dDensity;
-	double              dDensityFactor;
-	NJRvector3d         vExternalForce;
+	std::string               sDOName;
+	std::string               sDOGroup;
+	VEDO::DOShapeColor        cColor;
+	std::string               sBehavior;
+	std::string               sScope;
+	double                    dDensity;
+	double                    dDensityFactor;
+	NJR::NJRvector3d          vExternalForce;
 
-	DOShapeType         st;
-	DOShapeAttributes   sa;
+	VEDO::DOShapeType         st;
+	VEDO::DOShapeAttributes   sa;
 
-	std::vector<DOMaterialAttribute> cMatOpt(0);
+	std::vector<VEDO::DOMaterialAttribute> cMatOpt(0);
 
-	DOMaterialAttribute DOMatOpt;
-	DOMNodeList*        nl_MatOpt;
+	VEDO::DOMaterialAttribute DOMatOpt;
+	DOMNodeList*              nl_MatOpt;
 
 	unsigned long int i;
 
@@ -365,11 +365,11 @@ static DOModel* node2doml(const DOMNode* node)
 		cMatOpt.push_back(DOMatOpt);
 	}
 
-	if (st == Polyhedra)
+	if (st == VEDO::Polyhedra)
 	{
 		DOMNodeList* nl_hf = element->getElementsByTagName(XMLtrans("HalfSpace"));
-		NJRpolyhedra polyhedra;
-		NJRhalfspace hf;
+		NJR::NJRpolyhedra polyhedra;
+		NJR::NJRhalfspace hf;
 
 		unsigned long ulHalfSpaceSize = nl_hf->getLength();
 		for (i=0; i<ulHalfSpaceSize; ++i)
@@ -378,7 +378,7 @@ static DOModel* node2doml(const DOMNode* node)
 			polyhedra.AddConstrain(hf);
 		}
 
-		return new DOModel
+		return new VEDO::DOModel
 			(sDOName,
 			 sDOGroup,
 			 sBehavior,
@@ -391,7 +391,7 @@ static DOModel* node2doml(const DOMNode* node)
 			 cMatOpt        );
 	}
 
-	return new DOModel
+	return new VEDO::DOModel
 		(sDOName,
 		 sDOGroup,
 		 sBehavior,
@@ -405,14 +405,14 @@ static DOModel* node2doml(const DOMNode* node)
 		 cMatOpt        );
 };
 
-static DOStatus* node2dos (const DOMNode* node)
+static VEDO::DOStatus* node2dos (const DOMNode* node)
 {
 	std::string sDOName;
-	NJRvector3d vPosition;
-	NJRvector3d vVelocity;
-	NJRvector3d vOrientationX;
-	NJRvector3d	vOrientationZ;
-	NJRvector3d vAngularVelocity;
+	NJR::NJRvector3d vPosition;
+	NJR::NJRvector3d vVelocity;
+	NJR::NJRvector3d vOrientationX;
+	NJR::NJRvector3d	vOrientationZ;
+	NJR::NJRvector3d vAngularVelocity;
 
 	const DOMElement* element = (DOMElement*) node;
 
@@ -423,7 +423,7 @@ static DOStatus* node2dos (const DOMNode* node)
 	node2data(vOrientationZ   , element->getElementsByTagName(XMLtrans("OrientationZ"))->item(0));
 	node2data(vAngularVelocity, element->getElementsByTagName(XMLtrans("AngularVelocity"))->item(0));
 
-	return new DOStatus
+	return new VEDO::DOStatus
 		(sDOName,
 		 vPosition,
 		 vVelocity,
@@ -432,15 +432,15 @@ static DOStatus* node2dos (const DOMNode* node)
 		 vAngularVelocity);
 };
 
-static IactModel* node2iactml (const DOMNode* node)
+static VEDO::IactModel* node2iactml (const DOMNode* node)
 {
-	std::string                sMasterGroup;
-	std::string                sSlaveGroup;
-	std::string                sEquationType;
-	std::vector<IactMechanism> svIactMechanisms(0);
+	std::string                      sMasterGroup;
+	std::string                      sSlaveGroup;
+	std::string                      sEquationType;
+	std::vector<VEDO::IactMechanism> svIactMechanisms(0);
 
-	IactMechanism              im;
-	DOMNodeList*               nl_IactM;
+	VEDO::IactMechanism              im;
+	DOMNodeList*                     nl_IactM;
 
 	unsigned long int i;
 
@@ -463,9 +463,14 @@ static IactModel* node2iactml (const DOMNode* node)
 		svIactMechanisms.push_back(im);
 	}
 
-	return new IactModel
+	return new VEDO::IactModel
 		(sMasterGroup, sSlaveGroup, sEquationType, svIactMechanisms);
 };
+
+
+
+namespace VEDO
+{
 
 bool DOWorld::ReadXML(const char* xmlFile)
 {
@@ -473,11 +478,11 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	std::string   sTitle   = "noTitle";
 	std::string   sPublish = "noPublish";
 	std::string   sNote    = "noNote";
-	NJRvector3d   vFieldForce;
-	NJRvector3d   vLowerBoundaryZOI;
-	NJRvector3d   vUpperBoundaryZOI;
-	NJRvector3d   vLowerBoundaryPBC;
-	NJRvector3d   vUpperBoundaryPBC;
+	NJR::NJRvector3d   vFieldForce;
+	NJR::NJRvector3d   vLowerBoundaryZOI;
+	NJR::NJRvector3d   vUpperBoundaryZOI;
+	NJR::NJRvector3d   vLowerBoundaryPBC;
+	NJR::NJRvector3d   vUpperBoundaryPBC;
 	double        dStart;
 	double        dStop;
 	double        dInterval;
@@ -559,7 +564,7 @@ bool DOWorld::ReadXML(const char* xmlFile)
 
 	catch (const XMLException& toCatch)
 	{
-		std::cerr
+		std::cout
 			<< std::endl
 			<< "Error during parsing: '"
 			<< xmlFile
@@ -567,7 +572,7 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	}
 
 	/**************************************************************************
-	 * Extract the DOM tree, get the list of all the elements and report the
+	 * Extract the DOM tree, get the std::list of all the elements and report the
 	 * length as the count of elements.
 	 **************************************************************************/
 
@@ -709,3 +714,5 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	XMLPlatformUtils::Terminate();
 	return DOWorld::Check();
 };
+
+};   // namespace VEDO

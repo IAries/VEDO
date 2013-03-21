@@ -3,23 +3,26 @@
 #include <NJR/Interfaces/halfspace.h>
 #include <cstdio>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <cstdlib>
 #include <vector>
 
-using namespace std;
+namespace VEDO
+{
 
 void DOWorld::WriteXML (const char* filename) const
 {
 	FILE *fpxml;
-	list<DOModel*>::const_iterator     idoml;
-	list<IactModel*>::const_iterator   iactml;
-	vector<DOStatus *>::const_iterator idos;
+	std::list<DOModel*>::const_iterator     idoml;
+	std::list<IactModel*>::const_iterator   iactml;
+	std::vector<DOStatus *>::const_iterator idos;
 
 	if ((fpxml = fopen (filename,"w")) == NULL )
 	{
-		cerr << "DOWorld write xml failed" << endl;
-		exit (0);
+		std::cerr
+			<< "Error!! Code: DOWorld::WriteXML(const char*)" << std::endl
+			<< "        Note: DOWorld cannot write XML file"  << std::endl;
+		exit(-1);
 	};
 
 	fprintf
@@ -125,7 +128,7 @@ void DOWorld::WriteXML (const char* filename) const
 
 	char sa[256];
 
-	string buffer1;
+	std::string buffer1;
 
 	fprintf(fpxml, "\t<DOModelTab>\n");
 
@@ -166,8 +169,8 @@ void DOWorld::WriteXML (const char* filename) const
 					(*idoml)->GetShapeAttributes().ellipsoid.zlength );
 				buffer1 = sa;
 			case Polyhedra:
-				NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
-				vector<NJRhalfspace> faces = polyhedra.constrains();
+				NJR::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
+				std::vector<NJR::NJRhalfspace> faces = polyhedra.constrains();
 				sprintf(sa,"<Polyhedra>\n");
 				buffer1 = sa;
 				for (unsigned int i=0; i<faces.size(); ++i)
@@ -227,7 +230,7 @@ void DOWorld::WriteXML (const char* filename) const
 			(*idoml)->GetExternalForce().z(),
 			buffer1.c_str()                  );
 
-		const vector<DOMaterialAttribute>&
+		const std::vector<DOMaterialAttribute>&
 			cMatOpt = (*idoml)->GetMaterialAttributes();
 
 		for (unsigned int i=0; i<cMatOpt.size(); i++)
@@ -252,7 +255,7 @@ void DOWorld::WriteXML (const char* filename) const
 			(*iactml)->GetSlaveDOGroup().c_str(),
 			(*iactml)->GetEquationType().c_str()  );
 
-		const vector<IactMechanism>&
+		const std::vector<IactMechanism>&
 			svIactMechanisms = (*iactml)->GetIactMechanisms();
 
 		for (unsigned int i=0; i<svIactMechanisms.size(); i++)
@@ -298,3 +301,5 @@ void DOWorld::WriteXML (const char* filename) const
 	fprintf(fpxml, "</DOWorld>");
 	fclose(fpxml);
 };
+
+};   // namespace VEDO

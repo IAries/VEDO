@@ -1,23 +1,24 @@
 #include <FrameWork/Interfaces/Boundary2d.h>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
 Boundary2d::Boundary2d()
 {
 	sName = "Boundary2d";
-	vLowerPoint = ZERO;
-	vUpperPoint = ZERO;
+	vLowerPoint = NJRDXF::ZERO;
+	vUpperPoint = NJRDXF::ZERO;
 	bSwitch[0] = false;
 	bSwitch[1] = false;
 	Correct();
 };
 
 Boundary2d::Boundary2d
-	(string sN,
+	(std::string sN,
 	 const bool* bS,
-	 const NJRvector2d vLP,
-	 const NJRvector2d vUP): sName(sN)
+	 const NJR::NJRvector2d vLP,
+	 const NJR::NJRvector2d vUP): sName(sN)
 {
 	bSwitch[0]  = *bS;
 	bSwitch[1]  = *(bS+1);
@@ -28,8 +29,8 @@ Boundary2d::Boundary2d
 
 Boundary2d::Boundary2d
 	(const bool* bS,
-	 const NJRvector2d vLP,
-	 const NJRvector2d vUP )
+	 const NJR::NJRvector2d vLP,
+	 const NJR::NJRvector2d vUP )
 {
 	sName = "Boundary2d";
 	bSwitch[0] = *bS;
@@ -40,16 +41,16 @@ Boundary2d::Boundary2d
 };
 
 Boundary2d::Boundary2d
-	(string sN,
-	 const NJRvector2d vLP,
-	 const NJRvector2d vUP): sName(sN)
+	(std::string sN,
+	 const NJR::NJRvector2d vLP,
+	 const NJR::NJRvector2d vUP): sName(sN)
 {
 	vLowerPoint = vLP;
 	vUpperPoint = vUP;
 	Correct();
 };
 
-Boundary2d::Boundary2d(const NJRvector2d vLP, const NJRvector2d vUP)
+Boundary2d::Boundary2d(const NJR::NJRvector2d vLP, const NJR::NJRvector2d vUP)
 {
 	sName = "Boundary2d";
 	vLowerPoint = vLP;
@@ -79,10 +80,10 @@ Boundary2d::~Boundary2d()
 
 void Boundary2d::Correct()
 {
-	double x_min = min(vLowerPoint.x(), vUpperPoint.x());
-	double x_max = max(vLowerPoint.x(), vUpperPoint.x());
-	double y_min = min(vLowerPoint.y(), vUpperPoint.y());
-	double y_max = max(vLowerPoint.y(), vUpperPoint.y());
+	double x_min = std::min(vLowerPoint.x(), vUpperPoint.x());
+	double x_max = std::max(vLowerPoint.x(), vUpperPoint.x());
+	double y_min = std::min(vLowerPoint.y(), vUpperPoint.y());
+	double y_max = std::max(vLowerPoint.y(), vUpperPoint.y());
 
 	vLowerPoint.Set(x_min, y_min);
 	vUpperPoint.Set(x_max, y_max);
@@ -118,26 +119,26 @@ void Boundary2d::Correct()
 	};
 };
 
-void Boundary2d::SetLowerPoint(const NJRvector2d* point)
+void Boundary2d::SetLowerPoint(const NJR::NJRvector2d* point)
 {
 	vLowerPoint = *point;
 	Correct();
 };
 
-void Boundary2d::SetUpperPoint(const NJRvector2d* point)
+void Boundary2d::SetUpperPoint(const NJR::NJRvector2d* point)
 {
 	vUpperPoint = *point;
 	Correct();
 };
 
-void Boundary2d::SetCenter(const NJRvector2d* cNewCenter)
+void Boundary2d::SetCenter(const NJR::NJRvector2d* cNewCenter)
 {
-	NJRvector2d vShift = (*cNewCenter) - vCenter;
+	NJR::NJRvector2d vShift = (*cNewCenter) - vCenter;
 	vLowerPoint += vShift;
 	vUpperPoint += vShift;
 };
 
-void Boundary2d::SetRange(const NJRvector2d* vNewRange)
+void Boundary2d::SetRange(const NJR::NJRvector2d* vNewRange)
 {
 	double dX = fabs(vNewRange->x());
 	double dY = fabs(vNewRange->y());
@@ -147,7 +148,7 @@ void Boundary2d::SetRange(const NJRvector2d* vNewRange)
 	Correct();
 };
 
-bool Boundary2d::InBoundary(const NJRvector2d* p) const
+bool Boundary2d::InBoundary(const NJR::NJRvector2d* p) const
 {
 	if(Active())
 	{
@@ -173,7 +174,7 @@ bool Boundary2d::InBoundary(const NJRvector2d* p) const
 	return true;
 };
 
-bool Boundary2d::InBoundary(const NJRvector2d* p, const double r) const
+bool Boundary2d::InBoundary(const NJR::NJRvector2d* p, const double r) const
 {
 	if(Active())
 	{
@@ -199,7 +200,7 @@ bool Boundary2d::InBoundary(const NJRvector2d* p, const double r) const
 	return true;
 };
 
-void Boundary2d::EnforceBoundaryConditions(NJRvector2d* vPosition) const
+void Boundary2d::EnforceBoundaryConditions(NJR::NJRvector2d* vPosition) const
 {
 	double dPx = vPosition->x();
 	double dPy = vPosition->y();
@@ -262,7 +263,7 @@ void Boundary2d::EnforceBoundaryConditions(NJRvector2d* vPosition) const
 	vPosition->Set(dPx, dPy);
 };
 
-void Boundary2d::DifferenceBoundaryConditions(NJRvector2d* vDisplacement) const
+void Boundary2d::DifferenceBoundaryConditions(NJR::NJRvector2d* vDisplacement) const
 {
 	double dPx = vDisplacement->x();
 	double dPy = vDisplacement->y();
@@ -298,45 +299,49 @@ void Boundary2d::DifferenceBoundaryConditions(NJRvector2d* vDisplacement) const
 
 void Boundary2d::print() const
 {
-	cout << "Type: " << sName << endl;
+	std::cout << "Type: " << sName << std::endl;
 
 	if(!Active())
 	{
-		cout << "Boundary2d inactive" << endl;
+		std::cout << "Boundary2d inactive" << std::endl;
 	}
 	else
 	{
 		if(bSwitch[0])
 		{
-			cout
+			std::cout
 				<< "From X="
 				<< vLowerPoint.x()
 				<< " to X= "
 				<< vUpperPoint.x()
-				<< endl;
+				<< std::endl;
 		};
 
 		if(bSwitch[1])
 		{
-			cout
+			std::cout
 				<< "From Y="
 				<< vLowerPoint.y()
 				<< " to Y= "
 				<< vUpperPoint.y()
-				<< endl;
+				<< std::endl;
 		};
 	};
 };
 
-ostream& operator << (ostream& os, Boundary2d& b)
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream& os, VEDO::Boundary2d& b)
 {
 	if(!(b.Active()))
 	{
-		os << "Boundary2d inactive!!" << endl;
+		os << "Boundary2d inactive!!" << std::endl;
 	}
 	else
 	{
-		os << "Type: " << b.GetName() << endl;
+		os << "Type: " << b.GetName() << std::endl;
 
 		if(b.GetSwitch(0))
 		{
@@ -345,7 +350,7 @@ ostream& operator << (ostream& os, Boundary2d& b)
 				<< b.GetLowerPoint().x()
 				<< " to x= "
 				<< b.GetUpperPoint().x()
-				<< endl;
+				<< std::endl;
 		};
 
 		if(b.GetSwitch(1))
@@ -355,7 +360,7 @@ ostream& operator << (ostream& os, Boundary2d& b)
 				<< b.GetLowerPoint().y()
 				<< " to y= "
 				<< b.GetUpperPoint().y()
-				<< endl;
+				<< std::endl;
 		};
 	};
 	return os;

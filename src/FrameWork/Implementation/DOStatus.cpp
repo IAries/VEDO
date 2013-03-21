@@ -3,27 +3,28 @@
 #include <FrameWork/Interfaces/DOStatus.h>
 #include <NJR/Interfaces/Utility.h>
 
-using namespace std;
+namespace VEDO
+{
 
 void DOStatus::SetOrientation
-	(const NJRvector3d& orientationX, const NJRvector3d& orientationZ)
+	(const NJR::NJRvector3d& orientationX, const NJR::NJRvector3d& orientationZ)
 {
 	vOrientationX = orientationX;
 	vOrientationZ = orientationZ;
 };
 
-DOStatus::DOStatus(const string& doname)
+DOStatus::DOStatus(const std::string& doname)
 {
 	sDOName	= doname;
 };
 
 DOStatus::DOStatus
-	(const string& doname,
-	 const NJRvector3d& position,
-	 const NJRvector3d& velocity,
-	 const NJRvector3d& orientationX,
-	 const NJRvector3d& orientationZ,
-	 const NJRvector3d& angularVelocity)
+	(const std::string& doname,
+	 const NJR::NJRvector3d& position,
+	 const NJR::NJRvector3d& velocity,
+	 const NJR::NJRvector3d& orientationX,
+	 const NJR::NJRvector3d& orientationZ,
+	 const NJR::NJRvector3d& angularVelocity)
 {
 	sDOName	         = doname;
 	vPosition        = position;
@@ -39,7 +40,7 @@ DOStatus::DOStatus(const DOStatus& dos)
 	*this = dos;
 };
 
-DOStatus::DOStatus(ifstream& idof)
+DOStatus::DOStatus(std::ifstream& idof)
 {
 	*this << idof;
 };
@@ -52,7 +53,6 @@ const DOStatus& DOStatus::operator = (const DOStatus& dos)
 	vOrientationX          = dos.vOrientationX;
 	vOrientationZ          = dos.vOrientationZ;
 	vAngularVelocity       = dos.vAngularVelocity;
-	dRange                 = dos.dRange;
 	beMonitored            = dos.beMonitored;
 	dGranularTemperatureV  = dos.dGranularTemperatureV;
 	dGranularTemperatureAV = dos.dGranularTemperatureAV;
@@ -64,24 +64,28 @@ bool DOStatus::operator () (const DOStatus* p) const
 	return (sDOName == (p->sDOName));
 };
 
-ofstream& DOStatus::operator >> (ofstream& idof) const
+};   // namespace VEDO
+
+
+
+std::ofstream& VEDO::DOStatus::operator >> (std::ofstream& idof) const
 {
      NJR::WriteString(sDOName, idof);
-	 idof.write((char*) &vPosition       , sizeof(NJRvector3d));
-	 idof.write((char*) &vVelocity       , sizeof(NJRvector3d));
-     idof.write((char*) &vOrientationX   , sizeof(NJRvector3d));
-     idof.write((char*) &vOrientationZ   , sizeof(NJRvector3d));
-     idof.write((char*) &vAngularVelocity, sizeof(NJRvector3d));
+	 idof.write((char*) &vPosition       , sizeof(NJR::NJRvector3d));
+	 idof.write((char*) &vVelocity       , sizeof(NJR::NJRvector3d));
+     idof.write((char*) &vOrientationX   , sizeof(NJR::NJRvector3d));
+     idof.write((char*) &vOrientationZ   , sizeof(NJR::NJRvector3d));
+     idof.write((char*) &vAngularVelocity, sizeof(NJR::NJRvector3d));
 	 return idof;
 };
 
-ifstream& DOStatus::operator << (ifstream& idof)
+std::ifstream& VEDO::DOStatus::operator << (std::ifstream& idof)
 {
      NJR::ReadString(sDOName, idof);
-	 idof.read((char *) &vPosition       , sizeof(NJRvector3d));
-	 idof.read((char *) &vVelocity       , sizeof(NJRvector3d));
-     idof.read((char *) &vOrientationX   , sizeof(NJRvector3d));
-     idof.read((char *) &vOrientationZ   , sizeof(NJRvector3d));
-     idof.read((char *) &vAngularVelocity, sizeof(NJRvector3d));
+	 idof.read((char *) &vPosition       , sizeof(NJR::NJRvector3d));
+	 idof.read((char *) &vVelocity       , sizeof(NJR::NJRvector3d));
+     idof.read((char *) &vOrientationX   , sizeof(NJR::NJRvector3d));
+     idof.read((char *) &vOrientationZ   , sizeof(NJR::NJRvector3d));
+     idof.read((char *) &vAngularVelocity, sizeof(NJR::NJRvector3d));
 	 return idof;
 };

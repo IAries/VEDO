@@ -7,6 +7,9 @@
 #include <fstream>
 #define  PUBLISH "2010-08-27"
 
+namespace VEDO
+{
+
 // Data Type Class
 class SystemParameter
 {
@@ -21,7 +24,7 @@ public:
 		const double& TimeInterval,
 		const double& TimeCurrent,
 		const unsigned long int& DONumber,
-		const NJRvector3d& FieldForce,
+		const NJR::NJRvector3d& FieldForce,
 		const Boundary& ZOI,
 		const Boundary& PBC               );
 
@@ -79,7 +82,7 @@ public:
 		ulDONumber = n;
 	};
 
-	inline NJRvector3d GetFieldForce() const
+	inline NJR::NJRvector3d GetFieldForce() const
 	{
 		return vFieldForce;
 	};
@@ -122,7 +125,7 @@ public:
 		dTimeCurrent += dTimeInterval;
 	};
 
-	inline void SetFieldForce(const NJRvector3d& FieldForce)
+	inline void SetFieldForce(const NJR::NJRvector3d& FieldForce)
 	{
 		vFieldForce = FieldForce;
 	};
@@ -152,12 +155,12 @@ public:
 		return dEnergyRotation;
 	};
 
-	inline NJRvector3d GetMomentumAvg() const
+	inline NJR::NJRvector3d GetMomentumAvg() const
 	{
 		return vMomentumAvg;
 	};
 
-	inline NJRvector3d GetAngularMomentumAvg() const
+	inline NJR::NJRvector3d GetAngularMomentumAvg() const
 	{
 		return vAngularMomentumAvg;
 	};
@@ -207,12 +210,12 @@ public:
 		dEnergyRotation = e;
 	};
 
-	inline void SetMomentumAvg(const NJRvector3d& v)
+	inline void SetMomentumAvg(const NJR::NJRvector3d& v)
 	{
 		vMomentumAvg = v;
 	};
 
-	inline void SetAngularMomentumAvg(const NJRvector3d& v)
+	inline void SetAngularMomentumAvg(const NJR::NJRvector3d& v)
 	{
 		vAngularMomentumAvg = v;
 	};
@@ -280,7 +283,7 @@ private:
 	unsigned long ulDONumber;
 
 	// The global field force
-	NJRvector3d vFieldForce;
+	NJR::NJRvector3d vFieldForce;
 
 	Boundary    ZoneOfInterest;               // Zone of Interest (ZOI)
 	Boundary    PeriodicBoundaryConditions;   // Periodic Boundary Condition (PBC)
@@ -289,8 +292,8 @@ private:
 	double      dEnergyTranslation;           // Kinetic energy (Total, Translation part)
 	double      dEnergyRotation;              // Kinetic energy (Total, Rotation part)
 
-	NJRvector3d vMomentumAvg;                 // Average momentum
-	NJRvector3d vAngularMomentumAvg;          // Average angular momentum
+	NJR::NJRvector3d vMomentumAvg;                 // Average momentum
+	NJR::NJRvector3d vAngularMomentumAvg;          // Average angular momentum
 
 	double      dMomentumNorm;                // Norm of momentum (Total)
 	double      dAngularMomentumNorm;         // Norm of angular momentum (Total)
@@ -301,5 +304,7 @@ private:
 	double      dAngularVelocityMin;          // Minimal angular velocity
 	double      dAngularVelocityMax;          // Maximal angular velocity
 };
+
+};   // namespace VEDO
 
 #endif // _SYSTEM_PARAMETER_H

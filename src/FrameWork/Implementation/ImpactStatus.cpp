@@ -2,11 +2,12 @@
 #include <cstdlib>
 #include <cstring>
 
-using namespace std;
+namespace VEDO
+{
 
 ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearForce()
 {
-	for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = 0.0;
 };
 
@@ -21,7 +22,7 @@ const ImpactStatus& ImpactStatus::operator = (const ImpactStatus& is)
 	bBond       = is.bBond;
 	dKn         = is.dKn;
 	vShearForce = is.vShearForce;
-	memcpy(dUDV, is.dUDV, 4*uNumUserDefinedData*sizeof(double));
+	memcpy(dUDV, is.dUDV, 4*VEDO::uNumUserDefinedData*sizeof(double));
 	return *this;
 };
 
@@ -36,40 +37,42 @@ void ImpactStatus::CleanShearForce()
 
 void ImpactStatus::SetUserDefinedValue(unsigned u, double d)
 {
-	if (u < uNumUserDefinedData)
+	if (u < VEDO::uNumUserDefinedData)
 	{
-		dUDV[u+3*uNumUserDefinedData] = d;
+		dUDV[u+3*VEDO::uNumUserDefinedData] = d;
 	}
 	else
 	{
-		cerr << "ImpactStatus::SetUserDefinedValue(unsigned, double&) ERROR!!" << endl;
+		std::cerr << "Error!! Code: ImpactStatus::SetUserDefinedValue(unsigned, double)" << std::endl;
 		exit(-1);
 	}
 };
 
 double ImpactStatus::GetUserDefinedValue(unsigned u) const
 {
-	if (u < uNumUserDefinedData)
+	if (u < VEDO::uNumUserDefinedData)
 	{
-		return dUDV[u+3*uNumUserDefinedData];
+		return dUDV[u+3*VEDO::uNumUserDefinedData];
 	}
 	else
 	{
-		cerr << "ImpactStatus::GetUserDefinedValue(unsigned) ERROR!!" << endl;
+		std::cerr
+			<< "Error!! Code: ImpactStatus::GetUserDefinedValue(unsigned)"
+			<< std::endl;
 		exit(-1);
 	}
 };
 
 void ImpactStatus::AddAccumulativeUserDefinedValue(unsigned u, double d)
 {
-	if (u < uNumUserDefinedData)
+	if (u < VEDO::uNumUserDefinedData)
 	{
-		dUDV[u                    ] += d;
-		dUDV[u+uNumUserDefinedData] += d;
+		dUDV[u                               ] += d;
+		dUDV[u+VEDO::uNumUserDefinedData] += d;
 	}
 	else
 	{
-		cerr << "ImpactStatus::AddAccumulativeUserDefinedValue(unsigned, double&) ERROR!!" << endl;
+		std::cerr << "Error!! Code: ImpactStatus::AddAccumulativeUserDefinedValue(unsigned, double)" << std::endl;
 		exit(-1);
 	}
 };
@@ -77,14 +80,14 @@ void ImpactStatus::AddAccumulativeUserDefinedValue(unsigned u, double d)
 const double* ImpactStatus::RetrieveUserDefinedValue()
 {
 	memcpy
-		(&dUDV[2*uNumUserDefinedData]      ,
-		 &dUDV[uNumUserDefinedData]        ,
-		 uNumUserDefinedData*sizeof(double) );
+		(&dUDV[2*VEDO::uNumUserDefinedData]      ,
+		 &dUDV[VEDO::uNumUserDefinedData]        ,
+		 VEDO::uNumUserDefinedData*sizeof(double) );
 
-	for(unsigned u=0; u<uNumUserDefinedData; u++)
-		dUDV[u+uNumUserDefinedData] = 0.0;
+	for(unsigned u=0; u<VEDO::uNumUserDefinedData; u++)
+		dUDV[u+VEDO::uNumUserDefinedData] = 0.0;
 
-	return &dUDV[2*uNumUserDefinedData];
+	return &dUDV[2*VEDO::uNumUserDefinedData];
 };
 
 const double* ImpactStatus::RetrieveAllUserDefinedValue() const
@@ -94,25 +97,25 @@ const double* ImpactStatus::RetrieveAllUserDefinedValue() const
 
 void ImpactStatus::SetAllUserDefinedValue(const double* dp)
 {
-	for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = *(dp+u);
 };
 
 void ImpactStatus::CleanAllUserDefinedValue()
 {
-	for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = 0.0;
 };
 
 void ImpactStatus::CleanUserDefinedValue()
 {
-	for(unsigned u=0; u<uNumUserDefinedData; u++)
-		dUDV[u+3*uNumUserDefinedData] = 0.0;
+	for(unsigned u=0; u<VEDO::uNumUserDefinedData; u++)
+		dUDV[u+3*VEDO::uNumUserDefinedData] = 0.0;
 };
 
 void ImpactStatus::CleanAccumulativeUserDefinedValue()
 {
-	for(unsigned u=0; u<3*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<3*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = 0.0;
 };
 
@@ -123,6 +126,8 @@ void ImpactStatus::Clean()
 	dKn      = 0.0;
 	CleanShearForce();
 
-	for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = 0.0;
 };
+
+};   // namespace VEDO

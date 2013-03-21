@@ -7,6 +7,9 @@
 
 #include <string>
 
+namespace VEDO
+{
+
 class CDFactory
 {
 
@@ -112,5 +115,7 @@ private:
 	CDcf& operator == (CDcf&);
 
 };
+
+};   // namespace VEDO
 
 #endif // _CONTACT_DETECTOR_FACTORY_H

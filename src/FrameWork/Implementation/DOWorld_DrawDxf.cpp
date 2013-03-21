@@ -1,27 +1,29 @@
 #include <NJR/Interfaces/acadxf.h>
+#include <FrameWork/Interfaces/Constants.h>
 #include <NJR/Interfaces/dxfsolid.h>
 #include <FrameWork/Interfaces/DOWorld.h>
 #include <algorithm>
 #include <cstdlib>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
 void DOWorld::Draw(const char* filename)  const
 {
 	NJRDXF::ofstream bdxf(filename);
-	vector<DOStatus *>::const_iterator idos;
+	std::vector<DOStatus *>::const_iterator idos;
 	const DOModel* pdoml;
 	DOShapeAttributes shA;
 
-	NJRpolyhedra polyhedra;
-	vector<NJRpolygon> faces;
+	NJR::NJRpolyhedra polyhedra;
+	std::vector<NJR::NJRpolygon> faces;
 	NJRDXF::Polygon	polygon;
 
-    NJRDXF::Ellipsoid  ellipsoid(PI/4.0);
-	NJRDXF::Sphere     sphere(PI/3.0);
+    NJRDXF::Ellipsoid  ellipsoid(NJR::dQuarterPI);
+	NJRDXF::Sphere     sphere(NJR::dOneThirdPI);
 	NJRDXF::QuasiPlate cuboid;
-	NJRDXF::Cylinder   cylinder(PI/4.0);
+	NJRDXF::Cylinder   cylinder(NJR::dQuarterPI);
 	NJRDXF::Text       text;
 
 	for (idos = cDOStatus.begin(); idos != cDOStatus.end(); ++idos)
@@ -101,16 +103,16 @@ void DOWorld::Draw(const char* filename)  const
 void DOWorld::HighDraw(const char* filename) const
 {
 	NJRDXF::ofstream bdxf(filename);
-	vector<DOStatus *>::const_iterator idos;
+	std::vector<DOStatus *>::const_iterator idos;
 	const DOModel* pdoml;
 	DOShapeAttributes shA;
 
-	NJRpolyhedra polyhedra;
-	vector<NJRpolygon> faces;
+	NJR::NJRpolyhedra polyhedra;
+	std::vector<NJR::NJRpolygon> faces;
 	NJRDXF::Polygon polygon;
 
     NJRDXF::Ellipsoid ellipsoid;
-	NJRDXF::Sphere sphere(PI/8);
+	NJRDXF::Sphere sphere(NJR::dOneEighthPI);
 	NJRDXF::QuasiPlate qplate;
 	NJRDXF::QuasiCylinder qcylinder;
 	NJRDXF::Text text;
@@ -189,3 +191,5 @@ void DOWorld::HighDraw(const char* filename) const
 		}
 	};
 };
+
+};   // namespace VEDO

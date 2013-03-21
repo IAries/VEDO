@@ -7,6 +7,9 @@
 
 #include <string>
 
+namespace VEDO
+{
+
 class DiscreteObject
 {
 
@@ -29,7 +32,7 @@ public:
 		return dSudoMass;
 	};
 
-	inline NJRvector3d GetMassMomentInertia() const
+	inline NJR::NJRvector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	}
@@ -54,52 +57,42 @@ public:
 		return pDOStatus;
 	};
 
-	inline const NJRvector3d& GetImpact() const
+	inline const NJR::NJRvector3d& GetImpact() const
 	{
 		return vImpact;
 	};
 
-	inline const NJRvector3d& GetAngularImpact() const
+	inline const NJR::NJRvector3d& GetAngularImpact() const
 	{
 		return vAngularImpact;
 	};
 
-	inline const double GetRange() const
-	{
-		return pDOStatus->GetRange();
-	};
-
-	inline void SetRange(double r)
-	{
-		pDOStatus->SetRange(r);
-	};
-
-	inline void SetVelocity(const NJRvector3d& vV)
+	inline void SetVelocity(const NJR::NJRvector3d& vV)
 	{
 		pDOStatus->SetVelocity(vV);
 	};
 
-	inline void SetAngularVelocity(const NJRvector3d& vAV)
+	inline void SetAngularVelocity(const NJR::NJRvector3d& vAV)
 	{
 		pDOStatus->SetAngularVelocity(vAV);
 	};
 
-	void ModifyVelocity(const NJRvector3d& vdv);
+	void ModifyVelocity(const NJR::NJRvector3d& vdv);
 
-	void ModifyPosition(const NJRvector3d& vdp);
+	void ModifyPosition(const NJR::NJRvector3d& vdp);
 
 	void ClearImpact();
 
 	virtual void AddImpact
-		(const NJRvector3d& vImpact, const NJRvector3d& vAngularImpact = ZERO);
+		(const NJR::NJRvector3d& vImpact, const NJR::NJRvector3d& vAngularImpact = NJRDXF::ZERO);
 
 /*
-	inline NJRvector3d GetFieldImpact() const
+	inline NJR::NJRvector3d GetFieldImpact() const
 	{
 		return pDOStatus->GetFieldImpact();
 	};
 
-	inline void SetFieldImpact(const NJRvector3d& vi)
+	inline void SetFieldImpact(const NJR::NJRvector3d& vi)
 	{
 		pDOStatus->SetFieldImpact(vi);
 	};
@@ -128,9 +121,9 @@ protected:
 
 	DOStatus* pDOStatus;
 
-	NJRvector3d	vImpact;
+	NJR::NJRvector3d	vImpact;
 
-	NJRvector3d	vAngularImpact;
+	NJR::NJRvector3d	vAngularImpact;
 
 	double dVolume;
 
@@ -138,7 +131,7 @@ protected:
 
 	double dSudoMass;
 
-	NJRvector3d	vMassMomentInertia;
+	NJR::NJRvector3d	vMassMomentInertia;
 
 	DiscreteObject(const DOStatus* cpdos, const DOModel* cpdoml);
 
@@ -149,5 +142,7 @@ private:
 	DiscreteObject& operator = (const DiscreteObject&);
 	DiscreteObject(const DiscreteObject&);
 };
+
+};   // namespace VEDO
 
 #endif // _DISCRETE_OBJECT_H

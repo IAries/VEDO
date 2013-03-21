@@ -5,6 +5,9 @@
 #include <FrameWork/Interfaces/Interaction.h>
 #include <vector>
 
+namespace VEDO
+{
+
 class IactContainer
 {
 
@@ -48,8 +51,10 @@ private:
 
 	std::vector<Interaction*> vcIact;
 
-	double dUDVInEachProcessor[uNumUserDefinedData*2];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
-									                     // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
+	double dUDVInEachProcessor[VEDO::uNumUserDefinedData*2];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+                                                                    // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
 };
+
+};   // namespace VEDO
 
 #endif // _INTERACTION_CONTAINER_H

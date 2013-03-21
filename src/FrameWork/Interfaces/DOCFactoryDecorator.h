@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/DOFactory.h>
 
+namespace VEDO
+{
+
 class DOCFactoryDecorator : public DOFactory
 {
 
@@ -21,5 +24,7 @@ private:
 	std::list<DOFactory*> lcDOCFactory;
 
 };
+
+};   // namespace VEDO
 
 #endif // _DISCRETE_OBJECT_FACTORY_DECORATOR_H

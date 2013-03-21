@@ -19,8 +19,71 @@
 #include <ctime>
 #include <vector>
 
+namespace VEDO
+{
+
+// The EnsureLength function
+void EnsureLength
+	(unsigned int base,
+	 unsigned long target,
+	 unsigned long& length,
+	 double*& array        );
+
+
+
 typedef std::pair<unsigned long, unsigned long> IactPair;
-	
+
+class X_Comp
+{
+public:
+
+	X_Comp(const std::vector<DOMap>&);
+
+	bool operator() (const IactPair&, const IactPair&);
+
+private:
+
+	std::vector<DOMap> map;
+
+	double CalcIactCoordinate(const IactPair&);
+};
+
+
+
+class Y_Comp
+{
+public:
+
+	Y_Comp(const std::vector<DOMap>& vDOMap);
+
+	bool operator() (const IactPair&, const IactPair&);
+
+private:
+
+	std::vector<DOMap> map;
+
+	double CalcIactCoordinate(const IactPair&);
+};
+
+
+
+class Z_Comp
+{
+public:
+
+	Z_Comp(const std::vector<DOMap>& vDOMap);
+
+	bool operator() (const IactPair&, const IactPair&);
+
+private:
+
+	std::vector<DOMap> map;
+
+	double CalcIactCoordinate(const IactPair&);
+};
+
+
+
 class Consultant
 {
 
@@ -141,16 +204,18 @@ protected:
 	unsigned int               NP;     // Number of processores
 
 	unsigned long              ImpactBufferSize;
-	
+
 	std::vector<IactPair>      IactPairTab;
 
 	virtual void BuildIactTab(std::vector<DOMap>& v1, std::vector<DOMap>& v2);
 	virtual void BuildIactTab(std::vector<DOMap>& v);
 
-	double dUDV[2*uNumUserDefinedData];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
-										  // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
+	double dUDV[2*VEDO::uNumUserDefinedData];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+                                                     // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
 
 	virtual void CollectUserDefinedData(IactContainer&);
 };
+
+};   // namespace VEDO
 
 #endif // _CONSULTANT_H

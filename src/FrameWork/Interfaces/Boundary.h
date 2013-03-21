@@ -4,6 +4,9 @@
 #include <NJR/Interfaces/vector3d.h>
 #include <string>
 
+namespace VEDO
+{
+
 class Boundary
 {
 
@@ -11,13 +14,13 @@ public:
 
 	Boundary();
 
-	Boundary(std::string, const bool*, const NJRvector3d, const NJRvector3d);
+	Boundary(std::string, const bool*, const NJR::NJRvector3d, const NJR::NJRvector3d);
 
-	Boundary(const bool*, const NJRvector3d, const NJRvector3d);
+	Boundary(const bool*, const NJR::NJRvector3d, const NJR::NJRvector3d);
 
-	Boundary(std::string, const NJRvector3d, const NJRvector3d);
+	Boundary(std::string, const NJR::NJRvector3d, const NJR::NJRvector3d);
 
-	Boundary(const NJRvector3d, const NJRvector3d);
+	Boundary(const NJR::NJRvector3d, const NJR::NJRvector3d);
 
 	Boundary(const Boundary&);
 
@@ -50,31 +53,31 @@ public:
 		return bSwitch[i];
 	};
 
-	void SetCenter(const NJRvector3d*);
+	void SetCenter(const NJR::NJRvector3d*);
 
-	inline void SetBoxCenter(const NJRvector3d* vNewCenter)
+	inline void SetBoxCenter(const NJR::NJRvector3d* vNewCenter)
 	{
 		SetCenter(vNewCenter);
 	};
 
-	void SetRange(const NJRvector3d*);
+	void SetRange(const NJR::NJRvector3d*);
 
-	inline void SetLength(const NJRvector3d* vNewRange)
+	inline void SetLength(const NJR::NJRvector3d* vNewRange)
 	{
 		SetRange(vNewRange);
 	};
 
-	inline const NJRvector3d& GetLength() const
+	inline const NJR::NJRvector3d& GetLength() const
 	{
 		return vRange;
 	}
 
-	inline const NJRvector3d& GetRange() const
+	inline const NJR::NJRvector3d& GetRange() const
 	{
 		return vRange;
 	}
 
-	inline const NJRvector3d& GetCenter() const
+	inline const NJR::NJRvector3d& GetCenter() const
 	{
 		return vCenter;
 	};
@@ -84,37 +87,37 @@ public:
 		return dVolume;
 	};
 
-	void SetLowerPoint(const NJRvector3d*);
+	void SetLowerPoint(const NJR::NJRvector3d*);
 
-	inline void SetLowerEdge(const NJRvector3d* vNewEdge)
+	inline void SetLowerEdge(const NJR::NJRvector3d* vNewEdge)
 	{
 		SetLowerPoint(vNewEdge);
 	};
 
-	void SetUpperPoint(const NJRvector3d*);
+	void SetUpperPoint(const NJR::NJRvector3d*);
 
-	inline void SetUpperEdge(const NJRvector3d* vNewEdge)
+	inline void SetUpperEdge(const NJR::NJRvector3d* vNewEdge)
 	{
 		SetUpperPoint(vNewEdge);
 	};
 
-	inline const NJRvector3d& GetLowerPoint() const
+	inline const NJR::NJRvector3d& GetLowerPoint() const
 	{
 		return vLowerPoint;
 	}
 
-	inline const NJRvector3d& GetUpperPoint() const
+	inline const NJR::NJRvector3d& GetUpperPoint() const
 	{
 		return vUpperPoint;
 	}
 
-	bool InBoundary(const NJRvector3d) const;
+	bool InBoundary(const NJR::NJRvector3d) const;
 
-	bool InBoundary(const NJRvector3d, const double) const;
+	bool InBoundary(const NJR::NJRvector3d, const double) const;
 
-	void EnforceBoundaryConditions(NJRvector3d*) const;
+	void EnforceBoundaryConditions(NJR::NJRvector3d*) const;
 
-	void DifferenceBoundaryConditions(NJRvector3d*) const;
+	void DifferenceBoundaryConditions(NJR::NJRvector3d*) const;
 
 	void print() const;
 
@@ -125,11 +128,13 @@ private:
 	std::string sName;
 	bool bActive;
 	bool bSwitch[3];           // Open or close
-	NJRvector3d	vLowerPoint;   // Lower boundary
-	NJRvector3d	vUpperPoint;   // Upper boundary
-	NJRvector3d	vCenter;       // Center
+	NJR::NJRvector3d	vLowerPoint;   // Lower boundary
+	NJR::NJRvector3d	vUpperPoint;   // Upper boundary
+	NJR::NJRvector3d	vCenter;       // Center
 	double dVolume;            // Volume (space inside the boundary)
-	NJRvector3d	vRange;        // Range (length in x, y, z directions)
+	NJR::NJRvector3d	vRange;        // Range (length in x, y, z directions)
 };
+
+};   // namespace VEDO
 
 #endif // _BOUNDARY_H

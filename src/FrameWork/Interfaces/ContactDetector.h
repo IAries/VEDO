@@ -5,18 +5,23 @@
 #include <FrameWork/Interfaces/DiscreteObject.h>
 #include <FrameWork/Interfaces/IactModel.h>
 
+namespace VEDO
+{
+
 struct ContactInfo
 {
-	NJRvector3d vImpactDirection;
-	NJRvector3d vSlideDirection;
-	NJRvector3d vCenterToCenter;
-	NJRvector3d vImpactPoint;
+	NJR::NJRvector3d vImpactDirection;
+	NJR::NJRvector3d vSlideDirection;
+	NJR::NJRvector3d vCenterToCenter;
+	NJR::NJRvector3d vImpactPoint;
 	double      dImpactDepth;
 	double      dDistance;
 	double      dOverlapArea;
 	bool        bActive;
 	bool        bUnBalance;
 };
+
+
 
 class ContactDetector
 {
@@ -54,5 +59,7 @@ protected:
 	const Boundary* pBC;
 	ContactInfo cInfo;
 };
+
+};   // namespace VEDO
 
 #endif // _CONTACT_DETECTOR_H

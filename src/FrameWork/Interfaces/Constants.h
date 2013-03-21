@@ -1,7 +1,20 @@
-#ifndef _CONSTANTS_H
-#define _CONSTANTS_H
+#ifndef _VEDO_CONSTANTS_H
+#define _VEDO_CONSTANTS_H
 
-static const unsigned uNumUserDefinedData = 18;
-static const double dPI = 3.14159265358979;
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <string>
 
-#endif _CONSTANTS_H
+namespace VEDO
+{
+
+static const std::string sPublish            = "2013-03-24";
+static const double      dSafetyFactor       = 1.1;
+static const unsigned    uNumUserDefinedData = 18;
+static const unsigned    uImpactBufferSize   = 65535;   // Consultant
+// uImpactBufferSize ~= 18,000 for 60,000 elements / 4 processors
+// uImpactBufferSize ~= 60,000 for 60,000 elements / 8 processors
+
+};   // namespace VEDO
+
+#endif _VEDO_CONSTANTS_H

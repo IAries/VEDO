@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <functional>
 
-using namespace std;
+namespace VEDO
+{
 
 DOContainer::DOContainer(): lcDO(0), lcDOS(0)
 {
@@ -15,9 +16,9 @@ DOContainer::~DOContainer()
 	DOContainer::Clear();
 };
 
-void DOContainer::AddFieldImpact(const NJRvector3d& vFieldImpact)
+void DOContainer::AddFieldImpact(const NJR::NJRvector3d& vFieldImpact)
 {
-	vector<DiscreteObject *>::iterator ido;
+	std::vector<DiscreteObject *>::iterator ido;
 	for(ido=lcDO.begin(); ido!=lcDO.end(); ++ido)
 	{
 		(*ido)->AddImpact(vFieldImpact*((*ido)->GetSudoMass()));
@@ -26,19 +27,19 @@ void DOContainer::AddFieldImpact(const NJRvector3d& vFieldImpact)
 
 void DOContainer::AddImpact
 	(const unsigned long& ul,
-	 const NJRvector3d& vImpact,
-	 const NJRvector3d& vAngularImpact)
+	 const NJR::NJRvector3d& vImpact,
+	 const NJR::NJRvector3d& vAngularImpact)
 {
 	lcDO[ul]->AddImpact(vImpact, vAngularImpact);
 };
 
 /*
 void DOContainer::AddExternalImpact
-	(const vector<pair<NJRvector3d, NJRvector3d> >&
+	(const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >&
 	 vvExternalImpact                                        )
 {
-	vector<DiscreteObject*>::iterator ido;
-	vector<pair<NJRvector3d, NJRvector3d> >::iterator iExternalImpact;
+	std::vector<DiscreteObject*>::iterator ido;
+	std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >::iterator iExternalImpact;
 	unsigned long ul = 0;
 	for(ido=lcDO.begin();
 		ido!=lcDO.end(), ul<vvExternalImpact.size();
@@ -54,7 +55,7 @@ void DOContainer::AddConstrainedImpact(const double dt)
 	for_each
 		(lcDO.begin(),
 		 lcDO.end(),
-		 bind2nd(mem_fun(&DiscreteObject::AddConstrainedImpact), dt));
+		 bind2nd(std::mem_fun(&DiscreteObject::AddConstrainedImpact), dt));
 };
 
 void DOContainer::Response(const double dt)
@@ -62,12 +63,12 @@ void DOContainer::Response(const double dt)
 	for_each
 		(lcDO.begin(),
 		 lcDO.end(),
-		 bind2nd(mem_fun(&DiscreteObject::Response), dt));
+		 bind2nd(std::mem_fun(&DiscreteObject::Response), dt));
 };
 
 void DOContainer::EnforcePeriodicBoundaryConditions(const Boundary& pbc)
 {
-	typedef mem_fun1_t<void, DiscreteObject, const Boundary&> Func_Type;
+	typedef std::mem_fun1_t<void, DiscreteObject, const Boundary&> Func_Type;
 	Func_Type func_obj(&DiscreteObject::EnforcePeriodicBoundaryConditions);
 	NJR::binder2nd_refArg<Func_Type> binded_func(func_obj, pbc);
 	for_each(lcDO.begin(), lcDO.end(), binded_func);
@@ -87,20 +88,17 @@ void DOContainer::Add(DiscreteObject* pdo)
 {
 	if (pdo == 0)
     {
-		cerr
-			<< "(DOContainer:ADD) "
-			<< "Sorry! SimMediator do not accept null Discrete Object"
-			<< endl
-			<< "Sysem do not know how to create discrete object you want"
-			<< endl;
-		exit(1);
+		std::cerr
+			<< "Error!! Code: DOContainer::Add(DiscreteObject*)" << std::endl
+			<< "        Note: SimMediator do not accept null Discrete Object" << std::endl;
+		exit(-1);
 	}
 
 	lcDO.push_back(pdo);
 	lcDOS.push_back(pdo->GetDOStatus());
 };
 
-void DOContainer::Erase(const vector<unsigned long>& EraseList)
+void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
 {
 	const unsigned long numberDO      = lcDO.size();
 	const unsigned long ErasenumberDO = EraseList.size();
@@ -132,13 +130,13 @@ void DOContainer::Erase(const vector<unsigned long>& EraseList)
 };
 
 /*
-void DOContainer::Erase(const vector<unsigned long>& EraseList)
+void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
 {
 	const unsigned long numberDO      = lcDO.size();
 	const unsigned long ErasenumberDO = EraseList.size();
 	const unsigned long NewnumberDO   = numberDO - ErasenumberDO;
-	vector<DiscreteObject*> NewlcDO(NewnumberDO);
-	vector<const DOStatus*> NewlcDOS(NewnumberDO);
+	std::vector<DiscreteObject*> NewlcDO(NewnumberDO);
+	std::vector<const DOStatus*> NewlcDOS(NewnumberDO);
 
 	unsigned long ul;
 	unsigned long ulEraseCounter = 0;
@@ -181,3 +179,5 @@ void DOContainer::Erase(const vector<unsigned long>& EraseList)
 	NewlcDOS.clear();
 };
 */
+
+};   // namespace VEDO

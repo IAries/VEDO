@@ -5,6 +5,9 @@
 #include <FrameWork/Interfaces/DiscreteObject.h>
 #include <vector>
 
+namespace VEDO
+{
+
 class DOContainer
 {
 
@@ -14,12 +17,12 @@ public:
 
 	~DOContainer();
 
-	void AddFieldImpact(const NJRvector3d& vFieldImpact);
+	void AddFieldImpact(const NJR::NJRvector3d& vFieldImpact);
 
-	void AddImpact(const unsigned long& ul, const NJRvector3d& vImpact, const NJRvector3d& vAngularImpact);
+	void AddImpact(const unsigned long& ul, const NJR::NJRvector3d& vImpact, const NJR::NJRvector3d& vAngularImpact);
 
 	//void AddExternalImpact
-	//	(const std::vector<std::pair<NJRvector3d, NJRvector3d> >&
+	//	(const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >&
 	//	 vvExternalImpact                                        );
 
 	void Response(const double dt);
@@ -64,5 +67,7 @@ private:
 	std::vector<DiscreteObject*> lcDO;
 	std::vector<const DOStatus*> lcDOS;
 };
+
+};   // namespace VEDO
 
 #endif // _DISCRETE_OBJECT_CONTAINER_H

@@ -1,3 +1,4 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <FrameWork/Interfaces/Consultant.h>
 #include <NJR/Interfaces/Utility.h>
 #include <cstdio>
@@ -5,7 +6,131 @@
 #include <iostream>
 #include <sstream>
 
-using namespace std;
+namespace VEDO
+{
+
+void EnsureLength
+	(unsigned int base,
+	 unsigned long target,
+	 unsigned long& length,
+	 double*& array        )
+{
+	if ((base*target) > length)
+	{
+		while ((base*target) > length)
+        	length *= 2;
+
+		delete[] array;
+		array = new double[length];
+
+		#ifdef _VEDO_DEBUG
+			// Monitor the status of "Impact Buffer"
+			std::cout
+				<< "Resizing Impact Buffer = "
+				<< length
+				<< " (LeapConsulant::EnsureLength)"
+				<< std::endl;
+		#endif   // _VEDO_DEBUG
+	}
+
+/*
+	if ((base*target) != 0)
+	{
+		if ((base*target) > length)
+		{
+			length = base*target;
+			#ifdef _VEDO_DEBUG
+				// Monitor the status of "Impact Buffer"
+				std::cout
+					<< "Resizing Impact Buffer = "
+					<< length
+					<< " (NBSGPConsulant::EnsureLength)\n";
+			#endif   // _VEDO_DEBUG
+			delete[] array;
+			array = new double[length];
+		}
+		else if ((length%base) != 0)
+		{
+			length += (base - (length%base));
+			#ifdef _VEDO_DEBUG
+				// Monitor the status of "Impact Buffer"
+				std::cout
+					<< "Resizing Impact Buffer = "
+					<< length
+					<< " (NBSGPConsulant::EnsureLength)\n";
+			#endif   // _VEDO_DEBUG
+			delete[] array;
+			array = new double[length];
+		}
+	}
+*/
+};
+
+X_Comp::X_Comp(const std::vector<DOMap>& vDOMap): map(vDOMap)
+{
+};
+
+bool X_Comp::operator() (const IactPair& p1, const IactPair& p2)
+{
+	return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
+};
+
+double X_Comp::CalcIactCoordinate(const IactPair& p)
+{
+	if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
+		return map[p.second].cpdos()->GetPosition().x();
+	else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
+		return map[p.first].cpdos()->GetPosition().x();
+	else
+		return
+			std::min
+				(map[p.second].cpdos()->GetPosition().x(),
+				 map[p.first].cpdos()->GetPosition().x()   );
+};
+
+Y_Comp::Y_Comp(const std::vector<DOMap>& vDOMap): map(vDOMap)
+{
+};
+
+bool Y_Comp::operator() (const IactPair& p1, const IactPair& p2)
+{
+	return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
+};
+
+double Y_Comp::CalcIactCoordinate(const IactPair& p)
+{
+	if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
+		return map[p.second].cpdos()->GetPosition().y();
+	else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
+		return map[p.first].cpdos()->GetPosition().y();
+	else
+		return
+			std::min
+				(map[p.second].cpdos()->GetPosition().y(),
+				 map[p.first].cpdos()->GetPosition().y()   );
+};
+
+Z_Comp::Z_Comp(const std::vector<DOMap>& vDOMap): map(vDOMap)
+{
+};
+
+bool Z_Comp::operator() (const IactPair& p1, const IactPair& p2)
+{
+	return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
+};
+
+double Z_Comp::CalcIactCoordinate(const IactPair& p)
+{
+	if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
+		return map[p.second].cpdos()->GetPosition().z();
+	else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
+		return map[p.first].cpdos()->GetPosition().z();
+	else
+		return
+			std::min
+				(map[p.second].cpdos()->GetPosition().z(),
+				 map[p.first].cpdos()->GetPosition().z()   );
+};
 
 Consultant::Consultant
 	(DOWorld* DOWorld,
@@ -18,9 +143,7 @@ Consultant::Consultant
 	culRecord(ulwrite),
 	rank(0),
 	NP(1),
-	ImpactBufferSize(65536)
-//	ImpactBufferSize = 18,000 for 60,000 elements / 4 processors
-//	ImpactBufferSize = 60,000 for 60,000 elements / 8 processors
+	ImpactBufferSize(VEDO::uImpactBufferSize)
 {
 	pDOWorld                      = DOWorld;
 	pIRTbl                        = pIactRecordTab;
@@ -30,7 +153,7 @@ Consultant::Consultant
 	sfilename[strlen(filename)-4] = 0;
 	timePartitioning              = 0.0;
 
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = 0.0;
 };
 
@@ -81,7 +204,7 @@ void Consultant::RecordIDO()
 {
 	char ltoa[256];
 
-	string file = sfilename.c_str();
+	std::string file = sfilename.c_str();
 	file.append("_");
 
 	sprintf(ltoa, "%d.ido\0", 10000000 + ulRecordCount);
@@ -115,7 +238,7 @@ const ImpactStatus* Consultant::RetrieveImpactStatus
 
 bool Consultant::InBoundary(unsigned long i) const
 {
-	NJRvector3d p = (pDOWorld->GetDOStatus())[i]->GetPosition();
+	NJR::NJRvector3d p = (pDOWorld->GetDOStatus())[i]->GetPosition();
 	return
 		pDOWorld
 			->GetSystemParameter()
@@ -124,8 +247,8 @@ bool Consultant::InBoundary(unsigned long i) const
 
 void Consultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 {
-	vector<unsigned long> RedundantElement;
-	map<unsigned long, long> ElementMappingJump;
+	std::vector<unsigned long> RedundantElement;
+	std::map<unsigned long, long> ElementMappingJump;
 
 	SystemParameter* csp   = pDOWorld->GetSystemParameter();
 	unsigned long numberDO = csp->GetDONumber();
@@ -153,12 +276,14 @@ void Consultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 
 	if (!RedundantElement.empty())
 	{
-		cerr
-			<< "Number of redundant elements = "
-			<< RedundantElement.size()
-			<< " / "
-			<< numberDO
-			<< endl;
+        #ifdef _VEDO_DEBUG
+            std::cout
+                << "Number of redundant elements = "
+                << RedundantElement.size()
+                << " / "
+                << numberDO
+                << std::endl;
+        #endif   // _VEDO_DEBUG
 
 		cDO.Erase(RedundantElement);
 		pIRTbl->ModifyPair(ElementMappingJump);
@@ -186,19 +311,23 @@ void Consultant::CollectUserDefinedData(IactContainer& cIact)
 {
 	cIact.CollectUserDefinedData();
 
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = cIact.GetUserDefinedValue(u);
 };
 
 double Consultant::GetUserDefinedValue(unsigned u) const
 {
-	if(u < 2*uNumUserDefinedData)
+	if(u < 2*VEDO::uNumUserDefinedData)
 	{
 		return dUDV[u];
 	}
 	else
 	{
-		cerr << "Consultant::GetUserDefinedValue(unsigned) const ERROR!!" << endl;
+		std::cerr
+			<< "Error!! Code: Consultant::GetUserDefinedValue(unsigned u)"
+			<< std::endl;
 		exit(-1);
 	}
 };
+
+};   // namespace VEDO

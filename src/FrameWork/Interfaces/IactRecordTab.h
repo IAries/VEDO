@@ -6,6 +6,9 @@
 #include <map>
 #include <vector>
 
+namespace VEDO
+{
+
 class IactRecordTab
 {
 
@@ -67,5 +70,7 @@ private:
 
 	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> mapImStatus;
 };
+
+};   // namespace VEDO
 
 #endif // _IACT_RECORD_TAB_H

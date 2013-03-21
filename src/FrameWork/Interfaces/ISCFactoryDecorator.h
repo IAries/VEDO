@@ -3,6 +3,9 @@
 
 #include <FrameWork/Interfaces/ISFactory.h>
 
+namespace VEDO
+{
+
 class ISCFactoryDecorator : public ISFactory
 {
 
@@ -23,5 +26,7 @@ private:
 	std::list<ISFactory*> lcISCFactory;
 
 };
+
+};   // namespace VEDO
 
 #endif // _IMPACT_SOLVER_FACTORY_DECORATOR_H

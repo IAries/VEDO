@@ -1,23 +1,26 @@
 #include <FrameWork/Interfaces/DOWorld.h>
 
-using namespace std;
+namespace VEDO
+{
 
 bool DOWorld::ReadIDO(const char* filename)
 {
 	DOWorld::Clear();
 
-	ifstream idof;
+	std::ifstream idof;
 	unsigned long lnum_doml;
 	unsigned long lnum_iactml;
 	unsigned long lnum_dos;
 
 	register unsigned long i;
 
-	idof.open(filename, ios::in | ios::binary);
+	idof.open(filename, std::ios::in | std::ios::binary);
 
 	if (!idof.is_open())
 	{
-		cerr << "IDOWorld read idofile error" << endl;
+		std::cout
+			<< "Error!! Code: DOWorld::ReadIDO(const char*)" << std::endl
+			<< "        Note: IDOWorld read idofile error" << std::endl;
 		return false;
 	}
 
@@ -45,18 +48,20 @@ bool DOWorld::ReadIDO(const char* filename, unsigned int version)
 {
 	DOWorld::Clear();
 
-	ifstream idof;
+	std::ifstream idof;
 	unsigned long lnum_doml;
 	unsigned long lnum_iactml;
 	unsigned long lnum_dos;
 
 	register unsigned long i;
 
-	idof.open(filename, ios::in | ios::binary);
+	idof.open(filename, std::ios::in | std::ios::binary);
 
 	if (!idof.is_open())
 	{
-		cerr << "IDOWorld read idofile error" << endl;
+		std::cout
+			<< "Error!! Code: DOWorld::ReadIDO(const char*, unsigned int)" << std::endl
+			<< "        Note: IDOWorld read idofile error" << std::endl;
 		return false;
 	}
 
@@ -84,18 +89,20 @@ bool DOWorld::ReadIDO2011(const char* filename)
 {
 	DOWorld::Clear();
 
-	ifstream idof;
+	std::ifstream idof;
 	unsigned long lnum_doml;
 	unsigned long lnum_iactml;
 	unsigned long lnum_dos;
 
 	register unsigned long i;
 
-	idof.open(filename, ios::in | ios::binary);
+	idof.open(filename, std::ios::in | std::ios::binary);
 
 	if (!idof.is_open())
 	{
-		cerr << "IDOWorld read idofile error" << endl;
+		std::cout
+			<< "Error!! Code: DOWorld::ReadIDO2011(const char*)" << std::endl
+			<< "        Note: IDOWorld read idofile error" << std::endl;
 		return false;
 	}
 
@@ -123,18 +130,20 @@ bool DOWorld::ReadIDO2009(const char* filename)
 {
 	DOWorld::Clear();
 
-	ifstream idof;
+	std::ifstream idof;
 	unsigned long lnum_doml;
 	unsigned long lnum_iactml;
 	unsigned long lnum_dos;
 
 	register unsigned long i;
 
-	idof.open(filename, ios::in | ios::binary);
+	idof.open(filename, std::ios::in | std::ios::binary);
 
 	if (!idof.is_open())
 	{
-		cerr << "IDOWorld read idofile error" << endl;
+		std::cout
+			<< "Error!! Code: DOWorld::ReadIDO2009(const char*)" << std::endl
+			<< "        Note: IDOWorld read idofile error" << std::endl;
 		return false;
 	}
 
@@ -163,18 +172,20 @@ bool DOWorld::ReadIDO2008(const char* filename)
 {
 	DOWorld::Clear();
 
-	ifstream idof;
+	std::ifstream idof;
 	unsigned long lnum_doml;
 	unsigned long lnum_iactml;
 	unsigned long lnum_dos;
 
 	register unsigned long i;
 
-	idof.open(filename, ios::in | ios::binary);
+	idof.open(filename, std::ios::in | std::ios::binary);
 
 	if (!idof.is_open())
 	{
-		cerr << "IDOWorld read idofile error" << endl;
+		std::cout
+			<< "Error!! Code: DOWorld::ReadIDO2008(const char*)" << std::endl
+			<< "        Note: IDOWorld read idofile error" << std::endl;
 		return false;
 	}
 
@@ -200,21 +211,23 @@ bool DOWorld::ReadIDO2008(const char* filename)
 
 void DOWorld::WriteIDO(const char* filename) const
 {
-	ofstream idof;
+	std::ofstream idof;
 	unsigned long lnum_doml   = (unsigned long) cDOModel.size();
 	unsigned long lnum_iactml = (unsigned long) cIactModel.size();
 	unsigned long lnum_dos    = (unsigned long) cDOStatus.size();
 
-	list<DOModel *>::const_iterator idoml;
-	list<IactModel *>::const_iterator iactml;
-	vector<DOStatus *>::const_iterator idos;
+	std::list<DOModel *>::const_iterator idoml;
+	std::list<IactModel *>::const_iterator iactml;
+	std::vector<DOStatus *>::const_iterator idos;
 
-	idof.open(filename, ios::out | ios::binary);
+	idof.open(filename, std::ios::out | std::ios::binary);
 
 	if (idof.bad())
 	{
-		cerr << "DOWorld write idofile error!" << endl;
-		exit(0);
+		std::cerr
+			<< "Error!! Code: DOWorld::WriteIDO(const char*)" << std::endl
+			<< "        Note: DOWorld cannot write ido file" << std::endl;
+		exit(-1);
 	}
 
 	*pSystemParameter >> idof;
@@ -234,3 +247,5 @@ void DOWorld::WriteIDO(const char* filename) const
 
 	idof.close();
 };
+
+};   // namespace VEDO

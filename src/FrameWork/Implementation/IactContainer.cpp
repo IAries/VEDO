@@ -7,11 +7,12 @@
 #include <map>
 #include <typeinfo>
 
-using namespace std;
+namespace VEDO
+{
 
 IactContainer::IactContainer(): vcIact(0)
 {
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		dUDVInEachProcessor[u] = 0.0;
 };
 
@@ -25,12 +26,12 @@ void IactContainer::CalculateImpact(const double dt)
 	for_each
 		(vcIact.begin(),
 		vcIact.end(),
-		mem_fun(&Interaction::ControlError));
+		std::mem_fun(&Interaction::ControlError));
 
 	for_each
 		(vcIact.begin(),
 		vcIact.end(),
-		bind2nd(mem_fun(&Interaction::SolveImpact), dt));
+		bind2nd(std::mem_fun(&Interaction::SolveImpact), dt));
 };
 
 void IactContainer::CalculateImpact(const double dt, unsigned long ul)
@@ -44,7 +45,7 @@ void IactContainer::CheckContactStatus()
 	for_each
 		(vcIact.begin(),
 		vcIact.end(),
-		mem_fun(&Interaction::DetectContact));
+		std::mem_fun(&Interaction::DetectContact));
 };
 
 void IactContainer::Clear()
@@ -67,13 +68,15 @@ void IactContainer::CleanSolverStatus(unsigned long i)
 
 double IactContainer::GetUserDefinedValue(unsigned u) const
 {
-	if(u<2*uNumUserDefinedData)
+	if(u < 2*VEDO::uNumUserDefinedData)
 	{
 		return dUDVInEachProcessor[u];
 	}
 	else
 	{
-		cerr << "IactContainer::GetUserDefinedValue(unsigned u) ERROR!!" << endl;
+		std::cerr
+			<< "Error!! Code: IactContainer::GetUserDefinedValue(unsigned)"
+			<< std::endl;
 		exit(-1);
 	};
 };
@@ -82,13 +85,13 @@ void IactContainer::CollectUserDefinedData()
 {
 	const double* dpUDV;
 
-	for(unsigned u=uNumUserDefinedData; u<2*uNumUserDefinedData; u++)
+	for(unsigned u=VEDO::uNumUserDefinedData; u<2*VEDO::uNumUserDefinedData; u++)
 		dUDVInEachProcessor[u] = 0.0;
 
 	for(unsigned long ul=0; ul<vcIact.size(); ul++)
 	{
 		dpUDV = vcIact[ul]->RetrieveUserDefinedValue();
-		for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+		for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 			dUDVInEachProcessor[u] += *(dpUDV+u);
 	}
 };
@@ -106,14 +109,19 @@ bool IactContainer::InteractionDetectContact(unsigned long ul)
 	}
 };
 
-void IactContainer::Dump(string dumpfile)
+void IactContainer::Dump(std::string dumpfile)
 {
-	ofstream f(dumpfile.c_str());
-	copy(vcIact.begin(), vcIact.end(), ostream_iterator<Interaction* >(f));
+	std::ofstream f(dumpfile.c_str());
+	copy(vcIact.begin(), vcIact.end(), std::ostream_iterator<Interaction* >(f));
 	f.close();
 };
 
-static ostream& operator << (ostream& os, Interaction *pIact)
+
+};   // namespace VEDO
+
+
+
+static std::ostream& operator << (std::ostream& os, VEDO::Interaction *pIact)
 {
 	static unsigned int i = 0;
 	os << i++
@@ -124,6 +132,6 @@ static ostream& operator << (ostream& os, Interaction *pIact)
 		<< ')'
 		<< ' '
 		<< pIact->GetSolver()->type()
-		<< endl;
+		<< std::endl;
 	return os;
 };

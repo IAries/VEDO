@@ -12,11 +12,12 @@
 #include <iterator>
 #include <map>
 
-using namespace std;
+namespace VEDO
+{
 
 DataFieldVTKWriter* DataFieldVTKWriter::_instance = 0;
 
-string GetRankString(int rank, int NP)
+std::string GetRankString(int rank, int NP)
 {
     unsigned dig_total
 		= static_cast<unsigned>(log10(static_cast<double>(NP))) + 1;
@@ -29,7 +30,7 @@ string GetRankString(int rank, int NP)
     {
 	    dig = static_cast<unsigned>(log10(static_cast<double>(rank))) + 1;
     }
-	string dig_string = "";
+	std::string dig_string = "";
    	for(unsigned i=0; i<dig; i++)
    	{
 		dig_string = char(48+rank%10) + dig_string;
@@ -67,10 +68,10 @@ void SimMediator::CalculateSystemEnergy()
 			<< csp->GetMomentumNorm()        << ", "
 			<< csp->GetAngularMomentumNorm();
 
-		for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+		for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 			FileLogEnergy << ", " << pConsultant->GetUserDefinedValue(u);
-			
-		FileLogEnergy << endl;
+
+		FileLogEnergy << std::endl;
 	};
 };
 
@@ -79,14 +80,14 @@ SimMediator::SimMediator
 	: pConsultant(Consultant), cpAssembler(Assembler), rank(0), NP(1)
 {
 	TimeInitiate();
-	FileLog.open("time_0.csv", ios::out);
+	FileLog.open("time_0.csv", std::ios::out);
 	FileLog
 		<< "Rank, SimulatedTime, System, ImpactSolving, FieldForceAdding, "
 		<< "ResponseUpdating, ContactDetection, NextStep, "
 		<< "DOContainerSynchronization, Partitioning, Computing, "
 		<< "Communication, Total"
-		<< endl;
-	FileLogEnergy.open("energy.csv", ios::out);
+		<< std::endl;
+	FileLogEnergy.open("energy.csv", std::ios::out);
 	FileLogEnergy
 		<< "SystemTime, ElementNumber, "
 		<< "SystemEnergy, PotentialEnergy, KineticEnergy, "
@@ -94,10 +95,10 @@ SimMediator::SimMediator
 		<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
 		<< "NormMomentum, NormAngularMomentum";
 
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		FileLogEnergy << ", User-defined Value " << u+1;
 
-	FileLogEnergy << endl;
+	FileLogEnergy << std::endl;
 
 	CalculateSystemEnergy();
 };
@@ -111,18 +112,18 @@ SimMediator::SimMediator
 {
 	pConsultant->SetRankNP(r, np);
 	TimeInitiate();
-	string name = "time_" + GetRankString(r, np);
+	std::string name = "time_" + GetRankString(r, np);
 	name += ".csv";
-	FileLog.open(name.c_str(), ios::out);
+	FileLog.open(name.c_str(), std::ios::out);
 	FileLog
 		<< "Rank, SimulatedTime, System, ImpactSolving, FieldForceAdding, "
 		<< "ResponseUpdating, ContactDetection, NextStep, "
 		<< "DOContainerSynchronization, Partitioning, Computing, Communication, Total"
-		<< endl;
+		<< std::endl;
 
 	if (rank == 0)
 	{
-		FileLogEnergy.open("energy.csv", ios::out);
+		FileLogEnergy.open("energy.csv", std::ios::out);
 		FileLogEnergy
 			<< "SystemTime, ElementNumber, "
 			<< "SystemEnergy, PotentialEnergy, KineticEnergy, "
@@ -130,10 +131,10 @@ SimMediator::SimMediator
 			<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
 			<< "NormMomentum, NormAngularMomentum, ";
 
-		for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+		for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 			FileLogEnergy << ", User-defined Value " << u+1;
 
-		FileLogEnergy << endl;
+		FileLogEnergy << std::endl;
 	};
 	CalculateSystemEnergy();
 };
@@ -162,7 +163,7 @@ void SimMediator::TimeInitiate()
 
 void SimMediator::ShowInteraction()
 {
-	ofstream FileInteraction;
+	std::ofstream FileInteraction;
 	const DOWorld*         cpDOWorld = pConsultant->GetDOWorld();
 	const SystemParameter* csp       = cpDOWorld->GetSystemParameter();
 
@@ -172,18 +173,18 @@ void SimMediator::ShowInteraction()
 	const Interaction*  iap = 0;
 	const ContactInfo*  cip = 0;
 	const ImpactStatus* isp = 0;
-	NJRvector3d
+	NJR::NJRvector3d
 		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
 
 	if (NP == 1)
 	{
-		FileInteraction.open("interaction.csv", ios::out);
+		FileInteraction.open("interaction.csv", std::ios::out);
 	}
 	else
 	{
 		char sFileName[256];
 		sprintf(sFileName, "interaction_%d.csv\0", rank);
-		FileInteraction.open(sFileName, ios::out);
+		FileInteraction.open(sFileName, std::ios::out);
 	}
 
 	FileInteraction
@@ -198,10 +199,10 @@ void SimMediator::ShowInteraction()
 		<< "Bond, Contacted, RememberedNormalStiffness, "
 		<< "RememberedShearForceX, RememberedShearForceY, RememberedShearForceZ";
 
-	for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 		FileInteraction << ", User-defined value " << u+1;
 
-	FileInteraction << endl;
+	FileInteraction << std::endl;
 
 	const double* cdpudv;
 	if (NP == 1)
@@ -273,10 +274,10 @@ void SimMediator::ShowInteraction()
 					<< isp->ShearForce().y() << ", "
 					<< isp->ShearForce().z();
 
-				for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+				for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 					FileInteraction << ", " << *(cdpudv+u);
 
-				FileInteraction << endl;
+				FileInteraction << std::endl;
 			}
 		}
 	}
@@ -349,10 +350,10 @@ void SimMediator::ShowInteraction()
 					<< isp->ShearForce().y() << ", "
 					<< isp->ShearForce().z();
 
-				for(unsigned u=0; u<4*uNumUserDefinedData; u++)
+				for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
 					FileInteraction << ", " << *(cdpudv+u);
 
-				FileInteraction << endl;
+				FileInteraction << std::endl;
 			}
 		}
 	}
@@ -365,13 +366,13 @@ void SimMediator::ShowInteraction()
 
 	if (NP == 1)
 	{
-		FileInteraction.open("interaction_element.csv", ios::out);
+		FileInteraction.open("interaction_element.csv", std::ios::out);
 	}
 	else
 	{
 		char sFileName[256];
 		sprintf(sFileName, "interaction_element_%d.csv\0", rank);
-		FileInteraction.open(sFileName, ios::out);
+		FileInteraction.open(sFileName, std::ios::out);
 	}
 
 	FileInteraction
@@ -383,11 +384,11 @@ void SimMediator::ShowInteraction()
 		<< "OrientationZX, OrientationZY, OrientationZZ, "
 		<< "ImpactX, ImpactY, ImpactZ, "
 		<< "AngularImpactX, AngularImpactY, AngularImpactZ"
-		<< endl;
+		<< std::endl;
 
 	const DiscreteObject* dop = 0;
 	const DOStatus*       dos = 0;
-	NJRvector3d
+	NJR::NJRvector3d
 		vPosition, vVelocity, vAngularVelocity,
 		vOrientationX, vOrientationZ,
 		vImpact, vAngularImpact;
@@ -429,7 +430,7 @@ void SimMediator::ShowInteraction()
 				<< vImpact.z()          << ", "
 				<< vAngularImpact.x()   << ", "
 				<< vAngularImpact.y()   << ", "
-				<< vAngularImpact.z()   << endl;
+				<< vAngularImpact.z()   << std::endl;
 		}
 	}
 	else
@@ -469,7 +470,7 @@ void SimMediator::ShowInteraction()
 				<< vImpact.z()            << ", "
 				<< vAngularImpact.x()     << ", "
 				<< vAngularImpact.y()     << ", "
-				<< vAngularImpact.z()     << endl;
+				<< vAngularImpact.z()     << std::endl;
 		}
 	}
 
@@ -478,7 +479,7 @@ void SimMediator::ShowInteraction()
 
 void SimMediator::WriteInteractionForce
 	(const char* filename,
-	 const vector<pair<NJRvector3d, NJRvector3d> >* vvExternalImpact)
+	 const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >* vvExternalImpact)
 {
 	const SystemParameter* csp = pConsultant->GetDOWorld()->GetSystemParameter();
 	const double           dt  = csp->GetTimeInterval();
@@ -488,7 +489,7 @@ void SimMediator::WriteInteractionForce
 	// Calculate the force due to interaction
 	//cIact.CalculateImpact(csp->GetTimeInterval());   // It has been done in the function "ShowImpact"
 
-	vector<double> iactForce_vec, extForce_vec, fieldForce_vec, totalForce_vec;
+	std::vector<double> iactForce_vec, extForce_vec, fieldForce_vec, totalForce_vec;
 
 	for(unsigned long ul=0; ul<cDO.size(); ul++)
 	{
@@ -497,10 +498,10 @@ void SimMediator::WriteInteractionForce
 		if (dop->GetDOModel()->GetBehavior() != "mobile")
 			continue;
 
-		NJRvector3d iactForce  = dop->GetImpact() * (1.0/dt);
-		NJRvector3d fieldForce = csp->GetFieldForce();
-		NJRvector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : ZERO;
-		NJRvector3d totalForce = iactForce + fieldForce + extForce;
+		NJR::NJRvector3d iactForce  = dop->GetImpact() * (1.0/dt);
+		NJR::NJRvector3d fieldForce = csp->GetFieldForce();
+		NJR::NJRvector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : NJRDXF::ZERO;
+		NJR::NJRvector3d totalForce = iactForce + fieldForce + extForce;
 
 		iactForce_vec.push_back(iactForce.x());
 		iactForce_vec.push_back(iactForce.y());
@@ -719,7 +720,7 @@ bool SimMediator::Run()
 			<< timePartitioning                                                  << ", "
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
-			<< timeTotal                                                         << endl;
+			<< timeTotal                                                         << std::endl;
 	}
 
 	if (!bContinue)
@@ -736,7 +737,7 @@ bool SimMediator::Run()
 };
 
 bool SimMediator::Run
-	(const vector<pair<NJRvector3d, NJRvector3d> >& vvExternalImpact)
+	(const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >& vvExternalImpact)
 {
 	time(&starttime);
 
@@ -837,7 +838,7 @@ bool SimMediator::Run
 			<< timePartitioning                                                  << ", "
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
-			<< timeTotal                                                         << endl;
+			<< timeTotal                                                         << std::endl;
 	}
 
 	if (!bContinue)
@@ -891,8 +892,8 @@ bool SimMediator::ReDistribute()
 	// Freeze all elements
 	for (unsigned long ul=0; ul<cDO.size(); ul++)
 	{
-		cDO[ul]->SetVelocity(NJRvector3d(ZERO));
-		cDO[ul]->SetAngularVelocity(NJRvector3d(ZERO));
+		cDO[ul]->SetVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
+		cDO[ul]->SetAngularVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
 	}
 
 	// Check the number of contact pairs
@@ -900,14 +901,14 @@ bool SimMediator::ReDistribute()
 	{
 		if (rank == 0)
 		{
-			ofstream FileContactNumber("contact_number.txt", ios::app);
+			std::ofstream FileContactNumber("contact_number.txt", std::ios::app);
 			unsigned long ulContactPairNumber = pConsultant->ContactNumber();
 			FileContactNumber
 				<< "Time = "
 				<< pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()
 				<< "; Number of contacts = "
 				<< ulContactPairNumber
-				<< endl;
+				<< std::endl;
 			FileContactNumber.close();
 			if (ulContactPairNumber == 0)
 			{
@@ -992,7 +993,7 @@ bool SimMediator::ReDistribute()
 			<< timePartitioning                                                  << ", "
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
-			<< timeTotal                                                         << endl;
+			<< timeTotal                                                         << std::endl;
 	}
 
 	if (!bContinue)
@@ -1008,3 +1009,4 @@ bool SimMediator::ReDistribute()
 		(pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop())      );
 };
 
+};   // namespace VEDO

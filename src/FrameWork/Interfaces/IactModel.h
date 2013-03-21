@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+namespace VEDO
+{
+
 // Data type class for Old .ido file
 struct IactMechanism2007
 {
@@ -144,5 +147,7 @@ private:
 	std::string sEquationType;
 	std::vector<IactMechanism> svIactMechanisms;
 };
+
+};   // namespace VEDO
 
 #endif // _IACT_MODEL_H

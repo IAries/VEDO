@@ -4,7 +4,8 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace std;
+namespace VEDO
+{
 
 ISCFactoryDecorator::ISCFactoryDecorator() : lcISCFactory(0)
 {
@@ -17,7 +18,7 @@ ISCFactoryDecorator::~ISCFactoryDecorator()
 
 void ISCFactoryDecorator::AddISCFactory(ISFactory* pisf)
 {
-	list<ISFactory *>::const_iterator iisf;
+	std::list<ISFactory *>::const_iterator iisf;
 
 	for (iisf=lcISCFactory.begin(); iisf != lcISCFactory.end(); ++iisf)
 	{
@@ -37,7 +38,7 @@ ImpactSolver* ISCFactoryDecorator::Create
 	const DiscreteObject* cpdomaster,
 	const IactModel* cpiactmodel) const
 {
-	list<ISFactory *>::const_iterator iisf;
+	std::list<ISFactory *>::const_iterator iisf;
 
 	ImpactSolver* pis;
 
@@ -49,9 +50,11 @@ ImpactSolver* ISCFactoryDecorator::Create
 			return pis;
 		}
     }
-	cerr
-		<< "Unkown Impact Solver(IS c factory decorator "
-		<< cpiactmodel->GetEquationType().c_str()
-		<< endl;
-	exit (0);
+
+	std::cerr
+		<< "Error!! Code: ISCFactoryDecorator::Create (const DiscreteObject*, const DiscreteObject*, const IactModel*)" << std::endl
+		<< "        Note: Unkown Impact Solver \'" << cpiactmodel->GetEquationType().c_str() << '\'' << std::endl;
+	exit(-1);
 };
+
+};   // namespace VEDO

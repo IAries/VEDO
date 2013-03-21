@@ -1,13 +1,14 @@
 #include <FrameWork/Interfaces/GeometricShape.h>
 
-using namespace std;
+namespace VEDO
+{
 
 GeometricShape::GeometricShape(): _sType("Geometric Shape"), _sName("Null")
 {
 	_Status = new DOStatus("No Name");
 };
 
-GeometricShape::GeometricShape(const string& type, const string& name):
+GeometricShape::GeometricShape(const std::string& type, const std::string& name):
 	_sType(type), _sName(name)
 {
 	_Status = new DOStatus("No Name");
@@ -29,7 +30,7 @@ GeometricShape::GeometricShape(const GeometricShape& gs)
 
 GeometricShape::~GeometricShape()
 {
-	list<GeometricShape*>::iterator _lgsp;
+	std::list<GeometricShape*>::iterator _lgsp;
 	for (_lgsp=_ListGS.begin(); _lgsp!=_ListGS.end(); _lgsp++)
 	{
 		delete *_lgsp;
@@ -47,9 +48,9 @@ void GeometricShape::Remove(GeometricShape* gs)
 	_ListGS.remove(gs);
 };
 
-GeometricShape* GeometricShape::GetGeometricShape(string& st)
+GeometricShape* GeometricShape::GetGeometricShape(std::string& st)
 {
-	list<GeometricShape*>::iterator _lgsp;
+	std::list<GeometricShape*>::iterator _lgsp;
 	for (_lgsp=_ListGS.begin(); _lgsp!=_ListGS.end(); _lgsp++)
 	{
 		if ((*_lgsp)->GetName() == st)
@@ -60,8 +61,13 @@ GeometricShape* GeometricShape::GetGeometricShape(string& st)
 	return 0;
 };
 
-ostream& operator << (ostream& os, GeometricShape& gs)
+
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream& os, VEDO::GeometricShape& gs)
 {
-	cout << "Type: " << gs.GetType() << endl << gs.GetStatus() << endl;
+	std::cout << "Type: " << gs.GetType() << std::endl << gs.GetStatus() << std::endl;
 	return os;
 };

@@ -4,6 +4,9 @@
 #include <NJR/Interfaces/vector2d.h>
 #include <string>
 
+namespace VEDO
+{
+
 class Boundary2d
 {
 
@@ -11,13 +14,13 @@ public:
 
 	Boundary2d();
 
-	Boundary2d(std::string, const bool*, const NJRvector2d, const NJRvector2d);
+	Boundary2d(std::string, const bool*, const NJR::NJRvector2d, const NJR::NJRvector2d);
 
-	Boundary2d(const bool*, const NJRvector2d, const NJRvector2d);
+	Boundary2d(const bool*, const NJR::NJRvector2d, const NJR::NJRvector2d);
 
-	Boundary2d(std::string, const NJRvector2d, const NJRvector2d);
+	Boundary2d(std::string, const NJR::NJRvector2d, const NJR::NJRvector2d);
 
-	Boundary2d(const NJRvector2d, const NJRvector2d);
+	Boundary2d(const NJR::NJRvector2d, const NJR::NJRvector2d);
 
 	Boundary2d(const Boundary2d&);
 
@@ -50,31 +53,31 @@ public:
 		return bSwitch[i];
 	};
 
-	void SetCenter(const NJRvector2d*);
+	void SetCenter(const NJR::NJRvector2d*);
 
-	inline void SetBoxCenter(const NJRvector2d* vNewCenter)
+	inline void SetBoxCenter(const NJR::NJRvector2d* vNewCenter)
 	{
 		SetCenter(vNewCenter);
 	};
 
-	void SetRange(const NJRvector2d*);
+	void SetRange(const NJR::NJRvector2d*);
 
-	inline void SetLength(const NJRvector2d* vNewRange)
+	inline void SetLength(const NJR::NJRvector2d* vNewRange)
 	{
 		SetRange(vNewRange);
 	};
 
-	inline const NJRvector2d& GetLength() const
+	inline const NJR::NJRvector2d& GetLength() const
 	{
 		return vRange;
 	}
 
-	inline const NJRvector2d& GetRange() const
+	inline const NJR::NJRvector2d& GetRange() const
 	{
 		return vRange;
 	}
 
-	inline const NJRvector2d& GetCenter() const
+	inline const NJR::NJRvector2d& GetCenter() const
 	{
 		return vCenter;
 	};
@@ -84,37 +87,37 @@ public:
 		return dArea;
 	};
 
-	void SetLowerPoint(const NJRvector2d*);
+	void SetLowerPoint(const NJR::NJRvector2d*);
 
-	inline void SetLowerEdge(const NJRvector2d* vNewEdge)
+	inline void SetLowerEdge(const NJR::NJRvector2d* vNewEdge)
 	{
 		SetLowerPoint(vNewEdge);
 	};
 
-	void SetUpperPoint(const NJRvector2d*);
+	void SetUpperPoint(const NJR::NJRvector2d*);
 
-	inline void SetUpperEdge(const NJRvector2d* vNewEdge)
+	inline void SetUpperEdge(const NJR::NJRvector2d* vNewEdge)
 	{
 		SetUpperPoint(vNewEdge);
 	};
 
-	inline const NJRvector2d& GetLowerPoint() const
+	inline const NJR::NJRvector2d& GetLowerPoint() const
 	{
 		return vLowerPoint;
 	}
 
-	inline const NJRvector2d& GetUpperPoint() const
+	inline const NJR::NJRvector2d& GetUpperPoint() const
 	{
 		return vUpperPoint;
 	}
 
-	bool InBoundary(const NJRvector2d*) const;
+	bool InBoundary(const NJR::NJRvector2d*) const;
 
-	bool InBoundary(const NJRvector2d*, const double) const;
+	bool InBoundary(const NJR::NJRvector2d*, const double) const;
 
-	void EnforceBoundaryConditions(NJRvector2d*) const;
+	void EnforceBoundaryConditions(NJR::NJRvector2d*) const;
 
-	void DifferenceBoundaryConditions(NJRvector2d*) const;
+	void DifferenceBoundaryConditions(NJR::NJRvector2d*) const;
 
 	void print() const;
 
@@ -125,11 +128,17 @@ private:
 	std::string sName;
 	bool bActive;
 	bool bSwitch[2];           // Open or close
-	NJRvector2d	vLowerPoint;   // Lower boundary
-	NJRvector2d	vUpperPoint;   // Upper boundary
-	NJRvector2d	vCenter;       // Center
+	NJR::NJRvector2d	vLowerPoint;   // Lower boundary
+	NJR::NJRvector2d	vUpperPoint;   // Upper boundary
+	NJR::NJRvector2d	vCenter;       // Center
 	double dArea;              // Area (inside the boundary)
-	NJRvector2d	vRange;        // Range (length in x, y directions)
+	NJR::NJRvector2d	vRange;        // Range (length in x, y directions)
 };
+
+};   // namespace VEDO
+
+
+
+std::ostream& operator << (std::ostream&, VEDO::Boundary2d&);
 
 #endif // _BOUNDARY2D_H

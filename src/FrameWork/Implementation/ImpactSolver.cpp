@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include <iostream>
 
+namespace VEDO
+{
+
 ImpactSolver::ImpactSolver(const IactModel* cpIactml) : ImStatus()
 {
 	cpIactModel = cpIactml;
@@ -11,3 +14,5 @@ ImpactSolver::ImpactSolver(const IactModel* cpIactml) : ImStatus()
 ImpactSolver::~ImpactSolver()
 {
 };
+
+};   // namespace VEDO

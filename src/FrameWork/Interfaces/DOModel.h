@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 
+namespace VEDO
+{
+
 // Data Type Class
 // __DXFColor declared in <Utiltity/acadxf.h>
 typedef enum NJRDXF::Color DOShapeColor;
@@ -96,7 +99,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJRvector3d& ExternalForce,
+		const NJR::NJRvector3d& ExternalForce,
 		const DOShapeType&,
 		const DOShapeAttributes&,
 		const DOShapeColor&);
@@ -108,7 +111,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJRvector3d& ExternalForce,
+		const NJR::NJRvector3d& ExternalForce,
 		const DOShapeType&,
 		const DOShapeAttributes&,
 		const DOShapeColor&,
@@ -121,8 +124,8 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJRvector3d& ExternalForce,
-		const NJRpolyhedra&,
+		const NJR::NJRvector3d& ExternalForce,
+		const NJR::NJRpolyhedra&,
 		const DOShapeColor&);
 
 	DOModel
@@ -132,8 +135,8 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJRvector3d& ExternalForce,
-		const NJRpolyhedra&,
+		const NJR::NJRvector3d& ExternalForce,
+		const NJR::NJRpolyhedra&,
 		const DOShapeColor&,
 		const std::vector<DOMaterialAttribute>&);
 
@@ -175,7 +178,7 @@ public:
 		return dDensityFactor;
 	};
 
-	inline NJRvector3d GetExternalForce() const
+	inline NJR::NJRvector3d GetExternalForce() const
 	{
 		return vExternalForce;
 	};
@@ -199,7 +202,7 @@ public:
 	};
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline NJRvector3d GetMassMomentInertia() const
+	inline NJR::NJRvector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	};
@@ -229,7 +232,7 @@ public:
 		return matAttributes;
 	};
 
-	inline const NJRpolyhedra& GetPolyhedra() const
+	inline const NJR::NJRpolyhedra& GetPolyhedra() const
 	{
 		return polyhedra;
 	};
@@ -238,29 +241,29 @@ public:
 
 	// Cross area to surface ax+by+cz=d;
 	double CrossAreaToSurface
-		(const NJRvector3d& vP,
+		(const NJR::NJRvector3d& vP,
 		 const double&      a,
 		 const double&      b,
 		 const double&      c,
 		 const double&      d ) const;
 
-	std::pair<double, NJRvector3d> VolumeInsideBoundary
-		(const NJRvector3d& vP,
+	std::pair<double, NJR::NJRvector3d> VolumeInsideBoundary
+		(const NJR::NJRvector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJRvector3d> ProjectedAreaOnXYPlane
-		(const NJRvector3d& vP,
+	std::pair<double, NJR::NJRvector3d> ProjectedAreaOnXYPlane
+		(const NJR::NJRvector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJRvector3d> ProjectedAreaOnYZPlane
-		(const NJRvector3d& vP,
+	std::pair<double, NJR::NJRvector3d> ProjectedAreaOnYZPlane
+		(const NJR::NJRvector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJRvector3d> ProjectedAreaOnXZPlane
-		(const NJRvector3d& vP,
+	std::pair<double, NJR::NJRvector3d> ProjectedAreaOnXZPlane
+		(const NJR::NJRvector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
@@ -278,23 +281,25 @@ protected:
 
 private:
 
-	std::string	                 sDOName;
-	std::string	                 sDOGroup;
-	std::string	                 sBehavior;
-	std::string	                 sScope;
+	std::string	                     sDOName;
+	std::string	                     sDOGroup;
+	std::string	                     sBehavior;
+	std::string	                     sScope;
 	double                           dDensity;
 	double                           dDensityFactor;
-	NJRvector3d                      vExternalForce;
+	NJR::NJRvector3d                      vExternalForce;
 	double                           dMass;
 	double                           dSudoMass;
 	double                           dVolume;
 	double                           dRange;
-	NJRvector3d                      vMassMomentInertia;
+	NJR::NJRvector3d                      vMassMomentInertia;
 	DOShapeColor                     shColor;
-	DOShapeType	                 shType;
+	DOShapeType	                     shType;
 	DOShapeAttributes                shAttributes;
 	std::vector<DOMaterialAttribute> matAttributes;
-	NJRpolyhedra                     polyhedra;
+	NJR::NJRpolyhedra                     polyhedra;
 };
+
+};   // namespace VEDO
 
 #endif // _DOMODEL_H

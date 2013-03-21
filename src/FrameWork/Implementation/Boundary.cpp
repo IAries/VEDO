@@ -1,13 +1,14 @@
 #include <FrameWork/Interfaces/Boundary.h>
 #include <cmath>
 
-using namespace std;
+namespace VEDO
+{
 
 Boundary::Boundary()
 {
 	sName = "Boundary";
-	vLowerPoint = ZERO;
-	vUpperPoint = ZERO;
+	vLowerPoint = NJRDXF::ZERO;
+	vUpperPoint = NJRDXF::ZERO;
 	for(unsigned int i=0; i<3; i++)
 	{
 		bSwitch[i] = false;
@@ -16,10 +17,10 @@ Boundary::Boundary()
 };
 
 Boundary::Boundary
-	(string sN,
+	(std::string sN,
 	 const bool* bS,
-	 const NJRvector3d vLP,
-	 const NJRvector3d vUP): sName(sN)
+	 const NJR::NJRvector3d vLP,
+	 const NJR::NJRvector3d vUP): sName(sN)
 {
 	for(unsigned int i=0; i<3; i++)
 	{
@@ -32,8 +33,8 @@ Boundary::Boundary
 
 Boundary::Boundary
 	(const bool* bS,
-	 const NJRvector3d vLP,
-	 const NJRvector3d vUP )
+	 const NJR::NJRvector3d vLP,
+	 const NJR::NJRvector3d vUP )
 {
 	sName = "Boundary";
 	for(unsigned int i=0; i<3; i++)
@@ -46,16 +47,16 @@ Boundary::Boundary
 };
 
 Boundary::Boundary
-	(string sN,
-	 const NJRvector3d vLP,
-	 const NJRvector3d vUP): sName(sN)
+	(std::string sN,
+	 const NJR::NJRvector3d vLP,
+	 const NJR::NJRvector3d vUP): sName(sN)
 {
 	vLowerPoint = vLP;
 	vUpperPoint = vUP;
 	Correct();
 };
 
-Boundary::Boundary(const NJRvector3d vLP, const NJRvector3d vUP)
+Boundary::Boundary(const NJR::NJRvector3d vLP, const NJR::NJRvector3d vUP)
 {
 	sName = "Boundary";
 	vLowerPoint = vLP;
@@ -87,12 +88,12 @@ Boundary::~Boundary()
 
 void Boundary::Correct()
 {
-	double x_min = min(vLowerPoint.x(), vUpperPoint.x());
-	double x_max = max(vLowerPoint.x(), vUpperPoint.x());
-	double y_min = min(vLowerPoint.y(), vUpperPoint.y());
-	double y_max = max(vLowerPoint.y(), vUpperPoint.y());
-	double z_min = min(vLowerPoint.z(), vUpperPoint.z());
-	double z_max = max(vLowerPoint.z(), vUpperPoint.z());
+	double x_min = std::min(vLowerPoint.x(), vUpperPoint.x());
+	double x_max = std::max(vLowerPoint.x(), vUpperPoint.x());
+	double y_min = std::min(vLowerPoint.y(), vUpperPoint.y());
+	double y_max = std::max(vLowerPoint.y(), vUpperPoint.y());
+	double z_min = std::min(vLowerPoint.z(), vUpperPoint.z());
+	double z_max = std::max(vLowerPoint.z(), vUpperPoint.z());
 
 	vLowerPoint.Set(x_min, y_min, z_min);
 	vUpperPoint.Set(x_max, y_max, z_max);
@@ -137,26 +138,26 @@ void Boundary::Correct()
 	};
 };
 
-void Boundary::SetLowerPoint(const NJRvector3d* point)
+void Boundary::SetLowerPoint(const NJR::NJRvector3d* point)
 {
 	vLowerPoint = *point;
 	Correct();
 };
 
-void Boundary::SetUpperPoint(const NJRvector3d* point)
+void Boundary::SetUpperPoint(const NJR::NJRvector3d* point)
 {
 	vUpperPoint = *point;
 	Correct();
 };
 
-void Boundary::SetCenter(const NJRvector3d* cNewCenter)
+void Boundary::SetCenter(const NJR::NJRvector3d* cNewCenter)
 {
-	NJRvector3d vShift = (*cNewCenter) - vCenter;
+	NJR::NJRvector3d vShift = (*cNewCenter) - vCenter;
 	vLowerPoint += vShift;
 	vUpperPoint += vShift;
 };
 
-void Boundary::SetRange(const NJRvector3d* vNewRange)
+void Boundary::SetRange(const NJR::NJRvector3d* vNewRange)
 {
 	double dX = fabs(vNewRange->x());
 	double dY = fabs(vNewRange->y());
@@ -167,7 +168,7 @@ void Boundary::SetRange(const NJRvector3d* vNewRange)
 	Correct();
 };
 
-bool Boundary::InBoundary(const NJRvector3d v) const
+bool Boundary::InBoundary(const NJR::NJRvector3d v) const
 {
 	if(Active())
 	{
@@ -202,7 +203,7 @@ bool Boundary::InBoundary(const NJRvector3d v) const
 	return true;
 };
 
-bool Boundary::InBoundary(const NJRvector3d v, const double r) const
+bool Boundary::InBoundary(const NJR::NJRvector3d v, const double r) const
 {
 	if(Active())
 	{
@@ -237,7 +238,7 @@ bool Boundary::InBoundary(const NJRvector3d v, const double r) const
 	return true;
 };
 
-void Boundary::EnforceBoundaryConditions(NJRvector3d* vPosition) const
+void Boundary::EnforceBoundaryConditions(NJR::NJRvector3d* vPosition) const
 {
 	double dPx = vPosition->x();
 	double dPy = vPosition->y();
@@ -327,7 +328,7 @@ void Boundary::EnforceBoundaryConditions(NJRvector3d* vPosition) const
 	vPosition->Set(dPx, dPy, dPz);
 };
 
-void Boundary::DifferenceBoundaryConditions(NJRvector3d* vDisplacement) const
+void Boundary::DifferenceBoundaryConditions(NJR::NJRvector3d* vDisplacement) const
 {
 	double dPx = vDisplacement->x();
 	double dPy = vDisplacement->y();
@@ -377,55 +378,55 @@ void Boundary::DifferenceBoundaryConditions(NJRvector3d* vDisplacement) const
 
 void Boundary::print() const
 {
-	cout << "Type: " << sName << endl;
+	std::cout << "Type: " << sName << std::endl;
 
 	if(!Active())
 	{
-		cout << "Boundary inactive" << endl;
+		std::cout << "Boundary inactive" << std::endl;
 	}
 	else
 	{
 		if(bSwitch[0])
 		{
-			cout
+			std::cout
 				<< "From X="
 				<< vLowerPoint.x()
 				<< " to X= "
 				<< vUpperPoint.x()
-				<< endl;
+				<< std::endl;
 		};
 
 		if(bSwitch[1])
 		{
-			cout
+			std::cout
 				<< "From Y="
 				<< vLowerPoint.y()
 				<< " to Y= "
 				<< vUpperPoint.y()
-				<< endl;
+				<< std::endl;
 		};
 
 		if(bSwitch[2])
 		{
-			cout
+			std::cout
 				<< "From Z="
 				<< vLowerPoint.z()
 				<< " to Z= "
 				<< vUpperPoint.z()
-				<< endl;
+				<< std::endl;
 		};
 	};
 };
 
-ostream& operator << (ostream& os, Boundary& b)
+std::ostream& operator << (std::ostream& os, Boundary& b)
 {
 	if(!(b.Active()))
 	{
-		os << "Boundary inactive!!" << endl;
+		os << "Boundary inactive!!" << std::endl;
 	}
 	else
 	{
-		os << "Type: " << b.GetName() << endl;
+		os << "Type: " << b.GetName() << std::endl;
 
 		if(b.GetSwitch(0))
 		{
@@ -434,7 +435,7 @@ ostream& operator << (ostream& os, Boundary& b)
 				<< b.GetLowerPoint().x()
 				<< " to X= "
 				<< b.GetUpperPoint().x()
-				<< endl;
+				<< std::endl;
 		};
 
 		if(b.GetSwitch(1))
@@ -444,7 +445,7 @@ ostream& operator << (ostream& os, Boundary& b)
 				<< b.GetLowerPoint().y()
 				<< " to Y= "
 				<< b.GetUpperPoint().y()
-				<< endl;
+				<< std::endl;
 		};
 
 		if(b.GetSwitch(2))
@@ -454,8 +455,10 @@ ostream& operator << (ostream& os, Boundary& b)
 				<< b.GetLowerPoint().z()
 				<< " to Z= "
 				<< b.GetUpperPoint().z()
-				<< endl;
+				<< std::endl;
 		};
 	};
 	return os;
 };
+
+};   // namespace VEDO

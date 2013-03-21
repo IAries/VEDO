@@ -1,9 +1,10 @@
 #include <FrameWork/Interfaces/DOMap.h>
 #include <algorithm>
 
-using namespace std;
+namespace VEDO
+{
 
-double DOMap::CalSafeDistance(DOMap m, NJRvector3d vFF, double dt)
+double DOMap::CalSafeDistance(DOMap m, NJR::NJRvector3d vFF, double dt)
 {
 	switch (m._cpdoml->GetShapeType() )
 	{
@@ -25,8 +26,10 @@ double DOMap::CalSafeDistance(DOMap m, NJRvector3d vFF, double dt)
 				+ (vFF * (0.5*dt*dt)).length()
 				+ (m._cpdoml->GetShapeAttributes().sphere.radius * 1.1);
 		default:
-			cerr << "DOShape is not in the list of LeapConsultant\n";
-			exit(0);
+			std::cerr
+				<< "Error!! Code: DOMap::CalSafeDistance(DOMap, NJR::NJRvector3d, double)" << std::endl
+				<< "        Note: DOShape is not in the std::list of LeapConsultant" << std::endl;
+			exit(-1);
 	}
 };
 
@@ -41,19 +44,19 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 	if (   (m1._cpdoml->GetShapeType() == Sphere)
 		&& (m2._cpdoml->GetShapeType() == Sphere) )
 	{
-		NJRvector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
+		NJR::NJRvector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
 		return vIm.length();
 	}
 
 	if (   (m1._cpdoml->GetShapeType() == Sphere    )
 		&& (m2._cpdoml->GetShapeType() == QuasiPlate) )
 	{
-		NJRvector3d vCa  = m1._cpdos->GetPosition();
-		NJRvector3d vCb  = m2._cpdos->GetPosition();
-		NJRvector3d vOz  = m2._cpdos->GetOrientationZ();
-		NJRvector3d vOx  = m2._cpdos->GetOrientationX();
-		NJRvector3d vOy  = vOz * vOx;
-		NJRvector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+		NJR::NJRvector3d vCa  = m1._cpdos->GetPosition();
+		NJR::NJRvector3d vCb  = m2._cpdos->GetPosition();
+		NJR::NJRvector3d vOz  = m2._cpdos->GetOrientationZ();
+		NJR::NJRvector3d vOx  = m2._cpdos->GetOrientationX();
+		NJR::NJRvector3d vOy  = vOz * vOx;
+		NJR::NJRvector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 		double dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		double dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
@@ -79,8 +82,8 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 			Dapy = dHLb;
 		}
 
-		NJRvector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		NJRvector3d vIm   =  vCaps - vCa;
+		NJR::NJRvector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		NJR::NJRvector3d vIm   =  vCaps - vCa;
 		return vIm.length();
 	}
 
@@ -89,15 +92,15 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 	{
 		double dHHb
 			= 0.5 * (m2._cpdoml->GetShapeAttributes().quasicylinder.height);
-		NJRvector3d Ca     = m1._cpdos->GetPosition();
-		NJRvector3d Cb     = m2._cpdos->GetPosition();
-		NJRvector3d Vaxial = m2._cpdos->GetOrientationZ();
+		NJR::NJRvector3d Ca     = m1._cpdos->GetPosition();
+		NJR::NJRvector3d Cb     = m2._cpdos->GetPosition();
+		NJR::NJRvector3d Vaxial = m2._cpdos->GetOrientationZ();
 
 		double Dap = (Ca - Cb)%Vaxial;
 
-		NJRvector3d Cap    = Cb + (Vaxial * Dap);
+		NJR::NJRvector3d Cap    = Cb + (Vaxial * Dap);
 
-		NJRvector3d vIm;
+		NJR::NJRvector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -115,8 +118,10 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 		return vIm.length();
 	}
 
-	cerr << "DOShape is not in the list of DOMap\n";
-	exit(0);
+	std::cerr
+		<< "Error!! Code: DOMap::CalDistance(DOMap, DOMap)" << std::endl
+		<< "        Note: DOShape is not in the std::list of DOMap" << std::endl;
+	exit(-1);
 };
 */
 
@@ -124,13 +129,13 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 {
 	if (m1._cpdoml->GetShapeType() > m2._cpdoml->GetShapeType())
 	{
-		swap(m1, m2);
+		std::swap(m1, m2);
 	}
 
 	if (   (m1._cpdoml->GetShapeType() == Sphere)
 		&& (m2._cpdoml->GetShapeType() == Sphere) )
 	{
-		NJRvector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
+		NJR::NJRvector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
 		if(pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -141,12 +146,12 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 	if (   (m1._cpdoml->GetShapeType() == Sphere    )
 		&& (m2._cpdoml->GetShapeType() == QuasiPlate) )
 	{
-		NJRvector3d vCa  = m1._cpdos->GetPosition();
-		NJRvector3d vCb  = m2._cpdos->GetPosition();
-		NJRvector3d vOz  = m2._cpdos->GetOrientationZ();
-		NJRvector3d vOx  = m2._cpdos->GetOrientationX();
-		NJRvector3d vOy  = vOz * vOx;
-		NJRvector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+		NJR::NJRvector3d vCa  = m1._cpdos->GetPosition();
+		NJR::NJRvector3d vCb  = m2._cpdos->GetPosition();
+		NJR::NJRvector3d vOz  = m2._cpdos->GetOrientationZ();
+		NJR::NJRvector3d vOx  = m2._cpdos->GetOrientationX();
+		NJR::NJRvector3d vOy  = vOz * vOx;
+		NJR::NJRvector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 		double dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		double dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
@@ -172,8 +177,8 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 			Dapy = dHLb;
 		}
 
-		NJRvector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		NJRvector3d vIm   =  vCaps - vCa;
+		NJR::NJRvector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		NJR::NJRvector3d vIm   =  vCaps - vCa;
 		if(pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -186,15 +191,15 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 	{
 		double dHHb
 			= 0.5 * (m2._cpdoml->GetShapeAttributes().quasicylinder.height);
-		NJRvector3d Ca     = m1._cpdos->GetPosition();
-		NJRvector3d Cb     = m2._cpdos->GetPosition();
-		NJRvector3d Vaxial = m2._cpdos->GetOrientationZ();
+		NJR::NJRvector3d Ca     = m1._cpdos->GetPosition();
+		NJR::NJRvector3d Cb     = m2._cpdos->GetPosition();
+		NJR::NJRvector3d Vaxial = m2._cpdos->GetOrientationZ();
 
 		double Dap = (Ca - Cb)%Vaxial;
 
-		NJRvector3d Cap    = Cb + (Vaxial * Dap);
+		NJR::NJRvector3d Cap    = Cb + (Vaxial * Dap);
 
-		NJRvector3d vIm;
+		NJR::NJRvector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -216,15 +221,17 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 		return vIm.length();
 	}
 
-	cerr << "DOShape is not in the list of DOMap\n";
-	exit(0);
+	std::cerr
+		<< "Error!! DOMap::CalDistance(DOMap, DOMap, const Boundary*)" << std::endl
+		<< "        Note: DOShape is not in the std::list of DOMap" << std::endl;
+	exit(-1);
 };
 
-vector<DOMap> DOMap::GetDOMap(const DOWorld* World)
+std::vector<DOMap> DOMap::GetDOMap(const DOWorld* World)
 {
 	unsigned long numberDO = World->GetSystemParameter()->GetDONumber();
 
-	vector<DOMap> vDOMap(numberDO);
+	std::vector<DOMap> vDOMap(numberDO);
 
 	for (unsigned int ul=0; ul<numberDO; ++ul)
 	{
@@ -237,7 +244,7 @@ vector<DOMap> DOMap::GetDOMap(const DOWorld* World)
 };
 
 void DOMap::ExtremeValue
-	(vector<DOMap> Map,
+	(std::vector<DOMap> Map,
 	 double& maxX,
 	 double& minX,
 	 double& maxY,
@@ -269,3 +276,5 @@ void DOMap::ExtremeValue
 	maxS
 		= max_element(Map.begin(), Map.end(), ComS)->SafeLength();
 };
+
+};   // namespace VEDO

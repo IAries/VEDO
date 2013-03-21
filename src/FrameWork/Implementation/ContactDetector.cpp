@@ -1,5 +1,8 @@
 #include <FrameWork/Interfaces/ContactDetector.h>
 
+namespace VEDO
+{
+
 ContactDetector::ContactDetector()
 {
 	cInfo.dImpactDepth = 0.0;
@@ -9,3 +12,5 @@ ContactDetector::ContactDetector()
 	cInfo.bUnBalance   = false;
 	pBC                = 0;
 };
+
+};   // namespace VEDO

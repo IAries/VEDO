@@ -3,7 +3,8 @@
 #include <algorithm>
 #include <typeinfo>
 
-using namespace std;
+namespace VEDO
+{
 
 CDCFactoryDecorator::CDCFactoryDecorator() : lcCDCFactory(0)
 {
@@ -16,7 +17,7 @@ CDCFactoryDecorator::~CDCFactoryDecorator()
 
 void CDCFactoryDecorator::AddCDCFactory(CDFactory* pcdf)
 {
-	list<CDFactory *>::const_iterator icdf;
+	std::list<CDFactory *>::const_iterator icdf;
 
 	for (icdf=lcCDCFactory.begin(); icdf!=lcCDCFactory.end(); ++icdf)
 	{
@@ -38,7 +39,7 @@ ContactDetector* CDCFactoryDecorator::Create
 	const IactModel* cpiactmodel) const
 {
     ContactDetector* pcd;
-	list<CDFactory *>::const_iterator icdf;
+	std::list<CDFactory *>::const_iterator icdf;
 
 	for (icdf=lcCDCFactory.begin(); icdf!=lcCDCFactory.end(); ++icdf)
 	{
@@ -49,17 +50,13 @@ ContactDetector* CDCFactoryDecorator::Create
 		}
     }
 
-	cerr
-		<< "Unkown Contact Detector(CD c factory decorator)"
-		<< endl
-		<< "SlaveModel = "
-		<< cpdoslave->GetDOModel()->GetDOName()
-		<< endl
-		<< "MasterModel = "
-		<< cpdomaster->GetDOModel()->GetDOName()
-		<< endl
-		<< "EquationType = "
-		<< cpiactmodel->GetEquationType()
-		<< endl;
-	exit (0);
+	std::cerr
+		<< "Error!! Code: CDCFactoryDecorator::Create (const DiscreteObject*, const DiscreteObject*, const IactModel*)" << std::endl
+		<< "        Note: Unkown Contact Detector(CD c factory decorator)"          << std::endl
+		<< "              SlaveModel   = " << cpdoslave->GetDOModel()->GetDOName()  << std::endl
+		<< "              MasterModel  = " << cpdomaster->GetDOModel()->GetDOName() << std::endl
+		<< "              EquationType = " << cpiactmodel->GetEquationType() 	    << std::endl;
+	exit(-1);
 };
+
+};   // namespace VEDO

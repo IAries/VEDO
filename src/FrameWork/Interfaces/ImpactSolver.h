@@ -7,6 +7,9 @@
 #include <FrameWork/Interfaces/ISwModels.h>
 #include <FrameWork/Interfaces/ImpactStatus.h>
 
+namespace VEDO
+{
+
 class ImpactSolver
 {
 
@@ -14,7 +17,7 @@ public:
 
 	virtual ~ImpactSolver();
 
-	virtual NJRvector3d NextStep
+	virtual NJR::NJRvector3d NextStep
 		(const ContactDetector* pcd,
 		DiscreteObject* pdoSlave,
 		DiscreteObject* pdoMaster,
@@ -66,5 +69,7 @@ private:
 
 	ImpactSolver& operator = (const ImpactSolver&);
 };
+
+};   // namespace VEDO
 
 #endif // _IMPACT_SOLVER_H

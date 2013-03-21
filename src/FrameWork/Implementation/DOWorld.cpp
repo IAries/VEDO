@@ -1,3 +1,4 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <FrameWork/Interfaces/Boundary.h>
 #include <FrameWork/Interfaces/DOMap.h>
 #include <FrameWork/Interfaces/DOWorld.h>
@@ -8,7 +9,8 @@
 #include <map>
 #include <vector>
 
-using namespace std;
+namespace VEDO
+{
 
 DOWorld::DOWorld()
 	: cDOStatus(0), cDOModel(0), cIactModel(0), pSystemParameter(0)
@@ -23,9 +25,9 @@ DOWorld::DOWorld(const DOWorld &dow)
 
 DOWorld::DOWorld
 	(SystemParameter *sp,
-	const list<DOModel*>& nDOModel,
-	const list<IactModel*>& nIactModel,
-	const vector<DOStatus*>& nDOStatus)
+	const std::list<DOModel*>& nDOModel,
+	const std::list<IactModel*>& nIactModel,
+	const std::vector<DOStatus*>& nDOStatus)
 {
 	pSystemParameter = sp;
 	cDOModel         = nDOModel;
@@ -83,15 +85,15 @@ void DOWorld::SetDOStatus(const unsigned long& odo, const DOStatus& dos)
 
 /*
 void DOWorld::EraseDOStatus
-	(const vector<unsigned long>& EraseList, const int& rank)
+	(const std::vector<unsigned long>& EraseList, const int& rank)
 {
-	vector<DOStatus*>::size_type numberDO      = cDOStatus.size();
-	vector<DOStatus*>::size_type ErasenumberDO = EraseList.size();
-	vector<DOStatus*>::size_type NewnumberDO   = numberDO - ErasenumberDO;
+	std::vector<DOStatus*>::size_type numberDO      = cDOStatus.size();
+	std::vector<DOStatus*>::size_type ErasenumberDO = EraseList.size();
+	std::vector<DOStatus*>::size_type NewnumberDO   = numberDO - ErasenumberDO;
 	DOStatus** NewcDOStatus = new DOStatus* [NewnumberDO];
 
-	vector<DOStatus*>::size_type ul;
-	vector<DOStatus*>::size_type ulEraseCounter = 0;
+	std::vector<DOStatus*>::size_type ul;
+	std::vector<DOStatus*>::size_type ulEraseCounter = 0;
 
 	for(ul=0; ul<numberDO; ul++)
 	{
@@ -122,10 +124,10 @@ void DOWorld::EraseDOStatus
 };
 */
 
-const vector<unsigned long> DOWorld::FindDO (string name) const
+const std::vector<unsigned long> DOWorld::FindDO (std::string name) const
 {
-	vector<unsigned long> List;
-	vector<DOStatus*>::iterator cDOSp;
+	std::vector<unsigned long> List;
+	std::vector<DOStatus*>::iterator cDOSp;
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
 		if(cDOStatus[ul]->GetDOName() == name)
@@ -147,14 +149,14 @@ void DOWorld::TurnMonitor(bool m)
 //void DOWorld::ClearSeparatedElements(const IactRecordTab* pIactRecordTab)
 void DOWorld::ClearSeparatedElements()
 {
-	vector<unsigned long> RedundantElement;
+	std::vector<unsigned long> RedundantElement;
 	unsigned long numberDO = pSystemParameter->GetDONumber();
 	const DOStatus* pdos  = 0;
 	const DOModel*  pdoml = 0;
 
 	unsigned long ul;
-	list<DOModel*>::const_iterator idoml;
-	list<IactModel*>::const_iterator cimp;
+	std::list<DOModel*>::const_iterator idoml;
+	std::list<IactModel*>::const_iterator cimp;
 	for(ul=0; ul<numberDO; ul++)
 	{
 		cDOStatus[ul]->SetMonitored(true);
@@ -172,10 +174,10 @@ void DOWorld::ClearSeparatedElements()
 	}
 	if (!RedundantElement.empty())
 	{
-		cout
+		std::cout
 			<< "Number of redundant elements = "
 			<< RedundantElement.size()
-			<< endl;
+			<< std::endl;
 //		cDO.Erase(RedundantElement);
 //		pDOWorld->EraseDOStatus(RedundantElement);
 //		vcIactMaster.clear();
@@ -185,7 +187,7 @@ void DOWorld::ClearSeparatedElements()
 	}
 };
 
-void DOWorld::EraseDOStatus(const vector<unsigned long>& EraseList)
+void DOWorld::EraseDOStatus(const std::vector<unsigned long>& EraseList)
 {
 	if(!EraseList.empty())
 	{
@@ -218,12 +220,12 @@ void DOWorld::EraseDOStatus(const vector<unsigned long>& EraseList)
 
 /*
 void DOWorld::EraseDOStatus
-	(const vector<unsigned long>& EraseList, const int& rank)
+	(const std::vector<unsigned long>& EraseList, const int& rank)
 {
 	const unsigned long numberDO      = cDOStatus.size();
 	const unsigned long ErasenumberDO = EraseList.size();
 	const unsigned long NewnumberDO   = numberDO - ErasenumberDO;
-	vector<DOStatus*> NewcDOStatus(NewnumberDO);
+	std::vector<DOStatus*> NewcDOStatus(NewnumberDO);
 
 	unsigned long ul;
 	unsigned long ulEraseCounter = 0;
@@ -257,34 +259,34 @@ void DOWorld::EraseDOStatus
 };
 */
 
-const DOModel* DOWorld::GetDOModel(const string& DOName) const
+const DOModel* DOWorld::GetDOModel(const std::string& DOName) const
 {
-	list<DOModel*>::const_iterator idoml;
+	std::list<DOModel*>::const_iterator idoml;
 	idoml = find_if(cDOModel.begin(), cDOModel.end(), DOModel(DOName));
 	return(idoml != cDOModel.end()) ? *idoml : 0;
 };
 
 const IactModel* DOWorld::GetIactModel
-	(const string& MG, const string& SG) const
+	(const std::string& MG, const std::string& SG) const
 {
-	list<IactModel*>::const_iterator iiactml;
+	std::list<IactModel*>::const_iterator iiactml;
 	iiactml = find_if(cIactModel.begin(), cIactModel.end(), IactModel(MG, SG));
 	return(iiactml != cIactModel.end()) ? *iiactml : 0;
 };
 
-bool DOWorld::UpdateDOStatus(const vector<const DOStatus *>& nDOStatus)
+bool DOWorld::UpdateDOStatus(const std::vector<const DOStatus *>& nDOStatus)
 {
 	if ( cDOStatus.size() != nDOStatus.size() )
 	{
-		cerr
+		std::cout
 			<< "Warning!!! DO("
 			<< (unsigned int) cDOStatus.size()
 			<< ")don't equal to->"
 			<< (unsigned int) nDOStatus.size()
-			<< endl;
+			<< std::endl;
 	}
 
-	vector<DOStatus *> vnDOS;
+	std::vector<DOStatus *> vnDOS;
 	transform
 		(nDOStatus.begin(),
 		 nDOStatus.end(),
@@ -315,11 +317,11 @@ bool DOWorld::UpdateDOStatus(const vector<const DOStatus *>& nDOStatus)
 	return DOWorld::Check();
 };
 
-bool DOWorld::DelDOModel(const string& DOName)
+bool DOWorld::DelDOModel(const std::string& DOName)
 {
-	list<DOModel*>::iterator idoml;
-    vector<DOStatus*>::iterator idos;
-	vector<DOStatus*>cnDOStatus(0);
+	std::list<DOModel*>::iterator idoml;
+    std::vector<DOStatus*>::iterator idos;
+	std::vector<DOStatus*>cnDOStatus(0);
 
 	idoml = find_if(cDOModel.begin(),cDOModel.end(),DOModel(DOName));
 
@@ -364,7 +366,7 @@ bool DOWorld::DelDOModel(const string& DOName)
 	return DOWorld::Check();
 };
 
-void DOWorld::SetFieldForce(const NJRvector3d& ff)
+void DOWorld::SetFieldForce(const NJR::NJRvector3d& ff)
 {
 	pSystemParameter->SetFieldForce (ff);
 };
@@ -376,7 +378,7 @@ void DOWorld::SetModels(const DOWorld* dow)
 	pSystemParameter->SetDONumber(cDOStatus.size());
 
 	// Set cDOModel
-	list<DOModel*>::iterator cdmp;
+	std::list<DOModel*>::iterator cdmp;
 	for(cdmp=(cDOModel.begin()); cdmp!=(cDOModel.end()); cdmp++)
 	{
 		if((dow->GetDOModel((*cdmp)->GetDOName())))
@@ -386,7 +388,7 @@ void DOWorld::SetModels(const DOWorld* dow)
 	}
 
 	// Set cIactModel
-	list<IactModel*>::iterator cimp;
+	std::list<IactModel*>::iterator cimp;
 	for(cimp=(cIactModel.begin()); cimp!=(cIactModel.end()); cimp++)
 	{
 		if(dow
@@ -408,31 +410,31 @@ void DOWorld::FreezeAllElements()
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
-//		cDOStatus[ul]->SetOrientation(NJRvector3d(AXIALX), NJRvector3d(AXIALZ));
-		cDOStatus[ul]->SetVelocity(NJRvector3d(ZERO));
-		cDOStatus[ul]->SetAngularVelocity(NJRvector3d(ZERO));
+//		cDOStatus[ul]->SetOrientation(NJR::NJRvector3d(NJRDXF::AXIALX), NJR::NJRvector3d(NJRDXF::AXIALZ));
+		cDOStatus[ul]->SetVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
+		cDOStatus[ul]->SetAngularVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
 	}
 };
 
-void DOWorld::FreezeElements(string& sDOName)
+void DOWorld::FreezeElements(std::string& sDOName)
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
 		if (cDOStatus[ul]->GetDOName() == sDOName)
 		{
-//			cDOStatus[ul]->SetOrientation(NJRvector3d(AXIALX), NJRvector3d(AXIALZ));
-			cDOStatus[ul]->SetVelocity(NJRvector3d(ZERO));
-			cDOStatus[ul]->SetAngularVelocity(NJRvector3d(ZERO));
+//			cDOStatus[ul]->SetOrientation(NJR::NJRvector3d(NJRDXF::AXIALX), NJR::NJRvector3d(NJRDXF::AXIALZ));
+			cDOStatus[ul]->SetVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
+			cDOStatus[ul]->SetAngularVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
 		}
 	}
 };
 
 void DOWorld::SortingDOStatus()
 {
-	vector<DOStatus*> cDOStatusNew;
-	string str;
-	vector<string>              cDOStatusTempName;
-	vector< vector<DOStatus*> > cDOStatusTempData;
+	std::vector<DOStatus*> cDOStatusNew;
+	std::string str;
+	std::vector<std::string>              cDOStatusTempName;
+	std::vector< std::vector<DOStatus*> > cDOStatusTempData;
 	bool hasInsert;
 	DOStatus* dos;
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
@@ -451,7 +453,7 @@ void DOWorld::SortingDOStatus()
 		if(!hasInsert)
 		{
 			cDOStatusTempName.push_back(str);
-			vector<DOStatus*> vdos;
+			std::vector<DOStatus*> vdos;
 			vdos.push_back(new DOStatus(*dos));
 			cDOStatusTempData.push_back(vdos);
 		}
@@ -506,8 +508,8 @@ void DOWorld::CalculateSystemEnergy()
 	double          dEnergyKinetic;
 	double          dEnergyTranslation;
 	double          dEnergyRotation;
-	NJRvector3d     vMomentumAvg;
-	NJRvector3d     vAngularMomentumAvg;
+	NJR::NJRvector3d     vMomentumAvg;
+	NJR::NJRvector3d     vAngularMomentumAvg;
 	double          dMomentumNorm        = 0.0;
 	double          dAngularMomentumNorm = 0.0;
 	double          dVelocityMax;
@@ -515,9 +517,9 @@ void DOWorld::CalculateSystemEnergy()
 	double          dAngularVelocityMax;
 	double          dAngularVelocityMin;
 	double          m;
-	NJRvector3d     mmi;
+	NJR::NJRvector3d     mmi;
 	double          v;
-	NJRvector3d     av;
+	NJR::NJRvector3d     av;
 	double          dav;
 	bool            StartPoint       = true;
 	bool            NoMobileElements = false;
@@ -679,7 +681,7 @@ void DOWorld::CalculateSystemEnergy()
 	pSystemParameter->SetAngularVelocityMin(dAngularVelocityMin);
 };
 
-const pair<NJRvector3d, NJRvector3d>
+const std::pair<NJR::NJRvector3d, NJR::NJRvector3d>
 	DOWorld::Distribution(double& dMeshLength) const
 {
 	const Boundary      pZOI    = pSystemParameter->GetZoneOfInterest();
@@ -687,7 +689,7 @@ const pair<NJRvector3d, NJRvector3d>
 	const DOModel*      pdoml   = 0;
 	      unsigned long ulNumDO = pSystemParameter->GetDONumber();
 
-	vector<unsigned long> TargetedSerialNumber;
+	std::vector<unsigned long> TargetedSerialNumber;
 	for(unsigned long ul=0; ul<ulNumDO; ul++)
 	{
 		pdos     = cDOStatus[ul];
@@ -711,7 +713,7 @@ const pair<NJRvector3d, NJRvector3d>
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bMeshFilled;
-	NJRvector3d   vMeshCenter;
+	NJR::NJRvector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -764,12 +766,12 @@ const pair<NJRvector3d, NJRvector3d>
 	};
 
 	return
-		make_pair
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		std::make_pair
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 };
 
-void DOWorld::Shift(const NJRvector3d& shift)
+void DOWorld::Shift(const NJR::NJRvector3d& shift)
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -777,7 +779,7 @@ void DOWorld::Shift(const NJRvector3d& shift)
 	};
 };
 
-void DOWorld::Shift(const NJRvector3d& shift, const string& DOName)
+void DOWorld::Shift(const NJR::NJRvector3d& shift, const std::string& DOName)
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -788,12 +790,12 @@ void DOWorld::Shift(const NJRvector3d& shift, const string& DOName)
 	};
 };
 
-pair<double, double> Rotate1Axis
+std::pair<double, double> Rotate1Axis
 	(double Axis1, double Axis2, double dAnglePlus)
 {
 	if (dAnglePlus == 0.0)
 	{
-		return make_pair(Axis1, Axis2);
+		return std::make_pair(Axis1, Axis2);
 	}
 	else
 	{
@@ -817,31 +819,31 @@ pair<double, double> Rotate1Axis
 
 		if((Axis1 < 0.0) && (Axis2 > 0.0))
 		{
-			dAngle += 3.14159267;
+			dAngle += NJR::dPI;
 		}
 		else if((Axis1 < 0.0) && (Axis2 < 0.0))
 		{
-			dAngle += 3.14159267;
+			dAngle += NJR::dPI;
 		}
 
 		dAngle += dAnglePlus;
 
-		if(dAngle >= 6.28318534)
+		if(dAngle >= NJR::dDoublePI)
 		{
-			dAngle -= 6.28318534;
+			dAngle -= NJR::dDoublePI;
 		}
 
-		return make_pair(dRadius*cos(dAngle), dRadius*sin(dAngle));
+		return std::make_pair(dRadius*cos(dAngle), dRadius*sin(dAngle));
 	}
 }
 
-NJRvector3d& Rotate3Axis
-	(NJRvector3d vTarget,
+NJR::NJRvector3d& Rotate3Axis
+	(NJR::NJRvector3d vTarget,
 	 const double& Angle2XAxis,
 	 const double& Angle2YAxis,
 	 const double& Angle2ZAxis )
 {
-	pair<double, double> pNewAxisValues;
+	std::pair<double, double> pNewAxisValues;
 
 	pNewAxisValues = Rotate1Axis(vTarget.y(), vTarget.z(), Angle2XAxis);
 	vTarget.Set(vTarget.x(), pNewAxisValues.first, pNewAxisValues.second);
@@ -860,8 +862,8 @@ void DOWorld::Rotate
 	 const double& Angle2YAxis,
 	 const double& Angle2ZAxis )
 {
-	NJRvector3d vV1, vV2;
-	pair<double, double> pNewPosition, pNewVelocity, pNewAngularVelocity;
+	NJR::NJRvector3d vV1, vV2;
+	std::pair<double, double> pNewPosition, pNewVelocity, pNewAngularVelocity;
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
 		cDOStatus[ul]
@@ -907,10 +909,10 @@ void DOWorld::Rotate
 }
 
 void DOWorld::Rotate
-	(const NJRvector3d& eX, const NJRvector3d& eZ, const string& DOName)
+	(const NJR::NJRvector3d& eX, const NJR::NJRvector3d& eZ, const std::string& DOName)
 {
-	NJRvector3d eY(eZ * eX);
-	NJRvector3d position, orientationX, orientationZ;
+	NJR::NJRvector3d eY(eZ * eX);
+	NJR::NJRvector3d position, orientationX, orientationZ;
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
 		if(cDOStatus[ul]->GetDOName() == DOName)
@@ -918,14 +920,14 @@ void DOWorld::Rotate
 			position = cDOStatus[ul]->GetPosition();
 			cDOStatus[ul]
 				->SetPosition
-					(NJRvector3d(position % eX, position % eY, position % eZ));
+					(NJR::NJRvector3d(position % eX, position % eY, position % eZ));
 			orientationX = cDOStatus[ul]->GetOrientationX();
 			orientationZ = cDOStatus[ul]->GetOrientationZ();
 			cDOStatus[ul]
 				->SetOrientation
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(orientationX % eX, orientationX % eY, orientationX % eZ),
-					 NJRvector3d
+					 NJR::NJRvector3d
 						(orientationZ % eX, orientationZ % eY, orientationZ % eZ) );
 		};
 	};
@@ -933,25 +935,25 @@ void DOWorld::Rotate
 
 bool DOWorld::Check() const
 {
-	string doname;
-	vector<DOStatus *>::const_iterator idos;
+	std::string doname;
+	std::vector<DOStatus *>::const_iterator idos;
 
 	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
 	{
 		doname=(*idos)->GetDOName();
 		if (DOWorld::GetDOModel(doname) == 0)
 		{
-			cerr
+			std::cout
 				<<"unknown model of Discrete Object->"
 				<< doname.c_str()
-				<< endl;
+				<< std::endl;
 			return false;
 		}
 	}
 
 	if (pSystemParameter->GetDONumber()!=cDOStatus.size())
 	{
-		cerr << "Number of Discrete Objects don't equal to DOStatus" << endl;
+		std::cout << "Number of Discrete Objects don't equal to DOStatus" << std::endl;
 		return false;
 	}
 
@@ -965,7 +967,7 @@ double DOWorld::Volume(double& dMeshLength) const
 	const DOModel*      pdoml   = 0;
 	      unsigned long ulNumDO = pSystemParameter->GetDONumber();
 
-	vector<unsigned long> TargetedSerialNumber;
+	std::vector<unsigned long> TargetedSerialNumber;
 	for(unsigned long ul=0; ul<ulNumDO; ul++)
 	{
 		pdos     = cDOStatus[ul];
@@ -985,7 +987,7 @@ double DOWorld::Volume(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bVolumeFilled;
-	NJRvector3d   vMeshCenter;
+	NJR::NJRvector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -1027,7 +1029,7 @@ double DOWorld::ProjectedAreaX(double& dMeshLength) const
 	const DOModel*      pdoml   = 0;
 	      unsigned long ulNumDO = pSystemParameter->GetDONumber();
 
-	vector<unsigned long> TargetedSerialNumber;
+	std::vector<unsigned long> TargetedSerialNumber;
 	for(unsigned long ul=0; ul<ulNumDO; ul++)
 	{
 		pdos     = cDOStatus[ul];
@@ -1039,7 +1041,7 @@ double DOWorld::ProjectedAreaX(double& dMeshLength) const
 			{
 				TargetedSerialNumber.push_back(ul);
 				pdos->SetPosition
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(0.0,
 						 pdos->GetPosition().y(),
 						 pdos->GetPosition().z() ));
@@ -1052,7 +1054,7 @@ double DOWorld::ProjectedAreaX(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bAreaFilled;
-	NJRvector3d   vMeshCenter;
+	NJR::NJRvector3d   vMeshCenter;
 	for(double dY=pZOI.GetLowerPoint().y()+0.5*dMeshLength;
 		dY<pZOI.GetUpperPoint().y();
 		dY+=dMeshLength                                   )
@@ -1089,7 +1091,7 @@ double DOWorld::ProjectedAreaY(double& dMeshLength) const
 	const DOModel*      pdoml   = 0;
 	      unsigned long ulNumDO = pSystemParameter->GetDONumber();
 
-	vector<unsigned long> TargetedSerialNumber;
+	std::vector<unsigned long> TargetedSerialNumber;
 	for(unsigned long ul=0; ul<ulNumDO; ul++)
 	{
 		pdos     = cDOStatus[ul];
@@ -1101,7 +1103,7 @@ double DOWorld::ProjectedAreaY(double& dMeshLength) const
 			{
 				TargetedSerialNumber.push_back(ul);
 				pdos->SetPosition
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(pdos->GetPosition().x(),
 						 0.0,
 						 pdos->GetPosition().z() ));
@@ -1114,7 +1116,7 @@ double DOWorld::ProjectedAreaY(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bAreaFilled;
-	NJRvector3d   vMeshCenter;
+	NJR::NJRvector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -1151,7 +1153,7 @@ double DOWorld::ProjectedAreaZ(double& dMeshLength) const
 	const DOModel*      pdoml   = 0;
 	      unsigned long ulNumDO = pSystemParameter->GetDONumber();
 
-	vector<unsigned long> TargetedSerialNumber;
+	std::vector<unsigned long> TargetedSerialNumber;
 	for(unsigned long ul=0; ul<ulNumDO; ul++)
 	{
 		pdos     = cDOStatus[ul];
@@ -1163,7 +1165,7 @@ double DOWorld::ProjectedAreaZ(double& dMeshLength) const
 			{
 				TargetedSerialNumber.push_back(ul);
 				pdos->SetPosition
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(pdos->GetPosition().x(),
 						 pdos->GetPosition().y(),
 						 0.0                     ));
@@ -1176,7 +1178,7 @@ double DOWorld::ProjectedAreaZ(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bAreaFilled;
-	NJRvector3d   vMeshCenter;
+	NJR::NJRvector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -1207,7 +1209,7 @@ double DOWorld::ProjectedAreaZ(double& dMeshLength) const
 };
 
 const DOStatus DOWorld::GetDOStatus
-	(const string& DOName, const unsigned long ulSerialNumber) const
+	(const std::string& DOName, const unsigned long ulSerialNumber) const
 {
 	if (ulSerialNumber < cDOStatus.size())
 	{
@@ -1217,21 +1219,23 @@ const DOStatus DOWorld::GetDOStatus
 		}
 		else
 		{
-			cerr
+			std::cout
 				<< "DOWorld::Trace Error (I) !! Can't find DOStatus ["
 				<< ulSerialNumber
 				<< "]"
-				<< endl;
+				<< std::endl;
 			return *(cDOStatus[0]);
 		}
 	}
 	else
 	{
-		cerr
+		std::cout
 			<< "DOWorld::Trace Error (II) !! Can't find DOStatus ["
 			<< ulSerialNumber
 			<< "]"
-			<< endl;
+			<< std::endl;
 		return *(cDOStatus[0]);
 	}
 };
+
+};   // namespace VEDO

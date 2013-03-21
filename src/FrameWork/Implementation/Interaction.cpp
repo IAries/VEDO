@@ -1,5 +1,8 @@
 #include <FrameWork/Interfaces/Interaction.h>
 
+namespace VEDO
+{
+
 Interaction::Interaction
 	(DiscreteObject* doslave,
 	DiscreteObject* domaster,
@@ -44,3 +47,5 @@ void Interaction::DetectContact()
 {
 	pcd->Detect(pdoSlave, pdoMaster);
 };
+
+};   // namespace VEDO

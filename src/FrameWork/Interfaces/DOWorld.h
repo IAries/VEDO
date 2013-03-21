@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 
+namespace VEDO
+{
+
 struct NullExternalFieldVTKWriter;
 
 // Data Type Class
@@ -101,7 +104,7 @@ public:
 		pSystemParameter->SetTime(dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent);
 	}
 
-	void SetFieldForce(const NJRvector3d&);
+	void SetFieldForce(const NJR::NJRvector3d&);
 
 	bool UpdateDOStatus(const std::vector<const DOStatus *>& nDOStatus);
 
@@ -173,12 +176,12 @@ public:
 //	void CalculateSystemEnergy(const IactRecordTab*);
 	void CalculateSystemEnergy();
 
-	const std::pair<NJRvector3d, NJRvector3d>
+	const std::pair<NJR::NJRvector3d, NJR::NJRvector3d>
 		Distribution(double& dMeshLength) const;
 
-	void Shift(const NJRvector3d& shift);
+	void Shift(const NJR::NJRvector3d& shift);
 
-	void Shift(const NJRvector3d& shift, const std::string& DOName);
+	void Shift(const NJR::NJRvector3d& shift, const std::string& DOName);
 
 	void Rotate
 		(const double& Angle2XAxis,
@@ -186,8 +189,8 @@ public:
 		 const double& Angle2ZAxis );
 
 	void Rotate
-		(const NJRvector3d& eX,
-		 const NJRvector3d& eZ,
+		(const NJR::NJRvector3d& eX,
+		 const NJR::NJRvector3d& eZ,
 		 const std::string& DOName);
 
 	const DOStatus GetDOStatus
@@ -211,5 +214,7 @@ private:
 	// Friend class declaration in order to make docluster work
 	friend class DOCluster;
 };
+
+};   // namespace VEDO
 
 #endif // _DOWORLD_H

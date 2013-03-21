@@ -1,11 +1,13 @@
 // DOModel.cpp: implementation of the DOModel class.
 
+#include <FrameWork/Interfaces/Constants.h>
 #include <FrameWork/Interfaces/DOModel.h>
 #include <NJR/Interfaces/Utility.h>
 #include <cmath>
 #include <cstdlib>
 
-using namespace std;
+namespace VEDO
+{
 
 bool DOModel::operator () (const DOModel* p) const
 {
@@ -21,11 +23,11 @@ void DOModel::Analysis()
 		case 1:
 			r                        = shAttributes.sphere.radius;
 			dRange                   = r;
-			dVolume                  = 4.188790204786 * r * r * r;
+			dVolume                  = NJR::dFourthThirdsPI * r * r * r;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 			dmmi                     = 0.4 * dMass * r * r;
-			vMassMomentInertia       = NJRvector3d(dmmi, dmmi, dmmi);
+			vMassMomentInertia       = NJR::NJRvector3d(dmmi, dmmi, dmmi);
 			break;
 		case 2:
 /******************************************************************************
@@ -36,17 +38,22 @@ void DOModel::Analysis()
 			x                        = shAttributes.ellipsoid.xlength;
 			y                        = shAttributes.ellipsoid.ylength;
 			z                        = shAttributes.ellipsoid.zlength;
-			dRange                   = 0.5 * max(max(x, y), z);
-			dVolume		         = 0.523598775598 * x * y * z;
+			dRange                   = 0.5 * std::max(std::max(x, y), z);
+			dVolume		             = NJR::dOneSixthPI * x * y * z;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 			break;
 		case 3:
 			r                        = shAttributes.quasicylinder.radius;
 			h                        = shAttributes.quasicylinder.height;
-			dRange                   = max(r, 0.5 * h);
-			dVolume                  = 3.141592654 * r * r * h;
+
+			if(sScope == "local")
+                dRange               = std::max(r, 0.5 * h);
+            else
+                dRange               = r;
+
+			dVolume                  = NJR::dPI * r * r * h;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 /******************************************************************************
@@ -56,15 +63,20 @@ void DOModel::Analysis()
  * coordinate system.
  *
 			dmmi               = dMass * (3.0 * r * r + h * h) / 12.0;
-			vMassMomentInertia = NJRvector3d(dmmi, dmmi, 0.5 * dMass * r * r);
+			vMassMomentInertia = NJR::NJRvector3d(dmmi, dmmi, 0.5 * dMass * r * r);
  ******************************************************************************/
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 			break;
 		case 4:
 			w                        = shAttributes.quasiplate.width;
 			h                        = shAttributes.quasiplate.height;
 			l                        = shAttributes.quasiplate.length;
-			dRange                   = 0.5 * max(max(w, h), l);
+
+			if(sScope == "local")
+                dRange               = 0.5 * std::max(std::max(w, h), l);
+            else
+                dRange               = 0.5 * h;
+
 			dVolume                  = w * h * l;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
@@ -77,9 +89,9 @@ void DOModel::Analysis()
 			dmmiX              = dMass * (h * h + l * l) / 12.0;
 			dmmiY              = dMass * (w * w + l * l) / 12.0;
 			dmmiZ              = dMass * (h * h + w * w) / 12.0;
-			vMassMomentInertia = NJRvector3d(dmmiX, dmmiY, dmmiZ);
+			vMassMomentInertia = NJR::NJRvector3d(dmmiX, dmmiY, dmmiZ);
  ******************************************************************************/
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 			break;
 		case 5:
 /******************************************************************************
@@ -91,7 +103,7 @@ void DOModel::Analysis()
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 			break;
 		case 6:
 /******************************************************************************
@@ -103,7 +115,7 @@ void DOModel::Analysis()
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 			break;
 		case 7:
 /******************************************************************************
@@ -115,25 +127,25 @@ void DOModel::Analysis()
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 			break;
 		default:
 			dRange                   = 0.0;
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = NJRvector3d();
+			vMassMomentInertia       = NJR::NJRvector3d();
 	}
 };
 
-DOModel::DOModel(ifstream& idof)
+DOModel::DOModel(std::ifstream& idof)
 {
 	*this << idof;
 	Analysis();
 };
 
 
-DOModel::DOModel(ifstream& idof, unsigned int _version)
+DOModel::DOModel(std::ifstream& idof, unsigned int _version)
 {
 	int MatOptSize, i;
 	DOMaterialAttribute DMO;
@@ -161,7 +173,7 @@ DOModel::DOModel(ifstream& idof, unsigned int _version)
 		dDensityFactor = 1.0;
 
 	if(_version >= 2010)
-		idof.read((char*) &vExternalForce, sizeof(NJRvector3d));
+		idof.read((char*) &vExternalForce, sizeof(NJR::NJRvector3d));
 	else
 		vExternalForce.Set(0.0, 0.0, 0.0);
 
@@ -180,33 +192,33 @@ DOModel::DOModel(ifstream& idof, unsigned int _version)
 	if (shType == Polyhedra)
 	{
 		int numhf;
-		NJRhalfspace hf;
+		NJR::NJRhalfspace hf;
 		polyhedra.Clear();
 
 		idof.read((char*) &numhf, sizeof (int));
 
 		for (i=0; i<numhf; i++)
 		{
-			idof.read((char*) &hf, sizeof(NJRhalfspace));
+			idof.read((char*) &hf, sizeof(NJR::NJRhalfspace));
 			polyhedra.AddConstrain(hf);
 		}
 	}
 	Analysis();
 };
 
-DOModel::DOModel(const string& DOName) : matAttributes(0)
+DOModel::DOModel(const std::string& DOName) : matAttributes(0)
 {
 	sDOName = DOName;
 };
 
 DOModel::DOModel
-	(const string&            DOName,
-	 const string&            DOGroup,
-	 const string&            Behavior,
-	 const string&            Scope,
+	(const std::string&            DOName,
+	 const std::string&            DOGroup,
+	 const std::string&            Behavior,
+	 const std::string&            Scope,
 	 const double&            Density,
 	 const double&            DensityFactor,
-	 const NJRvector3d&       ExternalForce,
+	 const NJR::NJRvector3d&       ExternalForce,
 	 const DOShapeType&       type,
 	 const DOShapeAttributes& attributes,
 	 const DOShapeColor&      color         ): matAttributes(0)
@@ -225,17 +237,17 @@ DOModel::DOModel
 };
 
 DOModel::DOModel
-	(const string&            DOName,
-	 const string&            DOGroup,
-	 const string&            Behavior,
-	 const string&            Scope,
+	(const std::string&            DOName,
+	 const std::string&            DOGroup,
+	 const std::string&            Behavior,
+	 const std::string&            Scope,
 	 const double&            Density,
 	 const double&            DensityFactor,
-	 const NJRvector3d&       ExternalForce,
+	 const NJR::NJRvector3d&       ExternalForce,
 	 const DOShapeType&       type,
 	 const DOShapeAttributes& attributes,
 	 const DOShapeColor&      color,
-	 const vector<DOMaterialAttribute>& mats): matAttributes(0)
+	 const std::vector<DOMaterialAttribute>& mats): matAttributes(0)
 {
 	sDOName        = DOName;
 	sDOGroup       = DOGroup;
@@ -252,14 +264,14 @@ DOModel::DOModel
 };
 
 DOModel::DOModel
-	(const string&       DOName,
-	 const string&       DOGroup,
-	 const string&       Behavior,
-	 const string&       Scope,
+	(const std::string&       DOName,
+	 const std::string&       DOGroup,
+	 const std::string&       Behavior,
+	 const std::string&       Scope,
 	 const double&       Density,
 	 const double&       DensityFactor,
-	 const NJRvector3d&  ExternalForce,
-	 const NJRpolyhedra& poly,
+	 const NJR::NJRvector3d&  ExternalForce,
+	 const NJR::NJRpolyhedra& poly,
 	 const DOShapeColor& color         ): matAttributes(0)
 {
 	sDOName        = DOName;
@@ -276,16 +288,16 @@ DOModel::DOModel
 };
 
 DOModel::DOModel
-	(const string&       DOName,
-	 const string&       DOGroup,
-	 const string&       Behavior,
-	 const string&       Scope,
+	(const std::string&       DOName,
+	 const std::string&       DOGroup,
+	 const std::string&       Behavior,
+	 const std::string&       Scope,
 	 const double&       Density,
 	 const double&       DensityFactor,
-	 const NJRvector3d&  ExternalForce,
-	 const NJRpolyhedra& poly,
+	 const NJR::NJRvector3d&  ExternalForce,
+	 const NJR::NJRpolyhedra& poly,
 	 const DOShapeColor& color,
-	 const vector<DOMaterialAttribute>& mats): matAttributes(0)
+	 const std::vector<DOMaterialAttribute>& mats): matAttributes(0)
 {
 	sDOName        = DOName;
 	sDOGroup       = DOGroup;
@@ -327,7 +339,7 @@ const DOModel& DOModel::operator = (const DOModel& doml)
 	return *this;
 };
 
-ofstream& DOModel::operator >> (ofstream& idof) const
+std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 {
 	unsigned int MatOptSize,i;
 	DOMaterialAttribute DMO;
@@ -338,7 +350,7 @@ ofstream& DOModel::operator >> (ofstream& idof) const
 	NJR::WriteString(sScope   , idof);
 	idof.write((const char*) &dDensity,       sizeof(double)           );
 	idof.write((const char*) &dDensityFactor, sizeof(double)           );
-	idof.write((const char*) &vExternalForce, sizeof(NJRvector3d)      );
+	idof.write((const char*) &vExternalForce, sizeof(NJR::NJRvector3d)      );
 	idof.write((const char*) &shColor,        sizeof(DOShapeColor)     );
 	idof.write((const char*) &shType,         sizeof(DOShapeType)      );
 	idof.write((const char*) &shAttributes,   sizeof(DOShapeAttributes));
@@ -355,20 +367,20 @@ ofstream& DOModel::operator >> (ofstream& idof) const
 	if (shType == Polyhedra)
 	{
 		unsigned int numhf = (unsigned int)(polyhedra.constrains().size());
-		vector<NJRhalfspace> constrains = polyhedra.constrains();
+		std::vector<NJR::NJRhalfspace> constrains = polyhedra.constrains();
 
 		idof.write ((char*) &numhf, sizeof(int));
 
 		for (i=0; i<numhf; i++)
 		{
-			idof.write((char*) & (constrains[i]), sizeof(NJRhalfspace));
+			idof.write((char*) & (constrains[i]), sizeof(NJR::NJRhalfspace));
 		}
 	}
 
 	return idof;
 };
 
-ifstream& DOModel::operator << (ifstream &idof)
+std::ifstream& DOModel::operator << (std::ifstream &idof)
 {
 	int MatOptSize, i;
 	DOMaterialAttribute DMO;
@@ -379,7 +391,7 @@ ifstream& DOModel::operator << (ifstream &idof)
 	NJR::ReadString(sScope   , idof);
 	idof.read((char*) &dDensity      , sizeof(double)           );
 	idof.read((char*) &dDensityFactor, sizeof(double)           );
-	idof.read((char*) &vExternalForce, sizeof(NJRvector3d)      );
+	idof.read((char*) &vExternalForce, sizeof(NJR::NJRvector3d)      );
  	idof.read((char*) &shColor       , sizeof(DOShapeColor)     );
 	idof.read((char*) &shType        , sizeof(DOShapeType)      );
 	idof.read((char*) &shAttributes  , sizeof(DOShapeAttributes));
@@ -395,21 +407,21 @@ ifstream& DOModel::operator << (ifstream &idof)
 	if (shType == Polyhedra)
 	{
 		int numhf;
-		NJRhalfspace hf;
+		NJR::NJRhalfspace hf;
 		polyhedra.Clear();
 
 		idof.read((char*) &numhf, sizeof (int));
 
 		for (i=0; i<numhf; i++)
 		{
-			idof.read((char*) &hf, sizeof(NJRhalfspace));
+			idof.read((char*) &hf, sizeof(NJR::NJRhalfspace));
 			polyhedra.AddConstrain(hf);
 		}
 	}
 	return idof;
 };
 
-double DOModel::GetMaterialAttribute(string Name) const
+double DOModel::GetMaterialAttribute(std::string Name) const
 {
 
 	for (unsigned int i=0; i<matAttributes.size(); i++)
@@ -420,25 +432,25 @@ double DOModel::GetMaterialAttribute(string Name) const
 		}
 	}
 
-	cerr
+	std::cout
 		<< "Model "
 		<< sDOName.c_str()
 		<< "contains no such material option -- "
 		<< Name.c_str()
-		<< endl;
+		<< std::endl;
 
 	return 0.0;
 };
 
 double DOModel::CrossAreaToSurface
-	(const NJRvector3d& vP,
+	(const NJR::NJRvector3d& vP,
 	 const double&      a,
 	 const double&      b,
 	 const double&      c,
 	 const double&      d ) const
 {
 	double dSphere2Surface, r;
-	NJRvector3d vSurfaceNormal(a, b, c);   // Surface: ax+by+cz=d
+	NJR::NJRvector3d vSurfaceNormal(a, b, c);   // Surface: ax+by+cz=d
 	switch (shType)
 	{
 		case 1:
@@ -451,7 +463,7 @@ double DOModel::CrossAreaToSurface
 			}
 			else
 			{
-				return (r * r - dSphere2Surface * dSphere2Surface) * 3.14159267;
+				return (r * r - dSphere2Surface * dSphere2Surface) * NJR::dPI;
 			}
 			break;
 		case 2:
@@ -525,8 +537,8 @@ void FixBoundaryForVolumeInsideBoundary
 	};
 };
 
-pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
-	(const NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
+std::pair<double, NJR::NJRvector3d> DOModel::VolumeInsideBoundary
+	(const NJR::NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
 {
 	double Lx = pBC->GetLowerPoint().x();
 	double Ly = pBC->GetLowerPoint().y();
@@ -546,12 +558,12 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return make_pair(0.0, NJRvector3d(ZERO));
+				return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 					&& (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
 			{
-				return make_pair(dVolume, vP);
+				return std::make_pair(dVolume, vP);
 			}
 			else
 			{
@@ -559,7 +571,7 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
 				FixBoundaryForVolumeInsideBoundary(&Ly, &Uy, &Py, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Lz, &Uz, &Pz, &R, &dMeshSize);
 
-				NJRvector3d vT;
+				NJR::NJRvector3d vT;
 				double dVolumeInsideBoundary = 0.0;
 				double dMeshVolume  = pow(dMeshSize, 3.0);
 				double dMassCenterX = 0.0;
@@ -593,9 +605,9 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
 				{
 					dMassCenterX = dMassCenterY = dMassCenterZ = 0.0;
 				};
-				return make_pair
+				return std::make_pair
 					(dVolumeInsideBoundary,
-					 NJRvector3d(dMassCenterX, dMassCenterY, dMassCenterZ));
+					 NJR::NJRvector3d(dMassCenterX, dMassCenterY, dMassCenterZ));
 			};
 			break;
 		case 2:
@@ -604,7 +616,7 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 3:
 /******************************************************************************
@@ -612,7 +624,7 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 4:
 /******************************************************************************
@@ -620,7 +632,7 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 5:
 /******************************************************************************
@@ -628,7 +640,7 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 6:
 /******************************************************************************
@@ -636,15 +648,15 @@ pair<double, NJRvector3d> DOModel::VolumeInsideBoundary
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		default:
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 	};
 };
 
-pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
-	(const NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
+std::pair<double, NJR::NJRvector3d> DOModel::ProjectedAreaOnXYPlane
+	(const NJR::NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
 {
 	double Lx = pBC->GetLowerPoint().x();
 	double Ly = pBC->GetLowerPoint().y();
@@ -664,18 +676,18 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return make_pair(0.0, NJRvector3d(ZERO));
+				return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 				    && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
 			{
-				return make_pair(R * R * 3.141592654, vP);
+				return std::make_pair(R * R * NJR::dPI, vP);
 			}
 			else
 			{
 				FixBoundaryForVolumeInsideBoundary(&Lx, &Ux, &Px, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Ly, &Uy, &Py, &R, &dMeshSize);
-				NJRvector3d vT;
+				NJR::NJRvector3d vT;
 				double dProjectedArea = 0.0;
 				double dMeshArea      = dMeshSize * dMeshSize;
 				double dCentroidX     = 0.0;
@@ -703,8 +715,8 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
 				{
 					dCentroidX = dCentroidY = 0.0;
 				};
-				return make_pair
-					(dProjectedArea, NJRvector3d(dCentroidX, dCentroidY, vP.z()));
+				return std::make_pair
+					(dProjectedArea, NJR::NJRvector3d(dCentroidX, dCentroidY, vP.z()));
 			};
 			break;
 		case 2:
@@ -713,7 +725,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 3:
 /******************************************************************************
@@ -721,7 +733,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 4:
 /******************************************************************************
@@ -729,7 +741,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 5:
 /******************************************************************************
@@ -737,7 +749,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 6:
 /******************************************************************************
@@ -745,15 +757,15 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXYPlane
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		default:
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 	};
 };
 
-pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
-	(const NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
+std::pair<double, NJR::NJRvector3d> DOModel::ProjectedAreaOnYZPlane
+	(const NJR::NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
 {
 	double Lx = pBC->GetLowerPoint().x();
 	double Ly = pBC->GetLowerPoint().y();
@@ -773,19 +785,19 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return make_pair(0.0, NJRvector3d(ZERO));
+				return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 				    && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
 			{
-				return make_pair(R * R * 3.141592654, vP);
+				return std::make_pair(R * R * NJR::dPI, vP);
 			}
 			else
 			{
 				FixBoundaryForVolumeInsideBoundary(&Ly, &Uy, &Py, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Lz, &Uz, &Pz, &R, &dMeshSize);
 
-				NJRvector3d vT;
+				NJR::NJRvector3d vT;
 				double dProjectedArea = 0.0;
 				double dMeshArea      = dMeshSize * dMeshSize;
 				double dCentroidY     = 0.0;
@@ -813,8 +825,8 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
 				{
 					dCentroidY = dCentroidZ = 0.0;
 				};
-				return make_pair
-					(dProjectedArea, NJRvector3d(vP.x(), dCentroidY, dCentroidZ));
+				return std::make_pair
+					(dProjectedArea, NJR::NJRvector3d(vP.x(), dCentroidY, dCentroidZ));
 			};
 			break;
 		case 2:
@@ -823,7 +835,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 3:
 /******************************************************************************
@@ -831,7 +843,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 4:
 /******************************************************************************
@@ -839,7 +851,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 5:
 /******************************************************************************
@@ -847,7 +859,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 6:
 /******************************************************************************
@@ -855,15 +867,15 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnYZPlane
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		default:
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 	};
 };
 
-pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
-	(const NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
+std::pair<double, NJR::NJRvector3d> DOModel::ProjectedAreaOnXZPlane
+	(const NJR::NJRvector3d& vP, const Boundary* pBC, const double& dMeshSize) const
 {
 	double Lx = pBC->GetLowerPoint().x();
 	double Ly = pBC->GetLowerPoint().y();
@@ -883,19 +895,19 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return make_pair(0.0, NJRvector3d(ZERO));
+				return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 				    && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
 			{
-				return make_pair(R * R * 3.141592654, vP);
+				return std::make_pair(R * R * NJR::dPI, vP);
 			}
 			else
 			{
 				FixBoundaryForVolumeInsideBoundary(&Lx, &Ux, &Px, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Lz, &Uz, &Pz, &R, &dMeshSize);
 
-				NJRvector3d vT;
+				NJR::NJRvector3d vT;
 				double dProjectedArea = 0.0;
 				double dMeshArea      = dMeshSize * dMeshSize;
 				double dCentroidX     = 0.0;
@@ -923,8 +935,8 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
 				{
 					dCentroidX = dCentroidZ = 0.0;
 				};
-				return make_pair
-					(dProjectedArea, NJRvector3d(dCentroidX, vP.y(), dCentroidZ));
+				return std::make_pair
+					(dProjectedArea, NJR::NJRvector3d(dCentroidX, vP.y(), dCentroidZ));
 			};
 			break;
 		case 2:
@@ -933,7 +945,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 3:
 /******************************************************************************
@@ -941,7 +953,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 4:
 /******************************************************************************
@@ -949,7 +961,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 5:
 /******************************************************************************
@@ -957,7 +969,7 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		case 6:
 /******************************************************************************
@@ -965,9 +977,11 @@ pair<double, NJRvector3d> DOModel::ProjectedAreaOnXZPlane
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 			break;
 		default:
-			return make_pair(0.0, NJRvector3d(ZERO));
+			return std::make_pair(0.0, NJR::NJRvector3d(NJRDXF::ZERO));
 	};
 };
+
+};   // namespace VEDO

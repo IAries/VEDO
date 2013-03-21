@@ -1,8 +1,11 @@
 #ifndef _IMPACT_STATUS_H
 #define _IMPACT_STATUS_H
 
-#include <FrameWork/Interfaces/Constants.h>
 #include <NJR/Interfaces/vector3d.h>
+#include <FrameWork/Interfaces/Constants.h>
+
+namespace VEDO
+{
 
 class ImpactStatus
 {
@@ -47,12 +50,12 @@ public:
 		dKn = dK;
 	};
 
-	inline NJRvector3d ShearForce() const
+	inline NJR::NJRvector3d ShearForce() const
 	{
 		return vShearForce;
 	};
 
-	inline void SetShearForce(NJRvector3d& vS)
+	inline void SetShearForce(NJR::NJRvector3d& vS)
 	{
 		vShearForce = vS;
 	};
@@ -62,7 +65,7 @@ public:
 	void SetUserDefinedValue(unsigned u, double d);
 
 	double GetUserDefinedValue(unsigned u) const;
-	
+
 	void AddAccumulativeUserDefinedValue(unsigned u, double d);
 
 	const double* RetrieveUserDefinedValue();
@@ -87,13 +90,15 @@ private:
 
 	double dKn;                // Stiffness of normal spring
 
-	NJRvector3d vShearForce;   // Shear force
+	NJR::NJRvector3d vShearForce;   // Shear force
 
-	double dUDV[uNumUserDefinedData*4];   // User-defined value
-									      // 0 ~ uNumUserDefinedData: Accumulative user-defined value
-									      // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: Unsynchronized part of Accumulative user-defined value
-									      // 2*uNumUserDefinedData ~ 3*uNumUserDefinedData-1: Unsynchronized part of Accumulative user-defined value (to be referenced)
-									      // 3*uNumUserDefinedData ~ 4*uNumUserDefinedData-1: User-defined value
+	double dUDV[VEDO::uNumUserDefinedData*4];   // User-defined value
+                                                     // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+                                                     // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: Unsynchronized part of Accumulative user-defined value
+                                                     // 2*uNumUserDefinedData ~ 3*uNumUserDefinedData-1: Unsynchronized part of Accumulative user-defined value (to be referenced)
+                                                     // 3*uNumUserDefinedData ~ 4*uNumUserDefinedData-1: User-defined value
 };
+
+};   // namespace VEDO
 
 #endif // _IMPACT_STATUS_H

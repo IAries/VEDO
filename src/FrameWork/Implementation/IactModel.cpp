@@ -1,9 +1,10 @@
 #include <NJR/Interfaces/Utility.h>
 #include <FrameWork/Interfaces/IactModel.h>
 
-using namespace std;
+namespace VEDO
+{
 
-IactModel::IactModel(const string& mg, const string& sg)
+IactModel::IactModel(const std::string& mg, const std::string& sg)
 {
 	sMasterDOGroup = mg;
 	sSlaveDOGroup  = sg;
@@ -27,9 +28,9 @@ bool IactModel::operator () (const IactModel* piactml) const
 
 /*
 IactModel::IactModel
-	(const string& MasterDOGroup,
-	 const string& SlaveDOGroup,
-	 const string& EquationType,
+	(const std::string& MasterDOGroup,
+	 const std::string& SlaveDOGroup,
+	 const std::string& EquationType,
 	 const IactMechanismAttributes& imAttributes): cIactExtend(0)
 {
 	sMasterDOGroup = MasterDOGroup;
@@ -41,10 +42,10 @@ IactModel::IactModel
 */
 
 IactModel::IactModel
-	(const string& MasterDOGroup,
-	 const string& SlaveDOGroup,
-	 const string& EquationType,
-	 const vector<IactMechanism>& svIMs)
+	(const std::string& MasterDOGroup,
+	 const std::string& SlaveDOGroup,
+	 const std::string& EquationType,
+	 const std::vector<IactMechanism>& svIMs)
 {
 	sMasterDOGroup   = MasterDOGroup;
 	sSlaveDOGroup    = SlaveDOGroup;
@@ -57,12 +58,12 @@ IactModel::IactModel(const IactModel& iactml)
 	*this = iactml;
 };
 
-IactModel::IactModel(ifstream& idof)
+IactModel::IactModel(std::ifstream& idof)
 {
 	*this << idof;
 };
 
-double IactModel::GetIactMechanism(string Name) const
+double IactModel::GetIactMechanism(std::string Name) const
 {
 	for (unsigned int i=0; i<svIactMechanisms.size(); i++)
 	{
@@ -72,14 +73,14 @@ double IactModel::GetIactMechanism(string Name) const
 		}
 	}
 
-	cerr
+	std::cout
 		<< "Interaction between"
 		<< sMasterDOGroup.c_str()
 		<< " and "
 		<< sSlaveDOGroup.c_str()
 		<< " has no such interaction mechanism -- "
 		<< Name.c_str()
-		<< endl;
+		<< std::endl;
 
 	return 0.0;
 };
@@ -94,7 +95,7 @@ const IactModel& IactModel::operator = (const IactModel& iactml)
 	return *this;
 };
 
-ofstream& IactModel::operator >> (ofstream& idof) const
+std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 {
 	NJR::WriteString(sMasterDOGroup, idof);
 	NJR::WriteString(sSlaveDOGroup,  idof);
@@ -112,7 +113,7 @@ ofstream& IactModel::operator >> (ofstream& idof) const
 	return idof;
 };
 
-ifstream& IactModel::operator << (ifstream& idof)
+std::ifstream& IactModel::operator << (std::ifstream& idof)
 {
 	NJR::ReadString(sMasterDOGroup, idof);
 	NJR::ReadString(sSlaveDOGroup,  idof);
@@ -131,7 +132,7 @@ ifstream& IactModel::operator << (ifstream& idof)
 	return idof;
 };
 
-IactModel::IactModel(ifstream& idof, unsigned int _version)
+IactModel::IactModel(std::ifstream& idof, unsigned int _version)
 {
 	NJR::ReadString(sMasterDOGroup, idof);
 	NJR::ReadString(sSlaveDOGroup,  idof);
@@ -207,3 +208,5 @@ IactModel::IactModel(ifstream& idof, unsigned int _version)
       		svIactMechanisms.push_back(im);
 	}
 };
+
+};   // namespace VEDO
