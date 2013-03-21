@@ -1,12 +1,19 @@
 include ../../Makefile.in
 
-TMP=${patsubst ${VEDO_SRC}%,${VEDO_OBJ}%,${PWD}}/
+TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
+TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
-all: ${VEDO_BIN}Anne
+all: ${VEDO_BIN}Anne-Debug ${VEDO_BIN}Anne
 
-${VEDO_BIN}Anne: ${TMP}Anne.o
+${VEDO_BIN}Anne-Debug: ${TMP_DEBUG}Anne.o
+	${LNK} -o $@ $< ${LNK_FLAGd}
+
+${TMP_DEBUG}%.o: ${IMP}%.cpp
+	${CXX} -o $@ ${CXX_FLAGd} -c $<
+
+${VEDO_BIN}Anne: ${TMP_RELEASE}Anne.o
 	${LNK} -o $@ $< ${LNK_FLAG}
 
-${TMP}%.o: ${IMP}%.cpp
+${TMP_RELEASE}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAG} -c $<
 

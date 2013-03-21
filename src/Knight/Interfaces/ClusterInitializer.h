@@ -5,11 +5,10 @@
 #ifndef CLUSTERINITIALIZER_H
 #define CLUSTERINITIALIZER_H
 
+#include <FrameWork/Interfaces/DOWorld.h>
+#include <FrameWork/Interfaces/DOStatus.h>
+#include <Knight/Interfaces/BravaisLatticeWithBasis.h>
 #include <string>
-
-class BravaisLatticeWithBasis;
-class DOWorld;
-class DOStatus;
 
 //! Base class for creation of clusters of atoms of certain shapes.
 /*!	This is a Factory Method base class.
@@ -33,7 +32,7 @@ public:
     virtual ~ClusterInitializer();
 
     //! Factory method to do the actual creation.
-    void Create(std::string doName, DOWorld* pWorld);
+    void Create(std::string doName, VEDO::DOWorld* pWorld);
 
     //! Set the center of the cluster.
     void SetCenter(double clusterCenter[3]);
@@ -59,7 +58,7 @@ protected:
     one number per type of atoms (and \a positions has one leaf per type) */
     void MakeSlab(int center[3],
                   int subDimension,
-                  DOStatus& dos, DOWorld* pWorld);
+                  VEDO::DOStatus& dos, VEDO::DOWorld* pWorld);
 
     // Called at the begining of Create.
     /*!It sets the bounds on the solid in the lattice coordinates and returns an
@@ -73,7 +72,7 @@ protected:
     //! The coordinates of the cluster in real space
     double clusterCenter[3];
 
-    //! Cluster has maximum extent minSize[i]...maxSize[i] along basis vector i
+    //! Cluster has maximum extent minSize[i]...maxSize[i] along basis std::vector i
     //@{
     int minSize[3];
     int maxSize[3];

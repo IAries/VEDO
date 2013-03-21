@@ -30,7 +30,6 @@
 #include <Common/Interfaces/ISwBtSDBF.h>
 
 #include <Common/Interfaces/LeapConsultant.h>
-#include <Common/Interfaces/LeapConsultant2.h>
 #include <Common/Interfaces/NBSConsultant.h>
 #include <Common/Interfaces/NearConsultant.h>
 #include <Common/Interfaces/SafeConsultant.h>
@@ -41,33 +40,28 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
-
 void usage (int g)
 {
-	cout
-    	<< "ANNE 2011 Build 222" << endl
-		<< endl
-		<< "Usage:" << endl
-		<< "Anne <Mode> <IDO file> <Type I > <Record>" << endl
-		<< "Anne <Mode> <IDO file> <Type II> <Record> <UpIact>" << endl << endl
-		<< "Mode   : analysis/show/redistribute" << endl
-		<< "Type I : safe/near" << endl
-		<< "Type II: nbs/leap" << endl
-		<< "Record : integer" << endl
-		<< "UpIact : integer" << endl << endl
-		<< "Error Condition: "
-		<< g
-		<< endl;
+	std::cout
+		<< "Anne" << std::endl
+		<< std::endl
+		<< '\t' << "Usage:" << std::endl
+		<< '\t' << "Anne <Mode> <IDO file> <Type I > <Record>" << std::endl
+		<< '\t' << "Anne <Mode> <IDO file> <Type II> <Record> <UpIact>" << std::endl
+		<< std::endl
+		<< '\t' << "Mode   : analysis/show/redistribute" << std::endl
+		<< '\t' << "Type I : safe/near" << std::endl
+		<< '\t' << "Type II: nbs/leap" << std::endl
+		<< '\t' << "Record : integer" << std::endl
+		<< '\t' << "UpIact : integer" << std::endl << std::endl
+		<< '\t' << "Error Condition: " << g << std::endl;
 	exit(0);
 }
 
 int main (int argc, char* argv[])
 {
 	if (argc < 5)
-    {
 		usage(1);
-	}
 
 	time_t starttime;   // Starting time
 	time_t endtime;     // Endind time
@@ -91,41 +85,39 @@ int main (int argc, char* argv[])
 	sscanf(argv[3], "%s", type);
 	sscanf(argv[4], "%d", &RecordStep);
 	if (argc >= 6)
-    {
 		sscanf(argv[5], "%d", &UpIact);
-	}
 
-	DOWorld*       pDOWorld;
-	Consultant*    pConsultant;
-	IactRecordTab* pIactRecordTab;
-	Assembler*     pAssembler = new Assembler;
+	VEDO::DOWorld*       pDOWorld;
+	VEDO::Consultant*    pConsultant;
+	VEDO::IactRecordTab* pIactRecordTab;
+	VEDO::Assembler*     pAssembler = new VEDO::Assembler;
 
-	pAssembler->AddDO(new DOcf<DOConstrainedQuasiCylinder>(QuasiCylinder, "constrained"));
-	pAssembler->AddDO(new DOcf<DOConstrainedQuasiPlate>(QuasiPlate, "constrained"));
-	pAssembler->AddDO(new DOcf<DOFixedQuasiCylinder>(QuasiCylinder, "fixed"));
-	pAssembler->AddDO(new DOcf<DOFixedQuasiPlate>(QuasiPlate, "fixed"));
-	pAssembler->AddDO(new DOcf<DOFixedSphere>(Sphere, "fixed"));
-	pAssembler->AddDO(new DOcf<DOQuasiCylinder>(QuasiCylinder, "mobile"));
-	pAssembler->AddDO(new DOcf<DOQuasiPlate>(QuasiPlate, "mobile"));
-	pAssembler->AddDO(new DOcf<DOSphere>(Sphere, "mobile"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOConstrainedQuasiCylinder>(VEDO::QuasiCylinder, "constrained"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOConstrainedQuasiPlate>(VEDO::QuasiPlate, "constrained"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOFixedQuasiCylinder>(VEDO::QuasiCylinder, "fixed"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOFixedQuasiPlate>(VEDO::QuasiPlate, "fixed"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOFixedSphere>(VEDO::Sphere, "fixed"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOQuasiCylinder>(VEDO::QuasiCylinder, "mobile"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOQuasiPlate>(VEDO::QuasiPlate, "mobile"));
+	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOSphere>(VEDO::Sphere, "mobile"));
 
-	pAssembler->AddIS(new IScf<ISwBSDBF>("ISwBSDBF"));
-	pAssembler->AddIS(new IScf<ISwBtSDBF>("ISwBtSDBF"));
+	pAssembler->AddIS(new VEDO::IScf<VEDO::ISwBSDBF>("ISwBSDBF"));
+	pAssembler->AddIS(new VEDO::IScf<VEDO::ISwBtSDBF>("ISwBtSDBF"));
 
-    pAssembler->AddCD(new CDcf<CDSphere_Sphere>          (Sphere, Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinder>   (Sphere, QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-	pAssembler->AddCD(new CDcf<CDSphere_QuasiPlate>      (Sphere, QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    //pAssembler->AddCD(new CDcf<CDSphere_SphereAT>        (Sphere, Sphere       , "List- <CT>ISwLSDAT"));
-    //pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinderAT> (Sphere, QuasiCylinder, "List- <CT>ISwLSDAT"));
+    pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_Sphere>          (VEDO::Sphere, VEDO::Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_QuasiCylinder>   (VEDO::Sphere, VEDO::QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+	pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_QuasiPlate>      (VEDO::Sphere, VEDO::QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    //pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_SphereAT>        (VEDO::Sphere, VEDO::Sphere       , "List- <CT>ISwLSDAT"));
+    //pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_QuasiCylinderAT> (VEDO::Sphere, VEDO::QuasiCylinder, "List- <CT>ISwLSDAT"));
 
 	if ( !strcmp (strlen(argv[2]) - 4 + argv[2], ".ido") )
 	{
-		pDOWorld    = new DOWorld;
+		pDOWorld    = new VEDO::DOWorld;
 		idofilename = argv[2];
 		pDOWorld->ReadIDO(idofilename);
-		string irtfile(idofilename);
+		std::string irtfile(idofilename);
 		irtfile = irtfile.substr(0, irtfile.size() - 4) += ".irt";
-		pIactRecordTab = new IactRecordTab(irtfile.c_str());
+		pIactRecordTab = new VEDO::IactRecordTab(irtfile.c_str());
 	}
 	else
 	{
@@ -134,11 +126,11 @@ int main (int argc, char* argv[])
 
 	if (!strcmp(type, "safe"))
 	{
-		pConsultant = new SafeConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
+		pConsultant = new VEDO::SafeConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
 	}
     else if (!strcmp(type, "near"))
     {
-		pConsultant = new NearConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
+		pConsultant = new VEDO::NearConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
 	}
 	else if (!strcmp(type, "nbs"))
 	{
@@ -146,7 +138,7 @@ int main (int argc, char* argv[])
 		{
 			usage(3);
 		}
-	  	pConsultant = new NBSConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
+	  	pConsultant = new VEDO::NBSConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
 	}
 	else if (!strcmp(type, "leap"))
 	{
@@ -154,8 +146,7 @@ int main (int argc, char* argv[])
 	    {
 			usage(3);
 		}
-//		pConsultant = new LeapConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
-		pConsultant = new LeapConsultant2(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
+		pConsultant = new VEDO::LeapConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
 	}
 	else
 	{
@@ -164,7 +155,7 @@ int main (int argc, char* argv[])
 
 	//NJR::RunTime("Simulation Start !!");
 
-	SimMediator sm(pConsultant, pAssembler);
+	VEDO::SimMediator sm(pConsultant, pAssembler);
 	sm.Initiate();
 
 	time(&endtime);
@@ -181,7 +172,7 @@ int main (int argc, char* argv[])
 	else if (!strcmp(mode, "show"))
 	{
 		sm.ShowInteraction();
-		string vtufile(idofilename);
+		std::string vtufile(idofilename);
 		vtufile = vtufile.substr(0, vtufile.size() - 4) += ".vtu";
 		sm.WriteInteractionForce(vtufile.c_str());
 	}
@@ -218,48 +209,48 @@ int main (int argc, char* argv[])
 
 	double timeTotal = timeComputing + timeCommunication;
 
-	ofstream FileLog("time.txt", ios::out);
+	std::ofstream FileLog("time.txt", std::ios::out);
 	FileLog
-		<< "=============================================================" << endl
+		<< "=============================================================" << std::endl
 		<< " Simulated Time: "
 		<< pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()
-		<< " seconds" << endl
-		<< "-------------------------------------------------------------" << endl
-		<< " Item                                       Time(s) Rate(%)  " << endl
-		<< "-------------------------------------------------------------" << endl
+		<< " seconds" << std::endl
+		<< "-------------------------------------------------------------" << std::endl
+		<< " Item                                       Time(s) Rate(%)  " << std::endl
+		<< "-------------------------------------------------------------" << std::endl
 		<< " System                                    "                   << '\t'
 		<< timeSystem                                                      << "\t\t"
-		<< timeSystem                    /timeTotal*100.0                  << endl
+		<< timeSystem                    /timeTotal*100.0                  << std::endl
 		<< " Impact Solving                            "                   << '\t'
 	   	<< timeImpactSolving                                               << "\t\t"
-		<< timeImpactSolving             /timeTotal*100.0                  << endl
+		<< timeImpactSolving             /timeTotal*100.0                  << std::endl
 		<< " Field Force Adding                        "                   << '\t'
 		<< timeFieldForceAdding                                            << "\t\t"
-		<< timeFieldForceAdding          /timeTotal*100.0                  << endl
+		<< timeFieldForceAdding          /timeTotal*100.0                  << std::endl
 		<< " Response Updating                         "                   << '\t'
 		<< timeResponseUpdating                                            << "\t\t"
-		<< timeResponseUpdating          /timeTotal*100.0                  << endl
+		<< timeResponseUpdating          /timeTotal*100.0                  << std::endl
 		<< " Contact Detection                         "                   << '\t'
 		<< timeContactDetection                                            << "\t\t"
-		<< timeContactDetection          /timeTotal*100.0                  << endl
+		<< timeContactDetection          /timeTotal*100.0                  << std::endl
 		<< " NextStep                                  "                   << '\t'
 		<< timeNextStep                                                    << "\t\t"
-		<< timeNextStep                  /timeTotal*100.0                  << endl
+		<< timeNextStep                  /timeTotal*100.0                  << std::endl
 		<< " DOContainer Synchronization               "                   << '\t'
 	   	<< timeSyncDOContainer                                             << "\t\t"
-		<< timeSyncDOContainer           /timeTotal*100.0                  << endl
-		<< "-------------------------------------------------------------" << endl
+		<< timeSyncDOContainer           /timeTotal*100.0                  << std::endl
+		<< "-------------------------------------------------------------" << std::endl
 		<< " Computing                                 "                   << '\t'
 		<< timeComputing                                                   << "\t\t"
-		<< timeComputing                 /timeTotal*100.0                  << endl
+		<< timeComputing                 /timeTotal*100.0                  << std::endl
 		<< " Communication                             "                   << '\t'
 		<< timeCommunication                                               << "\t\t"
-		<< timeCommunication             /timeTotal*100.0                  << endl
-		<< "-------------------------------------------------------------" << endl
+		<< timeCommunication             /timeTotal*100.0                  << std::endl
+		<< "-------------------------------------------------------------" << std::endl
 		<< " Total                                     "                   << '\t'
 		<< timeTotal                                                       << "\t\t"
-		<< 100                                                             << endl
-		<< "=============================================================" << endl;
+		<< 100                                                             << std::endl
+		<< "=============================================================" << std::endl;
 	FileLog.close();
 
 	delete pDOWorld;

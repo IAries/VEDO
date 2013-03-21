@@ -1,18 +1,32 @@
 include ../../Makefile.in
 
-TMP=${patsubst ${VEDO_SRC}%,${VEDO_OBJ}%,${PWD}}/
+TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
+TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
-all: ${VEDO_BIN}Knight
+all: ${VEDO_BIN}Knight-Debug ${VEDO_BIN}Knight
 
-${VEDO_BIN}Knight: ${TMP}3DLattices.o                    \
-                   ${TMP}BravaisLatticeWithBasis.o       \
-                   ${TMP}CalcCoordinateNum.o             \
-                   ${TMP}CalcDensity.o                   \
-                   ${TMP}ClusterInitializer.o            \
-                   ${TMP}knight.o                        \
-                   ${TMP}RectangularClusterInitializer.o \
-                   ${TMP}svg.o
+${VEDO_BIN}Knight-Debug: ${TMP_DEBUG}3DLattices.o                    \
+                         ${TMP_DEBUG}BravaisLatticeWithBasis.o       \
+                         ${TMP_DEBUG}CalcCoordinateNum.o             \
+                         ${TMP_DEBUG}CalcDensity.o                   \
+                         ${TMP_DEBUG}ClusterInitializer.o            \
+                         ${TMP_DEBUG}knight.o                        \
+                         ${TMP_DEBUG}RectangularClusterInitializer.o \
+                         ${TMP_DEBUG}svg.o
+	${LNK} -o $@ $^ ${LNK_FLAGxd}
+
+${TMP_DEBUG}%.o: ${IMP}%.cpp
+	${CXX} -o $@ ${CXX_FLAGxd} -c $<
+
+${VEDO_BIN}Knight: ${TMP_RELEASE}3DLattices.o                    \
+                   ${TMP_RELEASE}BravaisLatticeWithBasis.o       \
+                   ${TMP_RELEASE}CalcCoordinateNum.o             \
+                   ${TMP_RELEASE}CalcDensity.o                   \
+                   ${TMP_RELEASE}ClusterInitializer.o            \
+                   ${TMP_RELEASE}knight.o                        \
+                   ${TMP_RELEASE}RectangularClusterInitializer.o \
+                   ${TMP_RELEASE}svg.o
 	${LNK} -o $@ $^ ${LNK_FLAGx}
 
-${TMP}%.o: ${IMP}%.cpp
+${TMP_RELEASE}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGx} -c $<

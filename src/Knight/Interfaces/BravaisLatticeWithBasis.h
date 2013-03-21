@@ -67,7 +67,7 @@ public:
     */
     void RotateLatticeVectors(double rotation[3][3]);
 
-    //! aligns the 1st lattice vector along the 1st coordinate, the 2nd vector in the 1-2 plane etc...
+    //! aligns the 1st lattice std::vector along the 1st coordinate, the 2nd std::vector in the 1-2 plane etc...
     virtual void ResetOrientation();
 
     void RescaleLatticeVectors(double a);
@@ -99,12 +99,12 @@ public:
 
     //! This function is swigged in BravaisLatticeWithBasis.i
     void SetAtomsCoordinatesInCell
-    	(std::vector<NJRvector3d> atomsCoord,
+    	(std::vector<NJR::NJRvector3d> atomsCoord,
     	 std::vector<std::string> *atomTypes=0);
 
-    virtual void AddAtomInCell(NJRvector3d atomCoord, std::string name="");
+    virtual void AddAtomInCell(NJR::NJRvector3d atomCoord, std::string name="");
 
-    inline const NJRvector3d &GetAtomsCoordinatesInCell(int atom) const
+    inline const NJR::NJRvector3d &GetAtomsCoordinatesInCell(int atom) const
     {
     	return atomsCoordinatesInCell[atom];
     }
@@ -117,9 +117,9 @@ public:
 protected:
     double origin[3];
 
-    //! lattice vectors: first index is which vector, second is component
-    /*! First index is which vector, second is component
-        This is natural in that the basisVector[0] is the first basis vector, but
+    //! lattice vectors: first index is which std::vector, second is component
+    /*! First index is which std::vector, second is component
+        This is natural in that the basisVector[0] is the first basis std::vector, but
         is backwards from the point of view of thinking of the array of basis vectors
         as a transformation matrix.00
     */
@@ -134,7 +134,7 @@ protected:
 
     double volumeOfCell;
 //! The coordinates of the atoms in units of the lattice vectors (coordinates must be between 0 and 1)
-    std::vector<NJRvector3d> atomsCoordinatesInCell;
+    std::vector<NJR::NJRvector3d> atomsCoordinatesInCell;
 //! The type name of the atoms in the basis
     std::vector<std::string> atomTypes;
 

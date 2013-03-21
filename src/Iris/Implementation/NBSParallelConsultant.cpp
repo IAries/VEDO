@@ -17,176 +17,8 @@
 #undef max
 #undef min
 
-using namespace std;
-
-
-
-class X_Comp
+namespace VEDO
 {
-public:
-
-	X_Comp(const vector<DOMap>& vDOMap) : map(vDOMap)
-	{
-	}
-
-	bool operator() (const IactPair& p1,const IactPair& p2)
-	{
-		return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
-	}
-
-private:
-
-	vector<DOMap> map;
-	double CalcIactCoordinate(const IactPair& p)
-	{
-		if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
-		{
-			return map[p.second].cpdos()->GetPosition().x();
-		}
-		else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
-		{
-			return map[p.first].cpdos()->GetPosition().x();
-		}
-		else
-		{
-			return
-				min
-					(map[p.second].cpdos()->GetPosition().x(),
-					map[p.first].cpdos()->GetPosition().x()   );
-		}
-	}
-};
-
-
-
-class Y_Comp
-{
-public:
-
-	Y_Comp(const vector<DOMap>& vDOMap) : map(vDOMap)
-	{
-	}
-
-	bool operator() (const IactPair& p1, const IactPair& p2)
-	{
-		return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
-	}
-
-private:
-
-	vector<DOMap> map;
-	double CalcIactCoordinate(const IactPair& p)
-	{
-		if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
-		{
-			return map[p.second].cpdos()->GetPosition().y();
-		}
-		else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
-		{
-			return map[p.first].cpdos()->GetPosition().y();
-		}
-		else
-		{
-			return
-				min
-					(map[p.second].cpdos()->GetPosition().y(),
-					map[p.first].cpdos()->GetPosition().y()   );
-		}
-	}
-};
-
-
-
-class Z_Comp
-{
-public:
-
-	Z_Comp(const vector<DOMap>& vDOMap) : map(vDOMap)
-	{
-	}
-
-	bool operator() (const IactPair& p1, const IactPair& p2)
-	{
-		return (CalcIactCoordinate(p1)<=CalcIactCoordinate(p2));
-	}
-
-private:
-
-	vector<DOMap> map;
-
-	double CalcIactCoordinate(const IactPair& p)
-	{
-		if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
-		{
-			return map[p.second].cpdos()->GetPosition().z();
-		}
-		else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
-		{
-			return map[p.first].cpdos()->GetPosition().z();
-		}
-		else
-		{
-			return
-				min
-					(map[p.second].cpdos()->GetPosition().z(),
-					map[p.first].cpdos()->GetPosition().z()   );
-		}
-	}
-};
-
-// The EnsureLength function
-static void EnsureLength
-	(unsigned int base,
-	unsigned long target,
-	unsigned long& length,
-	double*& array)
-{
-	if ((base*target) > length)
-	{
-		while ((base*target) > length)
-        {
-        	length *= 2;
-        }
-		delete[] array;
-		array = new double[length];
-		// Monitor the status of "Impact Buffer"
-		cerr
-			<< "Resizing Impact Buffer = "
-			<< length
-			<< " (NBSParallelConsulant::EnsureLength)"
-			<< endl;
-	}
-
-/*
-	if ((base*target) != 0)
-	{
-		if ((base*target) > length)
-		{
-			length = base*target;
-			// Monitor the status of "Impact Buffer"
-			cerr
-				<< "Resizing Impact Buffer = "
-				<< length
-				<< " (NBSParallelConsulant::EnsureLength)"
-				<< endl;
-			delete[] array;
-			array = new double[length];
-		}
-		else if ((length%base) != 0)
-		{
-			length += (base - (length%base));
-			// Monitor the status of "Impact Buffer"
-			cerr
-				<< "Resizing Impact Buffer = "
-				<< length
-				<< " (NBSParallelConsulant::EnsureLength)"
-				<< endl;
-			delete[] array;
-			array = new double[length];
-		}
-	}
-*/
-};
 
 unsigned long NBSParallelConsultant::GetDONum() const
 {
@@ -215,21 +47,21 @@ unsigned long NBSParallelConsultant::GetIactSlave (unsigned long i) const
 
 void NBSParallelConsultant::WriteDOSubWorld(DOContainer &vDO) const
 {
-	list<DOModel*> listModel;
+	std::list<DOModel*> listModel;
 	transform
 		(pDOWorld->GetDOModel().begin(),
 		pDOWorld->GetDOModel().end(),
 		back_inserter(listModel),
 		NJR::Copy_obj()                 );
 
-	list<IactModel*> listIModel;
+	std::list<IactModel*> listIModel;
 	transform
 		(pDOWorld->GetIactModel().begin(),
 		pDOWorld->GetIactModel().end(),
 		back_inserter(listIModel),
 		NJR::Copy_obj()                   );
 
-	vector<DOStatus*> vecStatus;
+	std::vector<DOStatus*> vecStatus;
 
 	for (unsigned int i=0; i<vDO.size(); ++i)
 	{
@@ -254,7 +86,7 @@ void NBSParallelConsultant::WriteDOSubWorld(DOContainer &vDO) const
     DOWorld w(ps,listModel, listIModel, vecStatus);
 
 	char ltoa[256];
-	string file = sfilename.c_str();
+	std::string file = sfilename.c_str();
 	file.append("_");
 
 	sprintf(ltoa, "SUB_%d.xml\0", rank);
@@ -281,7 +113,7 @@ NBSParallelConsultant::NBSParallelConsultant
 	MPI_Comm_rank(MPI_COMM_WORLD, &u);
 	rank = u;
 
-	overlapTab.assign(NP, vector<unsigned long>());
+	overlapTab.assign(NP, std::vector<unsigned long>());
 
 /******************************************************************************
  * Aries' Comment (2006/04/05)
@@ -295,11 +127,11 @@ NBSParallelConsultant::NBSParallelConsultant
 	for (unsigned int i=0; i<NP; ++i)
     {
 		sendBufVec.push_back
-			(pair<unsigned long, double*>
+			(std::pair<unsigned long, double*>
 				(ImpactBufferSize, new double [ImpactBufferSize]) );
 
 		recvBufVec.push_back
-			(pair<unsigned long, double*>
+			(std::pair<unsigned long, double*>
 				(ImpactBufferSize, new double [ImpactBufferSize]) );
 	}
 
@@ -314,9 +146,9 @@ NBSParallelConsultant::NBSParallelConsultant
 //	if (rank != MASTER)
 //    {
 		syncSendBufVec.push_back
-			(make_pair
+			(std::make_pair
 				(initialSyncCnt,
-					make_pair
+					std::make_pair
 						(new unsigned long[initialSyncCnt],
 						new double[initialSyncCnt * 15])   ));
 //	}
@@ -325,9 +157,9 @@ NBSParallelConsultant::NBSParallelConsultant
 		for (unsigned int i=0; i<NP; ++i)
         {
 			syncRecvBufVec.push_back
-				(make_pair
+				(std::make_pair
 					(initialSyncCnt,
-						make_pair
+						std::make_pair
 							(new unsigned long[initialSyncCnt],
 							new double[initialSyncCnt * 15])   ));
         }
@@ -354,20 +186,24 @@ NBSParallelConsultant::~NBSParallelConsultant()
 		delete syncRecvBufVec[i].second.first;
 		delete syncRecvBufVec[i].second.second;
 	}
-	// for run time statistics
-	//cerr << '[' << rank << "] timeReset: " << timeReset/3600.0 << endl;
+
+	#ifdef _VEDO_DEBUG
+		// for run time statistics
+		//std::cout << '[' << rank << "] timeReset: " << timeReset/3600.0 << std::endl;
+	#endif   // _VEDO_DEBUG
+
 /*
     char ltoa[256];
-	string file = sfilename.c_str();
+	std::string file = sfilename.c_str();
 	file.append("_");
 
 	sprintf(ltoa,"vechit_%d.xml\0", rank );
 	file.append(ltoa);
 
-	ofstream outFile( file.c_str() );
+	std::ofstream outFile( file.c_str() );
 	for (int i=0; i<this->VecHitRatio.size(); ++i)
     {
-		outFile << this->VecHitRatio[i] << endl;
+		outFile << this->VecHitRatio[i] << std::endl;
     }
 	outFile.close();
 */
@@ -449,7 +285,7 @@ void NBSParallelConsultant::ConstructDOandOverLapTab()
 	}
 	delete[] occur;
 	delete[] evpoccur;
-}
+};
 
 void NBSParallelConsultant::SyncDOContainer(DOContainer & vDO)
 {
@@ -457,19 +293,19 @@ void NBSParallelConsultant::SyncDOContainer(DOContainer & vDO)
     {
 		EnsureLength
 			(6,
-			overlapTab[i].size(),
-			sendBufVec[i].first,
-			sendBufVec[i].second);
+			 overlapTab[i].size(),
+			 sendBufVec[i].first,
+			 sendBufVec[i].second);
 
 		EnsureLength
 			(6,
-			overlapTab[i].size(),
-			recvBufVec[i].first,
-			recvBufVec[i].second);
+			 overlapTab[i].size(),
+			 recvBufVec[i].first,
+			 recvBufVec[i].second);
 
 		ImpactBufferSize
-			= max
-				(ImpactBufferSize, max
+			= std::max
+				(ImpactBufferSize, std::max
 					(sendBufVec[i].first, recvBufVec[i].first) );
 	}
 
@@ -549,11 +385,11 @@ void NBSParallelConsultant::SyncDOContainer(DOContainer & vDO)
 			idx = G2LTab[ overlapTab[i][j] ];
 			vDO[idx]
 				->AddImpact
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(impactRecBuf[6*j],
 						impactRecBuf[6*j+1],
 						impactRecBuf[6*j+2]),
-					NJRvector3d
+					NJR::NJRvector3d
 						(impactRecBuf[6*j+3],
 						impactRecBuf[6*j+4],
 						impactRecBuf[6*j+5]) );
@@ -725,32 +561,32 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 			}
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetPosition
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(recStatus[15*j],
 						recStatus[15*j+1],
 						recStatus[15*j+2]));
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetVelocity
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(recStatus[15*j+3],
 						recStatus[15*j+4],
 						recStatus[15*j+5]) );
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetOrientation
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(recStatus[15*j+6],
 						recStatus[15*j+7],
 						recStatus[15*j+8]),
-					NJRvector3d
+					NJR::NJRvector3d
 						(recStatus[15*j+9],
 						recStatus[15*j+10],
 						recStatus[15*j+11]) );
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetAngularVelocity
-					(NJRvector3d
+					(NJR::NJRvector3d
 						(recStatus[15*j+12],
 						recStatus[15*j+13],
 						recStatus[15*j+14]) );
@@ -852,11 +688,11 @@ bool NBSParallelConsultant::Reset()
 
     unsigned long numberDO = pDOWorld->GetSystemParameter()->GetDONumber();
 
-	vector<double> vecxloc;
-	vector<double> vecyloc;
-	vector<double> veczloc;
-	vector<double> vecvloc;
-	vector<double> vecrloc;
+	std::vector<double> vecxloc;
+	std::vector<double> vecyloc;
+	std::vector<double> veczloc;
+	std::vector<double> vecvloc;
+	std::vector<double> vecrloc;
 
 	const DOStatus* cpdos  = 0;
 	const DOModel*  cpdoml = 0;
@@ -1003,9 +839,9 @@ bool NBSParallelConsultant::Reset()
 
 void NBSParallelConsultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 {
-	vector<unsigned long> RedundantElementGlobal;
-	vector<unsigned long> RedundantElementLocal;
-	map<unsigned long, long> ElementMappingJumpGlobal;
+	std::vector<unsigned long> RedundantElementGlobal;
+	std::vector<unsigned long> RedundantElementLocal;
+	std::map<unsigned long, long> ElementMappingJumpGlobal;
 
 	unsigned long numberDOGlobal = pDOWorld->GetSystemParameter()->GetDONumber();
 	unsigned long numberDOLocal  = DOTab.size();
@@ -1046,28 +882,31 @@ void NBSParallelConsultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 
 	if (!RedundantElementGlobal.empty())
 	{
-		if (rank == 0)
-		{
-			cerr
-				<< '['
-				<< rank
-				<< "] Global Redundant elements = "
-				<< RedundantElementGlobal.size()
-				<< " / "
-				<< numberDOGlobal
-				<< endl;
-		}
+		#ifdef _VEDO_DEBUG
+			if (rank == 0)
+				std::cout
+					<< '['
+					<< rank
+					<< "] Global Redundant elements = "
+					<< RedundantElementGlobal.size()
+					<< " / "
+					<< numberDOGlobal
+					<< std::endl;
+		#endif   // _VEDO_DEBUG
 
 		if (!RedundantElementLocal.empty())
 		{
-			cerr
-				<< '['
-				<< rank
-				<< "] Local Redundant elements = "
-				<< RedundantElementLocal.size()
-				<< " / "
-				<< numberDOLocal
-				<< endl;
+			#ifdef _VEDO_DEBUG
+				std::cout
+					<< '['
+					<< rank
+					<< "] Local Redundant elements = "
+					<< RedundantElementLocal.size()
+					<< " / "
+					<< numberDOLocal
+					<< std::endl;
+			#endif   // _VEDO_DEBUG
+
 			cDO.Erase(RedundantElementLocal);
 		}
 
@@ -1082,7 +921,7 @@ void NBSParallelConsultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 };
 
 void NBSParallelConsultant::BuildIactTab
-	(vector<DOMap>& v1, vector<DOMap>& v2)
+	(std::vector<DOMap>& v1, std::vector<DOMap>& v2)
 {
 	const Boundary* pbc
 		= &(pDOWorld->GetSystemParameter()->GetPeriodicBoundaryConditions());
@@ -1110,17 +949,17 @@ void NBSParallelConsultant::BuildIactTab
 
 			if (v1[i].id() < v2[j].id())
         	{
-				IactPairTab.push_back(make_pair(v1[i].id(), v2[j].id()));
+				IactPairTab.push_back(std::make_pair(v1[i].id(), v2[j].id()));
 	        }
 			else
     	    {
-				IactPairTab.push_back(make_pair(v2[j].id(), v1[i].id()));
+				IactPairTab.push_back(std::make_pair(v2[j].id(), v1[i].id()));
         	}
 		}
 	}
 }
 
-void NBSParallelConsultant::BuildIactTab(vector<DOMap>& v)
+void NBSParallelConsultant::BuildIactTab(std::vector<DOMap>& v)
 {
 	const Boundary* pbc = &(pDOWorld->GetSystemParameter()->GetPeriodicBoundaryConditions()); //PBC by Liao 2009/5/28
 
@@ -1147,11 +986,11 @@ void NBSParallelConsultant::BuildIactTab(vector<DOMap>& v)
 
 			if ( v[i].id() < v[j].id())
             {
-				IactPairTab.push_back(make_pair(v[i].id(), v[j].id()));
+				IactPairTab.push_back(std::make_pair(v[i].id(), v[j].id()));
             }
 			else
             {
-				IactPairTab.push_back(make_pair(v[j].id(), v[i].id()));
+				IactPairTab.push_back(std::make_pair(v[j].id(), v[i].id()));
             }
 		}
     }
@@ -1160,7 +999,7 @@ void NBSParallelConsultant::BuildIactTab(vector<DOMap>& v)
 void NBSParallelConsultant::DistributeIactPair()
 {
 	unsigned long avgIact = IactPairTab.size() / NP;
-	vector< pair<unsigned long, unsigned long> > tmpIactVec;
+	std::vector< std::pair<unsigned long, unsigned long> > tmpIactVec;
 	tmpIactVec.reserve(avgIact + NP);
 	if (rank != (NP-1))
     {
@@ -1173,7 +1012,8 @@ void NBSParallelConsultant::DistributeIactPair()
 		tmpIactVec.assign
 			(IactPairTab.begin() + rank * avgIact, IactPairTab.end());
 	}
-	IactPairTab = tmpIactVec;
+
+	IactPairTab.swap(tmpIactVec);   // For higher efficiency, instead of "IactPairTab = tmpIactVec;"
 }
 
 const ImpactStatus* NBSParallelConsultant::RetrieveImpactStatus
@@ -1188,23 +1028,23 @@ void NBSParallelConsultant::CollectUserDefinedData(IactContainer& cIact)
 	cIact.CollectUserDefinedData();
 
 	// All processors collect and sum their-owned user-defined data
-	double dUserDefinedDataSend[2*uNumUserDefinedData];
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	double dUserDefinedDataSend[2*VEDO::uNumUserDefinedData];
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		dUserDefinedDataSend[u] = cIact.GetUserDefinedValue(u);
 
-	double dUserDefinedDataSum[2*uNumUserDefinedData];
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	double dUserDefinedDataSum[2*VEDO::uNumUserDefinedData];
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		dUserDefinedDataSum[u] = 0.0;
 
 	MPI_Allreduce
 		(&dUserDefinedDataSend,
 		 &dUserDefinedDataSum,
-		 2*uNumUserDefinedData,
+		 2*VEDO::uNumUserDefinedData,
 		 MPI_DOUBLE,
 		 MPI_SUM,
 		 MPI_COMM_WORLD);
 
-	for(unsigned u=0; u<2*uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
 		dUDV[u] = dUserDefinedDataSum[u];
 };
 
@@ -1224,11 +1064,13 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 					 *pInt->GetImpactStatus());
 	}
 
-	cerr
-		<< "[" << rank << "] "
-		<< "Size of local IactRecordTab = "
-		<< pIRTbl->GetTabSize()
-		<< endl;
+	#ifdef _VEDO_DEBUG
+		std::cout
+			<< "[" << rank << "] "
+			<< "Size of local IactRecordTab = "
+			<< pIRTbl->GetTabSize()
+			<< std::endl;
+	#endif   // _VEDO_DEBUG
 
 /*
 	this
@@ -1254,11 +1096,11 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	int totalSize = 0;
 	for (unsigned u=0; u<NP; ++u)
 	{
-		totalSize     +=                           numRecords[u];
-		recvPair  [u]  = 2                       * numRecords[u];
-		recvC_Bond[u]  = 2                       * numRecords[u];
-		recvKn_SF [u]  = 4                       * numRecords[u];
-		recvUDV   [u]  = 4 * uNumUserDefinedData * numRecords[u];
+		totalSize     +=                                      numRecords[u];
+		recvPair  [u]  = 2                                  * numRecords[u];
+		recvC_Bond[u]  = 2                                  * numRecords[u];
+		recvKn_SF [u]  = 4                                  * numRecords[u];
+		recvUDV   [u]  = 4 * VEDO::uNumUserDefinedData * numRecords[u];
 	}
 
 	offPair  [0] = 0;
@@ -1267,29 +1109,29 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	offUDV   [0] = 0;
 	for(unsigned int u2=1; u2<NP; ++u2)
     {
-		offPair  [u2] = offPair  [u2-1] + 2                       * numRecords[u2-1];
-		offC_Bond[u2] = offC_Bond[u2-1] + 2                       * numRecords[u2-1];
-		offKn_SF [u2] = offKn_SF [u2-1] + 4                       * numRecords[u2-1];
-		offUDV   [u2] = offUDV   [u2-1] + 4 * uNumUserDefinedData * numRecords[u2-1];
+		offPair  [u2] = offPair  [u2-1] + 2                                  * numRecords[u2-1];
+		offC_Bond[u2] = offC_Bond[u2-1] + 2                                  * numRecords[u2-1];
+		offKn_SF [u2] = offKn_SF [u2-1] + 4                                  * numRecords[u2-1];
+		offUDV   [u2] = offUDV   [u2-1] + 4 * VEDO::uNumUserDefinedData * numRecords[u2-1];
 	}
 
-	unsigned long* p       = new unsigned long [2                       * totalSize];
-	unsigned*      c_bond  = new unsigned      [2                       * totalSize];
-	double*        kn_sf   = new double        [4                       * totalSize];
-	double*        udv     = new double        [4 * uNumUserDefinedData * totalSize];
+	unsigned long* p       = new unsigned long [2                                  * totalSize];
+	unsigned*      c_bond  = new unsigned      [2                                  * totalSize];
+	double*        kn_sf   = new double        [4                                  * totalSize];
+	double*        udv     = new double        [4 * VEDO::uNumUserDefinedData * totalSize];
 
-	unsigned long* lp      = new unsigned long [2                       * tblSize];
-	unsigned*      lc_bond = new unsigned      [2                       * tblSize];
-	double*        lkn_sf  = new double        [4                       * tblSize];
-	double*        ludv    = new double        [4 * uNumUserDefinedData * tblSize];
+	unsigned long* lp      = new unsigned long [2                                  * tblSize];
+	unsigned*      lc_bond = new unsigned      [2                                  * tblSize];
+	double*        lkn_sf  = new double        [4                                  * tblSize];
+	double*        ludv    = new double        [4 * VEDO::uNumUserDefinedData * tblSize];
 
-	map<pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
+	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
 
-	const map<pair<unsigned long, unsigned long>, ImpactStatus>& m
+	const std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>& m
 		= pIRTbl->GetData();
 
 	unsigned u = 0;
-	NJRvector3d vTemp;
+	NJR::NJRvector3d vTemp;
 	const double* cdpudv;
 	for (iter=m.begin(); iter!=m.end(); ++iter)
     {
@@ -1313,8 +1155,8 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		lkn_sf[4*u+3] = vTemp.z();
 
 		cdpudv = iter->second.RetrieveAllUserDefinedValue();
-		for(unsigned u2=0; u2<4*uNumUserDefinedData; u2++)
-			ludv[4*uNumUserDefinedData*u+u2] = *(cdpudv+u2);
+		for(unsigned u2=0; u2<4*VEDO::uNumUserDefinedData; u2++)
+			ludv[4*VEDO::uNumUserDefinedData*u+u2] = *(cdpudv+u2);
 
 		u++;
 	};
@@ -1351,7 +1193,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 
 	MPI_Allgatherv
 		(ludv,
-		4*uNumUserDefinedData*tblSize,
+		4*VEDO::uNumUserDefinedData*tblSize,
 		MPI_DOUBLE,
 		udv,
 		recvUDV,
@@ -1360,7 +1202,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		MPI_COMM_WORLD);
 
 	ImpactStatus s;
-	NJRvector3d NewShearForce;
+	NJR::NJRvector3d NewShearForce;
 	for (unsigned u=0; u<NP; ++u)
 	{
 		if (u == rank)
@@ -1389,17 +1231,19 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 			s.SetKn(kn_sf[offsetKn_SF+4*i]);
 			NewShearForce.Set(kn_sf[offsetKn_SF+4*i+1], kn_sf[offsetKn_SF+4*i+2], kn_sf[offsetKn_SF+4*i+3]);
 			s.SetShearForce(NewShearForce);
-			s.SetAllUserDefinedValue(&udv[offsetUDV+4*uNumUserDefinedData*i]);
+			s.SetAllUserDefinedValue(&udv[offsetUDV+4*VEDO::uNumUserDefinedData*i]);
 
 			pIRTbl->PushRecord(p[offsetPair+2*i], p[offsetPair+2*i+1], s);
 		}
 	}
 
-	cerr
-		<< "[" << rank << "] "
-		<< "At RebuildIactRecordTab: size = "
-		<< pIRTbl->GetTabSize()
-		<< endl;
+	#ifdef _VEDO_DEBUG
+		std::cout
+			<< "[" << rank << "] "
+			<< "At RebuildIactRecordTab: size = "
+			<< pIRTbl->GetTabSize()
+			<< std::endl;
+	#endif   // _VEDO_DEBUG
 
 	delete[] numRecords;
 	delete[] p;
@@ -1418,4 +1262,6 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	delete[] recvC_Bond;
 	delete[] recvKn_SF;
 	delete[] recvUDV;
-}
+};
+
+};   // namespace VEDO

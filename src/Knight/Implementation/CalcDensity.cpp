@@ -8,7 +8,7 @@ using namespace std;
 const int CalcDensity::RandomHitTestNum = 20000;
 
 double CalcDensity::computeDensity
-	(const DOWorld* pWorld,
+	(const VEDO::DOWorld* pWorld,
 	double xmin,
 	double xmax,
 	double ymin,
@@ -16,13 +16,13 @@ double CalcDensity::computeDensity
 	double zmin,
 	double zmax ) const
 {
-	vector<DOMap> vDOMap;
+	std::vector<VEDO::DOMap> vDOMap;
 	double xp, yp, zp, radius;
 	for (unsigned int i=0; i<(pWorld->GetSystemParameter()->GetDONumber()) ;++i)
 	{
-		const DOStatus* pdos = pWorld->GetDOStatus(i);
-		const DOModel* pmodel = pWorld->GetDOModel(pdos->GetDOName());
-		if (pmodel->GetShapeType() != Sphere)
+		const VEDO::DOStatus* pdos = pWorld->GetDOStatus(i);
+		const VEDO::DOModel* pmodel = pWorld->GetDOModel(pdos->GetDOName());
+		if (pmodel->GetShapeType() != VEDO::Sphere)
 		{
 			continue;
 		}
@@ -38,7 +38,7 @@ double CalcDensity::computeDensity
 			&& (zp > (zmin-radius)) )
 		{
 			vDOMap.push_back
-				(DOMap(i, pdos, pmodel, pdos->GetVelocity().length()));
+				(VEDO::DOMap(i, pdos, pmodel, pdos->GetVelocity().length()));
 		}
 	}
 
@@ -49,7 +49,7 @@ double CalcDensity::computeDensity
 		double ranX = RA(xmin, xmax);
 		double ranY = RA(ymin, ymax);
         double ranZ = RA(zmin, zmax);
-		NJRvector3d ranV(ranX, ranY, ranZ);
+		NJR::NJRvector3d ranV(ranX, ranY, ranZ);
 
 		bool hasHit = false;
 		for (unsigned int j=0; j<vDOMap.size(); ++j)

@@ -1,3 +1,4 @@
+#include <FrameWork/Interfaces/Constants.h>
 #include <NJR/Interfaces/Utility.h>
 #include <NJR/Interfaces/vector3d.h>
 #include <FrameWork/Interfaces/Boundary.h>
@@ -27,304 +28,302 @@
 #include <map>
 #include <vector>
 
-using namespace std;
-
 void usage()
 {
-	cout
-		<< "KNIGHT 2011 Build 222" << endl
-		<< endl
-		<< "Usage:" << endl
-		<< endl
-		<< "	-a: add elements in defined domain" << endl
-		<< "	Knight -a <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-ap: add potential energy from a \"source point\"" << endl
-		<< "	Knight -ap <DOName> (source point)<x> <y> <z>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-av: add velocity" << endl
-		<< "	Knight -av <DOName> (velocity)<x> <y> <z>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-aav: add angular velocity" << endl
-		<< "	Knight -av <DOName> (angular velocity)<x> <y> <z>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-ar_cartesian: add elements (random distribution) in defined domain (cartesian coordinate)" << endl
-		<< "	Knight -ar_cartesian <DOName> <number of elements> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-ar_cylindrical: add elements (random distribution) in defined domain (cylindrical coordinate)" << endl
-		<< "	Knight -ar_cylindrical <DOName> <number of elements> <x> <y> <z> <r> <h>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-ar_spherical: add elements (random distribution) in defined domain (spherical coordinate)" << endl
-		<< "	Knight -ar_spherical <DOName> <number of elements> <x> <y> <z> <r>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-//		<< "	-assm: assemble xml file (-al)" << endl
-//		<< "	Knight -assm <f1.xml> <f2.xml> <des.xml>" << endl
-//		<< endl
-		<< "	-avg_info: calculate the average information in defined space" << endl
-		<< "	Knight -avg_info <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info: calculate the average information in defined space (velocity is estimated by positions in different step)" << endl
-		<< "	Knight -avg_info (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info_xy: calculate the average information in defined x-y plane" << endl
-		<< "	Knight -avg_info_xy <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info_xy: calculate the average information in defined x-y plane (velocity is estimated by positions in different step)" << endl
-		<< "	Knight -avg_info_xy (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info_yz: calculate the average information in defined y-z plane" << endl
-		<< "	Knight -avg_info_yz <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info_yz: calculate the average information in defined y-z plane (velocity is estimated by positions in different step)" << endl
-		<< "	Knight -avg_info_yz (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info_xz: calculate the average information in defined x-z plane" << endl
-		<< "	Knight -avg_info_xz <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_info_xz: calculate the average information in defined x-z plane (velocity is estimated by positions in different step)" << endl
-		<< "	Knight -avg_info_xz(current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-avg_rd_ntume: calculate the average information for NTUME experiment of rotating drum" << endl
-		<< "	Knight -avg_rd_ntume <.xml | .ido> <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << endl
-		<< endl
-		<< "	-c: convert" << endl
-		<< "	Knight -c <.xml | .ido> <.xml | .ido | .vpf | .dxf | .vtu>" << endl
-		<< endl
-		<< "	-cirt: convert" << endl
-		<< "	Knight -cirt <.irt> <.csv>" << endl
-		<< endl
-		<< "	-ca2s: calaulate area of cross section to surface, ax+by+cz=d" << endl
-		<< "	Knight -ca2s <DOName> <a> <b> <c> <d> <.xml | .ido>" << endl
-		<< endl
-		<< "	-cf2s: calaulate flux of cross section to surface, ax+by+cz=d" << endl
-		<< "	Knight -cf2s <DOName> <a> <b> <c> <d> <.xml | .ido>" << endl
-		<< endl
-		<< "	-cal: calculate average density and coordinate number" << endl
-		<< "	Knight -cal <filename> <xmin,xmax,ymin,ymax,zmin,zmax>" << endl
-		<< endl
-		<< "	-cl: convert list (Hexadecimal)" << endl
-		<< "	Knight -cl <filename> <begin num> <the end>" << endl
-		<< endl
- 		<< "	-clean_udv: clean the user-defined value in irt file" << endl
-		<< "	Knight -clean_udv (Original)<.irt> (New)<.irt>" << endl
-		<< endl
-		<< "	-cld: convert list (Decimalism)" << endl
-		<< "	Knight -cld <filename> <begin num> <the end>" << endl
-		<< endl
-		<< "	-cm: chang models" << endl
-		<< "	Knight -cm (Reference)<.xml | .ido> <.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-comb: combine two models" << endl
-		<< "	Knight -comb (Reference)<.xml | .ido> (with Mobile Elements)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-comb: combine two models" << endl
-		<< "	Knight -comb (Reference)<.xml | .ido> (with Added Elements)<.xml | .ido> <DOName> <.xml | .ido>" << endl
-		<< endl
-		<< "	-coord_num: calculate coordinate number for spheres and output to VTK file" << endl
-		<< "	Knight -coord_num <.xml | .ido>  <.vtu>" << endl
-		<< endl
-		<< "	-cu: convert to sudo vpf file" << endl
-		<< "	Knight -cu (Original)<.xml | .ido> (Current)<.xml | .ido> <.vpf>" << endl
-		<< endl
-		<< "	-b2h: convert DOS text file to HEX" << endl
-		<< "	Knight -b2h <origin> <destination>" << endl
-		<< endl
-		<< "	-d2u: convert DOS text file to UNIX text" << endl
-		<< "	Knight -d2u <origin> <destination>" << endl
-		<< endl
-		<< "	-distance: calculate the distance of objects from certain point" << endl
-		<< "	Knight -distance <.xml | .ido> <X> <Y> <Z>" << endl
-		<< endl
-		<< "	-distance_xy: calculate the distance of objects from certain line" << endl
-		<< "	Knight -distance <.xml | .ido> <X> <ZY>" << endl
-		<< endl
-		<< "	-distance_yz: calculate the distance of objects from certain line" << endl
-		<< "	Knight -distance <.xml | .ido> <Y> <Z>" << endl
-		<< endl
-		<< "	-distance_zx: calculate the distance of objects from certain line" << endl
-		<< "	Knight -distance <.xml | .ido> <Z> <X>" << endl
-		<< endl
-		<< "	-u2d: convert UNIX text file to DOS text" << endl
-		<< "	Knight -u2d <origin> <destination>" << endl
-		<< endl
-		<< "	-cse: clear separated elements" << endl
-		<< "	Knight -cs <.ido> <.ido>" << endl
-		<< endl
-		<< "	-distribution: determine the distribution of certain elements" << endl
-		<< "	Knight -distribution <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << endl
-		<< "			<Mesh size> <.xml | .ido>" << endl
-		<< endl
-		<< "	-e: erase elements" << endl
-		<< "	Knight -e <DOName> <.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-energy: calculate the energy of system" << endl
-		<< "	Knight -energy <.ido>" << endl
-		<< endl
-		<< "	-freeze: freeze all \"Elements\"" << endl
-		<< "	Knight -freeze <.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-freeze: freeze \"Elements\"" << endl
-		<< "	Knight -freeze <DOName> <.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-gt_auto: calculate the granular temperature in defined domain (auto/rectangle shape)" << endl
-		<< "	Knight -gt_auto <.xml | .ido> <DOName> <CutNumberX> <CutNumberY> <CutNumberZ>" << endl
-		<< "			<Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << endl
-		<< endl
-		<< "	-gt_rectangle: calculate the granular temperature in defined domain (rectangle shape)" << endl
-		<< "	Knight -gt_rectangle <.xml | .ido> <DOName> <width> <length> <height> <X> <Y> <Z>" << endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << endl
-		<< endl
-		<< "	-gt_cylinder: calculate the granular temperature in defined domain (culinder shape)" << endl
-		<< "	Knight -gt_cylinder <.xml | .ido> <DOName> <radius> <height> <X> <Y> <Z>" << endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << endl
-		<< endl
-		<< "	-gt_sphere: calculate the granular temperature in defined domain (sphere shape)" << endl
-		<< "	Knight -gt_sphere <.xml | .ido> <DOName> <radius> <X> <Y> <Z>" << endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << endl
-		<< endl
-		<< "	-gt_ellipsoid: calculate the granular temperature in defined domain (ellipsoid shape)" << endl
-		<< "	Knight -gt_ellipsoid <.xml | .ido> <DOName> <XLength> <YLength> <ZLength> <X> <Y> <Z>" << endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << endl
-		<< endl
-		<< "	-i: print infomation of data file" << endl
-		<< "	Knight -i  <.xml | .ido>" << endl
-		<< endl
-		<< "	-inside: check what elements are inside" << endl
-		<< "	Knight -inside <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax>" << endl
-		<< endl
-		<< "	-lattice_bcc: rectangular element initialization on the basis of BCC Lattice" << endl
-		<< "	Knight -lattice_bcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-lattice_fcc: rectangular element initialization on the basis of FCC Lattice" << endl
-		<< "	Knight -lattice_fcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-lattice_scc: rectangular element initialization on the basis of Simple Cubic Lattice" << endl
-		<< "	Knight -lattice_scc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << endl
-		<< endl
-		<< "	-profile_Info2Y: calculate the profile \"Information-Y\" in defined space" << endl
-		<< "	Knight -profile_Info2Y <.xml | .ido> <Xmin> <XMax> <Zmin> <Zmax>" << endl
-		<< endl
-		<< "	-projected_area_x: calculate the projected area in Y-Z domain" << endl
-		<< "	Knight -projected_area_x <mesh length> <.ido>" << endl
-		<< endl
-		<< "	-projected_area_y: calculate the projected area in Z-X domain" << endl
-		<< "	Knight -projected_area_y <mesh length> <.ido>" << endl
-		<< endl
-		<< "	-projected_area_z: calculate the projected area in X-Y domain" << endl
-		<< "	Knight -projected_area_z <mesh length> <.ido>" << endl
-		<< endl
-		<< "	-rotate: rotate elements" << endl
-		<< "	Knight -rotate <Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << endl
-		<< "			(Original)<.xml | .ido> (New)<.xml | .ido>" << endl
-		<< endl
-		<< "	-sccBm1: calculate the flowability index of SCC mortar" << endl
-		<< "	Knight -sccBm1 <.ido>" << endl
-		<< endl
-		<< "	-sccBm2: calculate the flowability index of SCC" << endl
-		<< "	Knight -sccBm2 <.ido>" << endl
-		<< endl
-		<< "	-sccRm: calculate the viscosity index of SCC mortar" << endl
-		<< "	Knight -sccRm <.ido>" << endl
-		<< endl
-		<< "	-shift: shift elements" << endl
-		<< "	Knight -shift <DOName> <x> <y> <z>" << endl
-		<< "			(Original)<.xml | .ido> (New)<.xml | .ido>" << endl
-		<< endl
-		<< "	-shift_all: shift all elements" << endl
-		<< "	Knight -shift_all <x> <y> <z> (Original)<.xml | .ido> (New)<.xml | .ido>" << endl
-		<< endl
-		<< "	-sort: sort elements" << endl
-		<< "	Knight -sort (Original)<.xml | .ido> (New)<.xml | .ido>" << endl
-		<< endl
-		<< "	-sort_distance: sort elements by the distance to a reference point" << endl
-		<< "	Knight -sort_distance <Px> <Py> <Pz> <.xml | .ido>" << endl
-		<< endl
-		<< "	-set_time: set simulated time" << endl
-		<< "	Knight -set_time <start time> <stop time> <time interval> <current time> (Original)<.xml | .ido> (New)<.xml | .ido>" << endl
-		<< endl
-		<< "	-show: show the motion status of certain object" << endl
-		<< "	Knight -show <.xml | .ido> <ObjectID>" << endl
-		<< endl
- 		<< "	-u11: update ido file (2011) to new version" << endl
-		<< "	Knight -u11 (Original)<.ido> (New)<.ido>" << endl
-		<< endl
- 		<< "	-u9: update ido file (2009) to new version" << endl
-		<< "	Knight -u9 (Original)<.ido> (New)<.ido>" << endl
-		<< endl
- 		<< "	-u8: update ido file (2008) to new version" << endl
-		<< "	Knight -u8 (Original)<.ido> (New)<.ido>" << endl
-		<< endl
- 		<< "	-u7: update ido file (2007) to new version" << endl
-		<< "	Knight -u7 (Original)<.ido> (New)<.ido>" << endl
-		<< endl
-		<< "	-u6: update ido file (2006) to new version" << endl
-		<< "	Knight -u6 (Original)<.ido> (New)<.ido>" << endl
-		<< endl
- 		<< "	-u10irt: update irt file (2010) to the current version" << endl
-		<< "	Knight -u10irt (Original)<.irt> (New)<.irt>" << endl
-		<< endl
- 		<< "	-u11irt: update irt file (2011) to the current version" << endl
-		<< "	Knight -u11irt (Original)<.irt> (New)<.irt>" << endl
-		<< endl
-		<< "	-volume: calculate the volume in 'Zone of Interest'" << endl
-		<< "	Knight -volume <mesh length> <.ido>" << endl
-		<< endl;
+	std::cout
+		<< "Knight" << std::endl
+		<< std::endl
+		<< "Usage:" << std::endl
+		<< std::endl
+		<< "	-a: add elements in defined domain" << std::endl
+		<< "	Knight -a <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-ap: add potential energy from a \"source point\"" << std::endl
+		<< "	Knight -ap <DOName> (source point)<x> <y> <z>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-av: add velocity" << std::endl
+		<< "	Knight -av <DOName> (velocity)<x> <y> <z>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-aav: add angular velocity" << std::endl
+		<< "	Knight -av <DOName> (angular velocity)<x> <y> <z>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-ar_cartesian: add elements (random distribution) in defined domain (cartesian coordinate)" << std::endl
+		<< "	Knight -ar_cartesian <DOName> <number of elements> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-ar_cylindrical: add elements (random distribution) in defined domain (cylindrical coordinate)" << std::endl
+		<< "	Knight -ar_cylindrical <DOName> <number of elements> <x> <y> <z> <r> <h>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-ar_spherical: add elements (random distribution) in defined domain (spherical coordinate)" << std::endl
+		<< "	Knight -ar_spherical <DOName> <number of elements> <x> <y> <z> <r>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+//		<< "	-assm: assemble xml file (-al)" << std::endl
+//		<< "	Knight -assm <f1.xml> <f2.xml> <des.xml>" << std::endl
+//		<< std::endl
+		<< "	-avg_info: calculate the average information in defined space" << std::endl
+		<< "	Knight -avg_info <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info: calculate the average information in defined space (velocity is estimated by positions in different step)" << std::endl
+		<< "	Knight -avg_info (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info_xy: calculate the average information in defined x-y plane" << std::endl
+		<< "	Knight -avg_info_xy <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info_xy: calculate the average information in defined x-y plane (velocity is estimated by positions in different step)" << std::endl
+		<< "	Knight -avg_info_xy (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info_yz: calculate the average information in defined y-z plane" << std::endl
+		<< "	Knight -avg_info_yz <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info_yz: calculate the average information in defined y-z plane (velocity is estimated by positions in different step)" << std::endl
+		<< "	Knight -avg_info_yz (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info_xz: calculate the average information in defined x-z plane" << std::endl
+		<< "	Knight -avg_info_xz <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_info_xz: calculate the average information in defined x-z plane (velocity is estimated by positions in different step)" << std::endl
+		<< "	Knight -avg_info_xz(current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-avg_rd_ntume: calculate the average information for NTUME experiment of rotating drum" << std::endl
+		<< "	Knight -avg_rd_ntume <.xml | .ido> <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< std::endl
+		<< "	-c: convert" << std::endl
+		<< "	Knight -c <.xml | .ido> <.xml | .ido | .vpf | .dxf | .vtu>" << std::endl
+		<< std::endl
+		<< "	-cirt: convert" << std::endl
+		<< "	Knight -cirt <.irt> <.csv>" << std::endl
+		<< std::endl
+		<< "	-ca2s: calaulate area of cross section to surface, ax+by+cz=d" << std::endl
+		<< "	Knight -ca2s <DOName> <a> <b> <c> <d> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-cf2s: calaulate flux of cross section to surface, ax+by+cz=d" << std::endl
+		<< "	Knight -cf2s <DOName> <a> <b> <c> <d> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-cal: calculate average density and coordinate number" << std::endl
+		<< "	Knight -cal <filename> <xmin,xmax,ymin,ymax,zmin,zmax>" << std::endl
+		<< std::endl
+		<< "	-cl: convert std::list (Hexadecimal)" << std::endl
+		<< "	Knight -cl <filename> <begin num> <the end>" << std::endl
+		<< std::endl
+ 		<< "	-clean_udv: clean the user-defined value in irt file" << std::endl
+		<< "	Knight -clean_udv (Original)<.irt> (New)<.irt>" << std::endl
+		<< std::endl
+		<< "	-cld: convert std::list (Decimalism)" << std::endl
+		<< "	Knight -cld <filename> <begin num> <the end>" << std::endl
+		<< std::endl
+		<< "	-cm: chang models" << std::endl
+		<< "	Knight -cm (Reference)<.xml | .ido> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-comb: combine two models" << std::endl
+		<< "	Knight -comb (Reference)<.xml | .ido> (with Mobile Elements)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-comb: combine two models" << std::endl
+		<< "	Knight -comb (Reference)<.xml | .ido> (with Added Elements)<.xml | .ido> <DOName> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-coord_num: calculate coordinate number for spheres and output to VTK file" << std::endl
+		<< "	Knight -coord_num <.xml | .ido>  <.vtu>" << std::endl
+		<< std::endl
+		<< "	-cu: convert to sudo vpf file" << std::endl
+		<< "	Knight -cu (Original)<.xml | .ido> (Current)<.xml | .ido> <.vpf>" << std::endl
+		<< std::endl
+		<< "	-b2h: convert DOS text file to HEX" << std::endl
+		<< "	Knight -b2h <origin> <destination>" << std::endl
+		<< std::endl
+		<< "	-d2u: convert DOS text file to UNIX text" << std::endl
+		<< "	Knight -d2u <origin> <destination>" << std::endl
+		<< std::endl
+		<< "	-distance: calculate the distance of objects from certain point" << std::endl
+		<< "	Knight -distance <.xml | .ido> <X> <Y> <Z>" << std::endl
+		<< std::endl
+		<< "	-distance_xy: calculate the distance of objects from certain line" << std::endl
+		<< "	Knight -distance <.xml | .ido> <X> <ZY>" << std::endl
+		<< std::endl
+		<< "	-distance_yz: calculate the distance of objects from certain line" << std::endl
+		<< "	Knight -distance <.xml | .ido> <Y> <Z>" << std::endl
+		<< std::endl
+		<< "	-distance_zx: calculate the distance of objects from certain line" << std::endl
+		<< "	Knight -distance <.xml | .ido> <Z> <X>" << std::endl
+		<< std::endl
+		<< "	-u2d: convert UNIX text file to DOS text" << std::endl
+		<< "	Knight -u2d <origin> <destination>" << std::endl
+		<< std::endl
+		<< "	-cse: clear separated elements" << std::endl
+		<< "	Knight -cs <.ido> <.ido>" << std::endl
+		<< std::endl
+		<< "	-distribution: determine the distribution of certain elements" << std::endl
+		<< "	Knight -distribution <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "			<Mesh size> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-e: erase elements" << std::endl
+		<< "	Knight -e <DOName> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-energy: calculate the energy of system" << std::endl
+		<< "	Knight -energy <.ido>" << std::endl
+		<< std::endl
+		<< "	-freeze: freeze all \"Elements\"" << std::endl
+		<< "	Knight -freeze <.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-freeze: freeze \"Elements\"" << std::endl
+		<< "	Knight -freeze <DOName> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-gt_auto: calculate the granular temperature in defined domain (auto/rectangle shape)" << std::endl
+		<< "	Knight -gt_auto <.xml | .ido> <DOName> <CutNumberX> <CutNumberY> <CutNumberZ>" << std::endl
+		<< "			<Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << std::endl
+		<< std::endl
+		<< "	-gt_rectangle: calculate the granular temperature in defined domain (rectangle shape)" << std::endl
+		<< "	Knight -gt_rectangle <.xml | .ido> <DOName> <width> <length> <height> <X> <Y> <Z>" << std::endl
+		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< std::endl
+		<< "	-gt_cylinder: calculate the granular temperature in defined domain (culinder shape)" << std::endl
+		<< "	Knight -gt_cylinder <.xml | .ido> <DOName> <radius> <height> <X> <Y> <Z>" << std::endl
+		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< std::endl
+		<< "	-gt_sphere: calculate the granular temperature in defined domain (sphere shape)" << std::endl
+		<< "	Knight -gt_sphere <.xml | .ido> <DOName> <radius> <X> <Y> <Z>" << std::endl
+		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< std::endl
+		<< "	-gt_ellipsoid: calculate the granular temperature in defined domain (ellipsoid shape)" << std::endl
+		<< "	Knight -gt_ellipsoid <.xml | .ido> <DOName> <XLength> <YLength> <ZLength> <X> <Y> <Z>" << std::endl
+		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< std::endl
+		<< "	-i: print infomation of data file" << std::endl
+		<< "	Knight -i  <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-inside: check what elements are inside" << std::endl
+		<< "	Knight -inside <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax>" << std::endl
+		<< std::endl
+		<< "	-lattice_bcc: rectangular element initialization on the basis of BCC Lattice" << std::endl
+		<< "	Knight -lattice_bcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-lattice_fcc: rectangular element initialization on the basis of FCC Lattice" << std::endl
+		<< "	Knight -lattice_fcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-lattice_scc: rectangular element initialization on the basis of Simple Cubic Lattice" << std::endl
+		<< "	Knight -lattice_scc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-profile_Info2Y: calculate the profile \"Information-Y\" in defined space" << std::endl
+		<< "	Knight -profile_Info2Y <.xml | .ido> <Xmin> <XMax> <Zmin> <Zmax>" << std::endl
+		<< std::endl
+		<< "	-projected_area_x: calculate the projected area in Y-Z domain" << std::endl
+		<< "	Knight -projected_area_x <mesh length> <.ido>" << std::endl
+		<< std::endl
+		<< "	-projected_area_y: calculate the projected area in Z-X domain" << std::endl
+		<< "	Knight -projected_area_y <mesh length> <.ido>" << std::endl
+		<< std::endl
+		<< "	-projected_area_z: calculate the projected area in X-Y domain" << std::endl
+		<< "	Knight -projected_area_z <mesh length> <.ido>" << std::endl
+		<< std::endl
+		<< "	-rotate: rotate elements" << std::endl
+		<< "	Knight -rotate <Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << std::endl
+		<< "			(Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-sccBm1: calculate the flowability index of SCC mortar" << std::endl
+		<< "	Knight -sccBm1 <.ido>" << std::endl
+		<< std::endl
+		<< "	-sccBm2: calculate the flowability index of SCC" << std::endl
+		<< "	Knight -sccBm2 <.ido>" << std::endl
+		<< std::endl
+		<< "	-sccRm: calculate the viscosity index of SCC mortar" << std::endl
+		<< "	Knight -sccRm <.ido>" << std::endl
+		<< std::endl
+		<< "	-shift: shift elements" << std::endl
+		<< "	Knight -shift <DOName> <x> <y> <z>" << std::endl
+		<< "			(Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-shift_all: shift all elements" << std::endl
+		<< "	Knight -shift_all <x> <y> <z> (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-sort: sort elements" << std::endl
+		<< "	Knight -sort (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-sort_distance: sort elements by the distance to a reference point" << std::endl
+		<< "	Knight -sort_distance <Px> <Py> <Pz> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-set_time: set simulated time" << std::endl
+		<< "	Knight -set_time <start time> <stop time> <time interval> <current time> (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-show: show the motion status of certain object" << std::endl
+		<< "	Knight -show <.xml | .ido> <ObjectID>" << std::endl
+		<< std::endl
+ 		<< "	-u11: update ido file (2011) to new version" << std::endl
+		<< "	Knight -u11 (Original)<.ido> (New)<.ido>" << std::endl
+		<< std::endl
+ 		<< "	-u9: update ido file (2009) to new version" << std::endl
+		<< "	Knight -u9 (Original)<.ido> (New)<.ido>" << std::endl
+		<< std::endl
+ 		<< "	-u8: update ido file (2008) to new version" << std::endl
+		<< "	Knight -u8 (Original)<.ido> (New)<.ido>" << std::endl
+		<< std::endl
+ 		<< "	-u7: update ido file (2007) to new version" << std::endl
+		<< "	Knight -u7 (Original)<.ido> (New)<.ido>" << std::endl
+		<< std::endl
+		<< "	-u6: update ido file (2006) to new version" << std::endl
+		<< "	Knight -u6 (Original)<.ido> (New)<.ido>" << std::endl
+		<< std::endl
+ 		<< "	-u10irt: update irt file (2010) to the current version" << std::endl
+		<< "	Knight -u10irt (Original)<.irt> (New)<.irt>" << std::endl
+		<< std::endl
+ 		<< "	-u11irt: update irt file (2011) to the current version" << std::endl
+		<< "	Knight -u11irt (Original)<.irt> (New)<.irt>" << std::endl
+		<< std::endl
+		<< "	-volume: calculate the volume in 'Zone of Interest'" << std::endl
+		<< "	Knight -volume <mesh length> <.ido>" << std::endl
+		<< std::endl;
 
 	exit(0);
 }
 
-DOWorld* info(DOWorld *oWorld)
+VEDO::DOWorld* info(VEDO::DOWorld *oWorld)
 {
-	const SystemParameter* sp = oWorld->GetSystemParameter();
-	cout
-		<< "<<SystemParameter Infomation>>" << endl
-		<< "\tTitle      : " << sp->GetTitle() << endl
-		<< "\tObjNumber  : " << sp->GetDONumber() << endl
+	const VEDO::SystemParameter* sp = oWorld->GetSystemParameter();
+	std::cout
+		<< "<<SystemParameter Infomation>>" << std::endl
+		<< "\tTitle      : " << sp->GetTitle() << std::endl
+		<< "\tObjNumber  : " << sp->GetDONumber() << std::endl
 		<< "\tTime       : "
 						<< "start("    << sp->GetTimeStart()    << ") "
 						<< "stop("     << sp->GetTimeStop()     << ") "
 						<< "interval(" << sp->GetTimeInterval() << ") "
-						<< "current("  << sp->GetTimeCurrent()  << ")" << endl
+						<< "current("  << sp->GetTimeCurrent()  << ")" << std::endl
 		<< "\tField Force: " << sp->GetFieldForce()
 		<< "\tZOI        : ";
 
 	if(sp->GetZoneOfInterest().GetSwitch(0))
 	{
-		cout
+		std::cout
 			<< "XMin(" << sp->GetZoneOfInterest().GetLowerPoint().x() << ") "
 			<< "XMax(" << sp->GetZoneOfInterest().GetUpperPoint().x() << ") ";
 	};
 
 	if(sp->GetZoneOfInterest().GetSwitch(1))
 	{
-		cout
+		std::cout
 			<< "YMin(" << sp->GetZoneOfInterest().GetLowerPoint().y() << ") "
 			<< "YMax(" << sp->GetZoneOfInterest().GetUpperPoint().y() << ") ";
 	};
 
 	if(sp->GetZoneOfInterest().GetSwitch(2))
 	{
-		cout
+		std::cout
 			<< "ZMin(" << sp->GetZoneOfInterest().GetLowerPoint().z() << ") "
 			<< "ZMax(" << sp->GetZoneOfInterest().GetUpperPoint().z() << ") ";
 	};
-	cout << endl;
+	std::cout << std::endl;
 
-	cout << "\tPBC        : ";
+	std::cout << "\tPBC        : ";
 
 	if(sp->GetPeriodicBoundaryConditions().GetSwitch(0))
 	{
-		cout
+		std::cout
 			<< "XMin("
 			<< sp->GetPeriodicBoundaryConditions().GetLowerPoint().x()
 			<< ") "
@@ -335,7 +334,7 @@ DOWorld* info(DOWorld *oWorld)
 
 	if(sp->GetPeriodicBoundaryConditions().GetSwitch(1))
 	{
-		cout
+		std::cout
 			<< "YMin("
 			<< sp->GetPeriodicBoundaryConditions().GetLowerPoint().y()
 			<< ") "
@@ -346,7 +345,7 @@ DOWorld* info(DOWorld *oWorld)
 
 	if(sp->GetPeriodicBoundaryConditions().GetSwitch(2))
 	{
-		cout
+		std::cout
 			<< "ZMin("
 			<< sp->GetPeriodicBoundaryConditions().GetLowerPoint().z()
 			<< ") "
@@ -354,64 +353,64 @@ DOWorld* info(DOWorld *oWorld)
 			<< sp->GetPeriodicBoundaryConditions().GetUpperPoint().z()
 			<< ") ";
 	};
-	cout << endl << endl;
+	std::cout << std::endl << std::endl;
 
-	const vector<DOStatus*>& rcDOStatus = oWorld->GetDOStatus();
-	vector<DOStatus *>::const_iterator idos;
-	map<string, unsigned long> counter;
+	const std::vector<VEDO::DOStatus*>& rcDOStatus = oWorld->GetDOStatus();
+	std::vector<VEDO::DOStatus *>::const_iterator idos;
+	std::map<std::string, unsigned long> counter;
 
 	for (idos=rcDOStatus.begin(); idos!=rcDOStatus.end(); idos++)
 	{
 		counter[(*idos)->GetDOName()]++;
  	}
 
-	cout << "<<DOModel Infomation>>" << endl;
+	std::cout << "<<VEDO::DOModel Infomation>>" << std::endl;
 
-	const list<DOModel*>& rcDOModel = oWorld->GetDOModel();
-	list<DOModel*>::const_iterator idoml;
-	string shape;
+	const std::list<VEDO::DOModel*>& rcDOModel = oWorld->GetDOModel();
+	std::list<VEDO::DOModel*>::const_iterator idoml;
+	std::string shape;
 	for (idoml=rcDOModel.begin(); idoml!=rcDOModel.end(); idoml++)
 	{
 		switch((*idoml)->GetShapeType())
 		{
-			case Sphere:
+			case VEDO::Sphere:
 				shape = "Sphere";
 				break;
-			case QuasiPlate:
+			case VEDO::QuasiPlate:
 				shape = "QuasiPlate";
 				break;
-		 	case QuasiCylinder:
+		 	case VEDO::QuasiCylinder:
 		 		shape = "QuasiCylinder";
 		 		break;
-			case Ellipsoid:
+			case VEDO::Ellipsoid:
 				shape = "Ellipsoid";
 				break;
-			case Polyhedra:
+			case VEDO::Polyhedra:
 				shape = "Polyhedra";
 				break;
 			default:
 				shape = "UnKnown";
 		}
-		cout
+		std::cout
 			<< "\t("
 			<< (*idoml)->GetDOName()          << ", "
 			<< (*idoml)->GetDOGroup()         << ", "
 			<< (*idoml)->GetBehavior()        << ", "
 			<< shape                          << ", "
-			<< counter[(*idoml)->GetDOName()] << ")" << endl;
+			<< counter[(*idoml)->GetDOName()] << ")" << std::endl;
 	}
-	cout << endl;
+	std::cout << std::endl;
 
-	cout << "<<Interaction Infomation>>" << endl;
+	std::cout << "<<Interaction Infomation>>" << std::endl;
 
-	const list<IactModel*>& rcIactModel = oWorld->GetIactModel();
-	list<IactModel*>::const_iterator iactiter;
+	const std::list<VEDO::IactModel*>& rcIactModel = oWorld->GetIactModel();
+	std::list<VEDO::IactModel*>::const_iterator iactiter;
 	unsigned long i = 0;
 	for (iactiter=rcIactModel.begin(); iactiter!=rcIactModel.end(); ++iactiter)
 	{
-		IactModel* im = *iactiter;
-		string eqtype = im->GetEquationType();
-		cout
+		VEDO::IactModel* im = *iactiter;
+		std::string eqtype = im->GetEquationType();
+		std::cout
 			<< '\t'
 			<< i++
 			<< " : "
@@ -420,15 +419,15 @@ DOWorld* info(DOWorld *oWorld)
 			<< im->GetSlaveDOGroup().c_str()
 			<< "  "
 			<< eqtype.c_str()
-			<< endl;
+			<< std::endl;
 	}
-	cout << endl;
+	std::cout << std::endl;
 	return oWorld;
 };
 
-DOWorld* ReadDOWorld (string filename)
+VEDO::DOWorld* ReadDOWorld (std::string filename)
 {
-	DOWorld* pWorld = new DOWorld;
+	VEDO::DOWorld* pWorld = new VEDO::DOWorld;
 
 	if (NJR::CheckSubName(filename,".xml"))
 	{
@@ -445,9 +444,9 @@ DOWorld* ReadDOWorld (string filename)
 	return pWorld;
 };
 
-DOWorld* ReadDOWorld2011(string filename)
+VEDO::DOWorld* ReadDOWorld2011(std::string filename)
 {
-	DOWorld* pWorld = new DOWorld;
+	VEDO::DOWorld* pWorld = new VEDO::DOWorld;
 
 	if (NJR::CheckSubName(filename, ".ido" ))
 	{
@@ -460,9 +459,9 @@ DOWorld* ReadDOWorld2011(string filename)
 	return pWorld;
 };
 
-DOWorld* ReadDOWorld2009(string filename)
+VEDO::DOWorld* ReadDOWorld2009(std::string filename)
 {
-	DOWorld* pWorld = new DOWorld;
+	VEDO::DOWorld* pWorld = new VEDO::DOWorld;
 
 	if (NJR::CheckSubName(filename, ".ido" ))
 	{
@@ -475,9 +474,9 @@ DOWorld* ReadDOWorld2009(string filename)
 	return pWorld;
 };
 
-DOWorld* ReadDOWorld2008(string filename)
+VEDO::DOWorld* ReadDOWorld2008(std::string filename)
 {
-	DOWorld* pWorld = new DOWorld;
+	VEDO::DOWorld* pWorld = new VEDO::DOWorld;
 
 	if (NJR::CheckSubName(filename, ".ido" ))
 	{
@@ -491,9 +490,9 @@ DOWorld* ReadDOWorld2008(string filename)
 };
 
 
-DOWorld* ReadDOWorld2007(string filename)
+VEDO::DOWorld* ReadDOWorld2007(std::string filename)
 {
-	DOWorld* pWorld = new DOWorld;
+	VEDO::DOWorld* pWorld = new VEDO::DOWorld;
 
 	if (NJR::CheckSubName(filename, ".ido" ))
 	{
@@ -506,9 +505,9 @@ DOWorld* ReadDOWorld2007(string filename)
 	return pWorld;
 };
 
-DOWorld* ReadDOWorld2006(string filename)
+VEDO::DOWorld* ReadDOWorld2006(std::string filename)
 {
-	DOWorld* pWorld = new DOWorld;
+	VEDO::DOWorld* pWorld = new VEDO::DOWorld;
 
 	if (NJR::CheckSubName(filename, ".ido" ))
 	{
@@ -521,7 +520,7 @@ DOWorld* ReadDOWorld2006(string filename)
 	return pWorld;
 };
 
-DOWorld* WriteDOWorld (string filename, DOWorld* pw)
+VEDO::DOWorld* WriteDOWorld (std::string filename, VEDO::DOWorld* pw)
 {
 	if (NJR::CheckSubName(filename, ".xml"))
 	{
@@ -554,7 +553,7 @@ DOWorld* WriteDOWorld (string filename, DOWorld* pw)
 	return pw;
 };
 
-DOWorld* WriteDOWorld (string filename, DOWorld* opw, DOWorld* cpw)
+VEDO::DOWorld* WriteDOWorld (std::string filename, VEDO::DOWorld* opw, VEDO::DOWorld* cpw)
 {
 	if (NJR::CheckSubName(filename, ".vpf"))
 	{
@@ -569,24 +568,24 @@ DOWorld* WriteDOWorld (string filename, DOWorld* opw, DOWorld* cpw)
 };
 
 /*
-void assm(string& f1, string& f2, string& des)
+void assm(std::string& f1, std::string& f2, std::string& des)
 {
-	DOWorld *pw1 = ReadDOWorld(f1);
-	DOWorld *pw2 = ReadDOWorld(f2);
-	vector<DOStatus*> vcd1 = pw1->GetDOStatus();
-	list<DOModel*> cDOModel = pw1->GetDOModel();
-	list<IactModel*> cIactModel = pw1->GetIactModel();
+	VEDO::DOWorld *pw1 = ReadDOWorld(f1);
+	VEDO::DOWorld *pw2 = ReadDOWorld(f2);
+	std::vector<VEDO::DOStatus*> vcd1 = pw1->GetDOStatus();
+	std::list<VEDO::DOModel*> cDOModel = pw1->GetDOModel();
+	std::list<VEDO::IactModel*> cIactModel = pw1->GetIactModel();
 
-	vector<DOStatus*> vcd2 = pw2->GetDOStatus();
-	vector<DOStatus*> vcd3(0);
+	std::vector<VEDO::DOStatus*> vcd2 = pw2->GetDOStatus();
+	std::vector<VEDO::DOStatus*> vcd3(0);
 
 	transform
 		(vcd1.begin(), vcd1.end(), back_inserter(vcd3), NJR::Copy_obj());
 	transform
 		(vcd2.begin(), vcd2.end(), back_inserter(vcd3), NJR::Copy_obj());
 
-	SystemParameter *pSystemParameter
-		= new SystemParameter
+	VEDO::SystemParameter *pSystemParameter
+		= new VEDO::SystemParameter
 			("Domino Test Benchmark 4",
 			"We Love YOU",
 			0.0,
@@ -594,10 +593,10 @@ void assm(string& f1, string& f2, string& des)
 			5e-6,
 			0.0,
 			vcd3.size(),
-			NJRvector3d(0.0, 0.0, -980.0),
-			Boundary()                    );
+			NJR::NJRvector3d(0.0, 0.0, -980.0),
+			VEDO::Boundary()                    );
 
-	DOWorld* pw3 = new DOWorld(pSystemParameter, cDOModel, cIactModel, vcd3);
+	VEDO::DOWorld* pw3 = new VEDO::DOWorld(pSystemParameter, cDOModel, cIactModel, vcd3);
 
 	pw3->WriteXML(des.c_str());
 
@@ -607,35 +606,35 @@ void assm(string& f1, string& f2, string& des)
 };
 */
 
-void ConList (string filename, unsigned long begin, unsigned long end)
+void ConList (std::string filename, unsigned long begin, unsigned long end)
 {
 	char ltoa[256];
 	unsigned long ulRecordCount;
 	for (ulRecordCount=begin; ulRecordCount<=end; ulRecordCount++)
 	{
-		string file = "knight -c " + filename + '_';
-		string out = filename + '_';
+		std::string file = "knight -c " + filename + '_';
+		std::string out = filename + '_';
 		sprintf(ltoa, "%d.ido\0", 10000000 + ulRecordCount);
 		file.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
 		sprintf(ltoa, "%d.vpf\0", 10000000 + ulRecordCount);
 		out.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
-		cout << file.c_str() << ' ' << out.c_str() << endl;
+		std::cout << file.c_str() << ' ' << out.c_str() << std::endl;
 	}
 };
 
-void ConListHEX (string filename, unsigned long begin, unsigned long end)
+void ConListHEX (std::string filename, unsigned long begin, unsigned long end)
 {
 	char ltoa[256];
 	unsigned long ulRecordCount;
 	for (ulRecordCount=begin; ulRecordCount<=end; ulRecordCount++)
 	{
-		string file = "knight -c " + filename + '_';
-		string out = filename + '_';
+		std::string file = "knight -c " + filename + '_';
+		std::string out = filename + '_';
 		sprintf(ltoa, "%p.ido\0", 0x10000000 + ulRecordCount);
 		file.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
 		sprintf(ltoa, "%p.vpf\0", 0x10000000 + ulRecordCount);
 		out.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
-		cout << file.c_str() << ' ' << out.c_str() << endl;
+		std::cout << file.c_str() << ' ' << out.c_str() << std::endl;
 	}
 };
 
@@ -644,46 +643,46 @@ void AssmListHEX ()
 	char ltoa[256];
 	unsigned long begin  = 0;
 	unsigned long end    = 1474;
-	string filename      = "bs";
+	std::string filename      = "bs";
 
 	unsigned long ulRecordCount;
 	for (ulRecordCount=begin; ulRecordCount<=end; ulRecordCount++)
 	{
-		string file = "knight -assm " + filename + "_A_";
-		string out  = filename + "_B_";
-		string des  = filename + "_C_";
+		std::string file = "knight -assm " + filename + "_A_";
+		std::string out  = filename + "_B_";
+		std::string des  = filename + "_C_";
 		sprintf(ltoa, "%p.xml\0", 0x10000000 + ulRecordCount);
 		file.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
 		sprintf(ltoa, "%p.xml\0", 0x10000000 + ulRecordCount);
 		out.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
 		sprintf(ltoa, "%p.xml\0", 0x10000000 + ulRecordCount);
 		des.append((ulRecordCount < 0x10010000) ? ltoa + 4 : ltoa);
-		cout
+		std::cout
 			<< file.c_str()
 			<< ' '
 			<< out.c_str()
 			<< ' '
 			<< des.c_str()
-			<< endl;
+			<< std::endl;
 	}
 };
 
 void AddDOInSpace
-	(NJRvector3d* LowerBoundary,
-	 NJRvector3d* UpperBoundary,
-	 string DOName,
-	 DOWorld* oWorld            )
+	(NJR::NJRvector3d* LowerBoundary,
+	 NJR::NJRvector3d* UpperBoundary,
+	 std::string DOName,
+	 VEDO::DOWorld* oWorld            )
 {
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	DOStatus dos
+	VEDO::DOStatus dos
 		(DOName,
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
-	*LowerBoundary += NJRvector3d(R, R, R);
-	*UpperBoundary -= NJRvector3d(R, R, R);
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
+	*LowerBoundary += NJR::NJRvector3d(R, R, R);
+	*UpperBoundary -= NJR::NJRvector3d(R, R, R);
 	for(double y=(LowerBoundary->y()); y<=(UpperBoundary->y()); y+=(2.0*R))
     {
 	    for(double z=(LowerBoundary->z()); z<=(UpperBoundary->z()); z+=(2.0*R))
@@ -693,28 +692,28 @@ void AddDOInSpace
 		    	 x<=(UpperBoundary->x());
 		    	 x+=(2.0*R)                    )
     		{
-				dos.SetPosition(NJRvector3d(x, y, z));
-				oWorld->AddDOStatus(new DOStatus(dos));
+				dos.SetPosition(NJR::NJRvector3d(x, y, z));
+				oWorld->AddDOStatus(new VEDO::DOStatus(dos));
 	    	}
 	    }
     }
 };
 
 void AddPotentialEnergy
-	(NJRvector3d* SourcePoint,
-	 string DOName,
-	 DOWorld* oWorld          )
+	(NJR::NJRvector3d* SourcePoint,
+	 std::string DOName,
+	 VEDO::DOWorld* oWorld          )
 {
-	      NJRvector3d vel;
-	const NJRvector3d ff = oWorld->GetSystemParameter()->GetFieldForce();
-	DOStatus new_dos
+	      NJR::NJRvector3d vel;
+	const NJR::NJRvector3d ff = oWorld->GetSystemParameter()->GetFieldForce();
+	VEDO::DOStatus new_dos
 		(DOName,
-		 NJRvector3d(ZERO),
-		 NJRvector3d(ZERO),
-		 NJRvector3d(AXIALX),
-		 NJRvector3d(AXIALZ),
-		 NJRvector3d(ZERO));
-	const DOStatus* dos = 0;
+		 NJR::NJRvector3d(NJRDXF::ZERO),
+		 NJR::NJRvector3d(NJRDXF::ZERO),
+		 NJR::NJRvector3d(NJRDXF::AXIALX),
+		 NJR::NJRvector3d(NJRDXF::AXIALZ),
+		 NJR::NJRvector3d(NJRDXF::ZERO));
+	const VEDO::DOStatus* dos = 0;
     double TempVelocitySquare;
 	for(unsigned long ul=0;
         ul < oWorld->GetSystemParameter()->GetDONumber();
@@ -743,19 +742,19 @@ void AddPotentialEnergy
 };
 
 void AddExternalVelocity
-	(NJRvector3d* pExternalVelocity,
-	 string DOName,
-	 DOWorld* oWorld                )
+	(NJR::NJRvector3d* pExternalVelocity,
+	 std::string DOName,
+	 VEDO::DOWorld* oWorld                )
 {
-	NJRvector3d vel;
-	DOStatus new_dos
+	NJR::NJRvector3d vel;
+	VEDO::DOStatus new_dos
 		(DOName,
-		 NJRvector3d(ZERO),
-		 NJRvector3d(ZERO),
-		 NJRvector3d(AXIALX),
-		 NJRvector3d(AXIALZ),
-		 NJRvector3d(ZERO));
-	const DOStatus* dos = 0;
+		 NJR::NJRvector3d(NJRDXF::ZERO),
+		 NJR::NJRvector3d(NJRDXF::ZERO),
+		 NJR::NJRvector3d(NJRDXF::AXIALX),
+		 NJR::NJRvector3d(NJRDXF::AXIALZ),
+		 NJR::NJRvector3d(NJRDXF::ZERO));
+	const VEDO::DOStatus* dos = 0;
 	for(unsigned long ul=0;
         ul < oWorld->GetSystemParameter()->GetDONumber();
         ul++                                             )
@@ -772,19 +771,19 @@ void AddExternalVelocity
 };
 
 void AddExternalAngularVelocity
-	(NJRvector3d* pExternalAngularVelocity,
-	 string DOName,
-	 DOWorld* oWorld                       )
+	(NJR::NJRvector3d* pExternalAngularVelocity,
+	 std::string DOName,
+	 VEDO::DOWorld* oWorld                       )
 {
-	NJRvector3d avel;
-	DOStatus new_dos
+	NJR::NJRvector3d avel;
+	VEDO::DOStatus new_dos
 		(DOName,
-		 NJRvector3d(ZERO),
-		 NJRvector3d(ZERO),
-		 NJRvector3d(AXIALX),
-		 NJRvector3d(AXIALZ),
-		 NJRvector3d(ZERO));
-	const DOStatus* dos = 0;
+		 NJR::NJRvector3d(NJRDXF::ZERO),
+		 NJR::NJRvector3d(NJRDXF::ZERO),
+		 NJR::NJRvector3d(NJRDXF::AXIALX),
+		 NJR::NJRvector3d(NJRDXF::AXIALZ),
+		 NJR::NJRvector3d(NJRDXF::ZERO));
+	const VEDO::DOStatus* dos = 0;
 	for(unsigned long ul=0;
         ul < oWorld->GetSystemParameter()->GetDONumber();
         ul++                                             )
@@ -801,22 +800,22 @@ void AddExternalAngularVelocity
 };
 
 void AddRandomDOInCartesianSpace
-	(NJRvector3d* LowerBoundary,
-	 NJRvector3d* UpperBoundary,
-	 string DOName,
+	(NJR::NJRvector3d* LowerBoundary,
+	 NJR::NJRvector3d* UpperBoundary,
+	 std::string DOName,
 	 unsigned long* num,
-	 DOWorld* oWorld            )
+	 VEDO::DOWorld* oWorld            )
 {
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	DOStatus dos
+	VEDO::DOStatus dos
 		(DOName,
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
-	*LowerBoundary += NJRvector3d(R, R, R);
-	*UpperBoundary -= NJRvector3d(R, R, R);
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
+	*LowerBoundary += NJR::NJRvector3d(R, R, R);
+	*UpperBoundary -= NJR::NJRvector3d(R, R, R);
 	double temp_x, temp_y, temp_z;
 	double xRange = (UpperBoundary->x()) - (LowerBoundary->x());
 	double yRange = (UpperBoundary->y()) - (LowerBoundary->y());
@@ -827,28 +826,28 @@ void AddRandomDOInCartesianSpace
 		temp_x = (double)(rand()) / (double)RAND_MAX * xRange;
 		temp_y = (double)(rand()) / (double)RAND_MAX * yRange;
 		temp_z = (double)(rand()) / (double)RAND_MAX * zRange;
-		cout << "Add Element: " << ul+1 << "/" << *num << endl;
-		dos.SetPosition(*LowerBoundary + NJRvector3d(temp_x, temp_y, temp_z));
-		oWorld->AddDOStatus(new DOStatus(dos));
+		std::cout << "Add Element: " << ul+1 << "/" << *num << std::endl;
+		dos.SetPosition(*LowerBoundary + NJR::NJRvector3d(temp_x, temp_y, temp_z));
+		oWorld->AddDOStatus(new VEDO::DOStatus(dos));
 	}
 };
 
 void AddRandomDOInCylindricalSpace
-	(NJRvector3d* Center,
+	(NJR::NJRvector3d* Center,
 	 double* r,
 	 double* h,
-	 string DOName,
+	 std::string DOName,
 	 unsigned long* num,
-	 DOWorld* oWorld     )
+	 VEDO::DOWorld* oWorld     )
 {
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	DOStatus dos
+	VEDO::DOStatus dos
 		(DOName,
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
 
 	*r -= R;
 	double dSquare_r = (*r) * (*r);
@@ -871,18 +870,18 @@ void AddRandomDOInCylindricalSpace
 		if(temp_x * temp_x + temp_y * temp_y <= dSquare_r)
 		{
 			temp_z = dZMin + (double)(rand()) / (double)RAND_MAX * (*h);
-			cout << "Add Element: " << ++ul << "/" << *num << endl;
-			dos.SetPosition(NJRvector3d(temp_x, temp_y, temp_z));
-			oWorld->AddDOStatus(new DOStatus(dos));
+			std::cout << "Add Element: " << ++ul << "/" << *num << std::endl;
+			dos.SetPosition(NJR::NJRvector3d(temp_x, temp_y, temp_z));
+			oWorld->AddDOStatus(new VEDO::DOStatus(dos));
 		}
 	}
 };
 
-map<string, double> CalculateGranularTemperature
-	(DOWorld* oWorld, GeometricShape& space, string DOName)
+std::map<std::string, double> CalculateGranularTemperature
+	(VEDO::DOWorld* oWorld, VEDO::GeometricShape& space, std::string DOName)
 {
-	const DOStatus* pDOS;
-	NJRvector3d     AvgV, AvgAV;
+	const VEDO::DOStatus* pDOS;
+	NJR::NJRvector3d     AvgV, AvgAV;
 	unsigned long   Counter = 0;
 
 	oWorld->TurnMonitor(false);
@@ -943,7 +942,7 @@ map<string, double> CalculateGranularTemperature
 			}
 		}
 	}
-	map<string, double> gt;
+	std::map<std::string, double> gt;
 	gt["Time"]
 		= oWorld->GetSystemParameter()->GetTimeCurrent();
 	gt["NumberOfElement"]                      = (double)Counter;
@@ -955,51 +954,51 @@ map<string, double> CalculateGranularTemperature
 };
 
 void AddRandomDOInSphericalSpace
-	(NJRvector3d* Center,
+	(NJR::NJRvector3d* Center,
 	 double* r,
-	 string DOName,
+	 std::string DOName,
 	 unsigned long* num,
-	 DOWorld* oWorld     )
+	 VEDO::DOWorld* oWorld     )
 {
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	DOStatus dos
+	VEDO::DOStatus dos
 		(DOName,
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
 	*r -= R;
 	double temp_x, temp_y, temp_z, temp_radius, temp_angle_1, temp_angle_2;
 	srand(time(0));
 	for(unsigned long ul=0; ul<(*num); ul++)
 	{
 		temp_radius  = (double)(rand()) / (double)RAND_MAX * (*r);
-		temp_angle_1 = (double)(rand()) / (double)RAND_MAX * 6.28318534;
-		temp_angle_2 = (double)(rand()) / (double)RAND_MAX * 6.28318534;
+		temp_angle_1 = (double)(rand()) / (double)RAND_MAX * NJR::dDoublePI;
+		temp_angle_2 = (double)(rand()) / (double)RAND_MAX * NJR::dDoublePI;
 		temp_x
 			= Center->x() + temp_radius * cos(temp_angle_1) * cos(temp_angle_2);
 		temp_y
 			= Center->y() + temp_radius * cos(temp_angle_1) * sin(temp_angle_2);
 		temp_z
 			= Center->z() + temp_radius * sin(temp_angle_1);
-		cout << "Add Element: " << ul+1 << "/" << *num << endl;
-		dos.SetPosition(NJRvector3d(temp_x, temp_y, temp_z));
-		oWorld->AddDOStatus(new DOStatus(dos));
+		std::cout << "Add Element: " << ul+1 << "/" << *num << std::endl;
+		dos.SetPosition(NJR::NJRvector3d(temp_x, temp_y, temp_z));
+		oWorld->AddDOStatus(new VEDO::DOStatus(dos));
 	}
 };
 
-void CombineModels(DOWorld* rWorld, DOWorld* oWorld)
+void CombineModels(VEDO::DOWorld* rWorld, VEDO::DOWorld* oWorld)
 {
 	unsigned long rNum = rWorld->GetSystemParameter()->GetDONumber();
 	unsigned long oNum = oWorld->GetSystemParameter()->GetDONumber();
-	DOStatus dos
+	VEDO::DOStatus dos
 		("NoName",
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
 	for(unsigned long ul=0; ul<oNum; ul++)
 	{
 		dos = *(oWorld->GetDOStatus(ul));
@@ -1007,42 +1006,42 @@ void CombineModels(DOWorld* rWorld, DOWorld* oWorld)
 			->GetDOModel(oWorld->GetDOStatus(ul)->GetDOName())->GetBehavior()
 				== "mobile"                                                  )
 		{
-			rWorld->AddDOStatus(new DOStatus(dos));
+			rWorld->AddDOStatus(new VEDO::DOStatus(dos));
 		}
 	}
 };
 
-void CombineModels(DOWorld* rWorld, DOWorld* oWorld, const string& sDOName)
+void CombineModels(VEDO::DOWorld* rWorld, VEDO::DOWorld* oWorld, const std::string& sDOName)
 {
 	unsigned long rNum = rWorld->GetSystemParameter()->GetDONumber();
 	unsigned long oNum = oWorld->GetSystemParameter()->GetDONumber();
-	DOStatus dos
+	VEDO::DOStatus dos
 		("NoName",
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
 	for(unsigned long ul=0; ul<oNum; ul++)
 	{
 		dos = *(oWorld->GetDOStatus(ul));
 		if (oWorld->GetDOStatus(ul)->GetDOName() == sDOName)
 		{
-			rWorld->AddDOStatus(new DOStatus(dos));
+			rWorld->AddDOStatus(new VEDO::DOStatus(dos));
 		}
 	}
 };
 
 double SCCFlowabilityIndex
-	(DOWorld* oWorld,
+	(VEDO::DOWorld* oWorld,
 	double StartPoint,
 	double EndPoint)
 {
 	unsigned long   DOnum  = oWorld->GetSystemParameter()->GetDONumber();
 	double          DOsize =  0.0;
-	const DOStatus* dos    =  0;
-	const DOModel*  dom    =  0;
-	NJRvector3d     DOpos(ZERO);
+	const VEDO::DOStatus* dos    =  0;
+	const VEDO::DOModel*  dom    =  0;
+	NJR::NJRvector3d     DOpos(NJRDXF::ZERO);
 	double          H1     =  0.0;
 	double          H2     =  0.0;
 	double          L1     =  0.0;
@@ -1083,14 +1082,15 @@ double SCCFlowabilityIndex
 		}
 	}
 
-	cout << "H1 = " << H1 << endl;
-	cout << "H2 = " << H2 << endl;
-	cout << "L1 = " << L1 << endl;
+	std::cout << "H1 = " << H1 << std::endl;
+	std::cout << "H2 = " << H2 << std::endl;
+	std::cout << "L1 = " << L1 << std::endl;
 	double Bm1 = (L1 - L) / L;
 	double Bm2 = 0.0;
 	if (H1 == 0.0)
 	{
-		cerr << "Numerical Error @ SCCFlowabilityIndex()!!" << endl;
+		std::cout << "Error!! Code: Knight.cpp - SCCFlowabilityIndex(VEDO::DOWorld*, double, double)" << std::endl;
+		exit(-1);
 	}
 	else
 	{
@@ -1107,17 +1107,17 @@ double SCCFlowabilityIndex
 	}
 };
 
-bool SCCViscosityIndex(DOWorld* oWorld)
+bool SCCViscosityIndex(VEDO::DOWorld* oWorld)
 {
 	unsigned long   DOnum
 		= oWorld->GetSystemParameter()->GetDONumber();
-	const DOStatus* dos                = 0;
-	const DOModel*  dom                = 0;
+	const VEDO::DOStatus* dos                = 0;
+	const VEDO::DOModel*  dom                = 0;
 	unsigned long   NumElements        = 0;
 	unsigned long   NumElementsInside  = 0;
 	unsigned long   NumElementsOutside = 0;
 	double          DOsize             = 0.0;
-	NJRvector3d     DOpos(ZERO);
+	NJR::NJRvector3d     DOpos(NJRDXF::ZERO);
 	for(unsigned long i=0; i<DOnum; i++)
 	{
 		dos = oWorld->GetDOStatus(i);
@@ -1138,22 +1138,22 @@ bool SCCViscosityIndex(DOWorld* oWorld)
 	}
 	NumElements = NumElementsInside + NumElementsOutside;
 
-	cout
+	std::cout
 		<< "Number of Mobile Elements = "
 		<< NumElements
-		<< endl
+		<< std::endl
 		<< "Inside elements           = "
 		<< NumElementsInside
 		<< "\t("
 		<< (double)NumElementsInside / (double)NumElements * 100.0
 		<< " %)"
-		<< endl
+		<< std::endl
 		<< "Outside elements          = "
 		<< NumElementsOutside
 		<< "\t("
 		<< (double)NumElementsOutside / (double)NumElements * 100.0
 		<< " %)"
-		<< endl;
+		<< std::endl;
 
 	if (NumElementsInside == 0)
 	{
@@ -1165,10 +1165,10 @@ bool SCCViscosityIndex(DOWorld* oWorld)
 	}
 };
 
-int main(int argc, char* argv[])
+int main (int argc, char* argv[])
 {
 	//NJR::RunTime("Anne's Knight Start");
-	vector<string> arg;
+	std::vector<std::string> arg;
 	for (int i=0; i<argc; i++)
 	{
 		arg.push_back(argv[i]);
@@ -1181,52 +1181,52 @@ int main(int argc, char* argv[])
 	else if ((arg[1] == "-a") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &xmin);
 		sscanf(argv[4], "%lg", &xmax);
 		sscanf(argv[5], "%lg", &ymin);
 		sscanf(argv[6], "%lg", &ymax);
 		sscanf(argv[7], "%lg", &zmin);
 		sscanf(argv[8], "%lg", &zmax);
-		NJRvector3d LowerBoundary(xmin, ymin, zmin);
-		NJRvector3d UpperBoundary(xmax, ymax, zmax);
-		DOWorld* oWorld = ReadDOWorld(arg[9]);
+		NJR::NJRvector3d LowerBoundary(xmin, ymin, zmin);
+		NJR::NJRvector3d UpperBoundary(xmax, ymax, zmax);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		AddDOInSpace(&LowerBoundary, &UpperBoundary, DOName, oWorld);
 		delete WriteDOWorld (arg[10], oWorld);
 	}
 	else if ((arg[1] == "-ap") && (arg.size() == 8))
 	{
 		double x, y, z;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &x);
 		sscanf(argv[4], "%lg", &y);
 		sscanf(argv[5], "%lg", &z);
-		DOWorld* oWorld = ReadDOWorld(arg[6]);
-		NJRvector3d SourcePoint(x, y, z);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[6]);
+		NJR::NJRvector3d SourcePoint(x, y, z);
 		AddPotentialEnergy(&SourcePoint, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld);
 	}
 	else if ((arg[1] == "-av") && (arg.size() == 8))
 	{
 		double dVx, dVy, dVz;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &dVx);
 		sscanf(argv[4], "%lg", &dVy);
 		sscanf(argv[5], "%lg", &dVz);
-		DOWorld* oWorld = ReadDOWorld(arg[6]);
-		NJRvector3d vExternalVelocity(dVx, dVy, dVz);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[6]);
+		NJR::NJRvector3d vExternalVelocity(dVx, dVy, dVz);
 		AddExternalVelocity(&vExternalVelocity, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld);
 	}
 	else if ((arg[1] == "-aav") && (arg.size() == 8))
 	{
 		double dAVx, dAVy, dAVz;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &dAVx);
 		sscanf(argv[4], "%lg", &dAVy);
 		sscanf(argv[5], "%lg", &dAVz);
-		DOWorld* oWorld = ReadDOWorld(arg[6]);
-		NJRvector3d vExternalAngularVelocity(dAVx, dAVy, dAVz);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[6]);
+		NJR::NJRvector3d vExternalAngularVelocity(dAVx, dAVy, dAVz);
 		AddExternalAngularVelocity(&vExternalAngularVelocity, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld);
 	}
@@ -1234,7 +1234,7 @@ int main(int argc, char* argv[])
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
 		unsigned long num = 0;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%d",  &num );
 		sscanf(argv[4], "%lg", &xmin);
 		sscanf(argv[5], "%lg", &xmax);
@@ -1242,9 +1242,9 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &ymax);
 		sscanf(argv[8], "%lg", &zmin);
 		sscanf(argv[9], "%lg", &zmax);
-		NJRvector3d LowerBoundary(xmin, ymin, zmin);
-		NJRvector3d UpperBoundary(xmax, ymax, zmax);
-		DOWorld* oWorld = ReadDOWorld(arg[10]);
+		NJR::NJRvector3d LowerBoundary(xmin, ymin, zmin);
+		NJR::NJRvector3d UpperBoundary(xmax, ymax, zmax);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[10]);
 		AddRandomDOInCartesianSpace
 			(&LowerBoundary, &UpperBoundary, DOName, &num, oWorld);
 		delete WriteDOWorld (arg[11], oWorld);
@@ -1253,15 +1253,15 @@ int main(int argc, char* argv[])
 	{
 		double x, y, z, r, h;
 		unsigned long num = 0;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%d", &num);
 		sscanf(argv[4], "%lg", &x);
 		sscanf(argv[5], "%lg", &y);
 		sscanf(argv[6], "%lg", &z);
 		sscanf(argv[7], "%lg", &r);
 		sscanf(argv[8], "%lg", &h);
-		NJRvector3d Center(x, y, z);
-		DOWorld* oWorld = ReadDOWorld(arg[9]);
+		NJR::NJRvector3d Center(x, y, z);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		AddRandomDOInCylindricalSpace(&Center, &r, &h, DOName, &num, oWorld);
 		delete WriteDOWorld (arg[10], oWorld);
 	}
@@ -1269,14 +1269,14 @@ int main(int argc, char* argv[])
 	{
 		double x, y, z, r;
 		unsigned long num = 0;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%d", &num);
 		sscanf(argv[4], "%lg", &x);
 		sscanf(argv[5], "%lg", &y);
 		sscanf(argv[6], "%lg", &z);
 		sscanf(argv[7], "%lg", &r);
-		NJRvector3d Center(x, y, z);
-		DOWorld* oWorld = ReadDOWorld(arg[8]);
+		NJR::NJRvector3d Center(x, y, z);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[8]);
 		AddRandomDOInSphericalSpace(&Center, &r, DOName, &num, oWorld);
 		delete WriteDOWorld (arg[9], oWorld);
 	}
@@ -1290,7 +1290,7 @@ int main(int argc, char* argv[])
 //	}
 	else if ((arg[1] == "-avg_info") && (arg.size() == 10))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[3], "%lg", &dXMin);
 		sscanf(argv[4], "%lg", &dXMax);
@@ -1298,11 +1298,11 @@ int main(int argc, char* argv[])
 		sscanf(argv[6], "%lg", &dYMax);
 		sscanf(argv[7], "%lg", &dZMin);
 		sscanf(argv[8], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[9], "%lg", &dMeshSize);
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 
 		// Fix boundary (stage 1: find first data)
 		double
@@ -1316,7 +1316,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -1344,18 +1344,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -1364,22 +1364,22 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the average information
 		double dTotalVolume = 0.0;
-		vector<double> vVolume;
+		std::vector<double> vVolume;
 		double dTotalMass   = 0.0;
-		NJRvector3d vMassCenter, vAverageVelocity, vAverageAngularVelocity;
+		NJR::NJRvector3d vMassCenter, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		ofstream FileSphericalElementVolume;
-		FileSphericalElementVolume.open("SphericalElementVolume.csv", ios::out);
+		std::ofstream FileSphericalElementVolume;
+		FileSphericalElementVolume.open("SphericalElementVolume.csv", std::ios::out);
 		FileSphericalElementVolume
 			<< "ElementID, "
 			<< "PositionX, PositionY, PositionZ, "
@@ -1387,8 +1387,8 @@ int main(int argc, char* argv[])
 			<< "AngularVelocityX, AngularVelocityY, AngularVelocityZ, "
 			<< "Radius, InsideVolume, "
 			<< "MassCenterX, MassCenterY, MassCenterZ"
-			<< endl;
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+			<< std::endl;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -1396,10 +1396,10 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvVolume
+			std::pair<double, NJR::NJRvector3d> pdvVolume
 				 = dom
 				 	->VolumeInsideBoundary(pDOS->GetPosition(), &BC, dMeshSize);
-			if((dom->GetShapeType() == Sphere) && (pdvVolume.first != 0.0))
+			if((dom->GetShapeType() == VEDO::Sphere) && (pdvVolume.first != 0.0))
 			{
 				FileSphericalElementVolume
 					<< ul                                      << ", "
@@ -1416,7 +1416,7 @@ int main(int argc, char* argv[])
 					<< pdvVolume.first                         << ", "
 					<< pdvVolume.second.x()                    << ", "
 					<< pdvVolume.second.y()                    << ", "
-					<< pdvVolume.second.z()                    << endl;
+					<< pdvVolume.second.z()                    << std::endl;
 			}
 
 			dWeighting           = dom->GetDensity() * dom->GetDensityFactor();
@@ -1458,7 +1458,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dTotalVolume * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dTotalVolume * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vVolume.size(); ul++)
 			{
 				vVTemp1
@@ -1526,8 +1526,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterX, BoxCenterY, BoxCenterZ, "
@@ -1547,7 +1547,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV"                 << endl
+			<< "GranularTemperatureAVzOverAV"                 << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                     << ", "
 			<< OriginalBC.GetCenter().y()                     << ", "
@@ -1581,15 +1581,15 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info") && (arg.size() == 11))
 	{
-		DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld         = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[4], "%lg", &dXMin);
 		sscanf(argv[5], "%lg", &dXMax);
@@ -1597,11 +1597,11 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dYMax);
 		sscanf(argv[8], "%lg", &dZMin);
 		sscanf(argv[9], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[10], "%lg", &dMeshSize);
-		const DOStatus *pDOS, *pDOSNextStep;
+		const VEDO::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
 			= oWorldNextStep->GetSystemParameter()->GetTimeCurrent()
 			- oWorld->GetSystemParameter()->GetTimeCurrent();
@@ -1618,7 +1618,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -1646,18 +1646,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -1666,22 +1666,22 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the average information
 		double dTotalVolume = 0.0;
-		vector<double> vVolume;
+		std::vector<double> vVolume;
 		double dTotalMass   = 0.0;
-		NJRvector3d vMassCenter, vAverageVelocity, vAverageAngularVelocity;
+		NJR::NJRvector3d vMassCenter, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		ofstream FileSphericalElementVolume;
-		FileSphericalElementVolume.open("SphericalElementVolume.csv", ios::out);
+		std::ofstream FileSphericalElementVolume;
+		FileSphericalElementVolume.open("SphericalElementVolume.csv", std::ios::out);
 		FileSphericalElementVolume
 			<< "ElementID, "
 			<< "PositionX, PositionY, PositionZ, "
@@ -1689,8 +1689,8 @@ int main(int argc, char* argv[])
 			<< "AngularVelocityX, AngularVelocityY, AngularVelocityZ, "
 			<< "Radius, InsideVolume, "
 			<< "MassCenterX, MassCenterY, MassCenterZ"
-			<< endl;
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+			<< std::endl;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -1699,10 +1699,10 @@ int main(int argc, char* argv[])
 			pDOS         = oWorld->GetDOStatus(ul);
 			pDOSNextStep = oWorldNextStep->GetDOStatus(ul);
 			dom          = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvVolume
+			std::pair<double, NJR::NJRvector3d> pdvVolume
 				 = dom
 				 	->VolumeInsideBoundary(pDOS->GetPosition(), &BC, dMeshSize);
-			if((dom->GetShapeType() == Sphere) && (pdvVolume.first != 0.0))
+			if((dom->GetShapeType() == VEDO::Sphere) && (pdvVolume.first != 0.0))
 			{
 				FileSphericalElementVolume
 					<< ul                                      << ", "
@@ -1725,7 +1725,7 @@ int main(int argc, char* argv[])
 					<< pdvVolume.first                         << ", "
 					<< pdvVolume.second.x()                    << ", "
 					<< pdvVolume.second.y()                    << ", "
-					<< pdvVolume.second.z()                    << endl;
+					<< pdvVolume.second.z()                    << std::endl;
 			}
 
 			dWeighting           = dom->GetDensity() * dom->GetDensityFactor();
@@ -1769,7 +1769,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dTotalVolume * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dTotalVolume * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vVolume.size(); ul++)
 			{
 				vVTemp1
@@ -1837,8 +1837,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterX, BoxCenterY, BoxCenterZ, "
@@ -1858,7 +1858,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV"                 << endl
+			<< "GranularTemperatureAVzOverAV"                 << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                     << ", "
 			<< OriginalBC.GetCenter().y()                     << ", "
@@ -1892,14 +1892,14 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info_xy") && (arg.size() == 10))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[3], "%lg", &dXMin);
 		sscanf(argv[4], "%lg", &dXMax);
@@ -1907,12 +1907,12 @@ int main(int argc, char* argv[])
 		sscanf(argv[6], "%lg", &dYMax);
 		sscanf(argv[7], "%lg", &dZMin);
 		sscanf(argv[8], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[9], "%lg", &dMeshSize);
 
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 
 		// Fix boundary (stage 1: find first data)
 		double
@@ -1926,7 +1926,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -1954,18 +1954,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -1974,21 +1974,21 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -1996,7 +1996,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2044,7 +2044,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -2112,8 +2112,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterX, "
@@ -2138,7 +2138,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV" << endl
+			<< "GranularTemperatureAVzOverAV" << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                     << ", "
 			<< OriginalBC.GetCenter().y()                     << ", "
@@ -2162,15 +2162,15 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info_xy") && (arg.size() == 11))
 	{
-		DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld         = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[4], "%lg", &dXMin);
 		sscanf(argv[5], "%lg", &dXMax);
@@ -2178,12 +2178,12 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dYMax);
 		sscanf(argv[8], "%lg", &dZMin);
 		sscanf(argv[9], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[10], "%lg", &dMeshSize);
 
-		const DOStatus *pDOS, *pDOSNextStep;
+		const VEDO::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
 			= oWorldNextStep->GetSystemParameter()->GetTimeCurrent()
 			- oWorld->GetSystemParameter()->GetTimeCurrent();
@@ -2200,7 +2200,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -2228,18 +2228,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -2248,21 +2248,21 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -2277,7 +2277,7 @@ int main(int argc, char* argv[])
 //				&& pDOS->GetPosition().z() < BC.GetUpperPoint().z() )
 //			{
 
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2328,7 +2328,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -2396,8 +2396,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterX, "
@@ -2422,7 +2422,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV" << endl
+			<< "GranularTemperatureAVzOverAV" << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                     << ", "
 			<< OriginalBC.GetCenter().y()                     << ", "
@@ -2446,14 +2446,14 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info_yz") && (arg.size() == 10))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[3], "%lg", &dXMin);
 		sscanf(argv[4], "%lg", &dXMax);
@@ -2461,12 +2461,12 @@ int main(int argc, char* argv[])
 		sscanf(argv[6], "%lg", &dYMax);
 		sscanf(argv[7], "%lg", &dZMin);
 		sscanf(argv[8], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[9], "%lg", &dMeshSize);
 
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 
 		// Fix boundary (stage 1: find first data)
 		double
@@ -2480,7 +2480,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -2508,18 +2508,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -2528,21 +2528,21 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -2550,7 +2550,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2596,7 +2596,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -2664,8 +2664,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterY, "
@@ -2690,7 +2690,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV" << endl
+			<< "GranularTemperatureAVzOverAV" << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().y()                     << ", "
 			<< OriginalBC.GetCenter().z()                     << ", "
@@ -2714,15 +2714,15 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info_yz") && (arg.size() == 11))
 	{
-		DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld         = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[4], "%lg", &dXMin);
 		sscanf(argv[5], "%lg", &dXMax);
@@ -2730,12 +2730,12 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dYMax);
 		sscanf(argv[8], "%lg", &dZMin);
 		sscanf(argv[9], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[10], "%lg", &dMeshSize);
 
-		const DOStatus *pDOS, *pDOSNextStep;
+		const VEDO::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
 			= oWorldNextStep->GetSystemParameter()->GetTimeCurrent()
 			- oWorld->GetSystemParameter()->GetTimeCurrent();
@@ -2752,7 +2752,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -2780,18 +2780,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -2800,21 +2800,21 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -2823,7 +2823,7 @@ int main(int argc, char* argv[])
 			pDOS = oWorld->GetDOStatus(ul);
 			pDOSNextStep = oWorldNextStep->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2871,7 +2871,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -2939,8 +2939,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterY, "
@@ -2965,7 +2965,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV" << endl
+			<< "GranularTemperatureAVzOverAV" << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().y()                     << ", "
 			<< OriginalBC.GetCenter().z()                     << ", "
@@ -2989,14 +2989,14 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info_xz") && (arg.size() == 10))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[3], "%lg", &dXMin);
 		sscanf(argv[4], "%lg", &dXMax);
@@ -3004,12 +3004,12 @@ int main(int argc, char* argv[])
 		sscanf(argv[6], "%lg", &dYMax);
 		sscanf(argv[7], "%lg", &dZMin);
 		sscanf(argv[8], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[9], "%lg", &dMeshSize);
 
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 
 		// Fix boundary (stage 1: find first data)
 		double
@@ -3023,7 +3023,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -3051,18 +3051,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -3071,21 +3071,21 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -3093,7 +3093,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -3139,7 +3139,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -3207,8 +3207,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterX, "
@@ -3233,7 +3233,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV" << endl
+			<< "GranularTemperatureAVzOverAV" << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                     << ", "
 			<< OriginalBC.GetCenter().z()                     << ", "
@@ -3257,15 +3257,15 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_info_xz") && (arg.size() == 11))
 	{
-		DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld         = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[4], "%lg", &dXMin);
 		sscanf(argv[5], "%lg", &dXMax);
@@ -3273,12 +3273,12 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dYMax);
 		sscanf(argv[8], "%lg", &dZMin);
 		sscanf(argv[9], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[10], "%lg", &dMeshSize);
 
-		const DOStatus *pDOS, *pDOSNextStep;
+		const VEDO::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
 			= oWorldNextStep->GetSystemParameter()->GetTimeCurrent()
 			- oWorld->GetSystemParameter()->GetTimeCurrent();
@@ -3295,7 +3295,7 @@ int main(int argc, char* argv[])
 				pDOS = oWorld->GetDOStatus(ul);
 				if
 					(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType()
-					 == Sphere                                            )
+					 == VEDO::Sphere                                            )
 				{
 					dRadius
 						= oWorld
@@ -3323,18 +3323,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld
 					->GetDOModel(pDOS->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -3343,21 +3343,21 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity, vvAverageAngularVelocity;
 
-		NJRvector3d vTempVelocity, vTempAngularVelocity;
+		NJR::NJRvector3d vTempVelocity, vTempAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -3366,7 +3366,7 @@ int main(int argc, char* argv[])
 			pDOS = oWorld->GetDOStatus(ul);
 			pDOSNextStep = oWorldNextStep->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -3414,7 +3414,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			NJRvector3d vVTemp1, vVTemp2;
+			NJR::NJRvector3d vVTemp1, vVTemp2;
 			for(unsigned long ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -3482,8 +3482,8 @@ int main(int argc, char* argv[])
 			vAverageAngularVelocity.Set(0.0, 0.0, 0.0);
 		}
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time, "
 			<< "BoxCenterX, "
@@ -3508,7 +3508,7 @@ int main(int argc, char* argv[])
 			<< "GranularTemperatureAV, "
 			<< "GranularTemperatureAVxOverAV, "
 			<< "GranularTemperatureAVyOverAV, "
-			<< "GranularTemperatureAVzOverAV" << endl
+			<< "GranularTemperatureAVzOverAV" << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                     << ", "
 			<< OriginalBC.GetCenter().z()                     << ", "
@@ -3532,15 +3532,15 @@ int main(int argc, char* argv[])
 			<< dGranularTemperatureAngularVelocity            << ", "
 			<< dGranularTemperatureAngularVelocityX           << ", "
 			<< dGranularTemperatureAngularVelocityY           << ", "
-			<< dGranularTemperatureAngularVelocityZ           << endl;
+			<< dGranularTemperatureAngularVelocityZ           << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld;
 	}
 	else if ((arg[1] == "-avg_rd_ntume") && (arg.size() == 11))
 	{
-		DOWorld* oWorld_1 = ReadDOWorld(arg[2]);
-		DOWorld* oWorld_2 = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld_1 = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld_2 = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[4], "%lg", &dXMin);
 		sscanf(argv[5], "%lg", &dXMax);
@@ -3548,13 +3548,13 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dYMax);
 		sscanf(argv[8], "%lg", &dZMin);
 		sscanf(argv[9], "%lg", &dZMax);
-		Boundary OriginalBC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary OriginalBC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 		sscanf(argv[10], "%lg", &dMeshSize);
 
-		const DOStatus* pDOS_1;
-		const DOStatus* pDOS_2;
+		const VEDO::DOStatus* pDOS_1;
+		const VEDO::DOStatus* pDOS_2;
 
 		// Fix boundary (stage 1: find first data)
 		double
@@ -3568,7 +3568,7 @@ int main(int argc, char* argv[])
 				pDOS_1 = oWorld_1->GetDOStatus(ul);
 				if
 					(oWorld_1->GetDOModel(pDOS_1->GetDOName())->GetShapeType()
-					 == Sphere                                                )
+					 == VEDO::Sphere                                                )
 				{
 					dRadius
 						= oWorld_1
@@ -3596,18 +3596,18 @@ int main(int argc, char* argv[])
 			ul++                                           )
 		{
 			pDOS_1 = oWorld_1->GetDOStatus(ul);
-			if(oWorld_1->GetDOModel(pDOS_1->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld_1->GetDOModel(pDOS_1->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				dRadius
 					= oWorld_1
 					->GetDOModel(pDOS_1->GetDOName())
 					->GetShapeAttributes().sphere.radius;
-				dNewXMin = min(pDOS_1->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = max(pDOS_1->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = min(pDOS_1->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = max(pDOS_1->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = min(pDOS_1->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = max(pDOS_1->GetPosition().z() + dRadius, dNewZMax);
+				dNewXMin = std::min(pDOS_1->GetPosition().x() - dRadius, dNewXMin);
+				dNewXMax = std::max(pDOS_1->GetPosition().x() + dRadius, dNewXMax);
+				dNewYMin = std::min(pDOS_1->GetPosition().y() - dRadius, dNewYMin);
+				dNewYMax = std::max(pDOS_1->GetPosition().y() + dRadius, dNewYMax);
+				dNewZMin = std::min(pDOS_1->GetPosition().z() - dRadius, dNewZMin);
+				dNewZMax = std::max(pDOS_1->GetPosition().z() + dRadius, dNewZMax);
 			}
 		};
 		if(dXMin < dNewXMin) dXMin = dNewXMin;
@@ -3616,28 +3616,30 @@ int main(int argc, char* argv[])
 		if(dYMax > dNewYMax) dYMax = dNewYMax;
 		if(dZMin < dNewZMin) dZMin = dNewZMin;
 		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		Boundary BC
-			(NJRvector3d(dXMin, dYMin, dZMin),
-			 NJRvector3d(dXMax, dYMax, dZMax) );
+		VEDO::Boundary BC
+			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		double dProjectedArea = 0.0;
-		vector<double> vProjectedArea;
-		NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		std::vector<double> vProjectedArea;
+		NJR::NJRvector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
-		const  DOModel* dom = 0;
+		const  VEDO::DOModel* dom = 0;
 		double dWeighting;
 		double dTotalWeighting = 0.0;
-		vector<NJRvector3d> vvAverageVelocity;
+		std::vector<NJR::NJRvector3d> vvAverageVelocity;
 
-		NJRvector3d vTempVelocity;
+		NJR::NJRvector3d vTempVelocity;
 
 		double dTimeFrequency
 			= oWorld_2->GetSystemParameter()->GetTimeCurrent()
 			- oWorld_1->GetSystemParameter()->GetTimeCurrent();
 		if (dTimeFrequency <= 0.0)
 		{
-			cout << "The order of <.xml | .ido> file error!!" << endl;
+			std::cout
+				<< "Error!! Code: Knight -avg_rd_ntume" << std::endl
+				<< "        Note: The order of <.xml | .ido> file error" << std::endl;
 			exit(0);
 		}
 		dTimeFrequency = 1.0 / dTimeFrequency;
@@ -3651,7 +3653,7 @@ int main(int argc, char* argv[])
 			pDOS_2 = oWorld_2->GetDOStatus(ul);
 			dom    = oWorld_1->GetDOModel(pDOS_1->GetDOName());
 
-			pair<double, NJRvector3d> pdvProjectedArea
+			std::pair<double, NJR::NJRvector3d> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS_1->GetPosition(), &BC, dMeshSize);
@@ -3690,8 +3692,8 @@ int main(int argc, char* argv[])
 			vCentroid = OriginalBC.GetCenter();
 		};
 
-		ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", ios::app);
+		std::ofstream FileAverageInformation;
+		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
 		FileAverageInformation
 			<< "Time_1, Time_2, "
 			<< "BoxCenterX, "
@@ -3704,7 +3706,7 @@ int main(int argc, char* argv[])
 			<< "ProjectedArea, "
 			<< "AverageVelocityX, "
 			<< "AverageVelocityY, "
-			<< "AverageVelocityZ" << endl
+			<< "AverageVelocityZ" << std::endl
 			<< oWorld_1->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< oWorld_2->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< OriginalBC.GetCenter().x()                       << ", "
@@ -3717,7 +3719,7 @@ int main(int argc, char* argv[])
 			<< dProjectedArea                                   << ", "
 			<< vAverageVelocity.x()                             << ", "
 			<< vAverageVelocity.y()                             << ", "
-			<< vAverageVelocity.z()                             << endl;
+			<< vAverageVelocity.z()                             << std::endl;
 		FileAverageInformation.close();
 
 		delete oWorld_1, oWorld_2;
@@ -3731,23 +3733,23 @@ int main(int argc, char* argv[])
 		if (   NJR::CheckSubName(arg[2], ".irt")
 			&& NJR::CheckSubName(arg[3], ".csv"))
 		{
-			string irtfilename = arg[2];
-			string csvfilename = arg[3];
-			IactRecordTab* pIactRecordTab
-				= new IactRecordTab(irtfilename.c_str());
+			std::string irtfilename = arg[2];
+			std::string csvfilename = arg[3];
+			VEDO::IactRecordTab* pIactRecordTab
+				= new VEDO::IactRecordTab(irtfilename.c_str());
 			pIactRecordTab->WriteTextIRT(csvfilename.c_str());
 			delete pIactRecordTab;
 		}
 	}
 	else if ((arg[1] == "-ca2s") && (arg.size() == 8))
 	{
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		double a, b, c, d;
 		sscanf(argv[3], "%lg", &a);
 		sscanf(argv[4], "%lg", &b);
 		sscanf(argv[5], "%lg", &c);
 		sscanf(argv[6], "%lg", &d);
-		DOWorld* oWorld    = ReadDOWorld(arg[7]);
+		VEDO::DOWorld* oWorld    = ReadDOWorld(arg[7]);
 		unsigned counter   = 0;
 		double   dArea     = 0.0;
 		double   dAreaTemp;
@@ -3770,26 +3772,26 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
-		cout
+		std::cout
 			<< "Surface           : "
-			<< a << "x+" << b << "y+" << c << "z=" << d << endl
-			<< "Element's name    : " << DOName         << endl
+			<< a << "x+" << b << "y+" << c << "z=" << d << std::endl
+			<< "Element's name    : " << DOName         << std::endl
 			<< "Cross area        : " << dArea
-			<< '(' << counter << " elements)"           << endl;
+			<< '(' << counter << " elements)"           << std::endl;
 	}
 	else if ((arg[1] == "-cf2s") && (arg.size() == 8))
 	{
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		double a, b, c, d;
 		sscanf(argv[3], "%lg", &a);
 		sscanf(argv[4], "%lg", &b);
 		sscanf(argv[5], "%lg", &c);
 		sscanf(argv[6], "%lg", &d);
-		DOWorld*    oWorld        = ReadDOWorld(arg[7]);
+		VEDO::DOWorld*    oWorld        = ReadDOWorld(arg[7]);
 		unsigned    counter       = 0;
 		double      dArea         = 0.0;
 		double      dAreaTemp;
-		NJRvector3d vFluxVelocity, vFluxAngularVelocity;
+		NJR::NJRvector3d vFluxVelocity, vFluxAngularVelocity;
 		for
 			(unsigned long ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -3814,8 +3816,8 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
- 		ofstream FileFlux;
-		FileFlux.open("Flux.csv", ios::out);
+ 		std::ofstream FileFlux;
+		FileFlux.open("Flux.csv", std::ios::out);
 		FileFlux
 			<< "Time"                                         << ", "
 			<< "a"                                            << ", "
@@ -3831,7 +3833,7 @@ int main(int argc, char* argv[])
 			<< "FluxAngularVelocity"                          << ", "
 			<< "FluxAngularVelocityX"                         << ", "
 			<< "FluxAngularVelocityY"                         << ", "
-			<< "FluxAngularVelocityZ"                         << endl
+			<< "FluxAngularVelocityZ"                         << std::endl
 			<< oWorld->GetSystemParameter()->GetTimeCurrent() << ", "
 			<< a                                              << ", "
 			<< b                                              << ", "
@@ -3846,12 +3848,12 @@ int main(int argc, char* argv[])
 			<< vFluxAngularVelocity.length()                  << ", "
 			<< vFluxAngularVelocity.x()                       << ", "
 			<< vFluxAngularVelocity.y()                       << ", "
-			<< vFluxAngularVelocity.z()                       << endl;
+			<< vFluxAngularVelocity.z()                       << std::endl;
 		FileFlux.close();
 	}
 	else if ((arg[1] == "-cal") && (arg.size() == 9))
 	{
-		DOWorld *oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld *oWorld = ReadDOWorld(arg[2]);
 		double xmin, xmax, ymin, ymax, zmin, zmax;
 		CalcCoordinateNum CCN;
 		CalcDensity CDN;
@@ -3861,18 +3863,18 @@ int main(int argc, char* argv[])
 		sscanf(argv[6], "%lg", &ymax);
 		sscanf(argv[7], "%lg", &zmin);
 		sscanf(argv[8], "%lg", &zmax);
-		cout
+		std::cout
 			<< "CoordinatNumber = "
 			<< CCN.computeAvgCoordinateNum
 				(oWorld, xmin, xmax, ymin, ymax, zmin, zmax)
-			<< endl
+			<< std::endl
 			<< "CalculateDensity = "
 			<< CDN.computeDensity(oWorld, xmin, xmax, ymin, ymax, zmin, zmax)
-			<< endl;
+			<< std::endl;
 	}
 	else if ((arg[1] == "-coord_num") && (arg.size() == 4))
 	{
-		DOWorld *oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld *oWorld = ReadDOWorld(arg[2]);
 		CalcCoordinateNum CCN;
 		CCN.outputCoordinateNumVTK(oWorld, arg[3]);
 	}
@@ -3882,7 +3884,7 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-clean_udv") && (arg.size() == 4))
 	{
-		IactRecordTab* pIactRecordTab = new IactRecordTab;
+		VEDO::IactRecordTab* pIactRecordTab = new VEDO::IactRecordTab;
 		pIactRecordTab->ReadIRT(arg[2].c_str());
 		pIactRecordTab->CleanUserDefinedValueInImpactStatus();
 		pIactRecordTab->WriteIRT(arg[3].c_str());
@@ -3894,23 +3896,23 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-cm") && (arg.size() == 5))
 	{
-		DOWorld* rWorld = ReadDOWorld(arg[2]);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* rWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		oWorld->SetModels(rWorld);
 		delete WriteDOWorld(arg[4], oWorld);
 	}
 	else if ((arg[1] == "-comb") && (arg.size() == 5))
 	{
-		DOWorld* rWorld = ReadDOWorld(arg[2]);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* rWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		CombineModels(rWorld, oWorld);
 		delete WriteDOWorld(arg[4], rWorld);
 	}
 	else if ((arg[1] == "-comb") && (arg.size() == 6))
 	{
-		DOWorld* rWorld = ReadDOWorld(arg[2]);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
-		string DOName = argv[4];
+		VEDO::DOWorld* rWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		std::string DOName = argv[4];
 		CombineModels(rWorld, oWorld, DOName);
 		delete WriteDOWorld(arg[5], rWorld);
 	}
@@ -3928,21 +3930,21 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-distance") && (arg.size() == 6))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dX, dY, dZ;
 		sscanf(argv[3], "%lg", &dX);
 		sscanf(argv[4], "%lg", &dY);
 		sscanf(argv[5], "%lg", &dZ);
-		NJRvector3d vP(dX, dY, dZ);
-		map<double, unsigned> mduDistance;
+		NJR::NJRvector3d vP(dX, dY, dZ);
+		std::map<double, unsigned> mduDistance;
 
 		for(unsigned u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
 			mduDistance[(oWorld->GetDOStatus(u)->GetPosition() - vP).length()] = u;
 
-		ofstream ofDistance("Distance.csv", ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << endl;
+		std::ofstream ofDistance("Distance.csv", std::ios::out);
+		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
-		for (map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
+		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
 											 mduiDistance++                      )
 		{
@@ -3953,7 +3955,7 @@ int main(int argc, char* argv[])
 				<< mduiDistance->first << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().x() << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().y() << ", "
-				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << endl;
+				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << std::endl;
 			uRank++;
 		}
 		ofDistance.close();
@@ -3961,13 +3963,13 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-distance_xy") && (arg.size() == 5))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dX, dY;
 		sscanf(argv[3], "%lg", &dX);
 		sscanf(argv[4], "%lg", &dY);
-		NJRvector3d vP(dX, dY, 0.0);
-		NJRvector3d vD;
-		map<double, unsigned> mduDistance;
+		NJR::NJRvector3d vP(dX, dY, 0.0);
+		NJR::NJRvector3d vD;
+		std::map<double, unsigned> mduDistance;
 
 		for(unsigned u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
 		{
@@ -3976,10 +3978,10 @@ int main(int argc, char* argv[])
 			mduDistance[vD.length()] = u;
 		}
 
-		ofstream ofDistance("Distance.csv", ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << endl;
+		std::ofstream ofDistance("Distance.csv", std::ios::out);
+		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
-		for (map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
+		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
 											 mduiDistance++                      )
 		{
@@ -3990,7 +3992,7 @@ int main(int argc, char* argv[])
 				<< mduiDistance->first << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().x() << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().y() << ", "
-				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << endl;
+				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << std::endl;
 			uRank++;
 		}
 		ofDistance.close();
@@ -3998,13 +4000,13 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-distance_yz") && (arg.size() == 5))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dY, dZ;
 		sscanf(argv[3], "%lg", &dY);
 		sscanf(argv[4], "%lg", &dZ);
-		NJRvector3d vP(0.0, dY, dZ);
-		NJRvector3d vD;
-		map<double, unsigned> mduDistance;
+		NJR::NJRvector3d vP(0.0, dY, dZ);
+		NJR::NJRvector3d vD;
+		std::map<double, unsigned> mduDistance;
 
 		for(unsigned u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
 		{
@@ -4013,10 +4015,10 @@ int main(int argc, char* argv[])
 			mduDistance[vD.length()] = u;
 		}
 
-		ofstream ofDistance("Distance.csv", ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << endl;
+		std::ofstream ofDistance("Distance.csv", std::ios::out);
+		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
-		for (map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
+		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
 											 mduiDistance++                      )
 		{
@@ -4027,7 +4029,7 @@ int main(int argc, char* argv[])
 				<< mduiDistance->first << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().x() << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().y() << ", "
-				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << endl;
+				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << std::endl;
 			uRank++;
 		}
 		ofDistance.close();
@@ -4035,13 +4037,13 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-distance_zx") && (arg.size() == 5))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dX, dZ;
 		sscanf(argv[3], "%lg", &dZ);
 		sscanf(argv[4], "%lg", &dX);
-		NJRvector3d vP(dX, 0.0, dZ);
-		NJRvector3d vD;
-		map<double, unsigned> mduDistance;
+		NJR::NJRvector3d vP(dX, 0.0, dZ);
+		NJR::NJRvector3d vD;
+		std::map<double, unsigned> mduDistance;
 
 		for(unsigned u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
 		{
@@ -4050,10 +4052,10 @@ int main(int argc, char* argv[])
 			mduDistance[vD.length()] = u;
 		}
 
-		ofstream ofDistance("Distance.csv", ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << endl;
+		std::ofstream ofDistance("Distance.csv", std::ios::out);
+		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
-		for (map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
+		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
 											 mduiDistance++                      )
 		{
@@ -4064,7 +4066,7 @@ int main(int argc, char* argv[])
 				<< mduiDistance->first << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().x() << ", "
 				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().y() << ", "
-				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << endl;
+				<< oWorld->GetDOStatus(mduiDistance->second)->GetPosition().z() << std::endl;
 			uRank++;
 		}
 		ofDistance.close();
@@ -4076,16 +4078,16 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-cse") && (arg.size() == 4))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
-		string irtfile(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
+		std::string irtfile(arg[2]);
 		irtfile = irtfile.substr(0, irtfile.size() - 4) += ".irt";
-//		oWorld->ClearSeparatedElements(new IactRecordTab(irtfile.c_str()));
+//		oWorld->ClearSeparatedElements(new VEDO::IactRecordTab(irtfile.c_str()));
 		oWorld->ClearSeparatedElements();
 		delete WriteDOWorld (arg[3], oWorld);
 	}
 	else if ((arg[1] == "-distribution") && (arg.size() >= 11))
 	{
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[3], "%lg", &dXMin);
 		sscanf(argv[4], "%lg", &dXMax);
@@ -4094,18 +4096,18 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dZMin);
 		sscanf(argv[8], "%lg", &dZMax);
 		sscanf(argv[9], "%lg", &dMeshSize);
-		DOWorld* oWorld = ReadDOWorld(arg[10]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[10]);
 		oWorld
 			->SetBoundary
-			(Boundary
-				(NJRvector3d(dXMin, dYMin, dZMin),
-				 NJRvector3d(dXMax, dYMax, dZMax) ));
-		pair<NJRvector3d, NJRvector3d> pDistribution
+			(VEDO::Boundary
+				(NJR::NJRvector3d(dXMin, dYMin, dZMin),
+				 NJR::NJRvector3d(dXMax, dYMax, dZMax) ));
+		std::pair<NJR::NJRvector3d, NJR::NJRvector3d> pDistribution
 			= oWorld->Distribution(dMeshSize);
- 		ofstream FileDistribution;
-		FileDistribution.open("Distribution.csv", ios::out);
+ 		std::ofstream FileDistribution;
+		FileDistribution.open("Distribution.csv", std::ios::out);
 		FileDistribution
-			<< "X, Y, Z, XMin, XMax, YMin, YMax, ZMin, ZMax" << endl
+			<< "X, Y, Z, XMin, XMax, YMin, YMax, ZMin, ZMax" << std::endl
 			<< 0.5 * (dXMin + dXMax)                         << ", "
 			<< 0.5 * (dYMin + dYMax)                         << ", "
 			<< 0.5 * (dZMin + dZMax)                         << ", "
@@ -4114,40 +4116,40 @@ int main(int argc, char* argv[])
 			<< pDistribution.first.y()                       << ", "
 			<< pDistribution.second.y()                      << ", "
 			<< pDistribution.first.z()                       << ", "
-			<< pDistribution.second.z()                      << endl;
+			<< pDistribution.second.z()                      << std::endl;
 		FileDistribution.close();
 	}
 	else if ((arg[1] == "-e") && (arg.size() == 5))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		oWorld->EraseDOStatus(oWorld->FindDO(argv[2]));
 		delete WriteDOWorld (arg[4], oWorld);
 	}
 	else if ((arg[1] == "-energy") && (arg.size() == 3))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		oWorld->CalculateSystemEnergy();
-		SystemParameter* sp = oWorld->GetSystemParameter();
+		VEDO::SystemParameter* sp = oWorld->GetSystemParameter();
 
-		ofstream FileEnergy;
-		FileEnergy.open("energy.txt", ios::out);
+		std::ofstream FileEnergy;
+		FileEnergy.open("energy.txt", std::ios::out);
 		FileEnergy
-			<< "<Symbols>" << endl
-			<< "\tST    : Simulated Time" << endl
-			<< "\tSE    : System Energy (Total)" << endl
-			<< "\tPE    : Potential Energy (Total)" << endl
-			<< "\tKE    : Kinetic Energy (Total)" << endl
-			<< "\tKET   : Kinetic Energy (Translation)" << endl
-			<< "\tKER   : Kinetic Energy (Rotation)" << endl
-			<< "\tMinV  : Minimal Velocity" << endl
-			<< "\tMaxV  : Maximal Velocity" << endl
-			<< "\tMinAV : Minimal Angular Velocity" << endl
-			<< "\tMaxAV : Maximal Angular Velocity" << endl
-			<< "\tNormV  : Norm of Momentum" << endl
-			<< "\tNormAV : Norm of Angular Momentum" << endl
-			<< endl
+			<< "<Symbols>" << std::endl
+			<< "\tST    : Simulated Time" << std::endl
+			<< "\tSE    : System Energy (Total)" << std::endl
+			<< "\tPE    : Potential Energy (Total)" << std::endl
+			<< "\tKE    : Kinetic Energy (Total)" << std::endl
+			<< "\tKET   : Kinetic Energy (Translation)" << std::endl
+			<< "\tKER   : Kinetic Energy (Rotation)" << std::endl
+			<< "\tMinV  : Minimal Velocity" << std::endl
+			<< "\tMaxV  : Maximal Velocity" << std::endl
+			<< "\tMinAV : Minimal Angular Velocity" << std::endl
+			<< "\tMaxAV : Maximal Angular Velocity" << std::endl
+			<< "\tNormV  : Norm of Momentum" << std::endl
+			<< "\tNormAV : Norm of Angular Momentum" << std::endl
+			<< std::endl
 			<< "ST, SE, PE, KE, KET, KER, MinV, MaxV, MinAV, MaxAV, NormV, NormAV"
-			<< endl
+			<< std::endl
 			<< sp->GetTimeCurrent()          << ", "
 			<< sp->GetEnergyPotential()
 			 + sp->GetEnergyTranslation()
@@ -4162,18 +4164,18 @@ int main(int argc, char* argv[])
 			<< sp->GetAngularVelocityMin()   << ", "
 			<< sp->GetAngularVelocityMax()   << ", "
 			<< sp->GetMomentumNorm()         << ", "
-			<< sp->GetAngularMomentumNorm()  << endl;
+			<< sp->GetAngularMomentumNorm()  << std::endl;
 		FileEnergy.close();
 	}
 	else if ((arg[1] == "-freeze") && (arg.size() == 4))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		oWorld->FreezeAllElements();
 		delete WriteDOWorld (arg[3], oWorld);
 	}
 	else if ((arg[1] == "-freeze") && (arg.size() == 5))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		oWorld->FreezeElements(arg[2]);
 		delete WriteDOWorld (arg[4], oWorld);
 	}
@@ -4185,8 +4187,8 @@ int main(int argc, char* argv[])
 		double        dAngle2XAxis = 0.0;
 		double        dAngle2YAxis = 0.0;
 		double        dAngle2ZAxis = 0.0;
-		DOWorld* oWorld      = ReadDOWorld(arg[2]);
-		string DOName   = argv[3];
+		VEDO::DOWorld* oWorld      = ReadDOWorld(arg[2]);
+		std::string DOName   = argv[3];
 		sscanf(argv[4] , "%d" , &CutNumX);
 		sscanf(argv[5] , "%d" , &CutNumY);
 		sscanf(argv[6] , "%d" , &CutNumZ);
@@ -4198,14 +4200,14 @@ int main(int argc, char* argv[])
 			 dAngle2YAxis*0.01745329261,
 			 dAngle2ZAxis*0.01745329261 );
 
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 		unsigned long StartNumber = 0;
 		while(   StartNumber < oWorld->GetSystemParameter()->GetDONumber()
 			  && (oWorld->GetDOStatus(StartNumber)->GetDOName() != DOName))
 		{
 			StartNumber++;
 		}
-		NJRvector3d PTemp(oWorld->GetDOStatus(StartNumber)->GetPosition());
+		NJR::NJRvector3d PTemp(oWorld->GetDOStatus(StartNumber)->GetPosition());
 		double XMin = PTemp.x();
 		double YMin = PTemp.y();
 		double ZMin = PTemp.z();
@@ -4256,7 +4258,7 @@ int main(int argc, char* argv[])
 		double width  = (XMax - XMin) / (double)CutNumX;
 		double length = (YMax - YMin) / (double)CutNumY;
 		double height = (ZMax - ZMin) / (double)CutNumZ;
-		GSRectangle space("Granular Temperature Space", width, length, height);
+		VEDO::GSRectangle space("Granular Temperature Space", width, length, height);
 		double XCentral = 0.5 * (XMin + XMax);
 		double YCentral = 0.5 * (YMin + YMax);
 		double ZCentral = 0.5 * (ZMin + ZMax);
@@ -4265,9 +4267,9 @@ int main(int argc, char* argv[])
 		unsigned long YCounter;
 		unsigned long ZCounter;
 
-		map<string, double> gt;
-		ofstream FileGT;
-		FileGT.open("GranularTemperature.csv", ios::out);
+		std::map<std::string, double> gt;
+		std::ofstream FileGT;
+		FileGT.open("GranularTemperature.csv", std::ios::out);
 		FileGT
 			<< "Index, "
 			<< "Time, "
@@ -4278,7 +4280,7 @@ int main(int argc, char* argv[])
 			<< "AergageVelocity, "
 			<< "GranularTemperatureV, "
 			<< "AergageAngularVelocity, "
-			<< "GranularTemperatureAV"   << endl;
+			<< "GranularTemperatureAV"   << std::endl;
 		for(double x=XMin+0.5*width; XCounter<=CutNumX; x+=width, XCounter++)
 		{
 			YCounter = 1;
@@ -4294,13 +4296,13 @@ int main(int argc, char* argv[])
 					 z+=height, ZCounter++    )
 				{
 					space.SetStatus
-						(new DOStatus
+						(new VEDO::DOStatus
 							("No Name",
-							 NJRvector3d(x, y, z),
-							 NJRvector3d(ZERO),
-							 NJRvector3d(AXIALX),
-							 NJRvector3d(AXIALZ),
-							 NJRvector3d(ZERO)    ));
+							 NJR::NJRvector3d(x, y, z),
+							 NJR::NJRvector3d(NJRDXF::ZERO),
+							 NJR::NJRvector3d(NJRDXF::AXIALX),
+							 NJR::NJRvector3d(NJRDXF::AXIALZ),
+							 NJR::NJRvector3d(NJRDXF::ZERO)    ));
 					gt = CalculateGranularTemperature(oWorld, space, DOName);
 					FileGT
 						<< "Zone-"
@@ -4315,7 +4317,7 @@ int main(int argc, char* argv[])
 						<< gt["AverageVelocity"]                      << ", "
 						<< gt["GranularTemperatureOfVelocity"]        << ", "
 						<< gt["AverageAngularVelocity"]               << ", "
-						<< gt["GranularTemperatureOfAngularVelocity"] << endl;
+						<< gt["GranularTemperatureOfAngularVelocity"] << std::endl;
 				}
 			}
 			FileGT.close();
@@ -4325,8 +4327,8 @@ int main(int argc, char* argv[])
 	else if ((arg[1] == "-gt_rectangle") && (arg.size() == 16))
 	{
 		double width, length, height, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
-		string DOName = argv[3];
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
+		std::string DOName = argv[3];
 		sscanf(argv[4], "%lg", &width);
 		sscanf(argv[5], "%lg", &length);
 		sscanf(argv[6], "%lg", &height);
@@ -4339,19 +4341,19 @@ int main(int argc, char* argv[])
 		sscanf(argv[13], "%lg", &Zx);
 		sscanf(argv[14], "%lg", &Zy);
 		sscanf(argv[15], "%lg", &Zz);
-		GSRectangle space("Granular Temperature Space", width, length, height);
+		VEDO::GSRectangle space("Granular Temperature Space", width, length, height);
 		space.SetStatus
-			(new DOStatus
+			(new VEDO::DOStatus
 				("No Name",
-				 NJRvector3d(x, y, z),
-				 NJRvector3d(ZERO),
-				 NJRvector3d(Xx, Xy, Xz),
-				 NJRvector3d(Zx, Zy, Zz),
-				 NJRvector3d(ZERO)       ));
-		map<string, double> gt
+				 NJR::NJRvector3d(x, y, z),
+				 NJR::NJRvector3d(NJRDXF::ZERO),
+				 NJR::NJRvector3d(Xx, Xy, Xz),
+				 NJR::NJRvector3d(Zx, Zy, Zz),
+				 NJR::NJRvector3d(NJRDXF::ZERO)       ));
+		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
-		ofstream FileGT;
-		FileGT.open("GranularTemperature.csv", ios::out);
+		std::ofstream FileGT;
+		FileGT.open("GranularTemperature.csv", std::ios::out);
 		FileGT
 			<< "Time, "
 			<< "ElementNumber, "
@@ -4364,15 +4366,15 @@ int main(int argc, char* argv[])
 			<< gt["AverageVelocity"]                       << ", "
 			<< gt["GranularTemperatureOfVelocity"]         << ", "
 			<< gt["AverageAngularVelocity"]                << ", "
-			<< gt["GranularTemperatureOfAngularVelocity"]  << endl;
+			<< gt["GranularTemperatureOfAngularVelocity"]  << std::endl;
 		FileGT.close();
 		delete oWorld;
 	}
 	else if ((arg[1] == "-gt_cylinder") && (arg.size() == 15))
 	{
 		double radius, height, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
-		string DOName = argv[3];
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
+		std::string DOName = argv[3];
 		sscanf(argv[4], "%lg", &radius);
 		sscanf(argv[5], "%lg", &height);
 		sscanf(argv[6], "%lg", &x);
@@ -4384,40 +4386,40 @@ int main(int argc, char* argv[])
 		sscanf(argv[12], "%lg", &Zx);
 		sscanf(argv[13], "%lg", &Zy);
 		sscanf(argv[14], "%lg", &Zz);
-		GSCylinder space("Granular Temperature Space", radius, height);
+		VEDO::GSCylinder space("Granular Temperature Space", radius, height);
 		space.SetStatus
-			(new DOStatus
+			(new VEDO::DOStatus
 				("No Name",
-				 NJRvector3d(x, y, z),
-				 NJRvector3d(ZERO),
-				 NJRvector3d(Xx, Xy, Xz),
-				 NJRvector3d(Zx, Zy, Zz),
-				 NJRvector3d(ZERO)       ));
-		map<string, double> gt
+				 NJR::NJRvector3d(x, y, z),
+				 NJR::NJRvector3d(NJRDXF::ZERO),
+				 NJR::NJRvector3d(Xx, Xy, Xz),
+				 NJR::NJRvector3d(Zx, Zy, Zz),
+				 NJR::NJRvector3d(NJRDXF::ZERO)       ));
+		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
-		ofstream FileGT;
-		FileGT.open("GranularTemperature.csv", ios::out);
+		std::ofstream FileGT;
+		FileGT.open("GranularTemperature.csv", std::ios::out);
 		FileGT
 			<< "Time, "
 			<< "ElementNumber, "
 			<< "AergageVelocity, "
 			<< "GranularTemperatureV, "
 			<< "AergageAngularVelocity, "
-			<< "GranularTemperatureAV"                     << endl
+			<< "GranularTemperatureAV"                     << std::endl
 			<< gt["Time"]                                  << ", "
 			<< (unsigned long)gt["NumberOfElement"]        << ", "
 			<< gt["AverageVelocity"]                       << ", "
 			<< gt["GranularTemperatureOfVelocity"]         << ", "
 			<< gt["AverageAngularVelocity"]                << ", "
-			<< gt["GranularTemperatureOfAngularVelocity"]  << endl;
+			<< gt["GranularTemperatureOfAngularVelocity"]  << std::endl;
 		FileGT.close();
 		delete oWorld;
 	}
 	else if ((arg[1] == "-gt_sphere") && (arg.size() == 14))
 	{
 		double radius, height, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
-		string DOName = argv[3];
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
+		std::string DOName = argv[3];
 		sscanf(argv[4], "%lg", &radius);
 		sscanf(argv[5], "%lg", &x);
 		sscanf(argv[6], "%lg", &y);
@@ -4428,19 +4430,19 @@ int main(int argc, char* argv[])
 		sscanf(argv[11], "%lg", &Zx);
 		sscanf(argv[12], "%lg", &Zy);
 		sscanf(argv[13], "%lg", &Zz);
-		GSSphere space("Granular Temperature Space", radius);
+		VEDO::GSSphere space("Granular Temperature Space", radius);
 		space.SetStatus
-			(new DOStatus
+			(new VEDO::DOStatus
 				("No Name",
-				 NJRvector3d(x, y, z),
-				 NJRvector3d(ZERO),
-				 NJRvector3d(Xx, Xy, Xz),
-				 NJRvector3d(Zx, Zy, Zz),
-				 NJRvector3d(ZERO)       ));
-		map<string, double> gt
+				 NJR::NJRvector3d(x, y, z),
+				 NJR::NJRvector3d(NJRDXF::ZERO),
+				 NJR::NJRvector3d(Xx, Xy, Xz),
+				 NJR::NJRvector3d(Zx, Zy, Zz),
+				 NJR::NJRvector3d(NJRDXF::ZERO)       ));
+		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
-		ofstream FileGT;
-		FileGT.open("GranularTemperature.csv", ios::out);
+		std::ofstream FileGT;
+		FileGT.open("GranularTemperature.csv", std::ios::out);
 		FileGT
 			<< "Time, "
 			<< "ElementNumber, "
@@ -4453,15 +4455,15 @@ int main(int argc, char* argv[])
 			<< gt["AverageVelocity"]                       << ", "
 			<< gt["GranularTemperatureOfVelocity"]         << ", "
 			<< gt["AverageAngularVelocity"]                << ", "
-			<< gt["GranularTemperatureOfAngularVelocity"]  << endl;
+			<< gt["GranularTemperatureOfAngularVelocity"]  << std::endl;
 		FileGT.close();
 		delete oWorld;
 	}
 	else if ((arg[1] == "-gt_ellipsoid") && (arg.size() == 16))
 	{
 		double XLength, YLength, ZLength, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
-		string DOName = argv[3];
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
+		std::string DOName = argv[3];
 		sscanf(argv[4], "%lg", &XLength);
 		sscanf(argv[5], "%lg", &YLength);
 		sscanf(argv[6], "%lg", &ZLength);
@@ -4474,20 +4476,20 @@ int main(int argc, char* argv[])
 		sscanf(argv[13], "%lg", &Zx);
 		sscanf(argv[14], "%lg", &Zy);
 		sscanf(argv[15], "%lg", &Zz);
-		GSEllipsoid space
+		VEDO::GSEllipsoid space
 			("Granular Temperature Space", XLength, YLength, ZLength);
 		space.SetStatus
-			(new DOStatus
+			(new VEDO::DOStatus
 				("No Name",
-				 NJRvector3d(x, y, z),
-				 NJRvector3d(ZERO),
-				 NJRvector3d(Xx, Xy, Xz),
-				 NJRvector3d(Zx, Zy, Zz),
-				 NJRvector3d(ZERO)       ));
-		map<string, double> gt
+				 NJR::NJRvector3d(x, y, z),
+				 NJR::NJRvector3d(NJRDXF::ZERO),
+				 NJR::NJRvector3d(Xx, Xy, Xz),
+				 NJR::NJRvector3d(Zx, Zy, Zz),
+				 NJR::NJRvector3d(NJRDXF::ZERO)       ));
+		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
-		ofstream FileGT;
-		FileGT.open("GranularTemperature.csv", ios::out);
+		std::ofstream FileGT;
+		FileGT.open("GranularTemperature.csv", std::ios::out);
 		FileGT
 			<< "Time, "
 			<< "ElementNumber, "
@@ -4500,7 +4502,7 @@ int main(int argc, char* argv[])
 			<< gt["AverageVelocity"]                       << ", "
 			<< gt["GranularTemperatureOfVelocity"]         << ", "
 			<< gt["AverageAngularVelocity"]                << ", "
-			<< gt["GranularTemperatureOfAngularVelocity"]  << endl;
+			<< gt["GranularTemperatureOfAngularVelocity"]  << std::endl;
 		FileGT.close();
 		delete oWorld;
 	}
@@ -4510,7 +4512,7 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-inside") && (arg.size() == 9))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[3], "%lg", &dXMin);
 		sscanf(argv[4], "%lg", &dXMax);
@@ -4519,11 +4521,11 @@ int main(int argc, char* argv[])
 		sscanf(argv[7], "%lg", &dZMin);
 		sscanf(argv[8], "%lg", &dZMax);
 
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 		double dRadius;
-		NJRvector3d vPosition;
-		ofstream oFileElementInside;
-		oFileElementInside.open("ElementInside.txt", ios::out);
+		NJR::NJRvector3d vPosition;
+		std::ofstream oFileElementInside;
+		oFileElementInside.open("ElementInside.txt", std::ios::out);
 
 		for(unsigned long ul=0;
 			ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -4531,7 +4533,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			pDOS->GetPosition();
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				vPosition = pDOS->GetPosition();
 				dRadius
@@ -4551,7 +4553,7 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		oFileElementInside << endl;
+		oFileElementInside << std::endl;
 		oFileElementInside.close();
 
 		delete oWorld;
@@ -4559,14 +4561,14 @@ int main(int argc, char* argv[])
 	else if ((arg[1] == "-lattice_bcc") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &xmin);
 		sscanf(argv[4], "%lg", &xmax);
 		sscanf(argv[5], "%lg", &ymin);
 		sscanf(argv[6], "%lg", &ymax);
 		sscanf(argv[7], "%lg", &zmin);
 		sscanf(argv[8], "%lg", &zmax);
-		DOWorld* oWorld = ReadDOWorld(arg[9]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		double d
 			= 2.0
 			* oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
@@ -4579,7 +4581,7 @@ int main(int argc, char* argv[])
 		init.Create(DOName, oWorld);
 		oWorld
 			->Shift
-				(NJRvector3d
+				(NJR::NJRvector3d
 					(rectCenter[0]-0.5*d,
 					 rectCenter[1]-0.5*d,
 					 rectCenter[2]-0.5*d), DOName);
@@ -4588,14 +4590,14 @@ int main(int argc, char* argv[])
 	else if ((arg[1] == "-lattice_fcc") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &xmin);
 		sscanf(argv[4], "%lg", &xmax);
 		sscanf(argv[5], "%lg", &ymin);
 		sscanf(argv[6], "%lg", &ymax);
 		sscanf(argv[7], "%lg", &zmin);
 		sscanf(argv[8], "%lg", &zmax);
-		DOWorld* oWorld = ReadDOWorld(arg[9]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		double d
 			= 2.0
 			* oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
@@ -4608,7 +4610,7 @@ int main(int argc, char* argv[])
 		init.Create(DOName, oWorld);
 		oWorld
 			->Shift
-				(NJRvector3d
+				(NJR::NJRvector3d
 					(rectCenter[0]-0.5*d,
 					 rectCenter[1]-0.5*d,
 					 rectCenter[2]-0.5*d), DOName);
@@ -4617,14 +4619,14 @@ int main(int argc, char* argv[])
 	else if ((arg[1] == "-lattice_scc") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &xmin);
 		sscanf(argv[4], "%lg", &xmax);
 		sscanf(argv[5], "%lg", &ymin);
 		sscanf(argv[6], "%lg", &ymax);
 		sscanf(argv[7], "%lg", &zmin);
 		sscanf(argv[8], "%lg", &zmax);
-		DOWorld* oWorld = ReadDOWorld(arg[9]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		double d
 			= 2.0
 			* oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
@@ -4637,7 +4639,7 @@ int main(int argc, char* argv[])
 		init.Create(DOName, oWorld);
 		oWorld
 			->Shift
-				(NJRvector3d
+				(NJR::NJRvector3d
 					(rectCenter[0]-0.5*d,
 					 rectCenter[1]-0.5*d,
 					 rectCenter[2]-0.5*d), DOName);
@@ -4645,22 +4647,22 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-profile_Info2Y") && (arg.size() == 7))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXmin, dXmax, dZmin, dZmax;
 		sscanf(argv[3], "%lg", &dXmin);
 		sscanf(argv[4], "%lg", &dXmax);
 		sscanf(argv[5], "%lg", &dZmin);
 		sscanf(argv[6], "%lg", &dZmax);
-		const DOStatus* pDOS;
+		const VEDO::DOStatus* pDOS;
 
-		map<double, unsigned long> mInformation;
-		map<double, unsigned long>::iterator mpInformation;
+		std::map<double, unsigned long> mInformation;
+		std::map<double, unsigned long>::iterator mpInformation;
 		for(unsigned long ul=0;
 			ul<oWorld->GetSystemParameter()->GetDONumber();
 			ul++                                           )
 		{
 			pDOS = oWorld->GetDOStatus(ul);
-			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == Sphere)
+			if(oWorld->GetDOModel(pDOS->GetDOName())->GetShapeType() == VEDO::Sphere)
 			{
 				if(    (pDOS->GetPosition().x() >= dXmin)
 					&& (pDOS->GetPosition().x() <= dXmax)
@@ -4672,9 +4674,9 @@ int main(int argc, char* argv[])
 			};
 		};
 
-		ofstream FileProfile;
-		FileProfile.open("Profile.csv", ios::out);
-		FileProfile << "Px, Py, Pz, Vx, Vy, Vz, AVx, AVy, AVz, R" << endl;
+		std::ofstream FileProfile;
+		FileProfile.open("Profile.csv", std::ios::out);
+		FileProfile << "Px, Py, Pz, Vx, Vy, Vz, AVx, AVy, AVz, R" << std::endl;
 		for(mpInformation  = mInformation.begin();
 			mpInformation != mInformation.end();
 			mpInformation++                       )
@@ -4692,7 +4694,7 @@ int main(int argc, char* argv[])
 				<< pDOS->GetAngularVelocity().z() << ", "
 				<< oWorld
 					->GetDOModel(pDOS->GetDOName())
-					->GetShapeAttributes().sphere.radius << endl;
+					->GetShapeAttributes().sphere.radius << std::endl;
 		};
 		FileProfile.close();
 
@@ -4702,40 +4704,40 @@ int main(int argc, char* argv[])
 	{
 		double dMeshSize;
 		sscanf(argv[2], "%lg", &dMeshSize);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
-		cout
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		std::cout
 			<< "Time = "
 			<< oWorld->GetSystemParameter()->GetTimeCurrent()
 			<< '\t'
 			<< "Projected Area (X) = "
 			<< oWorld->ProjectedAreaX(dMeshSize)
-			<< endl;
+			<< std::endl;
 	}
 	else if ((arg[1] == "-projected_area_y") && (arg.size() == 4))
 	{
 		double dMeshSize;
 		sscanf(argv[2], "%lg", &dMeshSize);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
-		cout
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		std::cout
 			<< "Time = "
 			<< oWorld->GetSystemParameter()->GetTimeCurrent()
 			<< '\t'
 			<< "Projected Area (Y) = "
 			<< oWorld->ProjectedAreaY(dMeshSize)
-			<< endl;
+			<< std::endl;
 	}
 	else if ((arg[1] == "-projected_area_z") && (arg.size() == 4))
 	{
 		double dMeshSize;
 		sscanf(argv[2], "%lg", &dMeshSize);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
-		cout
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		std::cout
 			<< "Time = "
 			<< oWorld->GetSystemParameter()->GetTimeCurrent()
 			<< '\t'
 			<< "Projected Area (Z) = "
 			<< oWorld->ProjectedAreaZ(dMeshSize)
-			<< endl;
+			<< std::endl;
 	}
 	else if ((arg[1] == "-rotate") && (arg.size() == 7))
 	{
@@ -4745,7 +4747,7 @@ int main(int argc, char* argv[])
 		sscanf(argv[2], "%lg", &dAngle2XAxis);
 		sscanf(argv[3], "%lg", &dAngle2YAxis);
 		sscanf(argv[4], "%lg", &dAngle2ZAxis);
-		DOWorld* oWorld = ReadDOWorld(arg[5]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[5]);
 
 		oWorld->Rotate
 			(dAngle2XAxis*0.0174532925199433,
@@ -4755,42 +4757,42 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-sccBm1") && (arg.size() == 3))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double Bm = SCCFlowabilityIndex(oWorld, 2.0, 28.0);
-		cout << endl << "Bm = " << Bm << endl << endl;
+		std::cout << std::endl << "Bm = " << Bm << std::endl << std::endl;
 	}
 	else if ((arg[1] == "-sccBm2") && (arg.size() == 3))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double Bm = SCCFlowabilityIndex(oWorld, 8.0, 65.0);
-		cout << endl << "Bm = " << Bm << endl << endl;
+		std::cout << std::endl << "Bm = " << Bm << std::endl << std::endl;
 	}
 	else if ((arg[1] == "-sccRm") && (arg.size() == 3))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		bool Rm = SCCViscosityIndex(oWorld);
 		if (Rm)
 		{
-			cout
-				<< endl
+			std::cout
+				<< std::endl
 				<< "All of the elements have passed the gate!!"
-				<< endl
-				<< endl;
+				<< std::endl
+				<< std::endl;
 		}
 		else
 		{
-			cout << endl << "Not yet..." << endl << endl;
+			std::cout << std::endl << "Not yet..." << std::endl << std::endl;
 		}
 	}
 	else if ((arg[1] == "-shift") && (arg.size() == 8))
 	{
 		double x, y, z;
-		string DOName = argv[2];
+		std::string DOName = argv[2];
 		sscanf(argv[3], "%lg", &x);
 		sscanf(argv[4], "%lg", &y);
 		sscanf(argv[5], "%lg", &z);
-		DOWorld* oWorld = ReadDOWorld(arg[6]);
-		oWorld->Shift(NJRvector3d(x, y, z), DOName);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[6]);
+		oWorld->Shift(NJR::NJRvector3d(x, y, z), DOName);
 		delete WriteDOWorld (arg[7], oWorld);
 	}
 	else if ((arg[1] == "-shift_all") && (arg.size() == 7))
@@ -4799,13 +4801,13 @@ int main(int argc, char* argv[])
 		sscanf(argv[2], "%lg", &x);
 		sscanf(argv[3], "%lg", &y);
 		sscanf(argv[4], "%lg", &z);
-		DOWorld* oWorld = ReadDOWorld(arg[5]);
-		oWorld->Shift(NJRvector3d(x, y, z));
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[5]);
+		oWorld->Shift(NJR::NJRvector3d(x, y, z));
 		delete WriteDOWorld (arg[6], oWorld);
 	}
 	else if ((arg[1] == "-sort") && (arg.size() == 4))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		oWorld->SortingDOStatus();
 		delete WriteDOWorld (arg[3], oWorld);
 	}
@@ -4815,10 +4817,10 @@ int main(int argc, char* argv[])
 		sscanf(argv[2], "%lg", &dX);
 		sscanf(argv[3], "%lg", &dY);
 		sscanf(argv[4], "%lg", &dZ);
-		NJRvector3d vP(dX, dY, dZ);
-		DOWorld* oWorld = ReadDOWorld(arg[5]);
+		NJR::NJRvector3d vP(dX, dY, dZ);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[5]);
 
-		map<double, unsigned long> mIndex;
+		std::map<double, unsigned long> mIndex;
 		double dD;
 		for (unsigned long ul=0;
 			 ul<(oWorld->GetSystemParameter()->GetDONumber());
@@ -4829,11 +4831,11 @@ int main(int argc, char* argv[])
 		}
 
 		unsigned long ulN;
-		ofstream FileSortDistance;
-		FileSortDistance.open("ElementSorting.csv", ios::out);
+		std::ofstream FileSortDistance;
+		FileSortDistance.open("ElementSorting.csv", std::ios::out);
 		FileSortDistance
-			<< "Distance, SerialNumber, DOName, Px, Py, Pz" << endl;
-		for (map<double, unsigned long>::iterator mpIndex=mIndex.begin();
+			<< "Distance, SerialNumber, DOName, Px, Py, Pz" << std::endl;
+		for (std::map<double, unsigned long>::iterator mpIndex=mIndex.begin();
 			 mpIndex!=mIndex.end();
 			 mpIndex++                                                   )
 		{
@@ -4844,7 +4846,7 @@ int main(int argc, char* argv[])
 				<< oWorld->GetDOStatus(ulN)->GetDOName()       << ", "
 				<< oWorld->GetDOStatus(ulN)->GetPosition().x() << ", "
 				<< oWorld->GetDOStatus(ulN)->GetPosition().y() << ", "
-				<< oWorld->GetDOStatus(ulN)->GetPosition().z() << endl;
+				<< oWorld->GetDOStatus(ulN)->GetPosition().z() << std::endl;
 		}
 
 		FileSortDistance.close();
@@ -4857,7 +4859,7 @@ int main(int argc, char* argv[])
 		sscanf(argv[3], "%lg", &dTimeStop);
 		sscanf(argv[4], "%lg", &dTimeInterval);
 		sscanf(argv[5], "%lg", &dTimeCurrent);
-		DOWorld* oWorld = ReadDOWorld(arg[6]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[6]);
 		oWorld
 			->SetSimulatedTime
 				(dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent);
@@ -4865,35 +4867,35 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-show") && (arg.size() == 4))
 	{
-		DOWorld* oWorld = ReadDOWorld(arg[2]);
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		unsigned uID;
 		sscanf(argv[3], "%d", &uID);
 		if(uID < oWorld->GetSystemParameter()->GetDONumber())
 		{
-			ofstream ofInformation("ObjectInformation.csv", ios::out);
-			const DOStatus* dosp = oWorld->GetDOStatus(uID);
-			NJRvector3d vV;
-			ofInformation << "Item, X, Y, Z" << endl;
+			std::ofstream ofInformation("ObjectInformation.csv", std::ios::out);
+			const VEDO::DOStatus* dosp = oWorld->GetDOStatus(uID);
+			NJR::NJRvector3d vV;
+			ofInformation << "Item, X, Y, Z" << std::endl;
 			vV = dosp->GetOrientationX();
 			ofInformation
 				<< "OrientationX, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << endl;
+				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
 			vV = dosp->GetOrientationZ();
 			ofInformation
 				<< "OrientationZ, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << endl;
+				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
 			vV = dosp->GetPosition();
 			ofInformation
 				<< "Position, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << endl;
+				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
 			vV = dosp->GetVelocity();
 			ofInformation
 				<< "Velocity, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << endl;
+				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
 			vV = dosp->GetAngularVelocity();
 			ofInformation
 				<< "AngularVelocity, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << endl;
+				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
 			ofInformation.close();
 		}
 		delete oWorld;
@@ -4920,14 +4922,14 @@ int main(int argc, char* argv[])
 	}
 	else if ((arg[1] == "-u10irt") && (arg.size() == 4))
 	{
-		IactRecordTab* pIactRecordTab = new IactRecordTab;
+		VEDO::IactRecordTab* pIactRecordTab = new VEDO::IactRecordTab;
 		pIactRecordTab->ReadIRT2010(arg[2].c_str());
 		pIactRecordTab->WriteIRT(arg[3].c_str());
 		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-u11irt") && (arg.size() == 4))
 	{
-		IactRecordTab* pIactRecordTab = new IactRecordTab;
+		VEDO::IactRecordTab* pIactRecordTab = new VEDO::IactRecordTab;
 		pIactRecordTab->ReadIRT2011(arg[2].c_str());
 		pIactRecordTab->WriteIRT(arg[3].c_str());
 		delete pIactRecordTab;
@@ -4936,14 +4938,14 @@ int main(int argc, char* argv[])
 	{
 		double dMeshSize;
 		sscanf(argv[2], "%lg", &dMeshSize);
-		DOWorld* oWorld = ReadDOWorld(arg[3]);
-		cout
+		VEDO::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		std::cout
 			<< "Time = "
 			<< oWorld->GetSystemParameter()->GetTimeCurrent()
 			<< ", "
 			<< "Volume = "
 			<< oWorld->Volume(dMeshSize)
-			<< endl;
+			<< std::endl;
 	}
 	else
 	{

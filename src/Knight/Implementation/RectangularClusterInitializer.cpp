@@ -7,8 +7,6 @@
 #include <string>
 #include <cmath>
 
-using namespace std;
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -23,7 +21,7 @@ RectangularClusterInitializer::RectangularClusterInitializer
 
 RectangularClusterInitializer::~RectangularClusterInitializer()
 {
-	// cout << "RectangularClusterInitializer deleted" << endl;
+	// std::cout << "RectangularClusterInitializer deleted" << std::endl;
 }
 
 void RectangularClusterInitializer::SetRectangleSize

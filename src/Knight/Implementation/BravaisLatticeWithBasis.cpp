@@ -6,8 +6,6 @@
 #include <NJR/Interfaces/vector3d.h>
 #include <limits>
 
-using namespace std;
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -20,8 +18,8 @@ BravaisLatticeWithBasis::BravaisLatticeWithBasis()
         for(int coord=0; coord<3; coord++)
             latticeVectors[vec][coord] = (vec==coord? 1. :0.);
 
-    vector<NJRvector3d> atomsCoord;
-    atomsCoord.push_back(NJRvector3d(0., 0., 0.));
+    std::vector<NJR::NJRvector3d> atomsCoord;
+    atomsCoord.push_back(NJR::NJRvector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
 }
 
@@ -82,7 +80,7 @@ void BravaisLatticeWithBasis::ClosestAtomCartesianCoordinates(
                               const double position[3]) const
 {
     int coord;
-    double distSq,closestDistanceSq = numeric_limits<double>::max();
+    double distSq,closestDistanceSq = std::numeric_limits<double>::max();
 	double atomIndices[3],atomPosition[3];
     // find closest lattice site
     int latticeIndices[3];
@@ -161,15 +159,19 @@ void BravaisLatticeWithBasis::ClosestAtomCartesianCoordinates(
 void BravaisLatticeWithBasis::RotateLatticeVectors(double rotation[3][3])
 {
     double newLatticeVectors[3][3];
-    if(fabs(Determinant(rotation,3)-1.) > 1.0e-11)
+
+	if(fabs(Determinant(rotation,3)-1.) > 1.0e-11)
 	{
-        cerr
-        	<< "[BravaisLatticeWithBasis::RotateLatticeVectors] "
-        	<< "this is not a rotation matrix"
-        	<< endl;
+		#ifdef _VEDO_DEBUG
+			std::cout
+				<< "[BravaisLatticeWithBasis::RotateLatticeVectors] "
+				<< "this is not a rotation matrix"
+				<< std::endl;
+		#endif   // _VEDO_DEBUG
 		return;
 	}
-    double test1, test2;   // check that rotation is a rotation matrix (ie det R = +1 , and the norm of its colums and row is 1)
+
+	double test1, test2;   // check that rotation is a rotation matrix (ie det R = +1 , and the norm of its colums and row is 1)
     for(int vec=0; vec<3; vec++)
     {
         test1 = test2 = 0.;
@@ -184,12 +186,15 @@ void BravaisLatticeWithBasis::RotateLatticeVectors(double rotation[3][3])
             	+= rotation[coord][k]*latticeVectors[vec][k];
             }
         }
-        if((fabs(test1-1.) > 1.0e-10) || (fabs(test2-1.)> 1.0e-10))
+
+		if((fabs(test1-1.) > 1.0e-10) || (fabs(test2-1.)> 1.0e-10))
 		{
-			cerr
-				<< "[BravaisLatticeWithBasis::RotateLatticeVectors] "
-				<< "this is not a rotation matrix"
-				<< endl;
+			#ifdef _VEDO_DEBUG
+				std::cout
+					<< "[BravaisLatticeWithBasis::RotateLatticeVectors] "
+					<< "this is not a rotation matrix"
+					<< std::endl;
+			#endif   // _VEDO_DEBUG
 			return;
 		}
     }
@@ -269,11 +274,11 @@ void BravaisLatticeWithBasis::UpdateMemberVariables()
     volumeOfCell = Determinant(latticeVectors,3);
     assert(volumeOfCell > 0.) ; // we impose a positively oriented basis
 
-    // we look for the smallest length of any vector of the form \sum a_i v_i,
-    //			where v_i is a lattice vector and a_i = -1, 0, 1
+    // we look for the smallest length of any std::vector of the form \sum a_i v_i,
+    //			where v_i is a lattice std::vector and a_i = -1, 0, 1
     double maxi = 0.0;
-    double mini = numeric_limits<double>::max();
-    double miniinside = numeric_limits<double>::max();
+    double mini = std::numeric_limits<double>::max();
+    double miniinside = std::numeric_limits<double>::max();
     double vect[3] ,norm;
     int i, k, index[3];
 
@@ -413,21 +418,21 @@ void BravaisLatticeWithBasis::SetLatticeVectors
 }
 
 void BravaisLatticeWithBasis::SetAtomsCoordinatesInCell(
-                              vector<NJRvector3d> atomsCoord,
-                              vector<string> *pAtomTypes)
+                              std::vector<NJR::NJRvector3d> atomsCoord,
+                              std::vector<std::string> *pAtomTypes)
 {
     atomTypes.clear();
     atomsCoordinatesInCell.clear();
     const int nAtomsPerCell = atomsCoord.size();
     for(int at=0; at<nAtomsPerCell; ++at)
     {
-        string name = (pAtomTypes ? (*pAtomTypes)[at] : "");
+        std::string name = (pAtomTypes ? (*pAtomTypes)[at] : "");
         AddAtomInCell(atomsCoord[at], name);
     }
 }
 
-void BravaisLatticeWithBasis::AddAtomInCell(NJRvector3d atomCoord,
-                                            string name)
+void BravaisLatticeWithBasis::AddAtomInCell(NJR::NJRvector3d atomCoord,
+                                            std::string name)
 {
     // make sure the atoms coordinates are between 0 and 1.
     double x = fmod(atomCoord.x(), 1.);
@@ -436,7 +441,7 @@ void BravaisLatticeWithBasis::AddAtomInCell(NJRvector3d atomCoord,
     if(y < 0.) y += 1.;
     double z = fmod(atomCoord.z(), 1.);
     if(z < 0.) z += 1.;
-    atomsCoordinatesInCell.push_back(NJRvector3d(x,y,z));
+    atomsCoordinatesInCell.push_back(NJR::NJRvector3d(x,y,z));
     atomTypes.push_back(name);
     UpdateMemberVariables();
 }

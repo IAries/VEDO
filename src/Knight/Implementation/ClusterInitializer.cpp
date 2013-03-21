@@ -22,7 +22,6 @@ ClusterInitializer::ClusterInitializer(const BravaisLatticeWithBasis *bravais)
 
 ClusterInitializer::~ClusterInitializer()
 {
-	// cout << "ClusterInitializer deleted" << endl;
 }
 
 void ClusterInitializer::SetBravaisLattice(const BravaisLatticeWithBasis *bravais)
@@ -30,18 +29,18 @@ void ClusterInitializer::SetBravaisLattice(const BravaisLatticeWithBasis *bravai
     this->bravais = bravais;
 }
 
-void ClusterInitializer::Create(string doName, DOWorld* pWorld)
+void ClusterInitializer::Create(std::string doName, VEDO::DOWorld* pWorld)
 {
     int zeroCenter[3];
     for (int coord=0; coord<3; coord++) zeroCenter[coord] = 0;
 
-	DOStatus dos
+	VEDO::DOStatus dos
 		(doName,
-		NJRvector3d(ZERO),
-		NJRvector3d(ZERO),
-		NJRvector3d(AXIALX),
-		NJRvector3d(AXIALZ),
-		NJRvector3d(ZERO));
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::ZERO),
+		NJR::NJRvector3d(NJRDXF::AXIALX),
+		NJR::NJRvector3d(NJRDXF::AXIALZ),
+		NJR::NJRvector3d(NJRDXF::ZERO));
 
     // Recursion to work in general 3:
     MakeSlab(zeroCenter, 3, dos, pWorld);
@@ -57,7 +56,7 @@ void ClusterInitializer::SetCenter(double clusterCenter[3])
 
 void ClusterInitializer::MakeSlab(int center[3],
                                   int sub3,
-                                  DOStatus& dos, DOWorld* pWorld)
+                                  VEDO::DOStatus& dos, VEDO::DOWorld* pWorld)
 {
     int newCenter[3];
     for(int coord=sub3; coord<3; coord++)
@@ -93,11 +92,11 @@ void ClusterInitializer::MakeSlab(int center[3],
                 if (Inside(potentialPos))
                 {
 					dos.SetPosition
-						(NJRvector3d
+						(NJR::NJRvector3d
 							(potentialPos[0],
 							 potentialPos[1],
 							 potentialPos[2]));
-					pWorld->AddDOStatus(new DOStatus(dos));
+					pWorld->AddDOStatus(new VEDO::DOStatus(dos));
                 }
             }
         }
@@ -113,7 +112,7 @@ double ClusterInitializer::GetMaxSize() const
     double max = 0;
     for (int coord=0; coord<3; coord++)
     {
-        double br2 = 0;	// Squared length of Bravais lattice vector
+        double br2 = 0;	// Squared length of Bravais lattice std::vector
         for (int coord2=0; coord2<3; coord2++)
         {
             double brComponent = bravais->GetLatticeVectors()[coord][coord2];

@@ -1,8 +1,6 @@
 #include <Knight/Interfaces/3DLattices.h>
 #include <cmath>
 
-using namespace std;
-
 ////////////////////////  CUBIC LATTICE //////////////////////////////////////
 
 CubicLattice::CubicLattice(double a)
@@ -36,19 +34,19 @@ void CubicLattice::SetLatticeConstant(double a)
 
 FCCLattice::FCCLattice(double a): CubicLattice(a)
 {
-    vector<NJRvector3d> atomsCoord;
-    atomsCoord.push_back(NJRvector3d(0., 0., 0.));
+    std::vector<NJR::NJRvector3d> atomsCoord;
+    atomsCoord.push_back(NJR::NJRvector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
-void FCCLattice::AddAtomInCell(NJRvector3d atomCoord, string name)
+void FCCLattice::AddAtomInCell(NJR::NJRvector3d atomCoord, std::string name)
 {
     double shifts[4][3] = {{0.,0.,0.},{0.,0.5,0.5},{0.5,0.,0.5},{0.5,0.5,0.}};
     for(int at=0; at<4; ++at)
 	{
 		BravaisLatticeWithBasis::AddAtomInCell
-			(atomCoord+NJRvector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
+			(atomCoord+NJR::NJRvector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
 			 name);
 	}
 }
@@ -102,19 +100,19 @@ void PrimitiveFCCLattice::SetLatticeConstant(double a)
 
 BCCLattice::BCCLattice(double a): CubicLattice(a)
 {
-    vector<NJRvector3d> atomsCoord;
-    atomsCoord.push_back(NJRvector3d(0., 0., 0.));
+    std::vector<NJR::NJRvector3d> atomsCoord;
+    atomsCoord.push_back(NJR::NJRvector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
-void BCCLattice::AddAtomInCell(NJRvector3d atomCoord, string name)
+void BCCLattice::AddAtomInCell(NJR::NJRvector3d atomCoord, std::string name)
 {
     double shifts[2][3] = {{0.,0.,0.},{0.5,0.5,0.5}};
     for(int at=0; at<2; ++at)
 	{
         BravaisLatticeWithBasis::AddAtomInCell
-        	(atomCoord+NJRvector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
+        	(atomCoord+NJR::NJRvector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
         	 name);
 	}
 }
@@ -124,21 +122,21 @@ void BCCLattice::AddAtomInCell(NJRvector3d atomCoord, string name)
 
 DiamondLattice::DiamondLattice(double a): FCCLattice(a)
 {
-    vector<NJRvector3d> atomsCoord;
-    atomsCoord.push_back(NJRvector3d(0., 0., 0.));
+    std::vector<NJR::NJRvector3d> atomsCoord;
+    atomsCoord.push_back(NJR::NJRvector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
 
 void DiamondLattice::AddAtomInCell
-	(NJRvector3d atomCoord, string name)
+	(NJR::NJRvector3d atomCoord, std::string name)
 {
     double shifts[2][3] = {{0.,0.,0.},{0.25,0.25,0.25}};
 	FCCLattice::AddAtomInCell
-		(atomCoord+NJRvector3d(shifts[0][0], shifts[0][1], shifts[0][2]), name);
+		(atomCoord+NJR::NJRvector3d(shifts[0][0], shifts[0][1], shifts[0][2]), name);
     FCCLattice::AddAtomInCell
-    	(atomCoord+NJRvector3d(shifts[1][0], shifts[1][1], shifts[1][2]), name);
+    	(atomCoord+NJR::NJRvector3d(shifts[1][0], shifts[1][1], shifts[1][2]), name);
 }
 
 

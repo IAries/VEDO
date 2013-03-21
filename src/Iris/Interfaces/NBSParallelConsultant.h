@@ -21,6 +21,9 @@
 #undef max
 #undef min
 
+namespace VEDO
+{
+
 class NBSParallelConsultant : public Consultant
 {
 
@@ -138,7 +141,7 @@ void NBSParallelConsultant::subReset
 	const SystemParameter* csp = Consultant::pDOWorld->GetSystemParameter();
 
 	unsigned long numberDO     = csp->GetDONumber();
-	NJRvector3d   vFieldForce  = csp->GetFieldForce();
+	NJR::NJRvector3d   vFieldForce  = csp->GetFieldForce();
 	double        dt           = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
@@ -187,28 +190,12 @@ void NBSParallelConsultant::subReset
  * Aries' Comment (2006/03/31)
  *
  *    The Safety distance contains the influence of the radius, velocity, and
- * acceleration. However, the safety vector of sphere should be 1.1 ?
+ * acceleration. However, the safety std::vector of sphere should be 1.1 ?
  ******************************************************************************/
-		// «H¼ý
-		switch(cpdoml->GetShapeType())
-		{
-			case QuasiPlate:
-				safeD
-					= 1.1 * (0.5 * cpdoml->GetShapeAttributes().quasiplate.height
-						     + (cpdos->GetVelocity()).length() * dt              )
-					+ 0.5 * dt * dt * vFieldForce.length();
-				break;
-			case QuasiCylinder:
-				safeD
-					= 1.1 * (0.5 * cpdoml->GetShapeAttributes().quasicylinder.radius
-						     + (cpdos->GetVelocity()).length() * dt                 )
-					+ 0.5 * dt * dt * vFieldForce.length();
-				break;
-			default:
-				safeD
-					= 1.1 * (cpdoml->GetRange() + (cpdos->GetVelocity()).length() * dt)
-					+ 0.5 * dt * dt * vFieldForce.length();
-		}
+		safeD
+			= 1.1 * (  cpdoml->GetRange()
+                     + (cpdos->GetVelocity()).length() * dt)
+            + 0.5 * dt * dt * vFieldForce.length();
 /*
 				xmin = std::min(xmin, cpdos->GetPosition().x());
 				xmax = std::max(xmax, cpdos->GetPosition().x());
@@ -254,17 +241,12 @@ void NBSParallelConsultant::subReset
 	//std::map<Trir, std::vector<DOMap>* > locMap;
 	std::vector<DOMap> GlobalElement;
 
-	NJRvector3d pos;
+	NJR::NJRvector3d pos;
 	for (unsigned long i=0; i<numberDO; ++i)
 	{
 		if (vDOMap[i].cpdoml()->GetScope() == "local")
 		{
 			pos = vDOMap[i].cpdos()->GetPosition();
-/******************************************************************************
- * Aries' Comment (2006/03/31)
- *
- *    What's the class of "Trir" ?
- ******************************************************************************/
 			Trir zone
 				(static_cast<int>((pos.x() - SphereXMin) / ZoneRange),
 				 static_cast<int>((pos.y() - SphereYMin) / ZoneRange),
@@ -272,7 +254,7 @@ void NBSParallelConsultant::subReset
 
 			if (locMap.find(zone) == locMap.end())
 			{
-				locMap.insert(make_pair(zone, new std::vector<DOMap>()));
+				locMap.insert(std::make_pair(zone, new std::vector<DOMap>()));
 			}
 			locMap[zone]->push_back(vDOMap[i]);
 		}
@@ -660,16 +642,16 @@ void NBSParallelConsultant::subReset
 		delete iter1->second;
 	}
 
-	/*
-	if (rank == MASTER)
-	{
-		std::cerr
-			<< "[" << rank << "] "
-			<< "Size of total IactTab = "
-			<< IactPairTab.size()
-			<< std::endl;
-	}
-	*/
+	#ifdef _VEDO_DEBUG
+		if (rank == MASTER)
+		{
+			std::cout
+				<< "[" << rank << "] "
+				<< "Size of total IactTab = "
+				<< IactPairTab.size()
+				<< std::endl;
+		}
+	#endif   // _VEDO_DEBUG
 
 	/*
 	stable_sort( IactPairTab.begin(),IactPairTab.end(),Y_Comp(vDOMap) );
@@ -677,22 +659,26 @@ void NBSParallelConsultant::subReset
 	if (MaxSpan == ySpan)
 	{
 		stable_sort( IactPairTab.begin(),IactPairTab.end(),Y_Comp(vDOMap) );
-		if (rank == MASTER)
-		{
-			std::cerr << "Partition at Y-dimension" << std::endl;
-		}
+		#ifdef _VEDO_DEBUG
+			if (rank == MASTER)
+				std::cout << "Partition at Y-dimension" << std::endl;
+		#endif   // _VEDO_DEBUG
 	}
-	else if (MaxSpan == xSpan) {
+	else if (MaxSpan == xSpan)
+	{
 		stable_sort( IactPairTab.begin(),IactPairTab.end(),X_Comp(vDOMap) );
-		if (rank == MASTER)
-		{
-			std::cerr << "Partition at X-dimension" << std::endl;
-		}
+		#ifdef _VEDO_DEBUG
+			if (rank == MASTER)
+				std::cout << "Partition at X-dimension" << std::endl;
+		#endif   // _VEDO_DEBUG
 	}
-	else {
+	else
+	{
 		stable_sort( IactPairTab.begin(),IactPairTab.end(),Z_Comp(vDOMap) );
-		if (rank == MASTER)
-			std::cerr << "Partition at Z-dimension" << std::endl;
+		#ifdef _VEDO_DEBUG
+			if (rank == MASTER)
+				std::cout << "Partition at Z-dimension" << std::endl;
+		#endif   // _VEDO_DEBUG
 	}
 	*/
 
@@ -705,26 +691,31 @@ void NBSParallelConsultant::subReset
 
 	ConstructDOandOverLapTab();
 
-	std::cerr
-		<< "[" << rank << "] "
-		<< "Size of Cutting Zone (ncelx, necly, ncelz) = ("
-		<< ncelx << ", " << ncely << ", " << ncelz << ")" << std::endl
-		<< "[" << rank << "] "
-		<< "Size of Interaction = "
-		<< (unsigned int)NBSParallelConsultant::IactPairTab.size() << std::endl
-		<< "[" << rank << "] "
-		<< "Size of Overlap Table = (" << overlapTab[0].size();
-	for (unsigned int i=1; i<NP; ++i)
-	{
-		std::cerr << ", " << overlapTab[i].size();
-	}
-	std::cerr << ")" << std::endl;
+	#ifdef _VEDO_DEBUG
+		std::cout
+			<< "[" << rank << "] "
+			<< "Size of Cutting Zone (ncelx, necly, ncelz) = ("
+			<< ncelx << ", " << ncely << ", " << ncelz << ")" << std::endl
+			<< "[" << rank << "] "
+			<< "Size of Interaction = "
+			<< (unsigned int)NBSParallelConsultant::IactPairTab.size() << std::endl
+			<< "[" << rank << "] "
+			<< "Size of Overlap Table = (" << overlapTab[0].size();
+
+		for (unsigned int i=1; i<NP; ++i)
+			std::cout << ", " << overlapTab[i].size();
+
+		std::cout << ")" << std::endl;
+	#endif   // _VEDO_DEBUG
+
 
 	delete[] pNumIactPair;
 	delete[] pAllIactPair;
 	delete[] pLocalIactPair;
 	delete[] recvcounts;
 	delete[] displs;
-}
+};
+
+};   // namespace VEDO
 
 #endif // _NBS_PARALLEL_CONSULTANT_H
