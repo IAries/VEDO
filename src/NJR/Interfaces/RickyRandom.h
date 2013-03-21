@@ -1,6 +1,9 @@
 #ifndef _RICKYRANDOM_H
 #define _RICKYRANDOM_H
 
+namespace NJR
+{
+
 class Rickyrandom
 {
 
@@ -40,5 +43,7 @@ private:
 	static bool test;
 
 };
+
+};   // namespace NJR
 
 #endif // _RICKYANDOM_H

@@ -7,9 +7,10 @@
 #include <iostream>
 #include <iterator>
 
-using namespace std;
+namespace NJR
+{
 
-void NJR::ReadString(string& os, ifstream &idof)
+void ReadString(std::string& os, std::ifstream &idof)
 {
 	unsigned int ssize;
 	char buffer [256];
@@ -19,7 +20,7 @@ void NJR::ReadString(string& os, ifstream &idof)
 	os = buffer;
 };
 
-void NJR::WriteString(const string& ostring, ofstream &idof)
+void WriteString(const std::string& ostring, std::ofstream &idof)
 {
 	unsigned int ssize;
 	ssize =(unsigned int) ostring.length();
@@ -27,16 +28,16 @@ void NJR::WriteString(const string& ostring, ofstream &idof)
 	idof.write (ostring.c_str(), ssize);
 };
 
-bool NJR::CheckSubName (string FileName, string SubName)
+bool CheckSubName (std::string FileName, std::string SubName)
 {
 	return (FileName.rfind(SubName)
 		 == (FileName.size() - SubName.size()) );
 };
 
-string NJR::RunTime(const string& message)
+std::string RunTime(const std::string& message)
 {
 	static unsigned long iteration = 0;
-	static time_t start = time(0); 
+	static time_t start = time(0);
 	static time_t last  = time(0);
 
 	time_t now = time(0);
@@ -47,23 +48,23 @@ string NJR::RunTime(const string& message)
 	if (iteration == 0)
 	{
 		tm* t = localtime(&start);
-		cout
-			<< endl
+		std::cout
+			<< std::endl
 			<< "Time Counter Initiation {" << message << "}"
-			<< endl
+			<< std::endl
 			<< "Now !!! ("
 			<< 1900 + t->tm_year << "-" << Mon[t->tm_mon] << "-" << t->tm_mday
 			<< ") (Hour:" << t->tm_hour << ",Min:" << t->tm_min << ')'
-			<< endl
-			<< endl
-			<< endl;
+			<< std::endl
+			<< std::endl
+			<< std::endl;
 	}
 	else
 	{
 		tm* t = localtime(&now);
-		cout
+		std::cout
 			<< "{" << message << "}"
-			<< endl
+			<< std::endl
 			<< "Now !!! ("
 			<< 1900 + t->tm_year
 			<< "-" << Mon[t->tm_mon]
@@ -72,7 +73,7 @@ string NJR::RunTime(const string& message)
 			<< ":" << t->tm_min << ')'
 			<< "(RunTime: " << (double)(difftime(now, start)) << " s) "
 			<< "(Since Last: " << (double)(difftime(now, last)) << " s)"
-			<< endl;
+			<< std::endl;
 	}
 
 	iteration ++;
@@ -81,30 +82,34 @@ string NJR::RunTime(const string& message)
 };
 
 
-void NJR::WriteFile(const string& FileName, const vector<char>& vWord)
+void WriteFile(const std::string& FileName, const std::vector<char>& vWord)
 {
-	ofstream of(FileName.c_str(), ios::out | ios::binary);
+	std::ofstream of(FileName.c_str(), std::ios::out | std::ios::binary);
 
 	if (of.bad())
 	{
-		cerr << "open file (" << FileName << ") error" << endl;
-		exit(0);
+		std::cout
+			<< "Error!! Code: WriteFile(const std::string&, const std::vector<char>&)" << std::endl
+			<< "        Note: Cannot open file \'" << FileName << '\'' << std::endl;
+		exit(-1);
 	}
 
-	copy(vWord.begin(), vWord.end(), ostream_iterator<char>(of));
+	copy(vWord.begin(), vWord.end(), std::ostream_iterator<char>(of));
 	of.close();
 };
 
-vector<char> NJR::ReadFile (const string& FileName)
+std::vector<char> ReadFile (const std::string& FileName)
 {
 	char c;
-	vector<char> vcword;
-	ifstream f(FileName.c_str(), ios::in | ios::binary);
+	std::vector<char> vcword;
+	std::ifstream f(FileName.c_str(), std::ios::in | std::ios::binary);
 
 	if ( f.bad() )
 	{
-		cerr << "open file (" << FileName << ") error" << endl;
-		exit (0);
+		std::cout
+			<< "Error!! Code: ReadFile(const std::string&)" << std::endl
+			<< "        Note: Cannot open file \'" << FileName << '\'' << std::endl;
+		exit(-1);
 	}
 
 	while ( !f.eof() )
@@ -118,18 +123,18 @@ vector<char> NJR::ReadFile (const string& FileName)
 	return vcword;
 };
 
-void NJR::dos2unix(const string& ifile, const string& ofile)
+void dos2unix(const std::string& ifile, const std::string& ofile)
 {
-	vector<char> vcword = NJR::ReadFile(ifile);
+	std::vector<char> vcword = ReadFile(ifile);
 	vcword.erase(remove(vcword.begin(), vcword.end(), 13), vcword.end());
-	NJR::WriteFile(ofile, vcword);
+	WriteFile(ofile, vcword);
 };
 
-void NJR::unix2dos(const string& ifile, const string& ofile)
+void unix2dos(const std::string& ifile, const std::string& ofile)
 {
-	vector<char> vcword = NJR::ReadFile(ifile);
-	vector<char>::iterator ic;
-	vector<char> hexdata;
+	std::vector<char> vcword = ReadFile(ifile);
+	std::vector<char>::iterator ic;
+	std::vector<char> hexdata;
 
 	for (ic=vcword.begin(); ic!=vcword.end(); ic++)
 	{
@@ -139,14 +144,14 @@ void NJR::unix2dos(const string& ifile, const string& ofile)
 		}
 		hexdata.push_back (*ic);
 	}
-	NJR::WriteFile(ofile, hexdata);
+	WriteFile(ofile, hexdata);
 };
 
-void NJR::bin2hex(const string& ifile, const string& ofile)
+void bin2hex(const std::string& ifile, const std::string& ofile)
 {
-	vector<char> vcword = NJR::ReadFile(ifile);
-	vector<char>::iterator ic;
-	vector<char> hexdata;
+	std::vector<char> vcword = ReadFile(ifile);
+	std::vector<char>::iterator ic;
+	std::vector<char> hexdata;
 	unsigned int i = 1;
 
 	for (ic=vcword.begin(); ic!=vcword.end(); ic++)
@@ -165,10 +170,10 @@ void NJR::bin2hex(const string& ifile, const string& ofile)
 			hexdata.push_back(10);
 		}
 	}
-	NJR::WriteFile(ofile, hexdata);
+	WriteFile(ofile, hexdata);
 };
 
-double NJR::NewtonApproach
+double NewtonApproach
 	(double (*F)(double),
 	double (*DF)(double),
 	const double& dV,
@@ -190,9 +195,14 @@ oncemore:
 	if ( (uic++) > 50)
 	{
 		return xs;
-		cerr << "Warning !! Newton Approach can't obtain the answer" << endl;
+		std::cerr
+			<< "Error!! Code: Utility.cpp" << std::endl
+			<< "        Note: Newton Approach can't obtain the answer" << std::endl;
+		exit(-1);
 	}
 
 	x = xs;
 	goto oncemore;
 };
+
+};   // namespace NJR

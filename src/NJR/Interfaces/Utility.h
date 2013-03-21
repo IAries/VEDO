@@ -98,6 +98,6 @@ namespace NJR
 		_Fn2 op;   // the functor to apply
 		typename _Fn2::second_argument_type value;	// the right operand
 	};
-};
+};   // namespace NJR
 
 #endif // _UTILITY_H

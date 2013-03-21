@@ -5,7 +5,8 @@
 #include <cstring>
 #include <functional>
 
-using namespace std;
+namespace NJR
+{
 
 NJRvector3d BMvector(1e6, 1e6, 1e6);
 
@@ -52,7 +53,7 @@ bool NJRLinearProgramming::PurgeArtificialVariable()
 		return false;
 	}
 
-	vector<unsigned int> NewNbasis;
+	std::vector<unsigned int> NewNbasis;
 
 	for (unsigned int i=0; i<nbas; i++)
 	{
@@ -89,7 +90,7 @@ double  NJRLinearProgramming::GetObjValue()
 
 	NJRmatrix rhsmemo = rhs;
 
-	NJR::RandomGenerator random;
+	RandomGenerator random;
 	double objval;
 	double ch [2];
 
@@ -264,7 +265,7 @@ const NJRLinearProgramming& NJRLinearProgramming::operator =
 	return *this;
 };
 
-void NJRLinearProgramming::Set(const NJRpolyhedra &a)
+void NJRLinearProgramming::Set(const NJR::NJRpolyhedra &a)
 {
 	NJRLinearProgramming::Clear();
 
@@ -275,7 +276,7 @@ void NJRLinearProgramming::Set(const NJRpolyhedra &a)
 	unsigned int n;
 	unsigned int b;
 
-	vector<NJRhalfspace> vchf = a.constrains();
+	std::vector<NJR::NJRhalfspace> vchf = a.constrains();
 
 	for (i=0; i<vchf.size(); ++i)
 	{
@@ -283,7 +284,7 @@ void NJRLinearProgramming::Set(const NJRpolyhedra &a)
 	}
 
 	for_each
-		(vchf.begin(), vchf.end(), mem_fun_ref(&NJRhalfspace::AbsRhs));
+		(vchf.begin(), vchf.end(), std::mem_fun_ref(&NJR::NJRhalfspace::AbsRhs));
 
 	number = (unsigned int) vchf.size();
 
@@ -402,7 +403,7 @@ bool NJRLinearProgramming::Check()
 	 **************************************************************************/
 	unsigned int pxout;
 
-	NJR::RandomGenerator random(2000);
+	RandomGenerator random(2000);
 
 	for (i=0; i<rows; ++i)
 	{
@@ -527,10 +528,10 @@ void NJRLinearProgramming::print () const
 {
 	register unsigned int i;
 
-	cout << ((_checked)   ? "checked "           : "unchecked "          );
-	cout << ((_feasiable) ? "feasiable "         : "infeasiable "        );
-	cout << ((_polygon)   ? "This is a polygon " : "This is not polygon ");
-	cout << endl;
+	std::cout << ((_checked)   ? "checked "           : "unchecked "          );
+	std::cout << ((_feasiable) ? "feasiable "         : "infeasiable "        );
+	std::cout << ((_polygon)   ? "This is a polygon " : "This is not polygon ");
+	std::cout << std::endl;
 
 	printf("\nbasis\n");
 	for (i=0; i<rows; ++i)
@@ -551,7 +552,7 @@ void NJRLinearProgramming::print () const
 
 NJRpolygon NJRLinearProgramming::GetPolygon()
 {
-	vector<NJRvector3d>vertexes(0);
+	std::vector<NJRvector3d>vertexes(0);
 
 	if (_polygon==false)
 	{
@@ -585,7 +586,7 @@ NJRpolygon NJRLinearProgramming::GetPolygon()
 	 **************************************************************************/
 	unsigned int  pxout=0;
 
-   	NJR::RandomGenerator random(2000);
+   	RandomGenerator random(2000);
 
 	for (i=0; i<rows; ++i)
 	rhs(i, 0) = rhs(i, 0) * ( 1.0 + random(1e-9, -1e-9) );
@@ -671,8 +672,7 @@ NJRpolygon NJRLinearProgramming::GetPolygon()
 	return NJRpolygon(vertexes);
 };
 
-
-bool  NJRLinearProgramming::GetExtremeValue
+bool NJRLinearProgramming::GetExtremeValue
 	(double& maxX,
 	double& minX,
 	double& maxY,
@@ -687,29 +687,31 @@ bool  NJRLinearProgramming::GetExtremeValue
 	}
 
 	obj(0,0) = 1.0;
-	maxX     =  NJRLinearProgramming::GetObjValue() - BMvector % AXIALX;
+	maxX     =  NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
 
 	obj(0,0) = -1.0;
-	minX     = -NJRLinearProgramming::GetObjValue() - BMvector % AXIALX;
+	minX     = -NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
 
 	obj(0,0) = 0.0;
 
 	obj(0,1) = 1.0;
-	maxY     =  NJRLinearProgramming::GetObjValue() - BMvector % AXIALY;
+	maxY     =  NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
 
 	obj(0,1) = -1.0;
-	minY     = -NJRLinearProgramming::GetObjValue() - BMvector % AXIALY;
+	minY     = -NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
 
 	obj(0,1) = 0.0;
 
 	obj(0,2) = 1.0;
-	maxZ     = NJRLinearProgramming::GetObjValue() - BMvector % AXIALZ;
+	maxZ     = NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
 
 	obj(0,2) = -1.0;
 
-	minZ     = -NJRLinearProgramming::GetObjValue() - BMvector % AXIALZ;
+	minZ     = -NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
 
 	obj(0,2) = 0.0;
 
 	return true;
 };
+
+};   // namespace NJR

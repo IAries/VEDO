@@ -3,7 +3,8 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace std;
+namespace NJR
+{
 
 NJRhalfspace::NJRhalfspace()
 {
@@ -84,7 +85,11 @@ void NJRhalfspace::RotateAround(const NJRvector3d &dw)
 	_c = gradient.z();
 };
 
-ostream& operator << (ostream& os, const NJRhalfspace& hf)
+};   // namespace NJR
+
+
+
+std::ostream& operator << (std::ostream& os, const NJR::NJRhalfspace& hf)
 {
     os	<< "[" << hf.a() << " X " << hf.b() << " Y " << hf.c() << " Z ";
 
@@ -100,11 +105,11 @@ ostream& operator << (ostream& os, const NJRhalfspace& hf)
 			os << "<=";
 			break;
 	}
-	os << hf.d() << ']' << endl;
+	os << hf.d() << ']' << std::endl;
 	return os;
 };
 
-istream& operator >> (istream& is, NJRhalfspace& hf)
+std::istream& operator >> (std::istream& is, NJR::NJRhalfspace& hf)
 {
 	double a;
 	double b;
@@ -126,14 +131,13 @@ istream& operator >> (istream& is, NJRhalfspace& hf)
 			se = L;
 			break;
 		default:
-			cerr
-				<< "Error halfspace"
-				<< endl
-				<< "halfspace: ( a , b ,c , ~ ,d)"
-				<< endl;
+			std::cout
+				<< "Error!! Code: halfspace.cpp" << std::endl
+				<< "        Note: halfspace: ( a , b ,c , ~ ,d)" << std::endl;
 			exit(0);
 	}
 
 	hf.Set(a, b, c, se, d);
 	return is;
-};
+};   // namespace NJR
+

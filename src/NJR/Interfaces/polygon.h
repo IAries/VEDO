@@ -4,6 +4,9 @@
 #include <NJR/Interfaces/vector3d.h>
 #include <vector>
 
+namespace NJR
+{
+
 class NJRpolygon
 {
 
@@ -58,5 +61,7 @@ private:
 	void CalCenter();
 
 };
+
+};   // namespace NJR
 
 #endif // _NJRPOLYGON_H

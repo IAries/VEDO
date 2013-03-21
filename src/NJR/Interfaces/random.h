@@ -32,6 +32,6 @@ private:
 
 };
 
-};
+};   // namespace NJR
 
 #endif // _NJRRANDOM_H

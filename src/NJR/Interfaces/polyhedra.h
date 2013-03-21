@@ -6,6 +6,9 @@
 #include <NJR/Interfaces/vector3d.h>
 #include <vector>
 
+namespace NJR
+{
+
 class NJRpolyhedra
 {
 
@@ -20,7 +23,7 @@ public:
 		return _center;
 	};
 
-	inline const std::vector<NJRhalfspace>& constrains() const
+	inline const std::vector<NJR::NJRhalfspace>& constrains() const
 	{
 		return _constrains;
 	};
@@ -59,7 +62,7 @@ public:
 
 	std::vector<NJRpolygon> faces() const;
 
-	void AddConstrain(const NJRhalfspace&);
+	void AddConstrain(const NJR::NJRhalfspace&);
 
 	void Clear();
 
@@ -71,10 +74,12 @@ public:
 
 private:
 
-	std::vector<NJRhalfspace> _constrains;
+	std::vector<NJR::NJRhalfspace> _constrains;
 
 	NJRvector3d _center;
 
 };
+
+};   // namespace NJR
 
 #endif // _NJR_POLYHEDRA_H

@@ -5,7 +5,8 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
+namespace NJR
+{
 
 const char* NJRmatrix::characteristic() const
 {
@@ -170,10 +171,8 @@ NJRmatrix NJRmatrix::operator * (const NJRmatrix &M) const
 
 	if (_cols != M._rows)
 	{
-		cerr
-			<< "Matrix operator * do nothing and terminate the program"
-			<< endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRmatrix::operator * (const NJRmatrix)" << std::endl;
+		exit(-1);
 	}
 	else
 	{
@@ -206,10 +205,8 @@ NJRmatrix NJRmatrix::operator + (const NJRmatrix &M) const
 
 	if (( _cols != M._cols) || ( _rows != M._rows))
 	{
-		cerr
-			<< "matrix operator + do nothing and terminate the program"
-			<< endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRmatrix::operator + (const NJRmatrix)" << std::endl;
+		exit(-1);
 	}
 
 	for (i=0; i<C._rows; ++i)
@@ -232,10 +229,8 @@ NJRmatrix NJRmatrix::operator - (const NJRmatrix &M) const
 
 	if ( ( _cols != M._cols) || ( _rows != M._rows) )
 	{
-		cerr
-			<< "matrix operator - do nothing and terminate the program"
-			<< endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRmatrix::operator - (const NJRmatrix)" << std::endl;
+		exit(-1);
 	}
 
 	for (i=0; i<C._rows; ++i)
@@ -256,10 +251,10 @@ NJRmatrix NJRmatrix::Select (unsigned int* selected, unsigned int len) const
 
 	if (_cols < len)
 	{
-		cerr
-			<< "Matrix select function do nothing and terminate the program"
-			<< endl;
-		exit(0);
+		std::cerr
+			<< "Error!! Code: NJRmatrix::Select (unsigned int*, unsigned int)"
+			<< std::endl;
+		exit(-1);
 	}
 
 	NJRmatrix C(_rows, len);
@@ -275,8 +270,10 @@ NJRmatrix NJRmatrix::Select (unsigned int* selected, unsigned int len) const
 		}
 		else
 		{
-			cerr << "Select error !! selected columns out of range !!" << endl;
-			exit(0);
+			std::cerr
+				<< "Error!! Code: NJRmatrix::Select (unsigned int*, unsigned int)" << std::endl
+				<< "        Note: Selected columns out of range" << std::endl;
+			exit(-1);
 		}
 	}
 
@@ -305,8 +302,8 @@ double& NJRmatrix::operator () (const unsigned int& r, const unsigned int& c)
 {
 	if ( (r >= _rows) || (c >= _cols) )
 	{
-		cout << "over matrix operator()" << endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRmatrix::operator () (const unsigned int&, const unsigned int&)" << std::endl;
+		exit(-1);
 	}
 	else
 	{
@@ -318,8 +315,8 @@ double NJRmatrix::Get(const unsigned int& r, const unsigned int& c) const
 {
 	if ( (r >= _rows) || (c >= _cols) )
 	{
-		cout << "over matrix.get()" << endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRmatrix::Get() (const unsigned int&, const unsigned int&)" << std::endl;
+		exit(-1);
 	}
 	else
 	{
@@ -327,14 +324,18 @@ double NJRmatrix::Get(const unsigned int& r, const unsigned int& c) const
 	}
 };
 
-ostream& operator << (ostream& os, const NJRmatrix& m)
+};   // namespace NJR
+
+
+
+std::ostream& operator << (std::ostream& os, const NJR::NJRmatrix& m)
 {
 	register unsigned int i;
 	register unsigned int j;
 
 	printf ("rows=%3d cols=%3d  ", m.rows(), m.columns());
 
-	cout << m.characteristic() << endl;
+	std::cout << m.characteristic() << std::endl;
 
 	for (i=0; i<m.rows(); ++i)
 	{

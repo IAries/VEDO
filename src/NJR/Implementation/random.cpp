@@ -2,7 +2,8 @@
 #include <NJR/Interfaces/random.h>
 #include <cmath>
 
-using namespace NJR;
+namespace NJR
+{
 
 int  RandomGenerator::a;
 int  RandomGenerator::b;
@@ -176,3 +177,5 @@ double RandomGenerator::Gaussian(double mean,double stddev)
     // Return ratio of P's coordinates as the normal deviate
     return (mean + stddev * v / u);
 };
+
+};   // namespace NJR

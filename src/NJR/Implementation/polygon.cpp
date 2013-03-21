@@ -1,6 +1,7 @@
 #include <NJR/Interfaces/polygon.h>
 
-using namespace std;
+namespace NJR
+{
 
 NJRpolygon::NJRpolygon() : _vertexes(0)
 {
@@ -9,7 +10,7 @@ NJRpolygon::NJRpolygon() : _vertexes(0)
 	_center.Set(0, 0, 0);
 };
 
-NJRpolygon::NJRpolygon (const vector<NJRvector3d>& vertexes)
+NJRpolygon::NJRpolygon (const std::vector<NJRvector3d>& vertexes)
 {
 	_vertexes = vertexes;
 
@@ -50,7 +51,7 @@ void NJRpolygon::CalCenter()
 {
 	register unsigned int i;
 
-	NJRvector3d w(ZERO);
+	NJRvector3d w(NJRDXF::ZERO);
 
 	for (i=0; i<_vertexes.size(); ++i)
 	{
@@ -59,7 +60,6 @@ void NJRpolygon::CalCenter()
 
 	_center = w * ( 1.0 / ( (double)(_vertexes.size()) ) );
 };
-
 
 void NJRpolygon::CalEdgeLength()
 {
@@ -102,14 +102,14 @@ void NJRpolygon::PureVertex()
     NJRvector3d v1;
 	numvertex = (unsigned int)(_vertexes.size());
 
-	vector<NJRvector3d> tmpvec(0);
+	std::vector<NJRvector3d> tmpvec(0);
 
 	if (numvertex < 2)
 	{
 		return;
 	}
 
-	vector<bool> mark(numvertex, true);
+	std::vector<bool> mark(numvertex, true);
 
 	for (i=0; i<(numvertex-1); ++i)
 	{
@@ -142,17 +142,19 @@ void NJRpolygon::print() const
 	register unsigned int i;
 	register unsigned int numvertex;
 
-	cout << "center     = " << _center      << endl;
-	cout << "area       = " << _area        << endl;
-	cout << "EdgeLength = " << _edge_length << endl;
+	std::cout << "center     = " << _center      << std::endl;
+	std::cout << "area       = " << _area        << std::endl;
+	std::cout << "EdgeLength = " << _edge_length << std::endl;
 
 	numvertex = (unsigned int)(_vertexes.size());
 
-	cout << "vertexes" << endl;
+	std::cout << "vertexes" << std::endl;
 
     for (i=0; i<numvertex; ++i)
 	{
-		cout << _vertexes[i];
+		std::cout << _vertexes[i];
 	}
 
 };
+
+};   // namespace NJR

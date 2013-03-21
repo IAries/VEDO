@@ -6,11 +6,12 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
+namespace NJR
+{
 
 NJRvector2d::NJRvector2d()
 {
-	*this = ORIGIN;
+	*this = NJRDXF::ORIGIN;
 };
 
 NJRvector2d::NJRvector2d(const double& dx, const double& dy)
@@ -28,12 +29,12 @@ NJRvector2d::NJRvector2d(const char* cInit)
 	*this = cInit;
 };
 
-NJRvector2d::NJRvector2d(const string& sInit)
+NJRvector2d::NJRvector2d(const std::string& sInit)
 {
 	*this = sInit;
 };
 
-NJRvector2d::NJRvector2d(const ParticularVector& pvInit)
+NJRvector2d::NJRvector2d(const NJRDXF::ParticularVector& pvInit)
 {
 	*this = pvInit;
 };
@@ -99,41 +100,41 @@ const NJRvector2d& NJRvector2d::operator = (const char* cInit)
 	strcpy(strv, cInit);
 	if ( (strv[0] != '(') || (strv[strlen(strv) -1 ] != ')') )
 	{
-		cerr << "VECTRO2d vector string error[1] ! from operator =" << endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRvector2d::operator = (const char*)" << std::endl;
+		exit(-1);
 	}
 
 	strv[0] = ' ';
 	strv[ strlen(strv) -1] = ' ';
 	if ( sscanf (strv,"%lf, %lf",&_x,&_y) != 2 )
 	{
-		cerr << "VECTRO2d vector string error[1]! from operator =" << endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRvector2d::operator = (const char*)" << std::endl;
+		exit(-1);
 	}
 	return *this;
 };
 
-const NJRvector2d& NJRvector2d::operator = (const ParticularVector& pvAval)
+const NJRvector2d& NJRvector2d::operator = (const NJRDXF::ParticularVector& pvAval)
 {
 	switch (pvAval)
 	{
-		case ORIGIN:
+		case NJRDXF::ORIGIN:
 			this->Set(0.0, 0.0);
 			break;
-		case AXIALX:
+		case NJRDXF::AXIALX:
 			this->Set(1.0, 0.0);
 			break;
-		case AXIALY:
+		case NJRDXF::AXIALY:
 			this->Set(0.0, 1.0);
 			break;
-		case ZERO:
+		case NJRDXF::ZERO:
 			this->Set(0.0, 0.0);
 			break;
 	};
 	return *this;
 };
 
-const NJRvector2d& NJRvector2d::operator = (const string& sAval)
+const NJRvector2d& NJRvector2d::operator = (const std::string& sAval)
 {
 	*this = sAval.c_str();
 	return *this;
@@ -214,28 +215,32 @@ bool NJRvector2d::operator == (NJRvector2d& vR) const
 
 void NJRvector2d::print() const
 {
-	cout << '(' << _x << ", " << _y << ")" << endl;
+	std::cout << '(' << _x << ", " << _y << ")" << std::endl;
 };
 
-NJRvector2d operator * (const double& ds, const NJRvector2d& v)
+};   // namespace NJR
+
+
+
+NJR::NJRvector2d operator * (const double& ds, const NJR::NJRvector2d& v)
 {
-	 NJRvector2d out(v.x()*ds, v.y()*ds);
+	 NJR::NJRvector2d out(v.x()*ds, v.y()*ds);
 	 return out;
 };
 
-NJRvector2d operator - (const NJRvector2d& v)
+NJR::NJRvector2d operator - (const NJR::NJRvector2d& v)
 {
-	 NJRvector2d out(-v.x(), -v.y());
+	 NJR::NJRvector2d out(-v.x(), -v.y());
 	 return out;
 };
 
-ostream& operator << (ostream& os, const NJRvector2d& v)
+std::ostream& operator << (std::ostream& os, const NJR::NJRvector2d& v)
 {
-	os << '(' << v.x() << ", " << v.y() << ")" << endl;
+	os << '(' << v.x() << ", " << v.y() << ")" << std::endl;
 	return os;
 };
 
-istream& operator >> (istream& is, NJRvector2d& v)
+std::istream& operator >> (std::istream& is, NJR::NJRvector2d& v)
 {
 	double x;
 	double y;

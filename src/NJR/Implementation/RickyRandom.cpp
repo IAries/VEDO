@@ -1,7 +1,8 @@
 #include <NJR/Interfaces/RickyRandom.h>
 #include <cmath>
 
-using namespace std;
+namespace NJR
+{
 
 double Rickyrandom::u[97];
 double Rickyrandom::c;
@@ -235,3 +236,5 @@ double Rickyrandom::RandomDouble(double lower,double upper)
 {
    return( (upper-lower)*RandomUniform() + lower );
 };
+
+};   // namespace NJR

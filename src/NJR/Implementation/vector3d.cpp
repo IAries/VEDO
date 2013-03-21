@@ -6,11 +6,12 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
+namespace NJR
+{
 
 NJRvector3d::NJRvector3d()
 {
-	*this = ORIGIN;
+	*this = NJRDXF::ORIGIN;
 };
 
 NJRvector3d::NJRvector3d(const double& dx, const double& dy, const double& dz)
@@ -28,12 +29,12 @@ NJRvector3d::NJRvector3d(const char* cInit)
 	*this = cInit;
 };
 
-NJRvector3d::NJRvector3d(const string& sInit)
+NJRvector3d::NJRvector3d(const std::string& sInit)
 {
 	*this = sInit;
 };
 
-NJRvector3d::NJRvector3d(const ParticularVector& pvInit)
+NJRvector3d::NJRvector3d(const NJRDXF::ParticularVector& pvInit)
 {
 	*this = pvInit;
 };
@@ -105,44 +106,44 @@ const NJRvector3d& NJRvector3d::operator = (const char* cInit)
 	strcpy (strv, cInit);
 	if ( (strv[0] != '(') || (strv[strlen(strv) -1 ] != ')') )
 	{
-		cerr << "VECTRO3D vector string error[1] ! from operator =" << endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRvector3d::operator = (const char*)" << std::endl;
+		exit(-1);
 	}
 
 	strv[0] = ' ';
 	strv[ strlen(strv) -1] = ' ';
 	if ( sscanf (strv,"%lf, %lf, %lf",&_x,&_y,&_z) != 3 )
 	{
-		cerr << "VECTRO3D vector string error[1]! from operator =" << endl;
-		exit(0);
+		std::cerr << "Error!! Code: NJRvector3d::operator = (const char*)" << std::endl;
+		exit(-1);
 	}
 	return *this;
 };
 
-const NJRvector3d& NJRvector3d::operator = (const ParticularVector& pvAval)
+const NJRvector3d& NJRvector3d::operator = (const NJRDXF::ParticularVector& pvAval)
 {
 	switch (pvAval)
 	{
-		case ORIGIN:
+		case NJRDXF::ORIGIN:
 			this->Set(0.0, 0.0, 0.0);
 			break;
-		case AXIALX:
+		case NJRDXF::AXIALX:
 			this->Set(1.0, 0.0, 0.0);
 			break;
-		case AXIALY:
+		case NJRDXF::AXIALY:
 			this->Set(0.0, 1.0, 0.0);
 			break;
-		case AXIALZ:
+		case NJRDXF::AXIALZ:
 			this->Set(0.0, 0.0, 1.0);
 			break;
-		case ZERO:
+		case NJRDXF::ZERO:
 			this->Set(0.0, 0.0, 0.0);
 			break;
 	};
 	return *this;
 };
 
-const NJRvector3d& NJRvector3d::operator = (const string& sAval)
+const NJRvector3d& NJRvector3d::operator = (const std::string& sAval)
 {
 	*this = sAval.c_str();
 	return *this;
@@ -247,28 +248,32 @@ bool NJRvector3d::operator == (NJRvector3d& vR) const
 
 void NJRvector3d::print() const
 {
-	cout << '(' << _x << ',' << _y << ',' << _z << ")" << endl;
+	std::cout << '(' << _x << ',' << _y << ',' << _z << ")" << std::endl;
 };
 
-NJRvector3d operator * (const double& ds , const NJRvector3d& v)
+};   // namespace NJR
+
+
+
+NJR::NJRvector3d operator - (const NJR::NJRvector3d& v)
 {
-	 NJRvector3d out(v.x()*ds, v.y()*ds, v.z()*ds);
+	 NJR::NJRvector3d out(-v.x(), -v.y(), -v.z());
 	 return out;
 };
 
-NJRvector3d operator - (const NJRvector3d& v)
+NJR::NJRvector3d operator * (const double& ds , const NJR::NJRvector3d& v)
 {
-	 NJRvector3d out(-v.x(), -v.y(), -v.z());
+	 NJR::NJRvector3d out(v.x()*ds, v.y()*ds, v.z()*ds);
 	 return out;
 };
 
-ostream& operator << (ostream& os, const NJRvector3d& v)
+std::ostream& operator << (std::ostream& os, const NJR::NJRvector3d& v)
 {
-	os << '(' << v.x() << ", " << v.y() << ", " << v.z() << ')' << endl;
+	os << '(' << v.x() << ", " << v.y() << ", " << v.z() << ')' << std::endl;
 	return os;
 };
 
-istream& operator >> (istream& is, NJRvector3d& v)
+std::istream& operator >> (std::istream& is, NJR::NJRvector3d& v)
 {
 	double x;
 	double y;

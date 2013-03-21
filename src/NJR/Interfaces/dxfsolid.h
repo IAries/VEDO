@@ -1,27 +1,17 @@
 #ifndef DXF3DSOLID_H
 #define DXF3DSOLID_H
 
+#include <NJR/Interfaces/Constants.h>
 #include <NJR/Interfaces/acadxf.h>
 #include <NJR/Interfaces/polygon.h>
 #include <list>
 #include <string>
 
-#define PI 3.14159265358979323846264338327950288
-
 namespace NJRDXF
 {
-	class Solid;
-	class Cuboid;
-	class Cylinder;
-	class Ellipsoid;
-	class QuasiCylinder;
-	class QuasiPlate;
-	class Sphere;
-	class Polygon;
-};
 
-// NJRDXF::Solid is base class of 3d Soilds
-class NJRDXF::Solid
+// Solid is base class of 3d Soilds
+class Solid
 {
 
 public:
@@ -31,12 +21,12 @@ public:
 	virtual ~Solid();
 
 	// Retrieves the Container of DXFGroups
-	std::list<NJRDXF::Face *>& Get3dFaceContainer();
+	std::list<Face *>& Get3dFaceContainer();
 
 protected:
 
 	// (Container of DXFGroup) is used to hold all DXFGroups of this solid
-	std::list<NJRDXF::Face *> lcon3dFace;
+	std::list<Face *> lcon3dFace;
 
 	// (Face per angle) of this solid
 	double fpa;
@@ -51,7 +41,7 @@ private:
 };
 
 // Cuboid is used to hold and set those faces of a Cuboid
-class NJRDXF::Cuboid : public NJRDXF::Solid
+class Cuboid : public Solid
 {
 
 public:
@@ -62,11 +52,11 @@ public:
 		(const double& dWidth,
 		const double& dLength,
 		const double& dHeight,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color& color);
+		const Color& color);
 
 private:
 
@@ -78,22 +68,22 @@ private:
 
 // Ellipsoid is used to hold and set those faces of a Ellipsoid
 
-class NJRDXF::Ellipsoid : public NJRDXF::Solid
+class Ellipsoid : public Solid
 {
 
 public:
 
-	Ellipsoid(const double& fpa = PI/12.0);
+	Ellipsoid(const double& fpa = NJR::dOneTwelfthPI);
 
 	void Set
 		(const double& dlx,
 		const double& dly,
 		const double& dlz,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color& color);
+		const Color& color);
 
 private:
 
@@ -104,20 +94,20 @@ private:
 };
 
 // Sphere is used to hold and set those faces of a sphere
-class NJRDXF::Sphere : public NJRDXF::Ellipsoid
+class Sphere : public Ellipsoid
 {
 
 public:
 
-	Sphere(const double& fpa = PI/12.0);
+	Sphere(const double& fpa = NJR::dOneTwelfthPI);
 
 	void Set
 		(const double& dRadius,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color& color);
+		const Color& color);
 
 private:
 
@@ -128,21 +118,21 @@ private:
 };
 
 // Cylinder is used to hold and set those faces of a Cylinder
-class NJRDXF::Cylinder : public NJRDXF::Solid
+class Cylinder : public Solid
 {
 
 public:
 
-	Cylinder(const double& fpa = PI/12.0);
+	Cylinder(const double& fpa = NJR::dOneTwelfthPI);
 
 	void Set
 		(const double& dRadius,
 		const double& dHeight,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color& color);
+		const Color& color);
 
 private:
 
@@ -153,46 +143,46 @@ private:
 };
 
 // QuasiCylinder is used to hold and set those faces of a QuasiCylinder
-class NJRDXF::QuasiCylinder: public NJRDXF::Solid
+class QuasiCylinder: public Solid
 {
 
 public:
 
-	QuasiCylinder(const double& fpa = PI/12.0);
+	QuasiCylinder(const double& fpa = NJR::dOneTwelfthPI);
 
 	void Set
 		(const double& dRadius,
 		const double& dHeight,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color& color);
+		const Color& color);
 
 private:
 
-	QuasiCylinder(const NJRDXF::Cylinder&);
+	QuasiCylinder(const Cylinder&);
 
-	QuasiCylinder& operator = (const NJRDXF::Cylinder&);
+	QuasiCylinder& operator = (const Cylinder&);
 
 };
 
 // QuasiPlate is used to hold and set those faces of a QuasiPlate
-class NJRDXF::QuasiPlate: public NJRDXF::Solid
+class QuasiPlate: public Solid
 {
 
 public:
 
-	QuasiPlate(const double& fpa = PI/12.0);
+	QuasiPlate(const double& fpa = NJR::dOneTwelfthPI);
 
 	void Set(const double& dWidth,
 		const double& dLength,
 		const double& dHeight,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color& color);
+		const Color& color);
 
 private:
 
@@ -204,7 +194,7 @@ private:
 
 // QuasiPlate is used to hold and set those faces of a QuasiPlate
 
-class NJRDXF::Polygon : public NJRDXF::Solid
+class Polygon : public Solid
 {
 
 public:
@@ -212,12 +202,12 @@ public:
 	Polygon();
 
 	void Set
-		(const NJRpolygon&,
-		const NJRvector3d& vP,
-		const NJRvector3d& vOX,
-		const NJRvector3d& vOZ,
+		(const NJR::NJRpolygon&,
+		const NJR::NJRvector3d& vP,
+		const NJR::NJRvector3d& vOX,
+		const NJR::NJRvector3d& vOZ,
 		const char* layer,
-		const NJRDXF::Color &color);
+		const Color &color);
 
 private:
 
@@ -227,6 +217,8 @@ private:
 
 };
 
-NJRDXF::ofstream& operator << (NJRDXF::ofstream&, NJRDXF::Solid*);
+NJRDXF::ofstream& operator << (NJRDXF::ofstream&, Solid*);
+
+};   // namespace NJRDXF
 
 #endif // DXF3DSOLID_H

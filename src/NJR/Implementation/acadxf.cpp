@@ -163,8 +163,8 @@ Line:: Line()
 };
 
 void Line::Set
-	(const NJRvector3d& p1,
-	const NJRvector3d& p2,
+	(const NJR::NJRvector3d& p1,
+	const NJR::NJRvector3d& p2,
 	const char* layer,
 	const Color& color)
 {
@@ -174,7 +174,7 @@ void Line::Set
 	Entitity::SetLayer(layer);
 };
 
-void Line::SetPoint1(const NJRvector3d& point)
+void Line::SetPoint1(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -182,7 +182,7 @@ void Line::SetPoint1(const NJRvector3d& point)
 	Entitity::SetValue(pz0, p+2);
 };
 
-void Line::SetPoint2(const NJRvector3d& point)
+void Line::SetPoint2(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -208,10 +208,10 @@ Face::Face()
 };
 
 void Face::Set
-	(const NJRvector3d& p1,
-	const NJRvector3d& p2,
-	const NJRvector3d& p3,
-	const NJRvector3d& p4,
+	(const NJR::NJRvector3d& p1,
+	const NJR::NJRvector3d& p2,
+	const NJR::NJRvector3d& p3,
+	const NJR::NJRvector3d& p4,
 	const char* layer,
 	const Color& color)
 {
@@ -223,7 +223,7 @@ void Face::Set
 	Entitity::SetLayer(layer);
 };
 
-void Face::SetPoint1(const NJRvector3d& point)
+void Face::SetPoint1(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -231,7 +231,7 @@ void Face::SetPoint1(const NJRvector3d& point)
 	Entitity::SetValue(pz0, p+2);
 };
 
-void Face::SetPoint2(const NJRvector3d& point)
+void Face::SetPoint2(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -239,7 +239,7 @@ void Face::SetPoint2(const NJRvector3d& point)
 	Entitity::SetValue(pz1, p+2);
 };
 
-void Face::SetPoint3(const NJRvector3d& point)
+void Face::SetPoint3(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px2, p);
@@ -247,7 +247,7 @@ void Face::SetPoint3(const NJRvector3d& point)
 	Entitity::SetValue(pz2, p+2);
 };
 
-void Face::SetPoint4(const NJRvector3d& point)
+void Face::SetPoint4(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px3, p);
@@ -267,7 +267,7 @@ Text:: Text()
 }
 
 void Text::Set
-	(const NJRvector3d& p1,
+	(const NJR::NJRvector3d& p1,
 	const char* text,
 	const double& dheight,
 	const double& dangle,
@@ -280,7 +280,7 @@ void Text::Set
 	 Entitity::SetLayer(layer);
 };
 
-void Text::SetPoint(const NJRvector3d& point)
+void Text::SetPoint(const NJR::NJRvector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -307,8 +307,10 @@ void ofstream::open(const char* filename)
 
 	if (!bdxf.is_open())
 	{
-		std::cerr << " open dxf file " << filename << " error" << std::endl;
-		std::exit(8);
+		std::cout
+			<< "Error!! Code: acadxf.cpp" << std::endl
+			<< "        Note: Open dxf file \'" << filename << "\' error" << std::endl;
+		std::exit(0);
 	}
 
 	bdxf.write("AutoCAD Binary DXF\r\n\032\000", 22);
@@ -321,8 +323,10 @@ ofstream::~ofstream()
 {
 	if (bdxf.bad())
 	{
-		std::cerr << " write dxf file error" << std::endl;
-		std::exit(8) ;
+		std::cout
+			<< "Error!! Code: acadxf.cpp" << std::endl
+			<< "        Note: Cannot write dxf file" << std::endl;
+		std::exit(0);
 	}
 	else
 	{
@@ -348,13 +352,13 @@ ofstream& NJRDXF::ofstream::operator << (Entitity* entitity)
 		}
 		else
 		{
-			std::cerr
-				<< " ofstream: you forgot to set attributes of entitity "
-				<< (*ciGroup)->code () << std::endl;
+			std::cout
+				<< "Error!! Code: acadxf.cpp" << std::endl
+				<< "        Note: You forgot to set attributes of entitity" << std::endl;
 			std::exit(0);
 		}
 	}
-	return *this ;
+	return *this;
 };
 
 }; // NJRDXF namespace
