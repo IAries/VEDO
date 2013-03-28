@@ -44,7 +44,7 @@
 void usage (int g)
 {
 	std::cout
-		<< "Anne" << std::endl
+		<< "Anne X3 build 328" << std::endl
 		<< std::endl
 		<< '\t' << "Usage:" << std::endl
 		<< '\t' << "Anne <Mode> <IDO file> <Type I > <Record>" << std::endl
