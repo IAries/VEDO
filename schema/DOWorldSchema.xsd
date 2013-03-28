@@ -13,7 +13,7 @@
 						<xs:all>
 							<xs:element name="Publish" type="xs:date">
 								<xs:annotation>
-									<xs:documentation>publish date of this file formate</xs:documentation>
+									<xs:documentation>publish date of VEDO (YYYY-MM-DD)</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="Title" type="xs:string" minOccurs="0">
@@ -51,7 +51,7 @@
 									<xs:documentation>the amount of objects in this problem</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="FieldForce">
+							<xs:element name="FieldAcceleration">
 								<xs:annotation>
 									<xs:documentation>vector</xs:documentation>
 								</xs:annotation>
@@ -85,6 +85,16 @@
 									<xs:attribute name="YMax" type="xs:double" use="optional"/>
 									<xs:attribute name="ZMin" type="xs:double" use="optional"/>
 									<xs:attribute name="ZMax" type="xs:double" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SimConstant" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>SafetyFactor,NumUDDOStatus,NumUDIactStatus</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="ContactDetectSafetyFactor" type="xs:double" use="optional"/>
+									<xs:attribute name="NumUDDOStatus" type="xs:unsignedLong" use="optional"/>
+									<xs:attribute name="NumUDIactStatus" type="xs:unsignedLong" use="optional"/>
 								</xs:complexType>
 							</xs:element>
 							<xs:element name="SystemLog" type="xs:anyType" minOccurs="0">
@@ -315,6 +325,48 @@
 										</xs:element>
 									</xs:all>
 									<xs:attribute name="DOName" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="IactStatusTab" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="IactStatus" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>MasterDOStatusId, SlaveDOStatusID, Contact, Bond, NormalStiffness, ShearForce, User-defined Value</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ShearForce" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>vector</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required"/>
+												<xs:attribute name="y" type="xs:double" use="required"/>
+												<xs:attribute name="z" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="AccumulativeUserDefinedValue" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="ID" type="xs:unsignedLong" use="required"/>
+												<xs:attribute name="Value" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="UserDefinedValue" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="ID" type="xs:unsignedLong" use="required"/>
+												<xs:attribute name="Value" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="MasterDOStatusID" type="xs:unsignedLong" use="required"/>
+									<xs:attribute name="SlaveDOStatusID" type="xs:unsignedLong" use="required"/>
+									<xs:attribute name="Contact" type="xs:boolean" use="optional"/>
+									<xs:attribute name="Bond" type="xs:boolean" use="optional"/>
+									<xs:attribute name="NormalStiffness" type="xs:double" use="optional"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>

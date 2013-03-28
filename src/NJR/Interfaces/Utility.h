@@ -1,7 +1,7 @@
 // Colletion
 
-#ifndef _UTILITY_H
-#define _UTILITY_H
+#ifndef _NJR_UTILITY_H
+#define _NJR_UTILITY_H
 
 #include <algorithm>
 #include <list>
@@ -100,4 +100,4 @@ namespace NJR
 	};
 };   // namespace NJR
 
-#endif // _UTILITY_H
+#endif // _NJR_UTILITY_H

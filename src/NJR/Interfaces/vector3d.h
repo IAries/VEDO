@@ -2,7 +2,7 @@
  * std::vector.h  header file for 3D std::vector Object
  * version   1.2
  *
- * NJRvector3d is a 3d [Mathemitics] std::vector which defines the attributes and
+ * Vector3d is a 3d [Mathemitics] std::vector which defines the attributes and
  * basic opertaion of std::vector.
  *
  * History:  Ver 1.0 Created 2001 Aug  by  C.T. Jitin Yang
@@ -11,8 +11,8 @@
  *           (C++ Programming Langurage)
  ******************************************************************************/
 
-#ifndef _NJRVECTOR3d_H
-#define _NJRVECTOR3d_H
+#ifndef _NJR_VECTOR_3D_H
+#define _NJR_VECTOR_3D_H
 
 #include <NJR/Interfaces/Constants.h>
 #include <string>
@@ -21,37 +21,37 @@
 namespace NJR
 {
 
-class NJRvector3d
+class Vector3d
 {
 
 public:
 
-	NJRvector3d();
+	Vector3d();
 
-	NJRvector3d(const double& dx, const double& dy, const double& dz);
+	Vector3d(const double& dx, const double& dy, const double& dz);
 
-	NJRvector3d(const NJRvector3d& vInit);
+	Vector3d(const Vector3d& vInit);
 
-	explicit NJRvector3d(const char* cInit);
+	explicit Vector3d(const char* cInit);
 
-	explicit NJRvector3d(const std::string& sInit);
+	explicit Vector3d(const std::string& sInit);
 
-	NJRvector3d(const NJRDXF::ParticularVector& pvInit);
+	Vector3d(const NJRDXF::ParticularVector& pvInit);
 
 	// Assigns dx, dy, dx to x, y, z
-	const NJRvector3d& Set
+	const Vector3d& Set
 		(const double& dx, const double& dy, const double& dz);
 
-	const NJRvector3d& SetX(const double& dx);
+	const Vector3d& SetX(const double& dx);
 
-	const NJRvector3d& SetY(const double& dy);
+	const Vector3d& SetY(const double& dy);
 
-	const NJRvector3d& SetZ(const double& dz);
+	const Vector3d& SetZ(const double& dz);
 
-	const NJRvector3d& SetCylinder
+	const Vector3d& SetCylinder
 		(const double& dRadius, const double& dThita, const double& dz);
 
-	const NJRvector3d& SetSphere
+	const Vector3d& SetSphere
 		(const double& dRadius, const double& dAlpha, const double& dThita);
 
 	// Retrieves element x
@@ -76,7 +76,7 @@ public:
 	double length() const;
 
 	// Retrieves the direction of this std::vector
-	NJRvector3d direction() const;
+	Vector3d direction() const;
 
 	// Outputs the version and Programmer
 	inline void info() const
@@ -97,7 +97,7 @@ public:
 	 * EFERENCE: Computer Graphics 2th Donald. Hearn and M. Pauline Baker page
 	 *           419-420
 	 **************************************************************************/
-	NJRvector3d RotateAround(const NJRvector3d& gv) const;
+	Vector3d RotateAround(const Vector3d& gv) const;
 
 	/**************************************************************************
 	 * Retrieves the new position of this std::vector
@@ -105,70 +105,70 @@ public:
 	 * and   axial z has been replaced by nz
 	 *       axial y has been replaced by ny
 	 **************************************************************************/
-	NJRvector3d Trans
-		(const NJRvector3d& nx, const NJRvector3d& ny, const NJRvector3d& nz)
+	Vector3d Trans
+		(const Vector3d& nx, const Vector3d& ny, const Vector3d& nz)
 		const;
 
 	// Retrieves the projected std::vector on v of this std::vector
-	NJRvector3d ProjectOn(const NJRvector3d& v) const;
+	Vector3d ProjectOn(const Vector3d& v) const;
 
 	// Retrieves the dot product of this and input std::vector
-	double Dot(const NJRvector3d& v) const;
+	double Dot(const Vector3d& v) const;
 
 	// Retrieves the cross product of this and input std::vector
-	NJRvector3d Cross(const NJRvector3d& v) const;
+	Vector3d Cross(const Vector3d& v) const;
 
 	/**************************************************************************
-	 * Assignment Operators of NJRvector3d
-	 * NJRvector3d & operator = (char char *cAval)
+	 * Assignment Operators of Vector3d
+	 * Vector3d & operator = (char char *cAval)
 	 * Assigns a input std::vector to this std::vector
 	 * the std::vector's form is "(a,b,c)" where a,b,c are constants.
 	 *
 	 * NOTICE: It does not allow any char which exists between " and ( or ).
 	 *
-	 * For example: NJRvector3d v="(a,b,c)";
+	 * For example: Vector3d v="(a,b,c)";
 	 * the function will decompose the std::string "(a,b,c)" into 3 double variable
 	 * and assigns them to this std::vector.
 	 **************************************************************************/
 
-	const NJRvector3d& operator = (const char* cAval);
+	const Vector3d& operator = (const char* cAval);
 
-	const NJRvector3d& operator = (const std::string& sAval);
+	const Vector3d& operator = (const std::string& sAval);
 
-	const NJRvector3d& operator = (const NJRDXF::ParticularVector& pvAval);
+	const Vector3d& operator = (const NJRDXF::ParticularVector& pvAval);
 
-	const NJRvector3d& operator = (const NJRvector3d& vAval);
+	const Vector3d& operator = (const Vector3d& vAval);
 
-	const NJRvector3d& operator += (const NJRvector3d& v);
+	const Vector3d& operator += (const Vector3d& v);
 
-	const NJRvector3d& operator -= (const NJRvector3d& v);
+	const Vector3d& operator -= (const Vector3d& v);
 
-	//	Arithmetic Operators of NJRvector3d
-	NJRvector3d operator + (const NJRvector3d& v) const;
+	//	Arithmetic Operators of Vector3d
+	Vector3d operator + (const Vector3d& v) const;
 
-	NJRvector3d operator - (const NJRvector3d& v) const;
+	Vector3d operator - (const Vector3d& v) const;
 
 	//	Retrieves the dot product of left and right operands of %
-	double operator % (const NJRvector3d& v) const;
+	double operator % (const Vector3d& v) const;
 
 	// Retrieves the cross product of left and right operands of * .
-	NJRvector3d operator * (const NJRvector3d& v) const;
+	Vector3d operator * (const Vector3d& v) const;
 
   	// Retrieves a std::vector which is a result of this std::vector
 	// multiply by the given scalar ds
-	NJRvector3d operator * (const double& ds) const;
+	Vector3d operator * (const double& ds) const;
 
 	//	Retrieves the projected std::vector on v of this std::vector
-	NJRvector3d operator >> (const NJRvector3d& v) const;
+	Vector3d operator >> (const Vector3d& v) const;
 
 	// Retrieves true if all elements of this std::vector equals to vRight's
-	bool operator == (NJRvector3d& vRight) const ;
+	bool operator == (Vector3d& vRight) const ;
 
 	void print () const;
 
 private:
 
-	// NJRvector3d: A 3D std::vector that has three elements x, y ,z
+	// Vector3d: A 3D std::vector that has three elements x, y ,z
 	double _x;
 	double _y;
 	double _z;
@@ -183,12 +183,12 @@ private:
  * scalar ds
  ******************************************************************************/
 
-NJR::NJRvector3d operator - (const NJR::NJRvector3d& v);
+NJR::Vector3d operator - (const NJR::Vector3d& v);
 
-NJR::NJRvector3d operator * (const double& ds, const NJR::NJRvector3d& v);
+NJR::Vector3d operator * (const double& ds, const NJR::Vector3d& v);
 
-std::ostream& operator << (std::ostream& os, const NJR::NJRvector3d& v);
+std::ostream& operator << (std::ostream& os, const NJR::Vector3d& v);
 
-std::istream& operator >> (std::istream& is, NJR::NJRvector3d& v);
+std::istream& operator >> (std::istream& is, NJR::Vector3d& v);
 
-#endif // _NJRVECTOR3d_H
+#endif // _NJR_VECTOR_3D_H

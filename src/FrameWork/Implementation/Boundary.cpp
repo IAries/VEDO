@@ -19,8 +19,8 @@ Boundary::Boundary()
 Boundary::Boundary
 	(std::string sN,
 	 const bool* bS,
-	 const NJR::NJRvector3d vLP,
-	 const NJR::NJRvector3d vUP): sName(sN)
+	 const NJR::Vector3d vLP,
+	 const NJR::Vector3d vUP): sName(sN)
 {
 	for(unsigned int i=0; i<3; i++)
 	{
@@ -33,8 +33,8 @@ Boundary::Boundary
 
 Boundary::Boundary
 	(const bool* bS,
-	 const NJR::NJRvector3d vLP,
-	 const NJR::NJRvector3d vUP )
+	 const NJR::Vector3d vLP,
+	 const NJR::Vector3d vUP )
 {
 	sName = "Boundary";
 	for(unsigned int i=0; i<3; i++)
@@ -48,15 +48,15 @@ Boundary::Boundary
 
 Boundary::Boundary
 	(std::string sN,
-	 const NJR::NJRvector3d vLP,
-	 const NJR::NJRvector3d vUP): sName(sN)
+	 const NJR::Vector3d vLP,
+	 const NJR::Vector3d vUP): sName(sN)
 {
 	vLowerPoint = vLP;
 	vUpperPoint = vUP;
 	Correct();
 };
 
-Boundary::Boundary(const NJR::NJRvector3d vLP, const NJR::NJRvector3d vUP)
+Boundary::Boundary(const NJR::Vector3d vLP, const NJR::Vector3d vUP)
 {
 	sName = "Boundary";
 	vLowerPoint = vLP;
@@ -138,26 +138,26 @@ void Boundary::Correct()
 	};
 };
 
-void Boundary::SetLowerPoint(const NJR::NJRvector3d* point)
+void Boundary::SetLowerPoint(const NJR::Vector3d* point)
 {
 	vLowerPoint = *point;
 	Correct();
 };
 
-void Boundary::SetUpperPoint(const NJR::NJRvector3d* point)
+void Boundary::SetUpperPoint(const NJR::Vector3d* point)
 {
 	vUpperPoint = *point;
 	Correct();
 };
 
-void Boundary::SetCenter(const NJR::NJRvector3d* cNewCenter)
+void Boundary::SetCenter(const NJR::Vector3d* cNewCenter)
 {
-	NJR::NJRvector3d vShift = (*cNewCenter) - vCenter;
+	NJR::Vector3d vShift = (*cNewCenter) - vCenter;
 	vLowerPoint += vShift;
 	vUpperPoint += vShift;
 };
 
-void Boundary::SetRange(const NJR::NJRvector3d* vNewRange)
+void Boundary::SetRange(const NJR::Vector3d* vNewRange)
 {
 	double dX = fabs(vNewRange->x());
 	double dY = fabs(vNewRange->y());
@@ -168,7 +168,7 @@ void Boundary::SetRange(const NJR::NJRvector3d* vNewRange)
 	Correct();
 };
 
-bool Boundary::InBoundary(const NJR::NJRvector3d v) const
+bool Boundary::InBoundary(const NJR::Vector3d v) const
 {
 	if(Active())
 	{
@@ -203,7 +203,7 @@ bool Boundary::InBoundary(const NJR::NJRvector3d v) const
 	return true;
 };
 
-bool Boundary::InBoundary(const NJR::NJRvector3d v, const double r) const
+bool Boundary::InBoundary(const NJR::Vector3d v, const double r) const
 {
 	if(Active())
 	{
@@ -238,7 +238,7 @@ bool Boundary::InBoundary(const NJR::NJRvector3d v, const double r) const
 	return true;
 };
 
-void Boundary::EnforceBoundaryConditions(NJR::NJRvector3d* vPosition) const
+void Boundary::EnforceBoundaryConditions(NJR::Vector3d* vPosition) const
 {
 	double dPx = vPosition->x();
 	double dPy = vPosition->y();
@@ -328,7 +328,7 @@ void Boundary::EnforceBoundaryConditions(NJR::NJRvector3d* vPosition) const
 	vPosition->Set(dPx, dPy, dPz);
 };
 
-void Boundary::DifferenceBoundaryConditions(NJR::NJRvector3d* vDisplacement) const
+void Boundary::DifferenceBoundaryConditions(NJR::Vector3d* vDisplacement) const
 {
 	double dPx = vDisplacement->x();
 	double dPy = vDisplacement->y();

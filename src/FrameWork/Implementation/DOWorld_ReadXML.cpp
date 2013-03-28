@@ -1,3 +1,6 @@
+#include <FrameWork/Interfaces/Constants.h>
+#include <FrameWork/Interfaces/IactRecordTab.h>
+#include <FrameWork/Interfaces/ImpactStatus.h>
 #include <xercesc/dom/DOMAttr.hpp>
 //#include <xercesc/dom/DOMBuilder.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
@@ -144,6 +147,16 @@ static bool node2data(unsigned long& des, const DOMNode* node)
 	return true;
 };
 
+static bool node2data(bool& des, const DOMNode* node)
+{
+	if (node == 0)
+	{
+		return false;
+	}
+	des = atoi(trans(node->getFirstChild()->getNodeValue()));
+	return true;
+};
+
 static bool node2data(VEDO::DOShapeColor& des, const DOMNode* node)
 {
 	std::string sTmp;
@@ -250,7 +263,7 @@ static bool node2data
 	return false;
 };
 
-static bool node2data(NJR::NJRvector3d& des, const DOMNode *node)
+static bool node2data(NJR::Vector3d& des, const DOMNode *node)
 {
 	double x, y, z;
 	if (node == 0)
@@ -267,7 +280,7 @@ static bool node2data(NJR::NJRvector3d& des, const DOMNode *node)
 	return true;
 };
 
-static bool node2data(NJR::NJRhalfspace& des, const DOMNode *node)
+static bool node2data(NJR::HalfSpace& des, const DOMNode *node)
 {
 	double a, b, c, d;
 	std::string sense;
@@ -312,7 +325,7 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 	std::string               sScope;
 	double                    dDensity;
 	double                    dDensityFactor;
-	NJR::NJRvector3d          vExternalForce;
+	NJR::Vector3d          vExternalForce;
 
 	VEDO::DOShapeType         st;
 	VEDO::DOShapeAttributes   sa;
@@ -369,7 +382,7 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 	{
 		DOMNodeList* nl_hf = element->getElementsByTagName(XMLtrans("HalfSpace"));
 		NJR::NJRpolyhedra polyhedra;
-		NJR::NJRhalfspace hf;
+		NJR::HalfSpace hf;
 
 		unsigned long ulHalfSpaceSize = nl_hf->getLength();
 		for (i=0; i<ulHalfSpaceSize; ++i)
@@ -408,11 +421,11 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 static VEDO::DOStatus* node2dos (const DOMNode* node)
 {
 	std::string sDOName;
-	NJR::NJRvector3d vPosition;
-	NJR::NJRvector3d vVelocity;
-	NJR::NJRvector3d vOrientationX;
-	NJR::NJRvector3d	vOrientationZ;
-	NJR::NJRvector3d vAngularVelocity;
+	NJR::Vector3d vPosition;
+	NJR::Vector3d vVelocity;
+	NJR::Vector3d vOrientationX;
+	NJR::Vector3d	vOrientationZ;
+	NJR::Vector3d vAngularVelocity;
 
 	const DOMElement* element = (DOMElement*) node;
 
@@ -432,6 +445,44 @@ static VEDO::DOStatus* node2dos (const DOMNode* node)
 		 vAngularVelocity);
 };
 
+static std::pair<std::pair<unsigned long, unsigned long>, VEDO::ImpactStatus*> node2is(const DOMNode* node)
+{
+	unsigned long ulMaster, ulSlave;
+	bool          bContact, bBond;
+	double        dKn;
+	NJR::Vector3d vShearForce;
+	double        dudv[4*VEDO::uNumUDDImpactStatus];
+	double*       dpudv = &dudv[0];
+	for(unsigned u=VEDO::uNumUDDImpactStatus; u<3*VEDO::uNumUDDImpactStatus; u++)
+		dudv[u] = 0.0;
+
+	DOMNodeList*  nl_IactUDV;
+
+	const DOMElement* element = (DOMElement*) node;
+
+	node2data(ulMaster   , element->getAttributeNode(XMLtrans("MasterDOStatusID")));
+	node2data(ulSlave    , element->getAttributeNode(XMLtrans("SlaveDOStatusID")));
+	node2data(bContact   , element->getAttributeNode(XMLtrans("Contact")));
+	node2data(bBond      , element->getAttributeNode(XMLtrans("Bond")));
+	node2data(dKn        , element->getAttributeNode(XMLtrans("NormalStiffness")));
+	node2data(vShearForce, element->getElementsByTagName(XMLtrans("ShearForce"))->item(0));
+
+	nl_IactUDV = element->getElementsByTagName(XMLtrans("AccumulativeUserDefinedValue"));
+	for (unsigned u=0; u<VEDO::uNumUDDImpactStatus; u++, dpudv++)
+		node2data
+			(*dpudv,
+			((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+
+	nl_IactUDV = element->getElementsByTagName(XMLtrans("UserDefinedValue"));
+	dpudv += 2*VEDO::uNumUDDImpactStatus;
+	for (unsigned u=0; u<VEDO::uNumUDDImpactStatus; u++, dpudv++)
+		node2data
+			(*dpudv,
+			((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+
+	return std::make_pair(std::make_pair(ulMaster, ulSlave), new VEDO::ImpactStatus(bContact, bBond, dKn, vShearForce, &dudv[0]));
+};
+
 static VEDO::IactModel* node2iactml (const DOMNode* node)
 {
 	std::string                      sMasterGroup;
@@ -442,8 +493,6 @@ static VEDO::IactModel* node2iactml (const DOMNode* node)
 	VEDO::IactMechanism              im;
 	DOMNodeList*                     nl_IactM;
 
-	unsigned long int i;
-
 	const DOMElement* element = (DOMElement*)node;
 
 	node2data(sMasterGroup , element->getAttributeNode(XMLtrans("MasterGroup" )));
@@ -452,7 +501,7 @@ static VEDO::IactModel* node2iactml (const DOMNode* node)
 
 	nl_IactM = element->getElementsByTagName(XMLtrans("Mechanism"));
 	unsigned long ulMechanismSize = nl_IactM->getLength();
-	for (i=0; i<ulMechanismSize; ++i)
+	for (unsigned long i=0; i<ulMechanismSize; ++i)
 	{
 		node2data
 			(im.Name,
@@ -472,17 +521,271 @@ static VEDO::IactModel* node2iactml (const DOMNode* node)
 namespace VEDO
 {
 
+bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
+{
+	DOWorld::Clear();
+	std::string   sTitle   = "noTitle";
+	std::string   sPublish = "noPublish";
+	std::string   sNote    = "noNote";
+	NJR::Vector3d   vFieldAcceleration;
+	NJR::Vector3d   vLowerBoundaryZOI;
+	NJR::Vector3d   vUpperBoundaryZOI;
+	NJR::Vector3d   vLowerBoundaryPBC;
+	NJR::Vector3d   vUpperBoundaryPBC;
+	double        dStart;
+	double        dStop;
+	double        dInterval;
+	double        dCurrent;
+	unsigned long lNumObject;
+
+	register unsigned int i;
+
+	XMLPlatformUtils::Initialize();
+
+	DOMNodeList* nl_iactml;
+	DOMNodeList* nl_doml;
+	DOMNodeList* nl_dos;
+	DOMNodeList* nl_is;
+	DOMElement*  element;
+
+	static const XMLCh gLS[] = { chLatin_L, chLatin_S, chNull };
+
+	DOMImplementation* impl
+		= DOMImplementationRegistry::getDOMImplementation(gLS);
+/*
+	// Xerces-C++ 2.x
+	DOMBuilder* parser
+		= ((createDOMBuilder*)impl)
+			->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+	parser->setFeature(XMLUni::fgDOMNamespaces           , true);
+	parser->setFeature(XMLUni::fgXercesSchema            , true);
+	parser->setFeature(XMLUni::fgXercesSchemaFullChecking, true);
+	parser->setFeature(XMLUni::fgDOMValidation           , true);
+	parser->setFeature(XMLUni::fgDOMDatatypeNormalization, true);
+
+	DOMCountErrorHandler errorHandler;
+	parser->setErrorHandler(&errorHandler);
+
+	// Reset error count first
+	errorHandler.resetErrors();
+*/
+
+	// Xerces-C++ 3.0
+	DOMLSParser* parser
+		= ((DOMImplementationLS*)impl)
+			->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+
+	DOMConfiguration* conf(parser->getDomConfig());
+	// Perform namespace processing.
+	conf->setParameter(XMLUni::fgDOMNamespaces, true);
+	// Enable/Disable validation.
+	conf->setParameter(XMLUni::fgDOMValidate, true);
+	conf->setParameter(XMLUni::fgXercesSchema, true);
+	conf->setParameter(XMLUni::fgXercesSchemaFullChecking, false);
+	// Discard comment nodes in the document.
+	conf->setParameter(XMLUni::fgDOMComments, false);
+	// Enable datatype normalization.
+	conf->setParameter(XMLUni::fgDOMDatatypeNormalization, true);
+	/***************************************************************************
+	 Do not create EntityReference nodes in the DOM tree. No EntityReference
+	 nodes will be created, only the nodes corresponding to their fully expanded
+	 substitution text will be created.
+	 ***************************************************************************/
+	conf->setParameter(XMLUni::fgDOMEntities, false);
+	// Do not include ignorable whitespace in the DOM tree.
+	conf->setParameter(XMLUni::fgDOMElementContentWhitespace, false);
+	// We will release the DOM document ourselves.
+	conf->setParameter(XMLUni::fgXercesUserAdoptsDOMDocument, true);
+
+	DOMCountErrorHandler errorHandler;
+	conf->setParameter (XMLUni::fgDOMErrorHandler, &errorHandler);
+
+	// Reset error count first
+	errorHandler.resetErrors();
+
+	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc = 0;
+
+	try
+	{
+	   // reset document pool
+	   parser->resetDocumentPool();
+	   doc = parser->parseURI(xmlFile);
+	}
+
+	catch (const XMLException& toCatch)
+	{
+		std::cout
+			<< std::endl
+			<< "Error during parsing: '"
+			<< xmlFile
+			<< std::endl;
+	}
+
+	/**************************************************************************
+	 * Extract the DOM tree, get the std::list of all the elements and report the
+	 * length as the count of elements.
+	 **************************************************************************/
+
+	if (errorHandler.getSawErrors())
+	{
+		std::cout
+			<< std::endl
+			<< "Errors occurred, no output available"
+			<< std::endl
+			<< std::endl;
+	   	parser->release();
+		XMLPlatformUtils::Terminate();
+		return false;
+	}
+
+	node2data(sPublish          , doc->getElementsByTagName(XMLtrans("Publish"          ))->item(0));
+	node2data(sTitle            , doc->getElementsByTagName(XMLtrans("Title"            ))->item(0));
+	node2data(sNote             , doc->getElementsByTagName(XMLtrans("Note"             ))->item(0));
+	node2data(lNumObject        , doc->getElementsByTagName(XMLtrans("NumObject"        ))->item(0));
+	node2data(vFieldAcceleration, doc->getElementsByTagName(XMLtrans("FieldAcceleration"))->item(0));
+
+	element
+		= (DOMElement *)doc->getElementsByTagName(XMLtrans("TimeControl"))->item(0);
+
+	node2data(dStart     , element->getAttributeNode(XMLtrans("Start"   )));
+	node2data(dStop      , element->getAttributeNode(XMLtrans("Stop"    )));
+	node2data(dInterval  , element->getAttributeNode(XMLtrans("Interval")));
+	node2data(dCurrent   , element->getAttributeNode(XMLtrans("Current" )));
+
+	element
+		= (DOMElement *)doc->getElementsByTagName(XMLtrans("SimConstant"))->item(0);
+
+    if(element)
+    {
+        node2data(VEDO::dSafetyFactor, element->getAttributeNode(XMLtrans("ContactDetectSafetyFactor")));
+        // Aries: We have not finish it. At here, we ignore "NumUDDOStatus" and "NumUDIactStatus".
+        //node2data(VEDO::uNumUDDDOStatus, element->getAttributeNode(XMLtrans("NumUDDOStatus")));
+        //node2data(VEDO::uNumUDDImpactStatus, element->getAttributeNode(XMLtrans("NumUDIactStatus")));
+    }
+
+	double dBV[3];
+
+	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("ZOI"))->item(0);
+	if(element)
+    {
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
+            dBV[2] = 0.0;
+
+        vLowerBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
+
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
+            dBV[2] = 0.0;
+
+        vUpperBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
+    }
+    else
+    {
+        vLowerBoundaryZOI.Set(0.0, 0.0, 0.0);
+        vUpperBoundaryZOI.Set(0.0, 0.0, 0.0);
+    }
+
+	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("PBC"))->item(0);
+	if(element)
+    {
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
+            dBV[2] = 0.0;
+
+        vLowerBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
+            dBV[2] = 0.0;
+
+        vUpperBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+    }
+    else
+    {
+        vLowerBoundaryPBC.Set(0.0, 0.0, 0.0);
+        vUpperBoundaryPBC.Set(0.0, 0.0, 0.0);
+    }
+
+	pSystemParameter
+		= new SystemParameter
+			(sTitle,
+			sNote,
+			dStart,
+			dStop,
+			dInterval,
+			dCurrent,
+			lNumObject,
+			vFieldAcceleration,
+			Boundary(vLowerBoundaryZOI, vUpperBoundaryZOI),
+			Boundary(vLowerBoundaryPBC, vUpperBoundaryPBC) );
+
+	nl_doml = doc->getElementsByTagName(XMLtrans("DOModel"));
+	unsigned long ulDOModelSize = nl_doml->getLength();
+	for (i=0; i<ulDOModelSize; ++i)
+	{
+		cDOModel.push_back(node2doml(nl_doml->item(i)));
+	}
+
+	nl_iactml = doc->getElementsByTagName(XMLtrans("IactModel"));
+	unsigned long ulIactModelSize = nl_iactml->getLength();
+	for (i=0; i<ulIactModelSize; ++i)
+	{
+		cIactModel.push_back(node2iactml(nl_iactml->item(i)));
+	}
+
+	nl_dos = doc->getElementsByTagName(XMLtrans("DOStatus"));
+	unsigned long ulDOStatusSize = nl_dos->getLength();
+	for (i=0; i<ulDOStatusSize; ++i)
+	{
+		cDOStatus.push_back(node2dos (nl_dos->item(i)));
+	}
+
+	nl_is = doc->getElementsByTagName(XMLtrans("IactStatus"));
+	unsigned long ulIactStatusSize = nl_is->getLength();
+	std::pair<std::pair<unsigned long, unsigned long>, VEDO::ImpactStatus*> ululis;
+	for (i=0; i<ulIactStatusSize; ++i)
+	{
+	    ululis = node2is(nl_is->item(i));
+        irtp->PushRecord(ululis.first.first, ululis.first.second, *(ululis.second));
+	}
+
+	parser->release();
+	XMLPlatformUtils::Terminate();
+	return DOWorld::Check();
+};
+
 bool DOWorld::ReadXML(const char* xmlFile)
 {
 	DOWorld::Clear();
 	std::string   sTitle   = "noTitle";
 	std::string   sPublish = "noPublish";
 	std::string   sNote    = "noNote";
-	NJR::NJRvector3d   vFieldForce;
-	NJR::NJRvector3d   vLowerBoundaryZOI;
-	NJR::NJRvector3d   vUpperBoundaryZOI;
-	NJR::NJRvector3d   vLowerBoundaryPBC;
-	NJR::NJRvector3d   vUpperBoundaryPBC;
+	NJR::Vector3d   vFieldAcceleration;
+	NJR::Vector3d   vLowerBoundaryZOI;
+	NJR::Vector3d   vUpperBoundaryZOI;
+	NJR::Vector3d   vLowerBoundaryPBC;
+	NJR::Vector3d   vUpperBoundaryPBC;
 	double        dStart;
 	double        dStop;
 	double        dInterval;
@@ -588,85 +891,11 @@ bool DOWorld::ReadXML(const char* xmlFile)
 		return false;
 	}
 
-	node2data(sPublish         , doc->getElementsByTagName(XMLtrans("Publish"      ))->item(0));
-	node2data(sTitle           , doc->getElementsByTagName(XMLtrans("Title"        ))->item(0));
-	node2data(sNote            , doc->getElementsByTagName(XMLtrans("Note"         ))->item(0));
-	node2data(lNumObject       , doc->getElementsByTagName(XMLtrans("NumObject"    ))->item(0));
-	node2data(vFieldForce      , doc->getElementsByTagName(XMLtrans("FieldForce"   ))->item(0));
-
-	double dBV[3];
-
-	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("ZOI"))->item(0);
-
-	if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
-	{
-		dBV[0] = 0.0;
-	};
-
-	if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
-	{
-		dBV[1] = 0.0;
-	};
-
-	if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
-	{
-		dBV[2] = 0.0;
-	};
-
-	vLowerBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
-
-	if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
-	{
-		dBV[0] = 0.0;
-	};
-
-	if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
-	{
-		dBV[1] = 0.0;
-	};
-
-	if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
-	{
-		dBV[2] = 0.0;
-	};
-
-	vUpperBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
-
-	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("PBC"))->item(0);
-
-	if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
-	{
-		dBV[0] = 0.0;
-	};
-
-	if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
-	{
-		dBV[1] = 0.0;
-	};
-
-	if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
-	{
-		dBV[2] = 0.0;
-	};
-
-	vLowerBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
-
-	if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
-	{
-		dBV[0] = 0.0;
-	};
-
-	if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
-	{
-		dBV[1] = 0.0;
-	};
-
-	if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
-	{
-		dBV[2] = 0.0;
-	};
-
-	vUpperBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+	node2data(sPublish          , doc->getElementsByTagName(XMLtrans("Publish"          ))->item(0));
+	node2data(sTitle            , doc->getElementsByTagName(XMLtrans("Title"            ))->item(0));
+	node2data(sNote             , doc->getElementsByTagName(XMLtrans("Note"             ))->item(0));
+	node2data(lNumObject        , doc->getElementsByTagName(XMLtrans("NumObject"        ))->item(0));
+	node2data(vFieldAcceleration, doc->getElementsByTagName(XMLtrans("FieldAcceleration"))->item(0));
 
 	element
 		= (DOMElement *)doc->getElementsByTagName(XMLtrans("TimeControl"))->item(0);
@@ -675,6 +904,80 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	node2data(dStop      , element->getAttributeNode(XMLtrans("Stop"    )));
 	node2data(dInterval  , element->getAttributeNode(XMLtrans("Interval")));
 	node2data(dCurrent   , element->getAttributeNode(XMLtrans("Current" )));
+
+	element
+		= (DOMElement *)doc->getElementsByTagName(XMLtrans("SimConstant"))->item(0);
+
+    if(element)
+    {
+        node2data(VEDO::dSafetyFactor, element->getAttributeNode(XMLtrans("ContactDetectSafetyFactor")));
+        //node2data(VEDO::uNumUDDDOStatus, element->getAttributeNode(XMLtrans("NumUDDOStatus")));
+        //node2data(VEDO::uNumUDDImpactStatus, element->getAttributeNode(XMLtrans("NumUDIactStatus")));
+    }
+
+	double dBV[3];
+
+	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("ZOI"))->item(0);
+	if(element)
+    {
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
+            dBV[2] = 0.0;
+
+        vLowerBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
+
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
+            dBV[2] = 0.0;
+
+        vUpperBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
+    }
+    else
+    {
+        vLowerBoundaryZOI.Set(0.0, 0.0, 0.0);
+        vUpperBoundaryZOI.Set(0.0, 0.0, 0.0);
+    }
+
+	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("PBC"))->item(0);
+	if(element)
+    {
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
+            dBV[2] = 0.0;
+
+        vLowerBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+
+        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
+            dBV[0] = 0.0;
+
+        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
+            dBV[1] = 0.0;
+
+        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
+            dBV[2] = 0.0;
+
+        vUpperBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+    }
+    else
+    {
+        vLowerBoundaryPBC.Set(0.0, 0.0, 0.0);
+        vUpperBoundaryPBC.Set(0.0, 0.0, 0.0);
+    }
 
 	pSystemParameter
 		= new SystemParameter
@@ -685,7 +988,7 @@ bool DOWorld::ReadXML(const char* xmlFile)
 			dInterval,
 			dCurrent,
 			lNumObject,
-			vFieldForce,
+			vFieldAcceleration,
 			Boundary(vLowerBoundaryZOI, vUpperBoundaryZOI),
 			Boundary(vLowerBoundaryPBC, vUpperBoundaryPBC) );
 

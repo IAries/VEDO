@@ -16,27 +16,21 @@ public:
 
 	IactRecordTab();
 
-	IactRecordTab(const char* filename);
-
 	IactRecordTab
 		(const std::map<std::pair<unsigned long, unsigned long>,
 		ImpactStatus>& m);
 
 	// I/O function
 
-	bool ReadIRT(const char* filename);
-
 	bool ReadIRT2010(const char* filename);
 
 	bool ReadIRT2011(const char* filename);
 
-	void WriteIRT(const char* filename) const;
-
 	//bool ReadTextIRT(const char* filename);
 
-	void WriteTextIRT (const char* filename) const;
+	void WriteCSV (std::string filename) const;
 
-	inline unsigned long int GetTabSize() const
+	inline unsigned long GetTabSize() const
 	{
 		return mapImStatus.size();
 	}
@@ -65,6 +59,12 @@ public:
 	void ModifyPair(std::map<unsigned long, long> mNewPairList);
 
 	unsigned long ContactNumber() const;
+
+	//binary output
+	std::ofstream& operator >> (std::ofstream& idof) const;
+
+	//binary input
+	std::ifstream& operator << (std::ifstream& idof);
 
 private:
 

@@ -1,7 +1,7 @@
 #ifndef _ISWMODELS_H
 #define _ISWMODELS_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <algorithm>
 
 namespace VEDO
@@ -26,42 +26,42 @@ public:
 		 const double& dBn,
 		 const double& dImpactDepth);
 
-	NJR::NJRvector3d NormalForceHertzSpring
+	NJR::Vector3d NormalForceHertzSpring
 		(const double&      dKn,
 		 const double&      dCn,
 		 const double&      dImpactDepth,
-		 const NJR::NJRvector3d& vImpactDirection,
-		 const NJR::NJRvector3d& vRelativeNormalVelocity);
+		 const NJR::Vector3d& vImpactDirection,
+		 const NJR::Vector3d& vRelativeNormalVelocity);
 
-	NJR::NJRvector3d NormalForce
+	NJR::Vector3d NormalForce
 		(const double&      dKn,
 		 const double&      dCn,
 		 const double&      dImpactDepth,
-		 const NJR::NJRvector3d& vImpactDirection,
-		 const NJR::NJRvector3d& vRelativeNormalVelocity);
+		 const NJR::Vector3d& vImpactDirection,
+		 const NJR::Vector3d& vRelativeNormalVelocity);
 
-	NJR::NJRvector3d NormalForceNoTension
+	NJR::Vector3d NormalForceNoTension
 		(const double&      dKn,
 		 const double&      dCn,
 		 const double&      dImpactDepth,
-		 const NJR::NJRvector3d& vImpactDirection,
-		 const NJR::NJRvector3d& vRelativeNormalVelocity);
+		 const NJR::Vector3d& vImpactDirection,
+		 const NJR::Vector3d& vRelativeNormalVelocity);
 
-	NJR::NJRvector3d NormalForce
+	NJR::Vector3d NormalForce
 		(const double&      dKn,
 		 const double&      dCn,
 		 const double&      dBn,
 		 const double&      dImpactDepth,
-		 const NJR::NJRvector3d& vImpactDirection,
-		 const NJR::NJRvector3d& vRelativeNormalVelocity);
+		 const NJR::Vector3d& vImpactDirection,
+		 const NJR::Vector3d& vRelativeNormalVelocity);
 
-	NJR::NJRvector3d NormalForceNoTension
+	NJR::Vector3d NormalForceNoTension
 		(const double&      dKn,
 		 const double&      dCn,
 		 const double&      dBn,
 		 const double&      dImpactDepth,
-		 const NJR::NJRvector3d& vImpactDirection,
-		 const NJR::NJRvector3d& vRelativeNormalVelocity);
+		 const NJR::Vector3d& vImpactDirection,
+		 const NJR::Vector3d& vRelativeNormalVelocity);
 
 	double ElasticModules2EquivalentStiffness
 		(const double& dEa,
@@ -83,7 +83,7 @@ public:
 		 const double& dRelativeShearVelocity,
 		 const double& dNormalForce                );
 
-	NJR::NJRvector3d ShearForceRotation(const NJR::NJRvector3d&, const NJR::NJRvector3d&);
+	NJR::Vector3d ShearForceRotation(const NJR::Vector3d&, const NJR::Vector3d&);
 
 private:
 

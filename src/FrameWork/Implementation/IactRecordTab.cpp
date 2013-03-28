@@ -1,5 +1,7 @@
+#include <NJR/Interfaces/Utility.h>
 #include <FrameWork/Interfaces/Constants.h>
 #include <FrameWork/Interfaces/IactRecordTab.h>
+#include <cstring>
 #include <fstream>
 
 namespace VEDO
@@ -7,11 +9,6 @@ namespace VEDO
 
 IactRecordTab::IactRecordTab()
 {
-}
-
-IactRecordTab::IactRecordTab(const char* filename)
-{
-	this->ReadIRT(filename);
 }
 
 IactRecordTab::IactRecordTab
@@ -35,14 +32,14 @@ bool IactRecordTab::ReadIRT2010(const char* filename)
 
 	unsigned long ulInteractionNumber;
 	std::pair<unsigned long,unsigned long> pElements;
-	bool         bContact, bBond;
-	double       dKn;
-	int          iStage;
-	NJR::NJRvector3d  vShearForce;
-	ImpactStatus is;
+	bool          bContact, bBond;
+	double        dKn;
+	int           iStage;
+	NJR::Vector3d vShearForce;
+	ImpactStatus  is;
 
-	double dudv[4*VEDO::uNumUserDefinedData];
-	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+	double dudv[4*uNumUDDImpactStatus];
+	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 		dudv[u] = 0.0;
 	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
 	for(unsigned long ul=0; ul<ulInteractionNumber; ++ul)
@@ -93,13 +90,14 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 
 	unsigned long ulInteractionNumber;
 	std::pair<unsigned long,unsigned long> pElements;
-	bool         bContact, bBond;
-	double       dKn;
-	NJR::NJRvector3d  vShearForce;
-	ImpactStatus is;
+	bool          bContact, bBond;
+	double        dKn;
+	int           iStage;
+	NJR::Vector3d vShearForce;
+	ImpactStatus  is;
 
-	double dudv[4*VEDO::uNumUserDefinedData];
-	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+	double dudv[4*uNumUDDImpactStatus];
+	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 		dudv[u] = 0.0;
 
 	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
@@ -126,99 +124,7 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 	irtif.close();
 
 	return true;
-}
-
-bool IactRecordTab::ReadIRT(const char* filename)
-{
-	mapImStatus.clear();
-
-	std::ifstream irtif;
-	irtif.open(filename, std::ios::in | std::ios::binary);
-
-	if (!irtif.is_open())
-	{
-		std::cout << "IRT read file error" << std::endl;
-		return false;
-	}
-
-    std::string sPublish;
-    irtif.read((char*) &sPublish, sizeof(std::string));
-
-	unsigned long ulInteractionNumber;
-	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
-
-	std::pair<unsigned long, unsigned long> pElements;
-	bool         bContact, bBond;
-	double       dKn;
-	NJR::NJRvector3d  vShearForce;
-	double       dudv[4*VEDO::uNumUserDefinedData];
-	ImpactStatus is;
-
-	for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
-	{
-		irtif.read((char*) &pElements  , 2*sizeof(unsigned long));
-
-		irtif.read((char*) &bContact   , sizeof(bool));
-		is.SetContact(bContact);
-
-		irtif.read((char*) &bBond      , sizeof(bool));
-		is.SetBond(bBond);
-
-		irtif.read((char*) &dKn        , sizeof(double));
-		is.SetKn(dKn);
-
-		irtif.read((char*) &vShearForce, 3*sizeof(double));
-		is.SetShearForce(vShearForce);
-
-		for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
-			irtif.read((char*) &dudv[u], sizeof(double));
-
-		is.SetAllUserDefinedValue(&dudv[0]);
-
-		mapImStatus.insert(std::make_pair(pElements, is));
-	}
-	irtif.close();
-
-	return true;
-}
-
-void IactRecordTab::WriteIRT(const char* filename) const
-{
-	std::ofstream irtof;
-	irtof.open(filename, std::ios::out | std::ios::binary);
-
-	irtof.write((char*) (&VEDO::sPublish), sizeof(std::string));
-
-	unsigned long ulInteractionNumber = mapImStatus.size();
-	irtof.write((char*) (&ulInteractionNumber), sizeof(unsigned long));
-
-	bool   bContact, bBond;
-	double dKn;
-	const double* cdpudv;
-	NJR::NJRvector3d vShearForce;
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
-	for (iter=mapImStatus.begin(); iter!=mapImStatus.end(); ++iter)
-	{
-		irtof.write( (char*) &(iter->first)      , 2*sizeof(unsigned long));
-
-		bContact = iter->second.Contact();
-		irtof.write( (char*) &bContact           , sizeof(bool));
-
-		bBond = iter->second.Bond();
-		irtof.write( (char*) &bBond              , sizeof(bool));
-
-		dKn = iter->second.Kn();
-		irtof.write( (char*) &dKn                , sizeof(double));
-
-        vShearForce = iter->second.ShearForce();
-		irtof.write( (char*) &vShearForce        , 3*sizeof(double));
-
-		cdpudv = iter->second.RetrieveAllUserDefinedValue();
-		for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
-			irtof.write( (char*) (cdpudv+u), sizeof(double));
-	}
-	irtof.close();
-}
+};
 
 const ImpactStatus* IactRecordTab::GetImpactStatus
 	(unsigned long master,unsigned long slave)
@@ -322,7 +228,7 @@ bool IactRecordTab::ReadTextIRT(const char* filename)
 
 	unsigned long ulInteractionNumber, ulElement1, ulElement2;
 	bool          bContact, bBond;
-	NJR::NJRvector3d   vShearForce, vUDV;
+	NJR::Vector3d   vShearForce, vUDV;
 	double        dKn, dVx, dVy, dVz, dUDV, vUDVx, vUDVy, vUDVz;
 	ImpactStatus  is;
 
@@ -375,21 +281,19 @@ bool IactRecordTab::ReadTextIRT(const char* filename)
 }
 */
 
-void IactRecordTab::WriteTextIRT(const char* filename) const
+void IactRecordTab::WriteCSV(std::string filename) const
 {
-	std::ofstream irtof(filename);
-	//irtof.open (filename, std::ios::out | std::ios::binary);
+	std::ofstream irtof(filename.c_str(), std::ios::out);
 
 	std::map< std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
 	unsigned long ulInteractionNumber = mapImStatus.size();
 	//irtof.write( (char*) (&tabSize) , sizeof(unsigned long) );
 	irtof
-		<< "Interactions=" << ulInteractionNumber << std::endl
 		<< "Master discrete object ID, Slave discrete object ID, "
 		<< "Contact, Bond, Normal Stiffness, "
 		<< "Shear force (x), Shear force (y), Shear force (z)";
 
-	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 		irtof << ", User-defined value " << u+1;
 
 	irtof << std::endl;
@@ -408,12 +312,86 @@ void IactRecordTab::WriteTextIRT(const char* filename) const
 			<< ", " << iter->second.ShearForce().z();
 
 		cdpudv = iter->second.RetrieveAllUserDefinedValue();
-		for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+		for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 			irtof << ", " << *(cdpudv+u);
 
 		irtof << std::endl;
 	}
 	irtof.close();
 };
+
+std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
+{
+    unsigned long ulSize = mapImStatus.size();
+	idof.write((char*) &ulSize, sizeof(unsigned long));
+
+	const ImpactStatus* isp;
+	bool                bTemp;
+	double              dTemp;
+	NJR::Vector3d       vTemp;
+	const double*       dpUDV;
+    for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator mapImStatusP = mapImStatus.begin();
+        mapImStatusP != mapImStatus.end();
+        mapImStatusP++                                                                                              )
+    {
+        idof.write((char*) &(mapImStatusP->first)             , 2*sizeof(unsigned long));
+
+        isp   = &(mapImStatusP->second);
+        bTemp = isp->Contact();
+        idof.write((char*) &bTemp                             , sizeof(bool));
+        bTemp = isp->Bond();
+        idof.write((char*) &bTemp                             , sizeof(bool));
+        dTemp =isp->Kn();
+        idof.write((char*) &dTemp                             , sizeof(double));
+        vTemp = isp->ShearForce();
+        idof.write((char*) &vTemp                             , 3*sizeof(double));
+
+        dpUDV = isp->RetrieveAllUserDefinedValue();
+        idof.write((char*) dpUDV                              , VEDO::uNumUDDImpactStatus*sizeof(double));
+        idof.write((char*) (dpUDV+3*VEDO::uNumUDDImpactStatus), VEDO::uNumUDDImpactStatus*sizeof(double));
+    }
+
+	return idof;
+};
+
+std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
+{
+	mapImStatus.clear();
+	unsigned long ulInteractionNumber;
+	idof.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
+
+	std::pair<unsigned long, unsigned long> pElements;
+	bool          bContact, bBond;
+	double        dKn;
+	NJR::Vector3d vShearForce;
+	ImpactStatus  is;
+	double dpudv[4*VEDO::uNumUDDImpactStatus];
+	memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
+
+    for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
+    {
+        idof.read((char*) &pElements                         , 2*sizeof(unsigned long));
+
+        idof.read((char*) &bContact                          , sizeof(bool));
+        is.SetContact(bContact);
+
+        idof.read((char*) &bBond                             , sizeof(bool));
+        is.SetBond(bBond);
+
+        idof.read((char*) &dKn                               , sizeof(double));
+        is.SetKn(dKn);
+
+        idof.read((char*) &vShearForce                       , 3*sizeof(double));
+        is.SetShearForce(vShearForce);
+
+        idof.read((char*) &dpudv[0]                          , VEDO::uNumUDDImpactStatus*sizeof(double));
+        idof.read((char*) &dpudv[3*VEDO::uNumUDDImpactStatus], VEDO::uNumUDDImpactStatus*sizeof(double));
+
+        mapImStatus.insert(std::make_pair(pElements, is));
+    }
+
+	return idof;
+};
+
 
 };   // namespace VEDO

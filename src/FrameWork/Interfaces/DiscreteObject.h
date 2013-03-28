@@ -1,7 +1,7 @@
 #ifndef _DISCRETE_OBJECT_H
 #define _DISCRETE_OBJECT_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/Boundary.h>
 #include <FrameWork/Interfaces/DOWorld.h>
 
@@ -32,7 +32,7 @@ public:
 		return dSudoMass;
 	};
 
-	inline NJR::NJRvector3d GetMassMomentInertia() const
+	inline NJR::Vector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	}
@@ -57,42 +57,42 @@ public:
 		return pDOStatus;
 	};
 
-	inline const NJR::NJRvector3d& GetImpact() const
+	inline const NJR::Vector3d& GetImpact() const
 	{
 		return vImpact;
 	};
 
-	inline const NJR::NJRvector3d& GetAngularImpact() const
+	inline const NJR::Vector3d& GetAngularImpact() const
 	{
 		return vAngularImpact;
 	};
 
-	inline void SetVelocity(const NJR::NJRvector3d& vV)
+	inline void SetVelocity(const NJR::Vector3d& vV)
 	{
 		pDOStatus->SetVelocity(vV);
 	};
 
-	inline void SetAngularVelocity(const NJR::NJRvector3d& vAV)
+	inline void SetAngularVelocity(const NJR::Vector3d& vAV)
 	{
 		pDOStatus->SetAngularVelocity(vAV);
 	};
 
-	void ModifyVelocity(const NJR::NJRvector3d& vdv);
+	void ModifyVelocity(const NJR::Vector3d& vdv);
 
-	void ModifyPosition(const NJR::NJRvector3d& vdp);
+	void ModifyPosition(const NJR::Vector3d& vdp);
 
 	void ClearImpact();
 
 	virtual void AddImpact
-		(const NJR::NJRvector3d& vImpact, const NJR::NJRvector3d& vAngularImpact = NJRDXF::ZERO);
+		(const NJR::Vector3d& vImpact, const NJR::Vector3d& vAngularImpact = NJRDXF::ZERO);
 
 /*
-	inline NJR::NJRvector3d GetFieldImpact() const
+	inline NJR::Vector3d GetFieldImpact() const
 	{
 		return pDOStatus->GetFieldImpact();
 	};
 
-	inline void SetFieldImpact(const NJR::NJRvector3d& vi)
+	inline void SetFieldImpact(const NJR::Vector3d& vi)
 	{
 		pDOStatus->SetFieldImpact(vi);
 	};
@@ -121,9 +121,9 @@ protected:
 
 	DOStatus* pDOStatus;
 
-	NJR::NJRvector3d	vImpact;
+	NJR::Vector3d	vImpact;
 
-	NJR::NJRvector3d	vAngularImpact;
+	NJR::Vector3d	vAngularImpact;
 
 	double dVolume;
 
@@ -131,7 +131,7 @@ protected:
 
 	double dSudoMass;
 
-	NJR::NJRvector3d	vMassMomentInertia;
+	NJR::Vector3d	vMassMomentInertia;
 
 	DiscreteObject(const DOStatus* cpdos, const DOModel* cpdoml);
 

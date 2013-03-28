@@ -16,7 +16,7 @@ public:
 		const DiscreteObject* cpdoMaster,
 		const IactModel* cpiactml        );
 
-	NJR::NJRvector3d NextStep
+	NJR::Vector3d NextStep
 		(const ContactDetector* pcd,
 		DiscreteObject* pdoSlave,
 		DiscreteObject* pdoMaster,

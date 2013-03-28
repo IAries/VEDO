@@ -100,8 +100,7 @@ bool LeapConsultant::NextStep(DOContainer& vDO, IactContainer& cIact)
 		}
 
 //		pDOWorld->WriteXML("terminate.xml");
-		pDOWorld->WriteIDO("terminate.ido");
-		pIRTbl  ->WriteIRT("terminate.irt");
+		pDOWorld->WriteIDO("terminate.ido", pIRTbl);
 	}
 
 	return HasMobileElement;

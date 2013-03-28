@@ -12,9 +12,9 @@ GSCylinder::GSCylinder(const std::string& nm, const double& r, const double& h):
 	_Status = new DOStatus("No Name");
 };
 
-bool GSCylinder::Inside(const NJR::NJRvector3d& p)
+bool GSCylinder::Inside(const NJR::Vector3d& p)
 {
-	NJR::NJRvector3d localP(p);
+	NJR::Vector3d localP(p);
 	localP = localP - _Status->GetPosition();
 	double localX = localP % (_Status->GetOrientationX());
 	double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());

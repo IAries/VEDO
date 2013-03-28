@@ -17,7 +17,7 @@ public:
 
 	virtual ~ImpactSolver();
 
-	virtual NJR::NJRvector3d NextStep
+	virtual NJR::Vector3d NextStep
 		(const ContactDetector* pcd,
 		DiscreteObject* pdoSlave,
 		DiscreteObject* pdoMaster,

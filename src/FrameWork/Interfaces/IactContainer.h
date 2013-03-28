@@ -51,7 +51,7 @@ private:
 
 	std::vector<Interaction*> vcIact;
 
-	double dUDVInEachProcessor[VEDO::uNumUserDefinedData*2];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+	double dUDVInEachProcessor[uNumUDDImpactStatus*2];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
                                                                     // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
 };
 

@@ -1,8 +1,8 @@
 #ifndef _DOMODEL_H
 #define _DOMODEL_H
 
-#include <NJR/Interfaces/acadxf.h>
-#include <NJR/Interfaces/polyhedra.h>
+#include <NJR/Interfaces/ACADXF.h>
+#include <NJR/Interfaces/Polyhedra.h>
 #include <FrameWork/Interfaces/Boundary.h>
 #include <fstream>
 #include <iostream>
@@ -99,7 +99,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::NJRvector3d& ExternalForce,
+		const NJR::Vector3d& ExternalForce,
 		const DOShapeType&,
 		const DOShapeAttributes&,
 		const DOShapeColor&);
@@ -111,7 +111,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::NJRvector3d& ExternalForce,
+		const NJR::Vector3d& ExternalForce,
 		const DOShapeType&,
 		const DOShapeAttributes&,
 		const DOShapeColor&,
@@ -124,7 +124,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::NJRvector3d& ExternalForce,
+		const NJR::Vector3d& ExternalForce,
 		const NJR::NJRpolyhedra&,
 		const DOShapeColor&);
 
@@ -135,7 +135,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::NJRvector3d& ExternalForce,
+		const NJR::Vector3d& ExternalForce,
 		const NJR::NJRpolyhedra&,
 		const DOShapeColor&,
 		const std::vector<DOMaterialAttribute>&);
@@ -178,7 +178,7 @@ public:
 		return dDensityFactor;
 	};
 
-	inline NJR::NJRvector3d GetExternalForce() const
+	inline NJR::Vector3d GetExternalForce() const
 	{
 		return vExternalForce;
 	};
@@ -202,7 +202,7 @@ public:
 	};
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline NJR::NJRvector3d GetMassMomentInertia() const
+	inline NJR::Vector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	};
@@ -241,29 +241,29 @@ public:
 
 	// Cross area to surface ax+by+cz=d;
 	double CrossAreaToSurface
-		(const NJR::NJRvector3d& vP,
+		(const NJR::Vector3d& vP,
 		 const double&      a,
 		 const double&      b,
 		 const double&      c,
 		 const double&      d ) const;
 
-	std::pair<double, NJR::NJRvector3d> VolumeInsideBoundary
-		(const NJR::NJRvector3d& vP,
+	std::pair<double, NJR::Vector3d> VolumeInsideBoundary
+		(const NJR::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJR::NJRvector3d> ProjectedAreaOnXYPlane
-		(const NJR::NJRvector3d& vP,
+	std::pair<double, NJR::Vector3d> ProjectedAreaOnXYPlane
+		(const NJR::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJR::NJRvector3d> ProjectedAreaOnYZPlane
-		(const NJR::NJRvector3d& vP,
+	std::pair<double, NJR::Vector3d> ProjectedAreaOnYZPlane
+		(const NJR::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJR::NJRvector3d> ProjectedAreaOnXZPlane
-		(const NJR::NJRvector3d& vP,
+	std::pair<double, NJR::Vector3d> ProjectedAreaOnXZPlane
+		(const NJR::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
@@ -287,12 +287,12 @@ private:
 	std::string	                     sScope;
 	double                           dDensity;
 	double                           dDensityFactor;
-	NJR::NJRvector3d                      vExternalForce;
+	NJR::Vector3d                      vExternalForce;
 	double                           dMass;
 	double                           dSudoMass;
 	double                           dVolume;
 	double                           dRange;
-	NJR::NJRvector3d                      vMassMomentInertia;
+	NJR::Vector3d                      vMassMomentInertia;
 	DOShapeColor                     shColor;
 	DOShapeType	                     shType;
 	DOShapeAttributes                shAttributes;

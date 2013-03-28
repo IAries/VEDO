@@ -153,8 +153,11 @@ Consultant::Consultant
 	sfilename[strlen(filename)-4] = 0;
 	timePartitioning              = 0.0;
 
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
-		dUDV[u] = 0.0;
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+		dUDVIS[u] = 0.0;
+
+//	for(unsigned u=0; u<2*uNumUDDDOStatus; u++)
+//		dUDVDS[u] = 0.0;
 };
 
 Consultant::~Consultant()
@@ -211,9 +214,7 @@ void Consultant::RecordIDO()
 //	file.append((ulRecordCount<10010000) ? ltoa + 4 : ltoa);
 	file.append((ulRecordCount<11000000) ? ltoa + 2 : ltoa);
 
-	pDOWorld->WriteIDO(file.c_str());
-	this->pIRTbl->WriteIRT((file.substr(0,file.size()-4)+".irt").c_str());
-
+	pDOWorld->WriteIDO(file.c_str(), pIRTbl);
 	ulRecordCount++;
 };
 
@@ -238,7 +239,7 @@ const ImpactStatus* Consultant::RetrieveImpactStatus
 
 bool Consultant::InBoundary(unsigned long i) const
 {
-	NJR::NJRvector3d p = (pDOWorld->GetDOStatus())[i]->GetPosition();
+	NJR::Vector3d p = (pDOWorld->GetDOStatus())[i]->GetPosition();
 	return
 		pDOWorld
 			->GetSystemParameter()
@@ -311,15 +312,15 @@ void Consultant::CollectUserDefinedData(IactContainer& cIact)
 {
 	cIact.CollectUserDefinedData();
 
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
-		dUDV[u] = cIact.GetUserDefinedValue(u);
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+		dUDVIS[u] = cIact.GetUserDefinedValue(u);
 };
 
 double Consultant::GetUserDefinedValue(unsigned u) const
 {
-	if(u < 2*VEDO::uNumUserDefinedData)
+	if(u < 2*uNumUDDImpactStatus)
 	{
-		return dUDV[u];
+		return dUDVIS[u];
 	}
 	else
 	{

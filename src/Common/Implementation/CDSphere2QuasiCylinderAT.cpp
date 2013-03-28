@@ -8,7 +8,7 @@ void CDSphere_QuasiCylinderAT::Detect
 {
 	CDSphere_QuasiCylinder::CalDistance(pdoSlave, pdoMaster);
 
-	NJR::NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	NJR::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Radius of Slave
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;

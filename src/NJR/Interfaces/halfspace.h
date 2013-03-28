@@ -1,7 +1,7 @@
 #ifndef _NJR_HALFSPACE_H
 #define _NJR_HALFSPACE_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <fstream>
 
 enum Sense
@@ -17,15 +17,15 @@ enum Sense
 namespace NJR
 {
 
-class NJRhalfspace
+class HalfSpace
 {
 public:
 
-	explicit NJRhalfspace(double a, double b, double c, Sense sense, double d);
+	explicit HalfSpace(double a, double b, double c, Sense sense, double d);
 
-	NJRhalfspace(const NJRhalfspace &);
+	HalfSpace(const HalfSpace &);
 
-	NJRhalfspace();
+	HalfSpace();
 
 	inline double a() const
 	{
@@ -52,15 +52,15 @@ public:
 		return _sense;
 	};
 
-	const NJRhalfspace& operator = (const NJRhalfspace &);
+	const HalfSpace& operator = (const HalfSpace &);
 
 	void AbsRhs();
 
-	void Translate(const NJRvector3d&);
+	void Translate(const Vector3d&);
 
 	void Normalize();
 
-	void RotateAround(const NJRvector3d&);
+	void RotateAround(const Vector3d&);
 
 	void Set(double a, double b, double c, Sense sense, double d);
 
@@ -83,8 +83,8 @@ private:
 
 
 
-std::ostream& operator << (std::ostream&, const NJR::NJRhalfspace&);
+std::ostream& operator << (std::ostream&, const NJR::HalfSpace&);
 
-std::istream& operator >> (std::istream&, NJR::NJRhalfspace&);
+std::istream& operator >> (std::istream&, NJR::HalfSpace&);
 
 #endif // _NJR_HALFSPACE_H

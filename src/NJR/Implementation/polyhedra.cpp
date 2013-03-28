@@ -1,5 +1,5 @@
-#include <NJR/Interfaces/polyhedra.h>
-#include <NJR/Interfaces/random.h>
+#include <NJR/Interfaces/Polyhedra.h>
+#include <NJR/Interfaces/RandomGenerator.h>
 #include <NJR/Interfaces/LinearProgramming.h>
 #include <algorithm>
 #include <functional>
@@ -17,7 +17,7 @@ NJRpolyhedra::NJRpolyhedra(const NJRpolyhedra& poly3d)
 	_constrains = poly3d._constrains;
 };
 
-void NJRpolyhedra::AddConstrain(const NJR::NJRhalfspace& poly3d)
+void NJRpolyhedra::AddConstrain(const NJR::HalfSpace& poly3d)
 {
 	_constrains.push_back(poly3d);
 };
@@ -31,8 +31,8 @@ void NJRpolyhedra::Purge()
 {
 	register unsigned int i;
 	NJRpolyhedra poly;
-	NJRLinearProgramming lp;
-	std::vector<NJR::NJRhalfspace> NewConstrains(0);
+	LinearProgramming lp;
+	std::vector<NJR::HalfSpace> NewConstrains(0);
 
 	for (i=0; i<_constrains.size(); ++i)
 	{
@@ -51,7 +51,7 @@ void NJRpolyhedra::Purge()
 
 bool NJRpolyhedra::Check()
 {
-	NJRLinearProgramming lp;
+	LinearProgramming lp;
 	lp.Set(*this);
 	return lp.Check();
 };
@@ -61,7 +61,7 @@ NJRpolyhedra NJRpolyhedra::operator +
 {
     NJRpolyhedra com(poly3d);
     com._center = (_center+poly3d._center) * 0.5;
-	std::vector<NJR::NJRhalfspace>::const_iterator ihf;
+	std::vector<NJR::HalfSpace>::const_iterator ihf;
 
 	for (ihf=_constrains.begin(); ihf!=_constrains.end(); ++ihf)
 	{
@@ -78,7 +78,7 @@ NJRpolyhedra& NJRpolyhedra::operator = (const NJRpolyhedra & poly3d)
 	return *this;
 };
 
-void NJRpolyhedra::Translate (const NJRvector3d &dp)
+void NJRpolyhedra::Translate (const Vector3d &dp)
 {
 	register unsigned int i;
 
@@ -91,14 +91,14 @@ void NJRpolyhedra::Translate (const NJRvector3d &dp)
 };
 
 NJRpolyhedra NJRpolyhedra::Mapping
-	(const NJRvector3d& center, const NJRvector3d& vOX, const NJRvector3d& vOZ)
+	(const Vector3d& center, const Vector3d& vOX, const Vector3d& vOZ)
 	const
 {
 	register unsigned int i;
-	NJRvector3d LX = vOX.direction();
-    NJRvector3d LZ = vOZ.direction();
-    NJRvector3d LY = LZ*LX;
-	NJRvector3d g;
+	Vector3d LX = vOX.direction();
+    Vector3d LZ = vOZ.direction();
+    Vector3d LY = LZ*LX;
+	Vector3d g;
 
 	NJRpolyhedra p(*this);
 
@@ -153,10 +153,10 @@ void NJRpolyhedra::Normalize()
 	for_each
 		(_constrains.begin(),
 		_constrains.end(),
-		std::mem_fun_ref(&NJR::NJRhalfspace::Normalize));
+		std::mem_fun_ref(&NJR::HalfSpace::Normalize));
 };
 
-void NJRpolyhedra::RotateAround(const NJRvector3d &dv)
+void NJRpolyhedra::RotateAround(const Vector3d &dv)
 {
 	register unsigned int i;
 
@@ -172,7 +172,7 @@ std::vector<NJRpolygon> NJRpolyhedra::faces() const
 {
 	register unsigned int i;
 	NJRpolyhedra poly;
-	NJRLinearProgramming lp;
+	LinearProgramming lp;
 	std::vector<NJRpolygon> faces(0);
 
 	for ( i=0 ; i < _constrains.size() ; ++i)
@@ -189,17 +189,17 @@ std::vector<NJRpolygon> NJRpolyhedra::faces() const
 	return faces;
 };
 
-void NJRpolyhedra::SetCubic(NJRvector3d c, double length)
+void NJRpolyhedra::SetCubic(Vector3d c, double length)
 {
 	_center = NJRDXF::ORIGIN;
 	_constrains.clear();
 
-	_constrains.push_back(NJR::NJRhalfspace(1, 0, 0, L,  length/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(1, 0, 0, G, -length/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 1, 0, L,  length/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 1, 0, G, -length/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 0, 1, L,  length/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 0, 1, G, -length/2.0));
+	_constrains.push_back(NJR::HalfSpace(1, 0, 0, L,  length/2.0));
+	_constrains.push_back(NJR::HalfSpace(1, 0, 0, G, -length/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 1, 0, L,  length/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 1, 0, G, -length/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 0, 1, L,  length/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 0, 1, G, -length/2.0));
 
 	NJRpolyhedra::Translate(c);
 };
@@ -209,24 +209,24 @@ void NJRpolyhedra::SetPlane
 {
 	_center=NJRDXF::ORIGIN;
 	_constrains.clear();
-    _constrains.push_back(NJR::NJRhalfspace(a, b, c, eqsense, d));
+    _constrains.push_back(NJR::HalfSpace(a, b, c, eqsense, d));
 };
 
-void NJRpolyhedra::SetRetangular(NJRvector3d c, double lx, double ly, double lz)
+void NJRpolyhedra::SetRetangular(Vector3d c, double lx, double ly, double lz)
 {
 	_center=NJRDXF::ORIGIN;
 	_constrains.clear();
-	_constrains.push_back(NJR::NJRhalfspace(1, 0, 0, L,  lx/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(1, 0, 0, G, -lx/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 1, 0, L,  ly/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 1, 0, G, -ly/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 0, 1, L,  lz/2.0));
-	_constrains.push_back(NJR::NJRhalfspace(0, 0, 1, G, -lz/2.0));
+	_constrains.push_back(NJR::HalfSpace(1, 0, 0, L,  lx/2.0));
+	_constrains.push_back(NJR::HalfSpace(1, 0, 0, G, -lx/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 1, 0, L,  ly/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 1, 0, G, -ly/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 0, 1, L,  lz/2.0));
+	_constrains.push_back(NJR::HalfSpace(0, 0, 1, G, -lz/2.0));
 	NJRpolyhedra::Translate(c);
 };
 
 void NJRpolyhedra::SetRandom
-	(NJRvector3d c,
+	(Vector3d c,
 	unsigned int n,
 	double radius)
 {
@@ -234,16 +234,16 @@ void NJRpolyhedra::SetRandom
 	_center=NJRDXF::ORIGIN;
 	_constrains.clear();
 
-	NJR::NJRhalfspace halfspace;
+	NJR::HalfSpace halfspace;
 	RandomGenerator random(2004);
 	unsigned int i;
 
-	_constrains.push_back(NJR::NJRhalfspace(1,0,0,L, radius));
-	_constrains.push_back(NJR::NJRhalfspace(1,0,0,G,-radius));
-	_constrains.push_back(NJR::NJRhalfspace(0,1,0,L, radius));
-	_constrains.push_back(NJR::NJRhalfspace(0,1,0,G,-radius));
-	_constrains.push_back(NJR::NJRhalfspace(0,0,1,L, radius));
-	_constrains.push_back(NJR::NJRhalfspace(0,0,1,G,-radius));
+	_constrains.push_back(NJR::HalfSpace(1,0,0,L, radius));
+	_constrains.push_back(NJR::HalfSpace(1,0,0,G,-radius));
+	_constrains.push_back(NJR::HalfSpace(0,1,0,L, radius));
+	_constrains.push_back(NJR::HalfSpace(0,1,0,G,-radius));
+	_constrains.push_back(NJR::HalfSpace(0,0,1,L, radius));
+	_constrains.push_back(NJR::HalfSpace(0,0,1,G,-radius));
 
 	for ( i = 6 ; i < n ; ++i)
 	{
@@ -251,14 +251,14 @@ void NJRpolyhedra::SetRandom
 		{
 			halfspace.Set (1.0, 0.0, 0.0, L, radius);
 			halfspace.RotateAround
-				(NJRvector3d
+				(Vector3d
 					(random(1.0,-1.0), random(1.0,-1.0), random(1.0,-1.0) ) );
 		}
 		else
 		{
 			halfspace.Set (1.0, 0.0, 0.0, G, -radius);
 			halfspace.RotateAround
-				(NJRvector3d
+				(Vector3d
 					(random(1.0,-1.0), random(1.0,-1.0), random(1.0,-1.0) ) );
 		}
 		_constrains.push_back(halfspace);
@@ -267,7 +267,7 @@ void NJRpolyhedra::SetRandom
 	NJRpolyhedra::Translate(c);
 };
 
-void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
+void NJRpolyhedra::SetIcosahedron(Vector3d c, double radius)
 {
 	double scale;
 	scale = radius/11.18035;
@@ -276,7 +276,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 	_constrains.clear();
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(58.778525/scale,
 			42.705098/scale,
 			95.105652/scale,
@@ -284,7 +284,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313510     ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(58.778525/scale,
 			42.705098/scale,
 			95.105652/scale,
@@ -292,7 +292,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313510       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-22.451399/scale,
 			69.098301/scale,
 			95.105652/scale,
@@ -300,7 +300,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313511      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-22.451399/scale,
 			69.098301/scale,
 			95.105652/scale,
@@ -308,7 +308,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313511       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-72.654253/scale,
 			0.0,
 			95.105652/scale,
@@ -316,7 +316,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313511      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-72.654253/scale,
 			0.0,
 			95.105652/scale,
@@ -324,7 +324,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313511       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-22.451399/scale,
 			-69.098301/scale,
 			95.105652/scale,
@@ -332,7 +332,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313510      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-22.451399/scale,
 			-69.098301/scale,
 			95.105652/scale,
@@ -340,7 +340,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313511       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(58.778525/scale,
 			-42.705098/scale,
 			95.105652/scale,
@@ -348,7 +348,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313510     ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(58.778525/scale,
 			-42.705098/scale,
 			95.105652/scale,
@@ -356,7 +356,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313510      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-95.105652/scale,
 			-69.098301/scale,
 			-22.451399/scale,
@@ -364,7 +364,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313510      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-95.105652/scale,
 			-69.098301/scale,
 			-22.451399/scale,
@@ -372,7 +372,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313510       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(36.327126/scale,
 			-111.803399/scale,
 			-22.451399/scale,
@@ -380,7 +380,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313511      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(36.327126/scale,
 			-111.803399/scale,
 			-22.451399/scale,
@@ -388,7 +388,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313511       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(117.557051/scale,
 			0.0,
 			-22.451399/scale,
@@ -396,7 +396,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313511      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(117.557051/scale,
 			0.0,
 			-22.451399/scale,
@@ -404,7 +404,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313511       ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(36.327126/scale,
 			111.803399/scale,
 			-22.451399/scale,
@@ -412,7 +412,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313510     ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(36.327126/scale,
 			111.803399/scale,
 			-22.451399/scale,
@@ -420,7 +420,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			1063.313510      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-95.105652/scale,
 			69.098300/scale,
 			-22.451399/scale,
@@ -428,7 +428,7 @@ void NJRpolyhedra::SetIcosahedron(NJRvector3d c, double radius)
 			-1063.313510      ) );
 
 	_constrains.push_back
-		(NJR::NJRhalfspace
+		(NJR::HalfSpace
 			(-95.105652/scale,
 			69.098300/scale,
 			-22.451399/scale,

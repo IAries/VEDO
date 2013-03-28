@@ -80,100 +80,100 @@ bool ISwModels::NormalBond
 	}
 };
 
-NJR::NJRvector3d ISwModels::NormalForceHertzSpring
+NJR::Vector3d ISwModels::NormalForceHertzSpring
 	(const double&      dKn,
 	 const double&      dCn,
 	 const double&      dImpactDepth,
-	 const NJR::NJRvector3d& vImpactDirection,
-	 const NJR::NJRvector3d& vRelativeNormalVelocity)
+	 const NJR::Vector3d& vImpactDirection,
+	 const NJR::Vector3d& vRelativeNormalVelocity)
 {
-	return NJR::NJRvector3d
+	return NJR::Vector3d
 		(- dKn * pow(dImpactDepth, 1.5) * vImpactDirection
 		 - dCn * vRelativeNormalVelocity                       );
 };
 
-NJR::NJRvector3d ISwModels::NormalForce
+NJR::Vector3d ISwModels::NormalForce
 	(const double&      dKn,
 	 const double&      dCn,
 	 const double&      dImpactDepth,
-	 const NJR::NJRvector3d& vImpactDirection,
-	 const NJR::NJRvector3d& vRelativeNormalVelocity)
+	 const NJR::Vector3d& vImpactDirection,
+	 const NJR::Vector3d& vRelativeNormalVelocity)
 {
-	return NJR::NJRvector3d
+	return NJR::Vector3d
 		(- dKn * dImpactDepth * vImpactDirection
 		 - dCn * vRelativeNormalVelocity        );
 };
 
-NJR::NJRvector3d ISwModels::NormalForceNoTension
+NJR::Vector3d ISwModels::NormalForceNoTension
 	(const double&      dKn,
 	 const double&      dCn,
 	 const double&      dImpactDepth,
-	 const NJR::NJRvector3d& vImpactDirection,
-	 const NJR::NJRvector3d& vRelativeNormalVelocity)
+	 const NJR::Vector3d& vImpactDirection,
+	 const NJR::Vector3d& vRelativeNormalVelocity)
 {
 	if ((vRelativeNormalVelocity % vImpactDirection) < 0.0)
 	{
 		// Elements move far away from each others
-		NJR::NJRvector3d vSpringForce = - dKn * dImpactDepth * vImpactDirection;
-		NJR::NJRvector3d vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
+		NJR::Vector3d vSpringForce = - dKn * dImpactDepth * vImpactDirection;
+		NJR::Vector3d vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
 		if(vShearViscousDampingForce.length() > vSpringForce.length())
-			return NJR::NJRvector3d(NJRDXF::ZERO);
+			return NJR::Vector3d(NJRDXF::ZERO);
 		else
 			return vSpringForce + vShearViscousDampingForce;
 	}
 	else
 	{
 		// Elements move colser to each others
-		return NJR::NJRvector3d
+		return NJR::Vector3d
 			(- dKn * dImpactDepth * vImpactDirection
 			 - dCn * vRelativeNormalVelocity        );
 	}
 };
 
-NJR::NJRvector3d ISwModels::NormalForce
+NJR::Vector3d ISwModels::NormalForce
 	(const double&      dKn,
 	 const double&      dCn,
 	 const double&      dBn,
 	 const double&      dImpactDepth,
-	 const NJR::NJRvector3d& vImpactDirection,
-	 const NJR::NJRvector3d& vRelativeNormalVelocity)
+	 const NJR::Vector3d& vImpactDirection,
+	 const NJR::Vector3d& vRelativeNormalVelocity)
 {
 	if ((vRelativeNormalVelocity % vImpactDirection) < 0.0)
 	{
 		// Elements move far away from each others
-		return NJR::NJRvector3d
+		return NJR::Vector3d
 			(- dKn * dImpactDepth * vImpactDirection
 			 - dCn                * vRelativeNormalVelocity);
 	}
 	else
 	{
 		// Elements move colser to each others
-		return NJR::NJRvector3d(- dCn * vRelativeNormalVelocity);
+		return NJR::Vector3d(- dCn * vRelativeNormalVelocity);
 	}
 };
 
-NJR::NJRvector3d ISwModels::NormalForceNoTension
+NJR::Vector3d ISwModels::NormalForceNoTension
 	(const double&      dKn,
 	 const double&      dCn,
 	 const double&      dBn,
 	 const double&      dImpactDepth,
-	 const NJR::NJRvector3d& vImpactDirection,
-	 const NJR::NJRvector3d& vRelativeNormalVelocity)
+	 const NJR::Vector3d& vImpactDirection,
+	 const NJR::Vector3d& vRelativeNormalVelocity)
 {
 	if ((vRelativeNormalVelocity % vImpactDirection) < 0.0)
 	{
 		// Elements move far away from each others
-		NJR::NJRvector3d vSpringForce = - dKn * dImpactDepth * vImpactDirection;
-		NJR::NJRvector3d vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
+		NJR::Vector3d vSpringForce = - dKn * dImpactDepth * vImpactDirection;
+		NJR::Vector3d vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
 		if(vShearViscousDampingForce.length() > vSpringForce.length())
-			return NJR::NJRvector3d(NJRDXF::ZERO);
+			return NJR::Vector3d(NJRDXF::ZERO);
 		else
 			return vSpringForce + vShearViscousDampingForce;
 	}
 	else
 	{
 		// Elements move colser to each others
-		return NJR::NJRvector3d(- dCn * vRelativeNormalVelocity);
+		return NJR::Vector3d(- dCn * vRelativeNormalVelocity);
 	}
 };
 
@@ -247,16 +247,16 @@ std::pair<bool, std::pair<double, double> > ISwModels::FrictionForce
 	}
 };
 
-NJR::NJRvector3d ISwModels::ShearForceRotation
-	(const NJR::NJRvector3d& vShearForce, const NJR::NJRvector3d& vNewDirection)
+NJR::Vector3d ISwModels::ShearForceRotation
+	(const NJR::Vector3d& vShearForce, const NJR::Vector3d& vNewDirection)
 {
 	if(vShearForce.Dot(vNewDirection) <= 0.0)
 	{
-		return NJR::NJRvector3d(-vShearForce.length() * vNewDirection.direction());
+		return NJR::Vector3d(-vShearForce.length() * vNewDirection.direction());
 	}
 	else
 	{
-		return NJR::NJRvector3d(vShearForce.length() * vNewDirection.direction());
+		return NJR::Vector3d(vShearForce.length() * vNewDirection.direction());
 	}
 };
 

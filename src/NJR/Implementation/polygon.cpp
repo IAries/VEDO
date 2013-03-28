@@ -1,4 +1,4 @@
-#include <NJR/Interfaces/polygon.h>
+#include <NJR/Interfaces/Polygon.h>
 
 namespace NJR
 {
@@ -10,7 +10,7 @@ NJRpolygon::NJRpolygon() : _vertexes(0)
 	_center.Set(0, 0, 0);
 };
 
-NJRpolygon::NJRpolygon (const std::vector<NJRvector3d>& vertexes)
+NJRpolygon::NJRpolygon (const std::vector<Vector3d>& vertexes)
 {
 	_vertexes = vertexes;
 
@@ -51,7 +51,7 @@ void NJRpolygon::CalCenter()
 {
 	register unsigned int i;
 
-	NJRvector3d w(NJRDXF::ZERO);
+	Vector3d w(NJRDXF::ZERO);
 
 	for (i=0; i<_vertexes.size(); ++i)
 	{
@@ -81,7 +81,7 @@ void NJRpolygon::CalArea()
 	register unsigned int i;
 	register unsigned int j;
 	register unsigned int size;
-	NJRvector3d vec;
+	Vector3d vec;
 	_area = 0.0;
 
 	size = (unsigned int)(_vertexes.size()) - 2;
@@ -99,10 +99,10 @@ void NJRpolygon::PureVertex()
 	register unsigned int i;
 	register unsigned int j;
 	register unsigned int numvertex;
-    NJRvector3d v1;
+    Vector3d v1;
 	numvertex = (unsigned int)(_vertexes.size());
 
-	std::vector<NJRvector3d> tmpvec(0);
+	std::vector<Vector3d> tmpvec(0);
 
 	if (numvertex < 2)
 	{

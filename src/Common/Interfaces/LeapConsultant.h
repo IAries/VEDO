@@ -83,9 +83,9 @@ void LeapConsultant::subReset
 
 	const SystemParameter* csp = Consultant::pDOWorld->GetSystemParameter();
 
-	unsigned long numberDO     = csp->GetDONumber();
-	NJR::NJRvector3d   vFieldForce  = csp->GetFieldForce();
-	double        dt           = culUpIact * csp->GetTimeInterval();
+	unsigned long numberDO           = csp->GetDONumber();
+	NJR::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
+	double        dt                 = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
 /*
@@ -129,33 +129,27 @@ void LeapConsultant::subReset
 		Consultant::vcDO.push_back(i);
 		cpdos  = Consultant::pDOWorld->GetDOStatus(i);
 		cpdoml = Consultant::pDOWorld->GetDOModel(cpdos->GetDOName());
-/******************************************************************************
- * Aries' Comment (2006/03/31)
- *
- *    The safety distance contains the influence of the radius, velocity, and
- * acceleration. However, the safety std::vector of sphere should be 1.1 ?
- ******************************************************************************/
 		safeD
-			= 1.1 * (  cpdoml->GetRange()
-                     + (cpdos->GetVelocity()).length() * dt)
-            + 0.5 * dt * dt * vFieldForce.length();
+			= VEDO::dSafetyFactor
+            * (   2.0 * cpdoml->GetRange()
+                + dt  * (cpdos->GetVelocity()).length()
+                + 0.5 * dt * dt * vFieldAcceleration.length() );
 /*
-				xmin = std::min(xmin, cpdos->GetPosition().x());
-				xmax = std::max(xmax, cpdos->GetPosition().x());
-				ymin = std::min(ymin, cpdos->GetPosition().y());
-				ymax = std::max(ymax, cpdos->GetPosition().y());
-				zmin = std::min(zmin, cpdos->GetPosition().z());
-				zmax = std::max(zmax, cpdos->GetPosition().z());
-				vmax = std::max(vmax, cpdos->GetVelocity().length());
-				rmax = cpdoml->GetShapeAttributes().sphere.radius;
+        xmin = std::min(xmin, cpdos->GetPosition().x());
+        xmax = std::max(xmax, cpdos->GetPosition().x());
+		ymin = std::min(ymin, cpdos->GetPosition().y());
+		ymax = std::max(ymax, cpdos->GetPosition().y());
+		zmin = std::min(zmin, cpdos->GetPosition().z());
+		zmax = std::max(zmax, cpdos->GetPosition().z());
+		vmax = std::max(vmax, cpdos->GetVelocity().length());
+		rmax = cpdoml->GetShapeAttributes().sphere.radius;
 */
 		vDOMap.push_back(DOMap(i, cpdos, cpdoml, safeD));
 	}
 
-	// The maximal safe distance, Safety factor = 1.1 (1.1*2.0=2.2)
 	double ZoneRange
-		= SphereVMax * dt
-		+ 2.2 * SphereRMax + 0.5 * dt * dt * vFieldForce.length();
+        = VEDO::dSafetyFactor
+        * (2.0 * SphereRMax + dt * SphereVMax + 0.5 * dt * dt * vFieldAcceleration.length());
 
 	// Determine how many "safety region" per direction
 	int ncelx = std::ceil((SphereXMax - SphereXMin) / ZoneRange);
@@ -184,7 +178,7 @@ void LeapConsultant::subReset
 	//std::map<Trir, std::vector<DOMap>* > locMap;
 	std::vector<DOMap> GlobalElement;
 
-	NJR::NJRvector3d pos;
+	NJR::Vector3d pos;
 	for (unsigned long i=0; i<numberDO; ++i)
 	{
 		if (vDOMap[i].cpdoml()->GetScope() == "local")

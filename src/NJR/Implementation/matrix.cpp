@@ -1,4 +1,4 @@
-#include <NJR/Interfaces/matrix.h>
+#include <NJR/Interfaces/Matrix.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -8,7 +8,7 @@
 namespace NJR
 {
 
-const char* NJRmatrix::characteristic() const
+const char* Matrix::characteristic() const
 {
 	if ( (_rows==1) && (_cols==1) )
 	{
@@ -28,7 +28,7 @@ const char* NJRmatrix::characteristic() const
 	}
 };
 
-NJRmatrix::NJRmatrix()
+Matrix::Matrix()
 {
 	_rows  = 0;
 	_cols  = 0;
@@ -36,7 +36,7 @@ NJRmatrix::NJRmatrix()
 	matval = 0;
 };
 
-NJRmatrix::NJRmatrix(const unsigned int& r, const unsigned int& c)
+Matrix::Matrix(const unsigned int& r, const unsigned int& c)
 {
 	unsigned int i;
 	_rows = r;
@@ -53,7 +53,7 @@ NJRmatrix::NJRmatrix(const unsigned int& r, const unsigned int& c)
 	*this = 0.0;
 };
 
-NJRmatrix::NJRmatrix(const NJRmatrix& M)
+Matrix::Matrix(const Matrix& M)
 {
 	register unsigned int i;
 
@@ -71,7 +71,7 @@ NJRmatrix::NJRmatrix(const NJRmatrix& M)
 	memcpy(matval, M.matval, sizeof(double) * _rows * _cols);
 };
 
-NJRmatrix::~NJRmatrix()
+Matrix::~Matrix()
 {
 	if (matval != 0)
 	{
@@ -84,7 +84,7 @@ NJRmatrix::~NJRmatrix()
 	}
 };
 
-void NJRmatrix::Resize(const unsigned int& r, const unsigned int& c)
+void Matrix::Resize(const unsigned int& r, const unsigned int& c)
 {
 	if(matval != 0)
 	{
@@ -112,7 +112,7 @@ void NJRmatrix::Resize(const unsigned int& r, const unsigned int& c)
 };
 
 
-const NJRmatrix& NJRmatrix::operator = (const NJRmatrix& M)
+const Matrix& Matrix::operator = (const Matrix& M)
 {
 	register unsigned int i;
 
@@ -144,7 +144,7 @@ const NJRmatrix& NJRmatrix::operator = (const NJRmatrix& M)
 	return *this;
 };
 
-const NJRmatrix& NJRmatrix::operator = (const double& v)
+const Matrix& Matrix::operator = (const double& v)
 {
 	register unsigned int i;
 	register unsigned int j;
@@ -160,18 +160,18 @@ const NJRmatrix& NJRmatrix::operator = (const double& v)
 	return *this;
 };
 
-NJRmatrix NJRmatrix::operator * (const NJRmatrix &M) const
+Matrix Matrix::operator * (const Matrix &M) const
 {
 	register unsigned int i;
 	register unsigned int j;
 	register unsigned int k;
 	register unsigned int m;
 
-	NJRmatrix C(_rows, M._cols);
+	Matrix C(_rows, M._cols);
 
 	if (_cols != M._rows)
 	{
-		std::cerr << "Error!! Code: NJRmatrix::operator * (const NJRmatrix)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::operator * (const Matrix)" << std::endl;
 		exit(-1);
 	}
 	else
@@ -196,16 +196,16 @@ NJRmatrix NJRmatrix::operator * (const NJRmatrix &M) const
 	return C;
 };
 
-NJRmatrix NJRmatrix::operator + (const NJRmatrix &M) const
+Matrix Matrix::operator + (const Matrix &M) const
 {
 	register unsigned int i;
 	register unsigned int j;
 
-	NJRmatrix C(_rows, _cols);
+	Matrix C(_rows, _cols);
 
 	if (( _cols != M._cols) || ( _rows != M._rows))
 	{
-		std::cerr << "Error!! Code: NJRmatrix::operator + (const NJRmatrix)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::operator + (const Matrix)" << std::endl;
 		exit(-1);
 	}
 
@@ -220,16 +220,16 @@ NJRmatrix NJRmatrix::operator + (const NJRmatrix &M) const
 	return C;
 };
 
-NJRmatrix NJRmatrix::operator - (const NJRmatrix &M) const
+Matrix Matrix::operator - (const Matrix &M) const
 {
 	register unsigned int i;
 	register unsigned int j;
 
-	NJRmatrix C(_rows,_cols);
+	Matrix C(_rows,_cols);
 
 	if ( ( _cols != M._cols) || ( _rows != M._rows) )
 	{
-		std::cerr << "Error!! Code: NJRmatrix::operator - (const NJRmatrix)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::operator - (const Matrix)" << std::endl;
 		exit(-1);
 	}
 
@@ -244,7 +244,7 @@ NJRmatrix NJRmatrix::operator - (const NJRmatrix &M) const
 	return C;
 };
 
-NJRmatrix NJRmatrix::Select (unsigned int* selected, unsigned int len) const
+Matrix Matrix::Select (unsigned int* selected, unsigned int len) const
 {
 	register unsigned int i;
 	register unsigned int j;
@@ -252,12 +252,12 @@ NJRmatrix NJRmatrix::Select (unsigned int* selected, unsigned int len) const
 	if (_cols < len)
 	{
 		std::cerr
-			<< "Error!! Code: NJRmatrix::Select (unsigned int*, unsigned int)"
+			<< "Error!! Code: Matrix::Select (unsigned int*, unsigned int)"
 			<< std::endl;
 		exit(-1);
 	}
 
-	NJRmatrix C(_rows, len);
+	Matrix C(_rows, len);
 
 	for (j=0; j<C._cols; ++j)
 	{
@@ -271,7 +271,7 @@ NJRmatrix NJRmatrix::Select (unsigned int* selected, unsigned int len) const
 		else
 		{
 			std::cerr
-				<< "Error!! Code: NJRmatrix::Select (unsigned int*, unsigned int)" << std::endl
+				<< "Error!! Code: Matrix::Select (unsigned int*, unsigned int)" << std::endl
 				<< "        Note: Selected columns out of range" << std::endl;
 			exit(-1);
 		}
@@ -280,9 +280,9 @@ NJRmatrix NJRmatrix::Select (unsigned int* selected, unsigned int len) const
 	return C;
 };
 
-const NJRmatrix& NJRmatrix::Transpose()
+const Matrix& Matrix::Transpose()
 {
-	NJRmatrix t(_cols, _rows);
+	Matrix t(_cols, _rows);
 
 	register unsigned int i;
 	register unsigned int j;
@@ -298,11 +298,11 @@ const NJRmatrix& NJRmatrix::Transpose()
 	return (*this = t);
 };
 
-double& NJRmatrix::operator () (const unsigned int& r, const unsigned int& c)
+double& Matrix::operator () (const unsigned int& r, const unsigned int& c)
 {
 	if ( (r >= _rows) || (c >= _cols) )
 	{
-		std::cerr << "Error!! Code: NJRmatrix::operator () (const unsigned int&, const unsigned int&)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::operator () (const unsigned int&, const unsigned int&)" << std::endl;
 		exit(-1);
 	}
 	else
@@ -311,11 +311,11 @@ double& NJRmatrix::operator () (const unsigned int& r, const unsigned int& c)
 	}
 };
 
-double NJRmatrix::Get(const unsigned int& r, const unsigned int& c) const
+double Matrix::Get(const unsigned int& r, const unsigned int& c) const
 {
 	if ( (r >= _rows) || (c >= _cols) )
 	{
-		std::cerr << "Error!! Code: NJRmatrix::Get() (const unsigned int&, const unsigned int&)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::Get() (const unsigned int&, const unsigned int&)" << std::endl;
 		exit(-1);
 	}
 	else
@@ -328,7 +328,7 @@ double NJRmatrix::Get(const unsigned int& r, const unsigned int& c) const
 
 
 
-std::ostream& operator << (std::ostream& os, const NJR::NJRmatrix& m)
+std::ostream& operator << (std::ostream& os, const NJR::Matrix& m)
 {
 	register unsigned int i;
 	register unsigned int j;

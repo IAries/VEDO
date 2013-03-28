@@ -1,9 +1,9 @@
 #ifndef _NJR_POLYHEDRA_H
 #define _NJR_POLYHEDRA_H
 
-#include <NJR/Interfaces/halfspace.h>
-#include <NJR/Interfaces/polygon.h>
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/HalfSpace.h>
+#include <NJR/Interfaces/Polygon.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <vector>
 
 namespace NJR
@@ -18,12 +18,12 @@ public:
 
 	NJRpolyhedra(const NJRpolyhedra &a);
 
-	inline const NJRvector3d& center() const
+	inline const Vector3d& center() const
 	{
 		return _center;
 	};
 
-	inline const std::vector<NJR::NJRhalfspace>& constrains() const
+	inline const std::vector<NJR::HalfSpace>& constrains() const
 	{
 		return _constrains;
 	};
@@ -32,37 +32,37 @@ public:
 
 	NJRpolyhedra operator + (const NJRpolyhedra &poly3d) const;
 
-	void SetCubic(NJRvector3d center, double length);
+	void SetCubic(Vector3d center, double length);
 
-	void SetIcosahedron(NJRvector3d center, double radius);
+	void SetIcosahedron(Vector3d center, double radius);
 
-	void SetRandom(NJRvector3d center, unsigned int n, double radius);
+	void SetRandom(Vector3d center, unsigned int n, double radius);
 
 	void SetPlane(double eqa, double eqb, double eqc, Sense sense, double eqd);
 
-	void SetRetangular(NJRvector3d center, double lx, double ly, double lz);
+	void SetRetangular(Vector3d center, double lx, double ly, double lz);
 
-	inline void SetCenter(const NJRvector3d& c)
+	inline void SetCenter(const Vector3d& c)
 	{
 		_center = c;
 	};
 
 	void Normalize();
 
-	void RotateAround(const NJRvector3d&);
+	void RotateAround(const Vector3d&);
 
-	void Translate(const NJRvector3d&);
+	void Translate(const Vector3d&);
 
 	NJRpolyhedra Mapping
-		(const NJRvector3d& center,
-		const NJRvector3d& Ox,
-		const NJRvector3d& Oz) const;
+		(const Vector3d& center,
+		const Vector3d& Ox,
+		const Vector3d& Oz) const;
 
 	NJRpolyhedra CoverPolyhedra () const;
 
 	std::vector<NJRpolygon> faces() const;
 
-	void AddConstrain(const NJR::NJRhalfspace&);
+	void AddConstrain(const NJR::HalfSpace&);
 
 	void Clear();
 
@@ -74,9 +74,9 @@ public:
 
 private:
 
-	std::vector<NJR::NJRhalfspace> _constrains;
+	std::vector<NJR::HalfSpace> _constrains;
 
-	NJRvector3d _center;
+	Vector3d _center;
 
 };
 

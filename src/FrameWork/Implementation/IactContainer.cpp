@@ -12,7 +12,7 @@ namespace VEDO
 
 IactContainer::IactContainer(): vcIact(0)
 {
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 		dUDVInEachProcessor[u] = 0.0;
 };
 
@@ -68,7 +68,7 @@ void IactContainer::CleanSolverStatus(unsigned long i)
 
 double IactContainer::GetUserDefinedValue(unsigned u) const
 {
-	if(u < 2*VEDO::uNumUserDefinedData)
+	if(u < 2*uNumUDDImpactStatus)
 	{
 		return dUDVInEachProcessor[u];
 	}
@@ -85,13 +85,13 @@ void IactContainer::CollectUserDefinedData()
 {
 	const double* dpUDV;
 
-	for(unsigned u=VEDO::uNumUserDefinedData; u<2*VEDO::uNumUserDefinedData; u++)
+	for(unsigned u=uNumUDDImpactStatus; u<2*uNumUDDImpactStatus; u++)
 		dUDVInEachProcessor[u] = 0.0;
 
 	for(unsigned long ul=0; ul<vcIact.size(); ul++)
 	{
 		dpUDV = vcIact[ul]->RetrieveUserDefinedValue();
-		for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 			dUDVInEachProcessor[u] += *(dpUDV+u);
 	}
 };

@@ -68,7 +68,7 @@ void SimMediator::CalculateSystemEnergy()
 			<< csp->GetMomentumNorm()        << ", "
 			<< csp->GetAngularMomentumNorm();
 
-		for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 			FileLogEnergy << ", " << pConsultant->GetUserDefinedValue(u);
 
 		FileLogEnergy << std::endl;
@@ -95,7 +95,7 @@ SimMediator::SimMediator
 		<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
 		<< "NormMomentum, NormAngularMomentum";
 
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 		FileLogEnergy << ", User-defined Value " << u+1;
 
 	FileLogEnergy << std::endl;
@@ -131,7 +131,7 @@ SimMediator::SimMediator
 			<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
 			<< "NormMomentum, NormAngularMomentum, ";
 
-		for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 			FileLogEnergy << ", User-defined Value " << u+1;
 
 		FileLogEnergy << std::endl;
@@ -173,7 +173,7 @@ void SimMediator::ShowInteraction()
 	const Interaction*  iap = 0;
 	const ContactInfo*  cip = 0;
 	const ImpactStatus* isp = 0;
-	NJR::NJRvector3d
+	NJR::Vector3d
 		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
 
 	if (NP == 1)
@@ -199,7 +199,7 @@ void SimMediator::ShowInteraction()
 		<< "Bond, Contacted, RememberedNormalStiffness, "
 		<< "RememberedShearForceX, RememberedShearForceY, RememberedShearForceZ";
 
-	for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 		FileInteraction << ", User-defined value " << u+1;
 
 	FileInteraction << std::endl;
@@ -274,7 +274,7 @@ void SimMediator::ShowInteraction()
 					<< isp->ShearForce().y() << ", "
 					<< isp->ShearForce().z();
 
-				for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+				for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 					FileInteraction << ", " << *(cdpudv+u);
 
 				FileInteraction << std::endl;
@@ -350,7 +350,7 @@ void SimMediator::ShowInteraction()
 					<< isp->ShearForce().y() << ", "
 					<< isp->ShearForce().z();
 
-				for(unsigned u=0; u<4*VEDO::uNumUserDefinedData; u++)
+				for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
 					FileInteraction << ", " << *(cdpudv+u);
 
 				FileInteraction << std::endl;
@@ -361,7 +361,7 @@ void SimMediator::ShowInteraction()
 	FileInteraction.close();
 
 	pConsultant->SyncDOContainer(cDO);
-	cDO.AddFieldImpact(csp->GetFieldForce() * csp->GetTimeInterval());
+	cDO.AddFieldImpact(csp->GetFieldAcceleration() * csp->GetTimeInterval());
 	cDO.AddConstrainedImpact(csp->GetTimeInterval());
 
 	if (NP == 1)
@@ -388,7 +388,7 @@ void SimMediator::ShowInteraction()
 
 	const DiscreteObject* dop = 0;
 	const DOStatus*       dos = 0;
-	NJR::NJRvector3d
+	NJR::Vector3d
 		vPosition, vVelocity, vAngularVelocity,
 		vOrientationX, vOrientationZ,
 		vImpact, vAngularImpact;
@@ -479,7 +479,7 @@ void SimMediator::ShowInteraction()
 
 void SimMediator::WriteInteractionForce
 	(const char* filename,
-	 const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >* vvExternalImpact)
+	 const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >* vvExternalImpact)
 {
 	const SystemParameter* csp = pConsultant->GetDOWorld()->GetSystemParameter();
 	const double           dt  = csp->GetTimeInterval();
@@ -498,10 +498,10 @@ void SimMediator::WriteInteractionForce
 		if (dop->GetDOModel()->GetBehavior() != "mobile")
 			continue;
 
-		NJR::NJRvector3d iactForce  = dop->GetImpact() * (1.0/dt);
-		NJR::NJRvector3d fieldForce = csp->GetFieldForce();
-		NJR::NJRvector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : NJRDXF::ZERO;
-		NJR::NJRvector3d totalForce = iactForce + fieldForce + extForce;
+		NJR::Vector3d iactForce  = dop->GetImpact() * (1.0/dt);
+		NJR::Vector3d fieldForce = csp->GetFieldAcceleration();
+		NJR::Vector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : NJRDXF::ZERO;
+		NJR::Vector3d totalForce = iactForce + fieldForce + extForce;
 
 		iactForce_vec.push_back(iactForce.x());
 		iactForce_vec.push_back(iactForce.y());
@@ -523,7 +523,7 @@ void SimMediator::WriteInteractionForce
 		DataFieldVTKWriter* wrapArr = DataFieldVTKWriter::Instance();
 		wrapArr->clearAll();
 		wrapArr->addArray("InteractionForce", 3, iactForce_vec);
-		wrapArr->addArray("FieldForce", 3, fieldForce_vec);
+		wrapArr->addArray("FieldAcceleration", 3, fieldForce_vec);
 		wrapArr->addArray("ExternalForce", 3, extForce_vec);
 		wrapArr->addArray("TotalForce", 3, totalForce_vec);
 		pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
@@ -649,7 +649,7 @@ bool SimMediator::Run()
 	timeSyncDOContainer += (endtime - starttime);
 	starttime = endtime;
 
-	cDO.AddFieldImpact(csp->GetFieldForce() * csp->GetTimeInterval());
+	cDO.AddFieldImpact(csp->GetFieldAcceleration() * csp->GetTimeInterval());
 	cDO.AddConstrainedImpact(csp->GetTimeInterval());
 
 	time(&endtime);
@@ -726,8 +726,7 @@ bool SimMediator::Run()
 	if (!bContinue)
 	{
 //		pConsultant->GetDOWorld()->WriteXML("terminate.xml");
-		pConsultant->GetDOWorld()->WriteIDO("terminate.ido");
-		pConsultant->GetIactRecordTab()->WriteIRT("terminate.irt");
+		pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
 		return false;
 	}
 
@@ -737,7 +736,7 @@ bool SimMediator::Run()
 };
 
 bool SimMediator::Run
-	(const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >& vvExternalImpact)
+	(const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >& vvExternalImpact)
 {
 	time(&starttime);
 
@@ -761,7 +760,7 @@ bool SimMediator::Run
 	timeSyncDOContainer += (endtime - starttime);
 	starttime = endtime;
 
-	cDO.AddFieldImpact(csp->GetFieldForce() * csp->GetTimeInterval());
+	cDO.AddFieldImpact(csp->GetFieldAcceleration() * csp->GetTimeInterval());
 	for(unsigned long i=0; i<cDO.size(); i++)
 	{
 		cDO.AddImpact
@@ -844,8 +843,7 @@ bool SimMediator::Run
 	if (!bContinue)
 	{
 //		pConsultant->GetDOWorld()->WriteXML("terminate.xml");
-		pConsultant->GetDOWorld()->WriteIDO("terminate.ido");
-		pConsultant->GetIactRecordTab()->WriteIRT("terminate.irt");
+		pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
 		return false;
 	}
 
@@ -892,8 +890,8 @@ bool SimMediator::ReDistribute()
 	// Freeze all elements
 	for (unsigned long ul=0; ul<cDO.size(); ul++)
 	{
-		cDO[ul]->SetVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
-		cDO[ul]->SetAngularVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
+		cDO[ul]->SetVelocity(NJR::Vector3d(NJRDXF::ZERO));
+		cDO[ul]->SetAngularVelocity(NJR::Vector3d(NJRDXF::ZERO));
 	}
 
 	// Check the number of contact pairs
@@ -913,8 +911,7 @@ bool SimMediator::ReDistribute()
 			if (ulContactPairNumber == 0)
 			{
 //				pConsultant->GetDOWorld()->WriteXML("terminate.xml");
-				pConsultant->GetDOWorld()->WriteIDO("terminate.ido");
-				pConsultant->GetIactRecordTab()->WriteIRT("terminate.irt");
+				pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
 				return false;
 			}
 		}
@@ -999,8 +996,7 @@ bool SimMediator::ReDistribute()
 	if (!bContinue)
 	{
 //		pConsultant->GetDOWorld()->WriteXML("terminate.xml");
-		pConsultant->GetDOWorld()->WriteIDO("terminate.ido");
-		pConsultant->GetIactRecordTab()->WriteIRT("terminate.irt");
+		pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
 		return false;
 	}
 

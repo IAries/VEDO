@@ -1,6 +1,6 @@
-#include <NJR/Interfaces/acadxf.h>
+#include <NJR/Interfaces/ACADXF.h>
+#include <NJR/Interfaces/ACADXF_Solid.h>
 #include <FrameWork/Interfaces/Constants.h>
-#include <NJR/Interfaces/dxfsolid.h>
 #include <FrameWork/Interfaces/DOWorld.h>
 #include <algorithm>
 #include <cstdlib>

@@ -12,7 +12,7 @@ DOFixedSphere::DOFixedSphere
 //	double Radius = cpdoml->GetShapeAttributes().sphere.radius;
 /*
 	double mmi = 0.4 * dMass * Radius * Radius;
-	vMassMomentInertia = NJR::NJRvector3d(mmi, mmi, mmi);
+	vMassMomentInertia = NJR::Vector3d(mmi, mmi, mmi);
 */
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
@@ -24,8 +24,8 @@ double DOFixedSphere::CrossAreaToSurface
 	(double& a, double& b, double& c, double& d) const
 {
 	//Surface: ax+by+cz=d
-	NJR::NJRvector3d vSurfaceNormal(a, b, c);
-	NJR::NJRvector3d p = pDOStatus->GetPosition();
+	NJR::Vector3d vSurfaceNormal(a, b, c);
+	NJR::Vector3d p = pDOStatus->GetPosition();
 	double r = cpDOModel->GetShapeAttributes().sphere.radius;
 
 	double dSphere2Surface = fabs(d-(p%vSurfaceNormal)/vSurfaceNormal.length());

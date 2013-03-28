@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/DOWorld.h>
 #include <Knight/Interfaces/ClusterInitializer.h>
 #include <Knight/Interfaces/BravaisLatticeWithBasis.h>
@@ -36,11 +36,11 @@ void ClusterInitializer::Create(std::string doName, VEDO::DOWorld* pWorld)
 
 	VEDO::DOStatus dos
 		(doName,
-		NJR::NJRvector3d(NJRDXF::ZERO),
-		NJR::NJRvector3d(NJRDXF::ZERO),
-		NJR::NJRvector3d(NJRDXF::AXIALX),
-		NJR::NJRvector3d(NJRDXF::AXIALZ),
-		NJR::NJRvector3d(NJRDXF::ZERO));
+		NJR::Vector3d(NJRDXF::ZERO),
+		NJR::Vector3d(NJRDXF::ZERO),
+		NJR::Vector3d(NJRDXF::AXIALX),
+		NJR::Vector3d(NJRDXF::AXIALZ),
+		NJR::Vector3d(NJRDXF::ZERO));
 
     // Recursion to work in general 3:
     MakeSlab(zeroCenter, 3, dos, pWorld);
@@ -92,7 +92,7 @@ void ClusterInitializer::MakeSlab(int center[3],
                 if (Inside(potentialPos))
                 {
 					dos.SetPosition
-						(NJR::NJRvector3d
+						(NJR::Vector3d
 							(potentialPos[0],
 							 potentialPos[1],
 							 potentialPos[2]));

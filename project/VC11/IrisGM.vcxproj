@@ -47,6 +47,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\;C:\usr\mpich2\32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>mpi.lib;libVEDO-Common-Debug.lib;libVEDO-Framework-Debug.lib;libVEDO-NJR-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -78,7 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Iris\Implementation\Iris_geometric.cpp" />
+    <ClCompile Include="..\..\src\Iris\Implementation\IrisGM.cpp" />
     <ClCompile Include="..\..\src\Iris\Implementation\NBSParallelConsultant.cpp" />
   </ItemGroup>
   <ItemGroup>

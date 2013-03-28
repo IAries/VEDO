@@ -1,7 +1,7 @@
 #ifndef _IMPACT_STATUS_H
 #define _IMPACT_STATUS_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/Constants.h>
 
 namespace VEDO
@@ -13,6 +13,10 @@ class ImpactStatus
 public:
 
 	ImpactStatus();
+
+	ImpactStatus
+        (const bool& Contact, const bool& Bond, const double& Kn,
+         const NJR::Vector3d& ShearForce, const double* UDVp       );
 
 	ImpactStatus(const ImpactStatus&);
 
@@ -50,12 +54,12 @@ public:
 		dKn = dK;
 	};
 
-	inline NJR::NJRvector3d ShearForce() const
+	inline NJR::Vector3d ShearForce() const
 	{
 		return vShearForce;
 	};
 
-	inline void SetShearForce(NJR::NJRvector3d& vS)
+	inline void SetShearForce(NJR::Vector3d& vS)
 	{
 		vShearForce = vS;
 	};
@@ -84,19 +88,15 @@ public:
 
 private:
 
-	bool bContact;             // Contacted or not
-
-	bool bBond;                // Bond exists or not
-
-	double dKn;                // Stiffness of normal spring
-
-	NJR::NJRvector3d vShearForce;   // Shear force
-
-	double dUDV[VEDO::uNumUserDefinedData*4];   // User-defined value
-                                                     // 0 ~ uNumUserDefinedData: Accumulative user-defined value
-                                                     // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: Unsynchronized part of Accumulative user-defined value
-                                                     // 2*uNumUserDefinedData ~ 3*uNumUserDefinedData-1: Unsynchronized part of Accumulative user-defined value (to be referenced)
-                                                     // 3*uNumUserDefinedData ~ 4*uNumUserDefinedData-1: User-defined value
+	bool          bContact;                      // Contacted or not
+	bool          bBond;                         // Bond exists or not
+	double        dKn;                           // Stiffness of normal spring
+	NJR::Vector3d vShearForce;                   // Shear force
+	double        dUDV[uNumUDDImpactStatus*4];   // User-defined value
+                                                 // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value
+                                                 // uNumUDDImpactStatus ~ 2*uNumUDDImpactStatus-1: Unsynchronized part of Accumulative user-defined value
+                                                 // 2*uNumUDDImpactStatus ~ 3*uNumUDDImpactStatus-1: Unsynchronized part of Accumulative user-defined value (to be referenced)
+                                                 // 3*uNumUDDImpactStatus ~ 4*uNumUDDImpactStatus-1: User-defined value
 };
 
 };   // namespace VEDO

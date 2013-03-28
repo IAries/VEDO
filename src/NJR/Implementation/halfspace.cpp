@@ -1,4 +1,4 @@
-#include <NJR/Interfaces/halfspace.h>
+#include <NJR/Interfaces/HalfSpace.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -6,29 +6,29 @@
 namespace NJR
 {
 
-NJRhalfspace::NJRhalfspace()
+HalfSpace::HalfSpace()
 {
-	NJRhalfspace::Set(0.0, 0.0, 1.0, E, 1.0);
+	HalfSpace::Set(0.0, 0.0, 1.0, E, 1.0);
 };
 
-NJRhalfspace::NJRhalfspace(const NJRhalfspace &hf)
+HalfSpace::HalfSpace(const HalfSpace &hf)
 {
-	NJRhalfspace::Set(hf._a, hf._b, hf._c ,hf._sense, hf._d);
+	HalfSpace::Set(hf._a, hf._b, hf._c ,hf._sense, hf._d);
 };
 
-NJRhalfspace::NJRhalfspace
+HalfSpace::HalfSpace
 	(double a, double b, double c, Sense sense, double d)
 {
-	NJRhalfspace::Set(a, b, c, sense, d);
+	HalfSpace::Set(a, b, c, sense, d);
 };
 
-const NJRhalfspace& NJRhalfspace::operator = (const NJRhalfspace &hf)
+const HalfSpace& HalfSpace::operator = (const HalfSpace &hf)
 {
-	NJRhalfspace::Set(hf.a(), hf.b(), hf.c(), hf.sense(), hf.d());
+	HalfSpace::Set(hf.a(), hf.b(), hf.c(), hf.sense(), hf.d());
 	return *this;
 };
 
-void NJRhalfspace::Set(double a, double b, double c, Sense sense, double d)
+void HalfSpace::Set(double a, double b, double c, Sense sense, double d)
 {
 	_a = a;
 	_b = b;
@@ -38,7 +38,7 @@ void NJRhalfspace::Set(double a, double b, double c, Sense sense, double d)
 };
 
 
-void NJRhalfspace::Normalize()
+void HalfSpace::Normalize()
 {
 	double length;
 	length = sqrt (_a*_a + _b*_b + _c*_c);
@@ -48,7 +48,7 @@ void NJRhalfspace::Normalize()
 	_d /= length;
 };
 
-void NJRhalfspace::AbsRhs()
+void HalfSpace::AbsRhs()
 {
 	if (_d < 0)
 	{
@@ -68,15 +68,15 @@ void NJRhalfspace::AbsRhs()
 	}
 };
 
-void NJRhalfspace::Translate(const NJRvector3d& dp)
+void HalfSpace::Translate(const Vector3d& dp)
 {
 	_d += (_a*dp.x() + _b*dp.y() + _c * dp.z());
 };
 
-void NJRhalfspace::RotateAround(const NJRvector3d &dw)
+void HalfSpace::RotateAround(const Vector3d &dw)
 {
 
-	NJRvector3d gradient(_a, _b, _c);
+	Vector3d gradient(_a, _b, _c);
 
 	gradient = gradient.RotateAround(dw);
 
@@ -89,7 +89,7 @@ void NJRhalfspace::RotateAround(const NJRvector3d &dw)
 
 
 
-std::ostream& operator << (std::ostream& os, const NJR::NJRhalfspace& hf)
+std::ostream& operator << (std::ostream& os, const NJR::HalfSpace& hf)
 {
     os	<< "[" << hf.a() << " X " << hf.b() << " Y " << hf.c() << " Z ";
 
@@ -109,7 +109,7 @@ std::ostream& operator << (std::ostream& os, const NJR::NJRhalfspace& hf)
 	return os;
 };
 
-std::istream& operator >> (std::istream& is, NJR::NJRhalfspace& hf)
+std::istream& operator >> (std::istream& is, NJR::HalfSpace& hf)
 {
 	double a;
 	double b;

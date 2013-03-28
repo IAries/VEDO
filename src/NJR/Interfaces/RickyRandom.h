@@ -1,5 +1,5 @@
-#ifndef _RICKYRANDOM_H
-#define _RICKYRANDOM_H
+#ifndef _NJR_RICKY_RANDOM_H
+#define _NJR_RICKY_RANDOM_H
 
 namespace NJR
 {
@@ -46,4 +46,4 @@ private:
 
 };   // namespace NJR
 
-#endif // _RICKYANDOM_H
+#endif // _NJR_RICKY_RANDOM_H

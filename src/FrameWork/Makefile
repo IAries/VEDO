@@ -3,7 +3,9 @@ include ../../Makefile.in
 TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
-all: ${VEDO_LIB}libVEDO-Framework-Debug.a ${VEDO_LIB}libVEDO-FrameworkX-Debug.a ${VEDO_LIB}libVEDO-Framework.a ${VEDO_LIB}libVEDO-FrameworkX.a
+all: debug release
+debug: ${VEDO_LIB}libVEDO-Framework-Debug.a ${VEDO_LIB}libVEDO-FrameworkX-Debug.a
+release: ${VEDO_LIB}libVEDO-Framework.a ${VEDO_LIB}libVEDO-FrameworkX.a
 
 ${VEDO_LIB}libVEDO-Framework-Debug.a: ${TMP_DEBUG}Assembler.o           \
                                       ${TMP_DEBUG}Boundary.o            \
@@ -33,7 +35,8 @@ ${VEDO_LIB}libVEDO-Framework-Debug.a: ${TMP_DEBUG}Assembler.o           \
                                       ${TMP_DEBUG}ISCFactoryDecorator.o \
                                       ${TMP_DEBUG}ISwModels.o           \
                                       ${TMP_DEBUG}SimMediator.o         \
-                                      ${TMP_DEBUG}SystemParameter.o
+                                      ${TMP_DEBUG}SystemParameter.o     \
+                                      ${TMP_DEBUG}SystemParameter2d.o
 	${AR} ${AR_FLAG} $@ $^
 
 ${VEDO_LIB}libVEDO-FrameworkX-Debug.a: ${TMP_DEBUG}Assembler.o           \
@@ -64,7 +67,8 @@ ${VEDO_LIB}libVEDO-FrameworkX-Debug.a: ${TMP_DEBUG}Assembler.o           \
                                        ${TMP_DEBUG}ISCFactoryDecorator.o \
                                        ${TMP_DEBUG}ISwModels.o           \
                                        ${TMP_DEBUG}SimMediator.o         \
-                                       ${TMP_DEBUG}SystemParameter.o
+                                       ${TMP_DEBUG}SystemParameter.o     \
+                                       ${TMP_DEBUG}SystemParameter2d.o
 	${AR} ${AR_FLAGx} $@ $^
 
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
@@ -98,7 +102,8 @@ ${VEDO_LIB}libVEDO-Framework.a: ${TMP_RELEASE}Assembler.o           \
                                 ${TMP_RELEASE}ISCFactoryDecorator.o \
                                 ${TMP_RELEASE}ISwModels.o           \
                                 ${TMP_RELEASE}SimMediator.o         \
-                                ${TMP_RELEASE}SystemParameter.o
+                                ${TMP_RELEASE}SystemParameter.o     \
+                                ${TMP_RELEASE}SystemParameter2d.o
 	${AR} ${AR_FLAG} $@ $^
 
 ${VEDO_LIB}libVEDO-FrameworkX.a: ${TMP_RELEASE}Assembler.o           \
@@ -129,7 +134,8 @@ ${VEDO_LIB}libVEDO-FrameworkX.a: ${TMP_RELEASE}Assembler.o           \
                                  ${TMP_RELEASE}ISCFactoryDecorator.o \
                                  ${TMP_RELEASE}ISwModels.o           \
                                  ${TMP_RELEASE}SimMediator.o         \
-                                 ${TMP_RELEASE}SystemParameter.o
+                                 ${TMP_RELEASE}SystemParameter.o     \
+                                 ${TMP_RELEASE}SystemParameter2d.o
 	${AR} ${AR_FLAGx} $@ $^
 
 ${TMP_RELEASE}%.o: ${IMP}%.cpp

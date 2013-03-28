@@ -309,7 +309,7 @@ bool DOWorld::UpdateDOStatus(const std::vector<const DOStatus *>& nDOStatus)
 			sp->GetTimeInterval(),
 			sp->GetTimeCurrent(),
 			(unsigned int) cDOStatus.size(),
-			sp->GetFieldForce(),
+			sp->GetFieldAcceleration(),
 			sp->GetZoneOfInterest(),
 			sp->GetPeriodicBoundaryConditions());
 
@@ -357,7 +357,7 @@ bool DOWorld::DelDOModel(const std::string& DOName)
 			sp->GetTimeInterval(),
 			sp->GetTimeCurrent(),
 			(unsigned int) cDOStatus.size(),
-			sp->GetFieldForce(),
+			sp->GetFieldAcceleration(),
 			sp->GetZoneOfInterest(),
 			sp->GetPeriodicBoundaryConditions());
 
@@ -366,9 +366,9 @@ bool DOWorld::DelDOModel(const std::string& DOName)
 	return DOWorld::Check();
 };
 
-void DOWorld::SetFieldForce(const NJR::NJRvector3d& ff)
+void DOWorld::SetFieldAcceleration(const NJR::Vector3d& ff)
 {
-	pSystemParameter->SetFieldForce (ff);
+	pSystemParameter->SetFieldAcceleration(ff);
 };
 
 void DOWorld::SetModels(const DOWorld* dow)
@@ -410,9 +410,9 @@ void DOWorld::FreezeAllElements()
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
-//		cDOStatus[ul]->SetOrientation(NJR::NJRvector3d(NJRDXF::AXIALX), NJR::NJRvector3d(NJRDXF::AXIALZ));
-		cDOStatus[ul]->SetVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
-		cDOStatus[ul]->SetAngularVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
+//		cDOStatus[ul]->SetOrientation(NJR::Vector3d(NJRDXF::AXIALX), NJR::Vector3d(NJRDXF::AXIALZ));
+		cDOStatus[ul]->SetVelocity(NJR::Vector3d(NJRDXF::ZERO));
+		cDOStatus[ul]->SetAngularVelocity(NJR::Vector3d(NJRDXF::ZERO));
 	}
 };
 
@@ -422,9 +422,9 @@ void DOWorld::FreezeElements(std::string& sDOName)
 	{
 		if (cDOStatus[ul]->GetDOName() == sDOName)
 		{
-//			cDOStatus[ul]->SetOrientation(NJR::NJRvector3d(NJRDXF::AXIALX), NJR::NJRvector3d(NJRDXF::AXIALZ));
-			cDOStatus[ul]->SetVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
-			cDOStatus[ul]->SetAngularVelocity(NJR::NJRvector3d(NJRDXF::ZERO));
+//			cDOStatus[ul]->SetOrientation(NJR::Vector3d(NJRDXF::AXIALX), NJR::Vector3d(NJRDXF::AXIALZ));
+			cDOStatus[ul]->SetVelocity(NJR::Vector3d(NJRDXF::ZERO));
+			cDOStatus[ul]->SetAngularVelocity(NJR::Vector3d(NJRDXF::ZERO));
 		}
 	}
 };
@@ -508,8 +508,8 @@ void DOWorld::CalculateSystemEnergy()
 	double          dEnergyKinetic;
 	double          dEnergyTranslation;
 	double          dEnergyRotation;
-	NJR::NJRvector3d     vMomentumAvg;
-	NJR::NJRvector3d     vAngularMomentumAvg;
+	NJR::Vector3d     vMomentumAvg;
+	NJR::Vector3d     vAngularMomentumAvg;
 	double          dMomentumNorm        = 0.0;
 	double          dAngularMomentumNorm = 0.0;
 	double          dVelocityMax;
@@ -517,9 +517,9 @@ void DOWorld::CalculateSystemEnergy()
 	double          dAngularVelocityMax;
 	double          dAngularVelocityMin;
 	double          m;
-	NJR::NJRvector3d     mmi;
+	NJR::Vector3d     mmi;
 	double          v;
-	NJR::NJRvector3d     av;
+	NJR::Vector3d     av;
 	double          dav;
 	bool            StartPoint       = true;
 	bool            NoMobileElements = false;
@@ -544,7 +544,7 @@ void DOWorld::CalculateSystemEnergy()
 			vAngularMomentumAvg = mmi * av;
 
 			dEnergyPotential
-				= -m * (pSystemParameter->GetFieldForce() % dos->GetPosition());
+				= -m * (pSystemParameter->GetFieldAcceleration() % dos->GetPosition());
 			dEnergyTranslation
 				= 0.5 * m * v * v;
 			dEnergyRotation
@@ -595,7 +595,7 @@ void DOWorld::CalculateSystemEnergy()
 
 				dEnergyPotential
 					-= m
-					* (pSystemParameter->GetFieldForce() % dos->GetPosition());
+					* (pSystemParameter->GetFieldAcceleration() % dos->GetPosition());
 				dEnergyTranslation
 					+= 0.5 * m * v * v;
 				dEnergyRotation
@@ -681,7 +681,7 @@ void DOWorld::CalculateSystemEnergy()
 	pSystemParameter->SetAngularVelocityMin(dAngularVelocityMin);
 };
 
-const std::pair<NJR::NJRvector3d, NJR::NJRvector3d>
+const std::pair<NJR::Vector3d, NJR::Vector3d>
 	DOWorld::Distribution(double& dMeshLength) const
 {
 	const Boundary      pZOI    = pSystemParameter->GetZoneOfInterest();
@@ -713,7 +713,7 @@ const std::pair<NJR::NJRvector3d, NJR::NJRvector3d>
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bMeshFilled;
-	NJR::NJRvector3d   vMeshCenter;
+	NJR::Vector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -767,11 +767,11 @@ const std::pair<NJR::NJRvector3d, NJR::NJRvector3d>
 
 	return
 		std::make_pair
-			(NJR::NJRvector3d(dXMin, dYMin, dZMin),
-			 NJR::NJRvector3d(dXMax, dYMax, dZMax) );
+			(NJR::Vector3d(dXMin, dYMin, dZMin),
+			 NJR::Vector3d(dXMax, dYMax, dZMax) );
 };
 
-void DOWorld::Shift(const NJR::NJRvector3d& shift)
+void DOWorld::Shift(const NJR::Vector3d& shift)
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -779,7 +779,7 @@ void DOWorld::Shift(const NJR::NJRvector3d& shift)
 	};
 };
 
-void DOWorld::Shift(const NJR::NJRvector3d& shift, const std::string& DOName)
+void DOWorld::Shift(const NJR::Vector3d& shift, const std::string& DOName)
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -837,8 +837,8 @@ std::pair<double, double> Rotate1Axis
 	}
 }
 
-NJR::NJRvector3d& Rotate3Axis
-	(NJR::NJRvector3d vTarget,
+NJR::Vector3d& Rotate3Axis
+	(NJR::Vector3d vTarget,
 	 const double& Angle2XAxis,
 	 const double& Angle2YAxis,
 	 const double& Angle2ZAxis )
@@ -862,7 +862,7 @@ void DOWorld::Rotate
 	 const double& Angle2YAxis,
 	 const double& Angle2ZAxis )
 {
-	NJR::NJRvector3d vV1, vV2;
+	NJR::Vector3d vV1, vV2;
 	std::pair<double, double> pNewPosition, pNewVelocity, pNewAngularVelocity;
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -909,10 +909,10 @@ void DOWorld::Rotate
 }
 
 void DOWorld::Rotate
-	(const NJR::NJRvector3d& eX, const NJR::NJRvector3d& eZ, const std::string& DOName)
+	(const NJR::Vector3d& eX, const NJR::Vector3d& eZ, const std::string& DOName)
 {
-	NJR::NJRvector3d eY(eZ * eX);
-	NJR::NJRvector3d position, orientationX, orientationZ;
+	NJR::Vector3d eY(eZ * eX);
+	NJR::Vector3d position, orientationX, orientationZ;
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
 		if(cDOStatus[ul]->GetDOName() == DOName)
@@ -920,14 +920,14 @@ void DOWorld::Rotate
 			position = cDOStatus[ul]->GetPosition();
 			cDOStatus[ul]
 				->SetPosition
-					(NJR::NJRvector3d(position % eX, position % eY, position % eZ));
+					(NJR::Vector3d(position % eX, position % eY, position % eZ));
 			orientationX = cDOStatus[ul]->GetOrientationX();
 			orientationZ = cDOStatus[ul]->GetOrientationZ();
 			cDOStatus[ul]
 				->SetOrientation
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(orientationX % eX, orientationX % eY, orientationX % eZ),
-					 NJR::NJRvector3d
+					 NJR::Vector3d
 						(orientationZ % eX, orientationZ % eY, orientationZ % eZ) );
 		};
 	};
@@ -987,7 +987,7 @@ double DOWorld::Volume(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bVolumeFilled;
-	NJR::NJRvector3d   vMeshCenter;
+	NJR::Vector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -1041,7 +1041,7 @@ double DOWorld::ProjectedAreaX(double& dMeshLength) const
 			{
 				TargetedSerialNumber.push_back(ul);
 				pdos->SetPosition
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(0.0,
 						 pdos->GetPosition().y(),
 						 pdos->GetPosition().z() ));
@@ -1054,7 +1054,7 @@ double DOWorld::ProjectedAreaX(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bAreaFilled;
-	NJR::NJRvector3d   vMeshCenter;
+	NJR::Vector3d   vMeshCenter;
 	for(double dY=pZOI.GetLowerPoint().y()+0.5*dMeshLength;
 		dY<pZOI.GetUpperPoint().y();
 		dY+=dMeshLength                                   )
@@ -1103,7 +1103,7 @@ double DOWorld::ProjectedAreaY(double& dMeshLength) const
 			{
 				TargetedSerialNumber.push_back(ul);
 				pdos->SetPosition
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(pdos->GetPosition().x(),
 						 0.0,
 						 pdos->GetPosition().z() ));
@@ -1116,7 +1116,7 @@ double DOWorld::ProjectedAreaY(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bAreaFilled;
-	NJR::NJRvector3d   vMeshCenter;
+	NJR::Vector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -1165,7 +1165,7 @@ double DOWorld::ProjectedAreaZ(double& dMeshLength) const
 			{
 				TargetedSerialNumber.push_back(ul);
 				pdos->SetPosition
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(pdos->GetPosition().x(),
 						 pdos->GetPosition().y(),
 						 0.0                     ));
@@ -1178,7 +1178,7 @@ double DOWorld::ProjectedAreaZ(double& dMeshLength) const
 	double        dRadius;
 	unsigned long ulCounter;
 	bool          bAreaFilled;
-	NJR::NJRvector3d   vMeshCenter;
+	NJR::Vector3d   vMeshCenter;
 	for(double dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )

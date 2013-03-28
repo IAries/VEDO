@@ -1,5 +1,5 @@
 #include <NJR/Interfaces/Utility.h>
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/DOContainer.h>
 #include <algorithm>
 #include <functional>
@@ -16,7 +16,7 @@ DOContainer::~DOContainer()
 	DOContainer::Clear();
 };
 
-void DOContainer::AddFieldImpact(const NJR::NJRvector3d& vFieldImpact)
+void DOContainer::AddFieldImpact(const NJR::Vector3d& vFieldImpact)
 {
 	std::vector<DiscreteObject *>::iterator ido;
 	for(ido=lcDO.begin(); ido!=lcDO.end(); ++ido)
@@ -27,19 +27,19 @@ void DOContainer::AddFieldImpact(const NJR::NJRvector3d& vFieldImpact)
 
 void DOContainer::AddImpact
 	(const unsigned long& ul,
-	 const NJR::NJRvector3d& vImpact,
-	 const NJR::NJRvector3d& vAngularImpact)
+	 const NJR::Vector3d& vImpact,
+	 const NJR::Vector3d& vAngularImpact)
 {
 	lcDO[ul]->AddImpact(vImpact, vAngularImpact);
 };
 
 /*
 void DOContainer::AddExternalImpact
-	(const std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >&
+	(const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >&
 	 vvExternalImpact                                        )
 {
 	std::vector<DiscreteObject*>::iterator ido;
-	std::vector<std::pair<NJR::NJRvector3d, NJR::NJRvector3d> >::iterator iExternalImpact;
+	std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >::iterator iExternalImpact;
 	unsigned long ul = 0;
 	for(ido=lcDO.begin();
 		ido!=lcDO.end(), ul<vvExternalImpact.size();

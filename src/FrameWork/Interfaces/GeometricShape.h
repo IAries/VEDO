@@ -1,7 +1,7 @@
 #ifndef _GEOMETRIC_SHAPE_H
 #define _GEOMETRIC_SHAPE_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/DOStatus.h>
 #include <list>
 #include <string>
@@ -53,7 +53,7 @@ public:
 
 	virtual GeometricShape* GetGeometricShape(std::string&);
 
-	virtual bool Inside(const NJR::NJRvector3d&) = 0;
+	virtual bool Inside(const NJR::Vector3d&) = 0;
 
 protected:
 

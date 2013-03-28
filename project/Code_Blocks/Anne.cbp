@@ -13,11 +13,12 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="../../lib/Code_Blocks/libVEDO-Common-Debug.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Framework-Debug.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-NJR-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR-Debug.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -30,9 +31,9 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Common.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Framework.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-NJR.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR.a" />
 				</Linker>
 			</Target>
 		</Build>

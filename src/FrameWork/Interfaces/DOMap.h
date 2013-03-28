@@ -151,7 +151,7 @@ public:
 		 double& maxR, double& maxV,
 		 double& maxS               );
 
-	static double CalSafeDistance(DOMap m, NJR::NJRvector3d vFF, double dt);
+	static double CalSafeDistance(DOMap m, NJR::Vector3d vFF, double dt);
 
 //	static double CalDistance(DOMap m1, DOMap m2);
 

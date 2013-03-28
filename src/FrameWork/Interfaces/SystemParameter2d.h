@@ -1,7 +1,7 @@
 #ifndef _SYSTEM_PARAMETER_2D_H
 #define _SYSTEM_PARAMETER_2D_H
 
-#include <NJR/Interfaces/vector2d.h>
+#include <NJR/Interfaces/Vector2d.h>
 #include <FrameWork/Interfaces/Boundary2d.h>
 #include <string>
 #include <fstream>
@@ -24,7 +24,7 @@ public:
 		const double& TimeInterval,
 		const double& TimeCurrent,
 		const unsigned long int& DONumber,
-		const NJR::NJRvector2d& FieldForce,
+		const NJR::Vector2d& FieldAcceleration,
 		const Boundary2d& ZOI,
 		const Boundary2d& PBC             );
 
@@ -82,9 +82,9 @@ public:
 		ulDONumber = n;
 	};
 
-	inline NJR::NJRvector2d GetFieldForce() const
+	inline NJR::Vector2d GetFieldAcceleration() const
 	{
-		return vFieldForce;
+		return vFieldAcceleration;
 	};
 
 	inline const Boundary2d& GetZoneOfInterest() const
@@ -126,9 +126,9 @@ public:
 		dTimeCurrent += dTimeInterval;
 	};
 
-	inline void SetFieldForce(const NJR::NJRvector2d& FieldForce)
+	inline void SetFieldAcceleration(const NJR::Vector2d& FieldAcceleration)
 	{
-		vFieldForce = FieldForce;
+		vFieldAcceleration = FieldAcceleration;
 	};
 
 	inline void SetBoundary(const Boundary2d& b)
@@ -156,12 +156,12 @@ public:
 		return dEnergyRotation;
 	};
 
-	inline NJR::NJRvector2d GetMomentumAvg() const
+	inline NJR::Vector2d GetMomentumAvg() const
 	{
 		return vMomentumAvg;
 	};
 
-	inline NJR::NJRvector2d GetAngularMomentumAvg() const
+	inline NJR::Vector2d GetAngularMomentumAvg() const
 	{
 		return vAngularMomentumAvg;
 	};
@@ -211,12 +211,12 @@ public:
 		dEnergyRotation = e;
 	};
 
-	inline void SetMomentumAvg(const NJR::NJRvector2d& v)
+	inline void SetMomentumAvg(const NJR::Vector2d& v)
 	{
 		vMomentumAvg = v;
 	};
 
-	inline void SetAngularMomentumAvg(const NJR::NJRvector2d& v)
+	inline void SetAngularMomentumAvg(const NJR::Vector2d& v)
 	{
 		vAngularMomentumAvg = v;
 	};
@@ -283,8 +283,8 @@ private:
 	// The number of Discrete Objects;
 	unsigned long ulDONumber;
 
-	// The global field force
-	NJR::NJRvector2d vFieldForce;
+	// The global field acceleration
+	NJR::Vector2d vFieldAcceleration;
 
 	Boundary2d  ZoneOfInterest;               // Zone of Interest (ZOI)
 	Boundary2d  PeriodicBoundaryConditions;   // Periodic Boundary Condition (PBC)
@@ -293,8 +293,8 @@ private:
 	double      dEnergyTranslation;           // Kinetic energy (Total, Translation part)
 	double      dEnergyRotation;              // Kinetic energy (Total, Rotation part)
 
-	NJR::NJRvector2d vMomentumAvg;                 // Average momentum
-	NJR::NJRvector2d vAngularMomentumAvg;          // Average angular momentum
+	NJR::Vector2d vMomentumAvg;                 // Average momentum
+	NJR::Vector2d vAngularMomentumAvg;          // Average angular momentum
 
 	double      dMomentumNorm;                // Norm of momentum (Total)
 	double      dAngularMomentumNorm;         // Norm of angular momentum (Total)

@@ -1,7 +1,7 @@
 #ifndef _GS_SPHERE_H
 #define _GS_SPHERE_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
 namespace VEDO
@@ -19,7 +19,7 @@ public:
 		return _dRadius;
 	};
 
-	inline bool Inside(const NJR::NJRvector3d& p)
+	inline bool Inside(const NJR::Vector3d& p)
 	{
 		return ((p - _Status->GetPosition()).length() <= _dRadius);
 	};

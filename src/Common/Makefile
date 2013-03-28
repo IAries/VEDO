@@ -3,7 +3,9 @@ include ../../Makefile.in
 TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
-all: ${VEDO_LIB}libVEDO-Common-Debug.a ${VEDO_LIB}libVEDO-Common.a
+all: debug release
+debug: ${VEDO_LIB}libVEDO-Common-Debug.a
+release: ${VEDO_LIB}libVEDO-Common.a
 
 ${VEDO_LIB}libVEDO-Common-Debug.a: ${TMP_DEBUG}CDSphere2QuasiCylinder.o     \
                                    ${TMP_DEBUG}CDSphere2QuasiCylinderAT.o   \

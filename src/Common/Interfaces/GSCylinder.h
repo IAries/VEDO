@@ -1,7 +1,7 @@
 #ifndef _GS_CYLINDER_H
 #define _GS_CYLINDER_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
 namespace VEDO
@@ -24,7 +24,7 @@ public:
 		return _dHeight;
 	};
 
-	bool Inside(const NJR::NJRvector3d&);
+	bool Inside(const NJR::Vector3d&);
 
 protected:
 

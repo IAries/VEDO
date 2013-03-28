@@ -75,8 +75,7 @@ bool NBSConsultant::NextStep(DOContainer &cDO, IactContainer& cIact)
 			cIact.CollectUserDefinedData();
 		}
 //		pDOWorld->WriteXML("terminate.xml");
-		pDOWorld->WriteIDO("terminate.ido");
-		pIRTbl  ->WriteIRT("terminate.irt");
+		pDOWorld->WriteIDO("terminate.ido", pIRTbl);
 	}
 	return true;
 };
@@ -99,7 +98,7 @@ bool NBSConsultant::Reset()
 
 	const SystemParameter* csp = pDOWorld->GetSystemParameter();
 	unsigned long numberDO = csp->GetDONumber();
-	NJR::NJRvector3d vFieldForce = csp->GetFieldForce();
+	NJR::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
 	double dt = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
@@ -116,21 +115,21 @@ bool NBSConsultant::Reset()
 	double vmax = 0.0;
 	double rmax = 0.0;
 
-	// Max safe distance
-	double maxS = 0.0;
-
+	double safeD;   // The safe distance of each element
+	const DOStatus* cpdos  = 0;
+	const DOModel*  cpdoml = 0;
 	for (ul=0; ul<numberDO; ++ul)
 	{
 		vcDO.push_back(ul);
 
-		const DOStatus* cpdos  = pDOWorld->GetDOStatus(ul);
-		const DOModel*  cpdoml = pDOWorld->GetDOModel(cpdos->GetDOName());
+		cpdos  = pDOWorld->GetDOStatus(ul);
+		cpdoml = pDOWorld->GetDOModel(cpdos->GetDOName());
 
-		// The safe distance of element
-		double safeD
-			= cpdoml->GetRange() * 1.1
-			+ (cpdos->GetVelocity()).length() * 1.1 * dt
-			+ 0.5 * dt * dt * vFieldForce.length();
+		safeD
+			= VEDO::dSafetyFactor
+            * (   2.0 * cpdoml->GetRange()
+                + dt  * (cpdos->GetVelocity()).length()
+                + 0.5 * dt * dt * vFieldAcceleration.length() );
 
 		if (cpdoml->GetScope() == "local")
 		{
@@ -142,26 +141,31 @@ bool NBSConsultant::Reset()
 			zmax = std::max( zmax, cpdos->GetPosition().z() );
 			vmax = std::max( vmax, cpdos->GetVelocity().length() );
 			rmax = cpdoml->GetRange();
-			// Update max safe distance
-			// maxS = max(maxS,safeD);
 		}
 
 		vDOMap.push_back(DOMap(ul, cpdos, cpdoml, safeD));
 	}
-	maxS = vmax*dt + rmax*1.1*2 + (0.5*dt*dt*vFieldForce).length();
+	// Max safe distance
+	double ZoneRange
+        = VEDO::dSafetyFactor
+        * (2.0 * rmax + dt * vmax + 0.5 * dt * dt * vFieldAcceleration.length());
+	// Determine how many "safety region" per direction
+	int ncelx = std::ceil((xmax - xmin) / ZoneRange);
+	ncelx = std::max(ncelx, 1);
+	int ncely = std::ceil((ymax - ymin) / ZoneRange);
+	ncely = std::max(ncely, 1);
+	int ncelz = std::ceil((zmax - zmin) / ZoneRange);
+	ncelz = std::max(ncelz, 1);
 
-	double ZoneRange = maxS;
-	int ncelx = ceil( (xmax-xmin)/ZoneRange );
-	int ncely = ceil( (ymax-ymin)/ZoneRange );
-	int ncelz = ceil( (zmax-zmin)/ZoneRange );
-
-	std::cout
-		<< "(ncelx,necly,ncelz) = ("
-		<< ncelx
-		<< ','
-		<< ncely
-		<< ','
-		<<ncelz << ")\n";
+	#ifdef _VEDO_DEBUG
+        std::cout
+            << "(ncelx, necly, ncelz) = ("
+            << ncelx
+            << ','
+            << ncely
+            << ','
+            << ncelz << ")\n";
+	#endif   // _VEDO_DEBUG
 
 	std::map<Trir, std::vector<DOMap>*, TrirLeY> locMap;
 
@@ -171,7 +175,7 @@ bool NBSConsultant::Reset()
 	{
 		if (vDOMap[ul].cpdoml()->GetScope() == "local")
 		{
-			NJR::NJRvector3d p = vDOMap[ul].cpdos()->GetPosition();
+			NJR::Vector3d p = vDOMap[ul].cpdos()->GetPosition();
 			Trir zone
 				(static_cast<int>((p.x()-xmin)/ZoneRange),
 				static_cast<int>((p.y()-ymin)/ZoneRange),
@@ -316,14 +320,14 @@ bool NBSConsultant::Reset()
 		<< (unsigned int)(IactPairTab.size())
 		<< ")\n";
 */
-	std::cout
-		<< "(SafeDistance = "
-		<< maxS
-		<< ") (Cutting Range = "
-		<< ZoneRange
-		<< ") (Uniqued Iact size = "
-		<< (unsigned int)(IactPairTab.size())
-		<< ")\n";
+	#ifdef _VEDO_DEBUG
+        std::cout
+            << "(Cutting Range = "
+            << ZoneRange
+            << ") (Uniqued Iact size = "
+            << (unsigned int)(IactPairTab.size())
+            << ")\n";
+	#endif   // _VEDO_DEBUG
 
 	// Clear the LocMap data
 	for (iter1=locMap.begin(); iter1!=locMap.end(); ++iter1)

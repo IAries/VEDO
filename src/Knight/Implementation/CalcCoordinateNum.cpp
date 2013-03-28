@@ -1,5 +1,5 @@
-#include <NJR/Interfaces/random.h>
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/RandomGenerator.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/DOWorld_WriteVTK.h>
 #include <FrameWork/Interfaces/DOMap.h>
 #include <Knight/Interfaces/CalcCoordinateNum.h>

@@ -1,5 +1,5 @@
-#include <NJR/Interfaces/acadxf.h>
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/ACADXF.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
@@ -163,8 +163,8 @@ Line:: Line()
 };
 
 void Line::Set
-	(const NJR::NJRvector3d& p1,
-	const NJR::NJRvector3d& p2,
+	(const NJR::Vector3d& p1,
+	const NJR::Vector3d& p2,
 	const char* layer,
 	const Color& color)
 {
@@ -174,7 +174,7 @@ void Line::Set
 	Entitity::SetLayer(layer);
 };
 
-void Line::SetPoint1(const NJR::NJRvector3d& point)
+void Line::SetPoint1(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -182,7 +182,7 @@ void Line::SetPoint1(const NJR::NJRvector3d& point)
 	Entitity::SetValue(pz0, p+2);
 };
 
-void Line::SetPoint2(const NJR::NJRvector3d& point)
+void Line::SetPoint2(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -208,10 +208,10 @@ Face::Face()
 };
 
 void Face::Set
-	(const NJR::NJRvector3d& p1,
-	const NJR::NJRvector3d& p2,
-	const NJR::NJRvector3d& p3,
-	const NJR::NJRvector3d& p4,
+	(const NJR::Vector3d& p1,
+	const NJR::Vector3d& p2,
+	const NJR::Vector3d& p3,
+	const NJR::Vector3d& p4,
 	const char* layer,
 	const Color& color)
 {
@@ -223,7 +223,7 @@ void Face::Set
 	Entitity::SetLayer(layer);
 };
 
-void Face::SetPoint1(const NJR::NJRvector3d& point)
+void Face::SetPoint1(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -231,7 +231,7 @@ void Face::SetPoint1(const NJR::NJRvector3d& point)
 	Entitity::SetValue(pz0, p+2);
 };
 
-void Face::SetPoint2(const NJR::NJRvector3d& point)
+void Face::SetPoint2(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -239,7 +239,7 @@ void Face::SetPoint2(const NJR::NJRvector3d& point)
 	Entitity::SetValue(pz1, p+2);
 };
 
-void Face::SetPoint3(const NJR::NJRvector3d& point)
+void Face::SetPoint3(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px2, p);
@@ -247,7 +247,7 @@ void Face::SetPoint3(const NJR::NJRvector3d& point)
 	Entitity::SetValue(pz2, p+2);
 };
 
-void Face::SetPoint4(const NJR::NJRvector3d& point)
+void Face::SetPoint4(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px3, p);
@@ -267,7 +267,7 @@ Text:: Text()
 }
 
 void Text::Set
-	(const NJR::NJRvector3d& p1,
+	(const NJR::Vector3d& p1,
 	const char* text,
 	const double& dheight,
 	const double& dangle,
@@ -280,7 +280,7 @@ void Text::Set
 	 Entitity::SetLayer(layer);
 };
 
-void Text::SetPoint(const NJR::NJRvector3d& point)
+void Text::SetPoint(const NJR::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);

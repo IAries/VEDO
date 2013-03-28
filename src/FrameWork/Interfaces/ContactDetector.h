@@ -10,10 +10,10 @@ namespace VEDO
 
 struct ContactInfo
 {
-	NJR::NJRvector3d vImpactDirection;
-	NJR::NJRvector3d vSlideDirection;
-	NJR::NJRvector3d vCenterToCenter;
-	NJR::NJRvector3d vImpactPoint;
+	NJR::Vector3d vImpactDirection;
+	NJR::Vector3d vSlideDirection;
+	NJR::Vector3d vCenterToCenter;
+	NJR::Vector3d vImpactPoint;
 	double      dImpactDepth;
 	double      dDistance;
 	double      dOverlapArea;

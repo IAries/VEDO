@@ -4,7 +4,7 @@
 namespace VEDO
 {
 
-bool GSComplexShape::Inside(const NJR::NJRvector3d& p)
+bool GSComplexShape::Inside(const NJR::Vector3d& p)
 {
 	std::list<GeometricShape*>::iterator _lgsp;
 	for (_lgsp=_ListGS.begin(); _lgsp!=_ListGS.end(); _lgsp++)

@@ -35,6 +35,7 @@
 #include <Common/Interfaces/SafeConsultant.h>
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <fstream>
@@ -57,6 +58,8 @@ void usage (int g)
 		<< '\t' << "Error Condition: " << g << std::endl;
 	exit(0);
 }
+
+#include <NJR/Interfaces/TimeHistory.h>
 
 int main (int argc, char* argv[])
 {
@@ -89,7 +92,7 @@ int main (int argc, char* argv[])
 
 	VEDO::DOWorld*       pDOWorld;
 	VEDO::Consultant*    pConsultant;
-	VEDO::IactRecordTab* pIactRecordTab;
+	VEDO::IactRecordTab* pIactRecordTab = new VEDO::IactRecordTab();
 	VEDO::Assembler*     pAssembler = new VEDO::Assembler;
 
 	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOConstrainedQuasiCylinder>(VEDO::QuasiCylinder, "constrained"));
@@ -114,10 +117,7 @@ int main (int argc, char* argv[])
 	{
 		pDOWorld    = new VEDO::DOWorld;
 		idofilename = argv[2];
-		pDOWorld->ReadIDO(idofilename);
-		std::string irtfile(idofilename);
-		irtfile = irtfile.substr(0, irtfile.size() - 4) += ".irt";
-		pIactRecordTab = new VEDO::IactRecordTab(irtfile.c_str());
+		pDOWorld->ReadIDO(idofilename, pIactRecordTab);
 	}
 	else
 	{

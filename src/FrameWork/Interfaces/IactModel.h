@@ -1,7 +1,7 @@
 #ifndef _IACT_MODEL_H
 #define _IACT_MODEL_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <fstream>
 #include <string>
 #include <vector>

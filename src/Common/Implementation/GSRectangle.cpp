@@ -13,9 +13,9 @@ GSRectangle::GSRectangle
 	_Status = new DOStatus("No Name");
 };
 
-bool GSRectangle::Inside(const NJR::NJRvector3d& p)
+bool GSRectangle::Inside(const NJR::Vector3d& p)
 {
-	NJR::NJRvector3d localP(p);
+	NJR::Vector3d localP(p);
 	localP = localP - _Status->GetPosition();
 	double localX = localP % (_Status->GetOrientationX());
 	double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());

@@ -13,12 +13,13 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="../../lib/Code_Blocks/libVEDO-Common-Debug.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Framework-Debug.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-NJR-Debug.a" />
-					<Add library="C:/usr/mpich2/32/lib/mpi.lib" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR-Debug.a" />
+					<Add library="C:\usr\mpich2\32\lib\mpi.lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -31,10 +32,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Common.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Framework.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-NJR.a" />
-					<Add library="C:/usr/mpich2/32/lib/mpi.lib" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR.a" />
+					<Add library="C:\usr\mpich2\32\lib\mpi.lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -51,7 +52,7 @@
 			<Add directory="../../lib/Code_Blocks/" />
 			<Add directory="C:/usr/mpich2/32/lib/" />
 		</Linker>
-		<Unit filename="../../src/Iris/Implementation/Iris_geometric.cpp" />
+		<Unit filename="../../src/Iris/Implementation/IrisGM.cpp" />
 		<Unit filename="../../src/Iris/Implementation/NBSParallelConsultant.cpp" />
 		<Unit filename="../../src/Iris/Interfaces/NBSParallelConsultant.h" />
 		<Extensions>

@@ -9,7 +9,7 @@ void CDSphere_SphereAT::Detect
 	CDSphere_Sphere::CalDistance(pdoSlave, pdoMaster);
 
 	// Center of Slave
-	NJR::NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	NJR::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Radius of Slave
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;

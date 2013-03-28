@@ -1,5 +1,5 @@
-#include <NJR/Interfaces/vector3d.h>
-#include <NJR/Interfaces/random.h>
+#include <NJR/Interfaces/Vector3d.h>
+#include <NJR/Interfaces/RandomGenerator.h>
 #include <FrameWork/Interfaces/DOMap.h>
 #include <Knight/Interfaces/CalcDensity.h>
 
@@ -49,7 +49,7 @@ double CalcDensity::computeDensity
 		double ranX = RA(xmin, xmax);
 		double ranY = RA(ymin, ymax);
         double ranZ = RA(zmin, zmax);
-		NJR::NJRvector3d ranV(ranX, ranY, ranZ);
+		NJR::Vector3d ranV(ranX, ranY, ranZ);
 
 		bool hasHit = false;
 		for (unsigned int j=0; j<vDOMap.size(); ++j)

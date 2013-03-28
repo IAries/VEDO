@@ -44,6 +44,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
@@ -82,7 +83,6 @@
     <ClInclude Include="..\..\src\Common\Interfaces\ISwBSDBF.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\ISwBtSDBF.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant.h" />
-    <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant2.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\NBSConsultant.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\NearConsultant.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\SafeConsultant.h" />
@@ -109,7 +109,6 @@
     <ClCompile Include="..\..\src\Common\Implementation\ISwBSDBF.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\ISwBtSDBF.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant.cpp" />
-    <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant2.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\NBSConsultant.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\NearConsultant.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\SafeConsultant.cpp" />

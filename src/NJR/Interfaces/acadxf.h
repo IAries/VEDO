@@ -10,10 +10,10 @@
  *       (C++ Programming Langurage)
  ******************************************************/
 
-#ifndef _NJRACADXF_H
-#define _NJRACADXF_H
+#ifndef _NJR_ACADXF_H
+#define _NJR_ACADXF_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -156,15 +156,15 @@ public:
 
 	// Sets attributes of this Entitity
 	void Set
-		(const NJR::NJRvector3d& p1,
-		const NJR::NJRvector3d& p2,
+		(const NJR::Vector3d& p1,
+		const NJR::Vector3d& p2,
 		const char* layer = "NJRDXFdefault",
 		const Color& color = bylayer);
 
 	// Set two endpoints of this line
-	void SetPoint1(const NJR::NJRvector3d& point);
+	void SetPoint1(const NJR::Vector3d& point);
 
-	void SetPoint2(const NJR::NJRvector3d& point);
+	void SetPoint2(const NJR::Vector3d& point);
 
 private:
 
@@ -191,21 +191,21 @@ public:
 
 	// Sets attributes of this Entititty
 	void Set
-		(const NJR::NJRvector3d& p1,
-		const NJR::NJRvector3d& p2,
-		const NJR::NJRvector3d& p3,
-		const NJR::NJRvector3d& p4,
+		(const NJR::Vector3d& p1,
+		const NJR::Vector3d& p2,
+		const NJR::Vector3d& p3,
+		const NJR::Vector3d& p4,
 		const char* layer = "NJRDXFdefault",
 		const Color& color = bylayer);
 
 	// Sets four corners of this 3d face
-	void SetPoint1(const NJR::NJRvector3d &point);
+	void SetPoint1(const NJR::Vector3d &point);
 
-	void SetPoint2(const NJR::NJRvector3d &point);
+	void SetPoint2(const NJR::Vector3d &point);
 
-	void SetPoint3(const NJR::NJRvector3d &point);
+	void SetPoint3(const NJR::Vector3d &point);
 
-	void SetPoint4(const NJR::NJRvector3d &point);
+	void SetPoint4(const NJR::Vector3d &point);
 
 private:
 
@@ -230,7 +230,7 @@ public:
 
 	// Sets attributes of this Entitity
 	void Set
-		(const NJR::NJRvector3d& p1,
+		(const NJR::Vector3d& p1,
 		const char* text,
 		const double& dheight = 2.0,
 		const double& dangle=0.0,
@@ -238,7 +238,7 @@ public:
 		const Color& color = bylayer);
 
 	// Sets the position of this Text
-	void SetPoint(const NJR::NJRvector3d& point);
+	void SetPoint(const NJR::Vector3d& point);
 
 	// Sets the size , angle, and content of this Text
 	void SetText
@@ -307,4 +307,4 @@ private:
 
 }; // namespace NJRDXF
 
-#endif // _NJRACADXF_H
+#endif // _NJR_ACADXF_H

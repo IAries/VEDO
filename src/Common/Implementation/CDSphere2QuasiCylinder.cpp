@@ -11,17 +11,17 @@ void CDSphere_QuasiCylinder::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	NJR::NJRvector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	NJR::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiCylinder)
-	NJR::NJRvector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
+	NJR::Vector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Half height of Master
 	double dHHb
 		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.height;
 
 	// The center axial of Master (QuasiCylinder)
-	NJR::NJRvector3d vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
+	NJR::Vector3d vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
 
 	// The projected point of vCa on vAxial
 	double Dap = (vCa - vCb) % vAxial;
@@ -38,8 +38,8 @@ void CDSphere_QuasiCylinder::CalDistance
      * The distance from vCaps to vCa is the shortest distance between surface
      * of Slave and Master
 	 **************************************************************************/
-	NJR::NJRvector3d vCaps = vCb + Dap * vAxial;
-	NJR::NJRvector3d vIm   = vCaps - vCa;
+	NJR::Vector3d vCaps = vCb + Dap * vAxial;
+	NJR::Vector3d vIm   = vCaps - vCa;
 
 	double dRs = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
 	double dRc = pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.radius;

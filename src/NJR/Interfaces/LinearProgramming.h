@@ -1,25 +1,25 @@
-#ifndef _LINEAR_PROGRAMMING_H
-#define _LINEAR_PROGRAMMING_H
+#ifndef _NJR_LINEAR_PROGRAMMING_H
+#define _NJR_LINEAR_PROGRAMMING_H
 
-#include <NJR/Interfaces/matrix.h>
-#include <NJR/Interfaces/polyhedra.h>
-#include <NJR/Interfaces/polygon.h>
+#include <NJR/Interfaces/Matrix.h>
+#include <NJR/Interfaces/Polyhedra.h>
+#include <NJR/Interfaces/Polygon.h>
 
 namespace NJR
 {
 
-class NJRLinearProgramming
+class LinearProgramming
 {
 
 public:
 
-	NJRLinearProgramming();
+	LinearProgramming();
 
-	NJRLinearProgramming(const NJRLinearProgramming&);
+	LinearProgramming(const LinearProgramming&);
 
-	virtual ~NJRLinearProgramming();
+	virtual ~LinearProgramming();
 
-	const NJRLinearProgramming& operator = (const NJRLinearProgramming&);
+	const LinearProgramming& operator = (const LinearProgramming&);
 
 	void Set(const NJR::NJRpolyhedra &);
 
@@ -67,10 +67,10 @@ private:
 	char *kid;
 	unsigned int *basis;
 	unsigned int *nbasis;
-	NJRmatrix obj;
-	NJRmatrix A;
-	NJRmatrix rhs;
-	NJRmatrix BI;
+	Matrix obj;
+	Matrix A;
+	Matrix rhs;
+	Matrix BI;
     void Allocation();
 	double GetObjValue();
 	bool PurgeArtificialVariable();
@@ -79,4 +79,4 @@ private:
 
 };   // namespace NJR
 
-#endif // _LINEAR_PROGRAMMING_H
+#endif // _NJR_LINEAR_PROGRAMMING_H

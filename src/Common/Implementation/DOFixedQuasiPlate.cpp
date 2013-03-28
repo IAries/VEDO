@@ -14,7 +14,7 @@ DOFixedQuasiPlate::DOFixedQuasiPlate
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = 0.0;
-	vMassMomentInertia = NJR::NJRvector3d();
+	vMassMomentInertia = NJR::Vector3d();
 };
 
 };   // namespace VEDO

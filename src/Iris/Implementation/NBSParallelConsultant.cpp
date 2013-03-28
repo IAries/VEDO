@@ -79,7 +79,7 @@ void NBSParallelConsultant::WriteDOSubWorld(DOContainer &vDO) const
 			oSP->GetTimeInterval(),
 			oSP->GetTimeCurrent(),
 			vDO.size(),
-			oSP->GetFieldForce(),
+			oSP->GetFieldAcceleration(),
 			oSP->GetZoneOfInterest(),
 			oSP->GetPeriodicBoundaryConditions());
 
@@ -385,11 +385,11 @@ void NBSParallelConsultant::SyncDOContainer(DOContainer & vDO)
 			idx = G2LTab[ overlapTab[i][j] ];
 			vDO[idx]
 				->AddImpact
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(impactRecBuf[6*j],
 						impactRecBuf[6*j+1],
 						impactRecBuf[6*j+2]),
-					NJR::NJRvector3d
+					NJR::Vector3d
 						(impactRecBuf[6*j+3],
 						impactRecBuf[6*j+4],
 						impactRecBuf[6*j+5]) );
@@ -561,32 +561,32 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 			}
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetPosition
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(recStatus[15*j],
 						recStatus[15*j+1],
 						recStatus[15*j+2]));
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetVelocity
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(recStatus[15*j+3],
 						recStatus[15*j+4],
 						recStatus[15*j+5]) );
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetOrientation
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(recStatus[15*j+6],
 						recStatus[15*j+7],
 						recStatus[15*j+8]),
-					NJR::NJRvector3d
+					NJR::Vector3d
 						(recStatus[15*j+9],
 						recStatus[15*j+10],
 						recStatus[15*j+11]) );
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetAngularVelocity
-					(NJR::NJRvector3d
+					(NJR::Vector3d
 						(recStatus[15*j+12],
 						recStatus[15*j+13],
 						recStatus[15*j+14]) );
@@ -672,8 +672,7 @@ bool NBSParallelConsultant::NextStep(DOContainer& vDO, IactContainer& cIact)
 		if (rank == MASTER)
         {
 //			pDOWorld->WriteXML("terminate.xml");
-			pDOWorld->WriteIDO("terminate.ido");
-			pIRTbl  ->WriteIRT("terminate.irt");
+			pDOWorld->WriteIDO("terminate.ido", pIRTbl);
 		}
 		//this->WriteDOSubWorld(vDO);
 	}
@@ -1028,24 +1027,24 @@ void NBSParallelConsultant::CollectUserDefinedData(IactContainer& cIact)
 	cIact.CollectUserDefinedData();
 
 	// All processors collect and sum their-owned user-defined data
-	double dUserDefinedDataSend[2*VEDO::uNumUserDefinedData];
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+	double dUserDefinedDataSend[2*uNumUDDImpactStatus];
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 		dUserDefinedDataSend[u] = cIact.GetUserDefinedValue(u);
 
-	double dUserDefinedDataSum[2*VEDO::uNumUserDefinedData];
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
+	double dUserDefinedDataSum[2*uNumUDDImpactStatus];
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 		dUserDefinedDataSum[u] = 0.0;
 
 	MPI_Allreduce
 		(&dUserDefinedDataSend,
 		 &dUserDefinedDataSum,
-		 2*VEDO::uNumUserDefinedData,
+		 2*uNumUDDImpactStatus,
 		 MPI_DOUBLE,
 		 MPI_SUM,
 		 MPI_COMM_WORLD);
 
-	for(unsigned u=0; u<2*VEDO::uNumUserDefinedData; u++)
-		dUDV[u] = dUserDefinedDataSum[u];
+	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+		dUDVIS[u] = dUserDefinedDataSum[u];
 };
 
 void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
@@ -1100,7 +1099,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		recvPair  [u]  = 2                                  * numRecords[u];
 		recvC_Bond[u]  = 2                                  * numRecords[u];
 		recvKn_SF [u]  = 4                                  * numRecords[u];
-		recvUDV   [u]  = 4 * VEDO::uNumUserDefinedData * numRecords[u];
+		recvUDV   [u]  = 4 * uNumUDDImpactStatus * numRecords[u];
 	}
 
 	offPair  [0] = 0;
@@ -1112,18 +1111,18 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		offPair  [u2] = offPair  [u2-1] + 2                                  * numRecords[u2-1];
 		offC_Bond[u2] = offC_Bond[u2-1] + 2                                  * numRecords[u2-1];
 		offKn_SF [u2] = offKn_SF [u2-1] + 4                                  * numRecords[u2-1];
-		offUDV   [u2] = offUDV   [u2-1] + 4 * VEDO::uNumUserDefinedData * numRecords[u2-1];
+		offUDV   [u2] = offUDV   [u2-1] + 4 * uNumUDDImpactStatus * numRecords[u2-1];
 	}
 
 	unsigned long* p       = new unsigned long [2                                  * totalSize];
 	unsigned*      c_bond  = new unsigned      [2                                  * totalSize];
 	double*        kn_sf   = new double        [4                                  * totalSize];
-	double*        udv     = new double        [4 * VEDO::uNumUserDefinedData * totalSize];
+	double*        udv     = new double        [4 * uNumUDDImpactStatus * totalSize];
 
 	unsigned long* lp      = new unsigned long [2                                  * tblSize];
 	unsigned*      lc_bond = new unsigned      [2                                  * tblSize];
 	double*        lkn_sf  = new double        [4                                  * tblSize];
-	double*        ludv    = new double        [4 * VEDO::uNumUserDefinedData * tblSize];
+	double*        ludv    = new double        [4 * uNumUDDImpactStatus * tblSize];
 
 	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
 
@@ -1131,7 +1130,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		= pIRTbl->GetData();
 
 	unsigned u = 0;
-	NJR::NJRvector3d vTemp;
+	NJR::Vector3d vTemp;
 	const double* cdpudv;
 	for (iter=m.begin(); iter!=m.end(); ++iter)
     {
@@ -1155,8 +1154,8 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		lkn_sf[4*u+3] = vTemp.z();
 
 		cdpudv = iter->second.RetrieveAllUserDefinedValue();
-		for(unsigned u2=0; u2<4*VEDO::uNumUserDefinedData; u2++)
-			ludv[4*VEDO::uNumUserDefinedData*u+u2] = *(cdpudv+u2);
+		for(unsigned u2=0; u2<4*uNumUDDImpactStatus; u2++)
+			ludv[4*uNumUDDImpactStatus*u+u2] = *(cdpudv+u2);
 
 		u++;
 	};
@@ -1193,7 +1192,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 
 	MPI_Allgatherv
 		(ludv,
-		4*VEDO::uNumUserDefinedData*tblSize,
+		4*uNumUDDImpactStatus*tblSize,
 		MPI_DOUBLE,
 		udv,
 		recvUDV,
@@ -1202,7 +1201,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		MPI_COMM_WORLD);
 
 	ImpactStatus s;
-	NJR::NJRvector3d NewShearForce;
+	NJR::Vector3d NewShearForce;
 	for (unsigned u=0; u<NP; ++u)
 	{
 		if (u == rank)
@@ -1231,7 +1230,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 			s.SetKn(kn_sf[offsetKn_SF+4*i]);
 			NewShearForce.Set(kn_sf[offsetKn_SF+4*i+1], kn_sf[offsetKn_SF+4*i+2], kn_sf[offsetKn_SF+4*i+3]);
 			s.SetShearForce(NewShearForce);
-			s.SetAllUserDefinedValue(&udv[offsetUDV+4*VEDO::uNumUserDefinedData*i]);
+			s.SetAllUserDefinedValue(&udv[offsetUDV+4*uNumUDDImpactStatus*i]);
 
 			pIRTbl->PushRecord(p[offsetPair+2*i], p[offsetPair+2*i+1], s);
 		}

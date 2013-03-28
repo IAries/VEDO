@@ -10,8 +10,8 @@
  *           (C++ Programming Langurage)
  ******************************************************************************/
 
-#ifndef _NJRMATRIX_H
-#define _NJRMATRIX_H
+#ifndef _NJR_MATRIX_H
+#define _NJR_MATRIX_H
 
 #include <iostream>
 #include <cstdlib>
@@ -20,25 +20,25 @@
 namespace NJR
 {
 
-// NJRmatrix is used to define cubic(NxN) or irregular (NxM) matrix.
-class NJRmatrix
+// Matrix is used to define cubic(NxN) or irregular (NxM) matrix.
+class Matrix
 {
 
 public:
 
-	NJRmatrix();
+	Matrix();
 
 	/**************************************************************************
 	 * constructor is used to define the rows and columns of this matrix and
 	 * allocate the memory space of the matrix
 	 **************************************************************************/
-	NJRmatrix(const unsigned int& rows, const unsigned int& columns);
+	Matrix(const unsigned int& rows, const unsigned int& columns);
 
 	//copy constructor
-	NJRmatrix(const NJRmatrix& matrix);
+	Matrix(const Matrix& matrix);
 
 	//destructor which used to free the memorey space of matrix
-	virtual ~NJRmatrix();
+	virtual ~Matrix();
 
 	/**************************************************************************
 	 * reset the rows and columns of this matrix and allocate the memory space
@@ -59,7 +59,7 @@ public:
 	};
 
 	// Assignment
-	const NJRmatrix& operator = (const NJRmatrix& matrix);
+	const Matrix& operator = (const Matrix& matrix);
 
 	/**************************************************************************
 	 * Assignment
@@ -67,28 +67,28 @@ public:
 	 * 2. Sets all elements to be zero and matrix[i][j] equal the input
 	 *    argument when (i == j)
 	 **************************************************************************/
-	const NJRmatrix& operator = (const double& v);
+	const Matrix& operator = (const double& v);
 
 	/**************************************************************************
 	 * Retrieves the matrix that is the result of matrix A (n0 rows , m0 cols )
 	 * times B ( n1 rows , m1 cols); But, the operator will do noting and
 	 * terminate the program when (m0 != n1)
 	 **************************************************************************/
-	NJRmatrix operator * (const NJRmatrix& matrix) const;
+	Matrix operator * (const Matrix& matrix) const;
 
 	/**************************************************************************
 	 * Retrieves the matrix that is the result of matrix A (n0 rows , m0 cols )
 	 * adds B ( n1 rows , m1 cols); But, the operator will do noting and
 	 * terminate the program when (n0 != n1) or ( m0 != m1)
 	 **************************************************************************/
-	NJRmatrix operator + (const NJRmatrix& matrix) const;
+	Matrix operator + (const Matrix& matrix) const;
 
 	/**************************************************************************
 	 * Retrieves the matrix that is the result of matrix A (n0 rows , m0 cols )
 	 * reduces B ( n1 rows , m1 cols); But, the operator will do noting and
 	 * terminate the program when (n0 != n1) or ( m0 != m1)
 	 **************************************************************************/
-	NJRmatrix operator - (const NJRmatrix& matrix) const;
+	Matrix operator - (const Matrix& matrix) const;
 
 	/**************************************************************************
 	 * Select columns from (this matrix)
@@ -104,7 +104,7 @@ public:
 	 * Note: if (len > cols ) or (the element in selected > cols), the matrix
 	 *       will do nothing and terminate the program.
 	 **************************************************************************/
-	NJRmatrix Select(unsigned int* selected, unsigned int len) const;
+	Matrix Select(unsigned int* selected, unsigned int len) const;
 
 	/**************************************************************************
 	 * Retrieves the type of the matrix,
@@ -116,7 +116,7 @@ public:
    	const char* characteristic() const;
 
 	// Transposes this matrix
-	const NJRmatrix& Transpose();
+	const Matrix& Transpose();
 
 	// Retrieves element (r,c);
 	double Get(const unsigned int& r, const unsigned int& c) const;
@@ -148,6 +148,6 @@ private:
 
 
 // output operator
-std::ostream& operator << (std::ostream& os, const NJR::NJRmatrix& matrix);
+std::ostream& operator << (std::ostream& os, const NJR::Matrix& matrix);
 
-#endif // _NJRMATRIX_H
+#endif // _NJR_MATRIX_H

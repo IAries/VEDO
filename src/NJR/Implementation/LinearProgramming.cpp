@@ -1,5 +1,5 @@
 #include <NJR/Interfaces/LinearProgramming.h>
-#include <NJR/Interfaces/random.h>
+#include <NJR/Interfaces/RandomGenerator.h>
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
@@ -8,9 +8,9 @@
 namespace NJR
 {
 
-NJRvector3d BMvector(1e6, 1e6, 1e6);
+Vector3d BMvector(1e6, 1e6, 1e6);
 
-void NJRLinearProgramming::Clear()
+void LinearProgramming::Clear()
 {
 	cols       = 0;
 	rows       = 0;
@@ -41,11 +41,11 @@ void NJRLinearProgramming::Clear()
 	}
 };
 
-bool NJRLinearProgramming::PurgeArtificialVariable()
+bool LinearProgramming::PurgeArtificialVariable()
 {
 	if (_checked == false)
 	{
-		NJRLinearProgramming::Check();
+		LinearProgramming::Check();
 	}
 
 	if (_feasiable == false)
@@ -81,14 +81,14 @@ bool NJRLinearProgramming::PurgeArtificialVariable()
 	return true;
 };
 
-double  NJRLinearProgramming::GetObjValue()
+double  LinearProgramming::GetObjValue()
 {
-	NJRmatrix BIA(rows, 1);
-	NJRmatrix RCOST(1, cols);
-	NJRmatrix XBASIS(rows, 1);
-	NJRmatrix E(rows, rows);
+	Matrix BIA(rows, 1);
+	Matrix RCOST(1, cols);
+	Matrix XBASIS(rows, 1);
+	Matrix E(rows, rows);
 
-	NJRmatrix rhsmemo = rhs;
+	Matrix rhsmemo = rhs;
 
 	RandomGenerator random;
 	double objval;
@@ -178,7 +178,7 @@ double  NJRLinearProgramming::GetObjValue()
 
 };
 
-void NJRLinearProgramming::Allocation()
+void LinearProgramming::Allocation()
 {
 	kid    = new char[cols];
 	basis  = new unsigned int [rows];
@@ -190,7 +190,7 @@ void NJRLinearProgramming::Allocation()
 	BI.Resize(rows,rows);
 };
 
-NJRLinearProgramming::NJRLinearProgramming()
+LinearProgramming::LinearProgramming()
 {
 	cols  = 0;
 	rows  = 0;
@@ -207,7 +207,7 @@ NJRLinearProgramming::NJRLinearProgramming()
 	nbasis = 0;
 };
 
-NJRLinearProgramming::NJRLinearProgramming(const NJRLinearProgramming &lp)
+LinearProgramming::LinearProgramming(const LinearProgramming &lp)
 {
 	cols  = lp.cols;
 	rows  = lp.rows;
@@ -215,7 +215,7 @@ NJRLinearProgramming::NJRLinearProgramming(const NJRLinearProgramming &lp)
 	num_s = lp.num_s;
 	nbas  = lp.nbas;
 
-	NJRLinearProgramming::Allocation ();
+	LinearProgramming::Allocation ();
 
 	_checked   = lp._checked;
 	_feasiable = lp._feasiable;
@@ -231,15 +231,15 @@ NJRLinearProgramming::NJRLinearProgramming(const NJRLinearProgramming &lp)
 	A   = lp.A;
 };
 
-NJRLinearProgramming::~NJRLinearProgramming()
+LinearProgramming::~LinearProgramming()
 {
-	NJRLinearProgramming::Clear();
+	LinearProgramming::Clear();
 };
 
-const NJRLinearProgramming& NJRLinearProgramming::operator =
-	(const NJRLinearProgramming& lp)
+const LinearProgramming& LinearProgramming::operator =
+	(const LinearProgramming& lp)
 {
-	NJRLinearProgramming::Clear();
+	LinearProgramming::Clear();
 
 	cols  = lp.cols;
 	rows  = lp.rows;
@@ -247,7 +247,7 @@ const NJRLinearProgramming& NJRLinearProgramming::operator =
 	num_s = lp.num_s;
 	nbas  = lp.nbas ;
 
-	NJRLinearProgramming::Allocation ();
+	LinearProgramming::Allocation ();
 
 	_checked   = lp._checked;
 	_feasiable = lp._feasiable;
@@ -265,9 +265,9 @@ const NJRLinearProgramming& NJRLinearProgramming::operator =
 	return *this;
 };
 
-void NJRLinearProgramming::Set(const NJR::NJRpolyhedra &a)
+void LinearProgramming::Set(const NJR::NJRpolyhedra &a)
 {
-	NJRLinearProgramming::Clear();
+	LinearProgramming::Clear();
 
 	register unsigned int number;
 	register unsigned int i;
@@ -276,7 +276,7 @@ void NJRLinearProgramming::Set(const NJR::NJRpolyhedra &a)
 	unsigned int n;
 	unsigned int b;
 
-	std::vector<NJR::NJRhalfspace> vchf = a.constrains();
+	std::vector<NJR::HalfSpace> vchf = a.constrains();
 
 	for (i=0; i<vchf.size(); ++i)
 	{
@@ -284,7 +284,7 @@ void NJRLinearProgramming::Set(const NJR::NJRpolyhedra &a)
 	}
 
 	for_each
-		(vchf.begin(), vchf.end(), std::mem_fun_ref(&NJR::NJRhalfspace::AbsRhs));
+		(vchf.begin(), vchf.end(), std::mem_fun_ref(&NJR::HalfSpace::AbsRhs));
 
 	number = (unsigned int) vchf.size();
 
@@ -308,7 +308,7 @@ void NJRLinearProgramming::Set(const NJR::NJRpolyhedra &a)
 	cols = 3 + num_m + num_s;
 	nbas = cols - rows;
 
-	NJRLinearProgramming::Allocation();
+	LinearProgramming::Allocation();
 
 	for (i=0; i<3; i++)
 	{
@@ -368,19 +368,19 @@ void NJRLinearProgramming::Set(const NJR::NJRpolyhedra &a)
 };
 
 
-bool NJRLinearProgramming::Check()
+bool LinearProgramming::Check()
 {
 	if (_checked)
 	{
 		return _feasiable;
 	}
 
-     NJRmatrix BIA(rows, 1);
-     NJRmatrix RCOST(1, cols);
-     NJRmatrix XBASIS(rows, 1);
-     NJRmatrix E(rows, rows);
+     Matrix BIA(rows, 1);
+     Matrix RCOST(1, cols);
+     Matrix XBASIS(rows, 1);
+     Matrix E(rows, rows);
 
-	 NJRmatrix rhsmemo = rhs;
+	 Matrix rhsmemo = rhs;
 
      double objval;
      double ch [2];
@@ -524,7 +524,7 @@ bool NJRLinearProgramming::Check()
 	return _feasiable;
 };
 
-void NJRLinearProgramming::print () const
+void LinearProgramming::print () const
 {
 	register unsigned int i;
 
@@ -550,20 +550,20 @@ void NJRLinearProgramming::print () const
 };
 
 
-NJRpolygon NJRLinearProgramming::GetPolygon()
+NJRpolygon LinearProgramming::GetPolygon()
 {
-	std::vector<NJRvector3d>vertexes(0);
+	std::vector<Vector3d>vertexes(0);
 
 	if (_polygon==false)
 	{
 		return NJRpolygon(vertexes);
 	}
 
-	NJRmatrix BIA(rows, 1);
-	NJRmatrix XBASIS(rows, 1);
-	NJRmatrix X(rows, 1);
-	NJRmatrix E(rows, rows);
-	NJRmatrix rhsmemo = rhs;
+	Matrix BIA(rows, 1);
+	Matrix XBASIS(rows, 1);
+	Matrix X(rows, 1);
+	Matrix E(rows, rows);
+	Matrix rhsmemo = rhs;
 
 	unsigned int i;
 	unsigned int num_ans;
@@ -632,7 +632,7 @@ NJRpolygon NJRLinearProgramming::GetPolygon()
 			}
 		}
 
-		vertexes.push_back(NJRvector3d(x,y,z) - BMvector);
+		vertexes.push_back(Vector3d(x,y,z) - BMvector);
 		BIA = BI * (A.Select(nonbasis + 2 ,1));
 
 		ch[0] = 1e24;
@@ -672,7 +672,7 @@ NJRpolygon NJRLinearProgramming::GetPolygon()
 	return NJRpolygon(vertexes);
 };
 
-bool NJRLinearProgramming::GetExtremeValue
+bool LinearProgramming::GetExtremeValue
 	(double& maxX,
 	double& minX,
 	double& maxY,
@@ -681,33 +681,33 @@ bool NJRLinearProgramming::GetExtremeValue
 	double& minZ)
 {
 
-	if (NJRLinearProgramming::PurgeArtificialVariable() == false)
+	if (LinearProgramming::PurgeArtificialVariable() == false)
 	{
 		return false;
 	}
 
 	obj(0,0) = 1.0;
-	maxX     =  NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
+	maxX     =  LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
 
 	obj(0,0) = -1.0;
-	minX     = -NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
+	minX     = -LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
 
 	obj(0,0) = 0.0;
 
 	obj(0,1) = 1.0;
-	maxY     =  NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
+	maxY     =  LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
 
 	obj(0,1) = -1.0;
-	minY     = -NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
+	minY     = -LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
 
 	obj(0,1) = 0.0;
 
 	obj(0,2) = 1.0;
-	maxZ     = NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
+	maxZ     = LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
 
 	obj(0,2) = -1.0;
 
-	minZ     = -NJRLinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
+	minZ     = -LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
 
 	obj(0,2) = 0.0;
 

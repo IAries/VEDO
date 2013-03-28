@@ -16,6 +16,7 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -61,7 +62,6 @@
 		<Unit filename="../../src/Common/Implementation/ISwBSDBF.cpp" />
 		<Unit filename="../../src/Common/Implementation/ISwBtSDBF.cpp" />
 		<Unit filename="../../src/Common/Implementation/LeapConsultant.cpp" />
-		<Unit filename="../../src/Common/Implementation/LeapConsultant2.cpp" />
 		<Unit filename="../../src/Common/Implementation/NBSConsultant.cpp" />
 		<Unit filename="../../src/Common/Implementation/NearConsultant.cpp" />
 		<Unit filename="../../src/Common/Implementation/SafeConsultant.cpp" />
@@ -86,7 +86,6 @@
 		<Unit filename="../../src/Common/Interfaces/ISwBSDBF.h" />
 		<Unit filename="../../src/Common/Interfaces/ISwBtSDBF.h" />
 		<Unit filename="../../src/Common/Interfaces/LeapConsultant.h" />
-		<Unit filename="../../src/Common/Interfaces/LeapConsultant2.h" />
 		<Unit filename="../../src/Common/Interfaces/NBSConsultant.h" />
 		<Unit filename="../../src/Common/Interfaces/NearConsultant.h" />
 		<Unit filename="../../src/Common/Interfaces/SafeConsultant.h" />

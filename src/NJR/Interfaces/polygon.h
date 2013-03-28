@@ -1,7 +1,7 @@
-#ifndef _NJRPOLYGON_H
-#define _NJRPOLYGON_H
+#ifndef _NJR_POLYGON_H
+#define _NJR_POLYGON_H
 
-#include <NJR/Interfaces/vector3d.h>
+#include <NJR/Interfaces/Vector3d.h>
 #include <vector>
 
 namespace NJR
@@ -14,7 +14,7 @@ public:
 
 	NJRpolygon();
 
-	explicit NJRpolygon(const std::vector<NJRvector3d>&);
+	explicit NJRpolygon(const std::vector<Vector3d>&);
 
 	NJRpolygon(const NJRpolygon &p);
 
@@ -30,12 +30,12 @@ public:
 		return _edge_length;
 	};
 
-	inline const std::vector<NJRvector3d>& vertexes () const
+	inline const std::vector<Vector3d>& vertexes () const
 	{
 		return _vertexes;
 	};
 
-	inline NJRvector3d center() const
+	inline Vector3d center() const
 	{
 		return _center;
 	};
@@ -44,10 +44,10 @@ public:
 
 private:
 
-	NJRvector3d _center;
+	Vector3d _center;
 	double _area  ;
 	double _edge_length;
-	std::vector<NJRvector3d> _vertexes;
+	std::vector<Vector3d> _vertexes;
 
 	// Remove the one of vertexs from two nearly vertexs
 	void PureVertex();
@@ -64,4 +64,4 @@ private:
 
 };   // namespace NJR
 
-#endif // _NJRPOLYGON_H
+#endif // _NJR_POLYGON_H

@@ -17,8 +17,8 @@ Boundary2d::Boundary2d()
 Boundary2d::Boundary2d
 	(std::string sN,
 	 const bool* bS,
-	 const NJR::NJRvector2d vLP,
-	 const NJR::NJRvector2d vUP): sName(sN)
+	 const NJR::Vector2d vLP,
+	 const NJR::Vector2d vUP): sName(sN)
 {
 	bSwitch[0]  = *bS;
 	bSwitch[1]  = *(bS+1);
@@ -29,8 +29,8 @@ Boundary2d::Boundary2d
 
 Boundary2d::Boundary2d
 	(const bool* bS,
-	 const NJR::NJRvector2d vLP,
-	 const NJR::NJRvector2d vUP )
+	 const NJR::Vector2d vLP,
+	 const NJR::Vector2d vUP )
 {
 	sName = "Boundary2d";
 	bSwitch[0] = *bS;
@@ -42,15 +42,15 @@ Boundary2d::Boundary2d
 
 Boundary2d::Boundary2d
 	(std::string sN,
-	 const NJR::NJRvector2d vLP,
-	 const NJR::NJRvector2d vUP): sName(sN)
+	 const NJR::Vector2d vLP,
+	 const NJR::Vector2d vUP): sName(sN)
 {
 	vLowerPoint = vLP;
 	vUpperPoint = vUP;
 	Correct();
 };
 
-Boundary2d::Boundary2d(const NJR::NJRvector2d vLP, const NJR::NJRvector2d vUP)
+Boundary2d::Boundary2d(const NJR::Vector2d vLP, const NJR::Vector2d vUP)
 {
 	sName = "Boundary2d";
 	vLowerPoint = vLP;
@@ -119,26 +119,26 @@ void Boundary2d::Correct()
 	};
 };
 
-void Boundary2d::SetLowerPoint(const NJR::NJRvector2d* point)
+void Boundary2d::SetLowerPoint(const NJR::Vector2d* point)
 {
 	vLowerPoint = *point;
 	Correct();
 };
 
-void Boundary2d::SetUpperPoint(const NJR::NJRvector2d* point)
+void Boundary2d::SetUpperPoint(const NJR::Vector2d* point)
 {
 	vUpperPoint = *point;
 	Correct();
 };
 
-void Boundary2d::SetCenter(const NJR::NJRvector2d* cNewCenter)
+void Boundary2d::SetCenter(const NJR::Vector2d* cNewCenter)
 {
-	NJR::NJRvector2d vShift = (*cNewCenter) - vCenter;
+	NJR::Vector2d vShift = (*cNewCenter) - vCenter;
 	vLowerPoint += vShift;
 	vUpperPoint += vShift;
 };
 
-void Boundary2d::SetRange(const NJR::NJRvector2d* vNewRange)
+void Boundary2d::SetRange(const NJR::Vector2d* vNewRange)
 {
 	double dX = fabs(vNewRange->x());
 	double dY = fabs(vNewRange->y());
@@ -148,7 +148,7 @@ void Boundary2d::SetRange(const NJR::NJRvector2d* vNewRange)
 	Correct();
 };
 
-bool Boundary2d::InBoundary(const NJR::NJRvector2d* p) const
+bool Boundary2d::InBoundary(const NJR::Vector2d* p) const
 {
 	if(Active())
 	{
@@ -174,7 +174,7 @@ bool Boundary2d::InBoundary(const NJR::NJRvector2d* p) const
 	return true;
 };
 
-bool Boundary2d::InBoundary(const NJR::NJRvector2d* p, const double r) const
+bool Boundary2d::InBoundary(const NJR::Vector2d* p, const double r) const
 {
 	if(Active())
 	{
@@ -200,7 +200,7 @@ bool Boundary2d::InBoundary(const NJR::NJRvector2d* p, const double r) const
 	return true;
 };
 
-void Boundary2d::EnforceBoundaryConditions(NJR::NJRvector2d* vPosition) const
+void Boundary2d::EnforceBoundaryConditions(NJR::Vector2d* vPosition) const
 {
 	double dPx = vPosition->x();
 	double dPy = vPosition->y();
@@ -263,7 +263,7 @@ void Boundary2d::EnforceBoundaryConditions(NJR::NJRvector2d* vPosition) const
 	vPosition->Set(dPx, dPy);
 };
 
-void Boundary2d::DifferenceBoundaryConditions(NJR::NJRvector2d* vDisplacement) const
+void Boundary2d::DifferenceBoundaryConditions(NJR::Vector2d* vDisplacement) const
 {
 	double dPx = vDisplacement->x();
 	double dPy = vDisplacement->y();

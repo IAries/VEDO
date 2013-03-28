@@ -4,6 +4,7 @@
 #include <FrameWork/Interfaces/DOModel.h>
 #include <FrameWork/Interfaces/DOStatus.h>
 #include <FrameWork/Interfaces/IactModel.h>
+//#include <FrameWork/Interfaces/IactRecordTab.h>
 #include <FrameWork/Interfaces/SystemParameter.h>
 #include <algorithm>
 #include <list>
@@ -14,6 +15,7 @@ namespace VEDO
 {
 
 struct NullExternalFieldVTKWriter;
+class IactRecordTab;
 
 // Data Type Class
 class DOWorld
@@ -104,7 +106,7 @@ public:
 		pSystemParameter->SetTime(dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent);
 	}
 
-	void SetFieldForce(const NJR::NJRvector3d&);
+	void SetFieldAcceleration(const NJR::Vector3d&);
 
 	bool UpdateDOStatus(const std::vector<const DOStatus *>& nDOStatus);
 
@@ -120,6 +122,8 @@ public:
 
 	bool ReadIDO(const char* idoFile);
 
+	bool ReadIDO(const char* idoFile, IactRecordTab*);
+
 	bool ReadIDO(const char* idoFile, unsigned int version);
 
 	bool ReadIDO2011(const char* idoFile);
@@ -130,9 +134,15 @@ public:
 
 	void WriteIDO(const char* filename) const;
 
+	void WriteIDO(const char* filename, const IactRecordTab*) const;
+
+	bool ReadXML(const char* xmlFile, IactRecordTab*);
+
 	bool ReadXML(const char* xmlFile);
 
 	void WriteXML(const char* filename) const;
+
+	void WriteXML(const char* filename, const IactRecordTab*) const;
 
 	// 2003.12.3 JF Lee Add for Visualization Postprocessor
 	// 2003.12.5 Jitin Yang Modified
@@ -176,12 +186,12 @@ public:
 //	void CalculateSystemEnergy(const IactRecordTab*);
 	void CalculateSystemEnergy();
 
-	const std::pair<NJR::NJRvector3d, NJR::NJRvector3d>
+	const std::pair<NJR::Vector3d, NJR::Vector3d>
 		Distribution(double& dMeshLength) const;
 
-	void Shift(const NJR::NJRvector3d& shift);
+	void Shift(const NJR::Vector3d& shift);
 
-	void Shift(const NJR::NJRvector3d& shift, const std::string& DOName);
+	void Shift(const NJR::Vector3d& shift, const std::string& DOName);
 
 	void Rotate
 		(const double& Angle2XAxis,
@@ -189,8 +199,8 @@ public:
 		 const double& Angle2ZAxis );
 
 	void Rotate
-		(const NJR::NJRvector3d& eX,
-		 const NJR::NJRvector3d& eZ,
+		(const NJR::Vector3d& eX,
+		 const NJR::Vector3d& eZ,
 		 const std::string& DOName);
 
 	const DOStatus GetDOStatus

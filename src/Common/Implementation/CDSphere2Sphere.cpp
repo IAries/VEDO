@@ -9,7 +9,7 @@ void CDSphere_Sphere::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Impact std::vector form slave to master
-	NJR::NJRvector3d vIm
+	NJR::Vector3d vIm
 		= pdoMaster->GetDOStatus()->GetPosition()
 		- pdoSlave->GetDOStatus()->GetPosition();
 

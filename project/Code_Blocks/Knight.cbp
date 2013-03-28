@@ -13,12 +13,13 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="../../lib/Code_Blocks/libVEDO-Common-Debug.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Framework-Debug.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-NJR-Debug.a" />
-					<Add library="C:/usr/xercesc/GCC/lib/libxerces-c.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR-Debug.a" />
+					<Add library="C:\usr\xercesc\GCC\lib\libxerces-c.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -31,10 +32,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Common.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-Framework.a" />
-					<Add library="../../lib/Code_Blocks/libVEDO-NJR.a" />
-					<Add library="C:/usr/xercesc/GCC/lib/libxerces-c.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR.a" />
+					<Add library="C:\usr\xercesc\GCC\lib\libxerces-c.a" />
 				</Linker>
 			</Target>
 		</Build>
@@ -57,7 +58,7 @@
 		<Unit filename="../../src/Knight/Implementation/CalcDensity.cpp" />
 		<Unit filename="../../src/Knight/Implementation/ClusterInitializer.cpp" />
 		<Unit filename="../../src/Knight/Implementation/RectangularClusterInitializer.cpp" />
-		<Unit filename="../../src/Knight/Implementation/knight.cpp" />
+		<Unit filename="../../src/Knight/Implementation/Knight.cpp" />
 		<Unit filename="../../src/Knight/Implementation/svg.cpp" />
 		<Unit filename="../../src/Knight/Interfaces/3DLattices.h" />
 		<Unit filename="../../src/Knight/Interfaces/BravaisLatticeWithBasis.h" />

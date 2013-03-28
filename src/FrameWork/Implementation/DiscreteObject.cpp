@@ -24,12 +24,12 @@ DiscreteObject::~DiscreteObject ()
 	delete pDOStatus;
 };
 
-void DiscreteObject::ModifyVelocity(const NJR::NJRvector3d& vdv)
+void DiscreteObject::ModifyVelocity(const NJR::Vector3d& vdv)
 {
 	pDOStatus->SetVelocity ( (pDOStatus->GetVelocity()) + vdv);
 };
 
-void DiscreteObject::ModifyPosition(const NJR::NJRvector3d& vdp)
+void DiscreteObject::ModifyPosition(const NJR::Vector3d& vdp)
 {
 	pDOStatus->SetPosition ( (pDOStatus->GetPosition()) + vdp);
 };
@@ -41,7 +41,7 @@ void DiscreteObject::ClearImpact()
 };
 
 void DiscreteObject::AddImpact
-	(const NJR::NJRvector3d& impact, const NJR::NJRvector3d& angularimpact)
+	(const NJR::Vector3d& impact, const NJR::Vector3d& angularimpact)
 {
 	vImpact        = vImpact        + impact;
 	vAngularImpact = vAngularImpact + angularimpact;
@@ -57,7 +57,7 @@ void DiscreteObject::EnforcePeriodicBoundaryConditions
 {
 	if(cpDOModel->GetBehavior() == "mobile")
 	{
-		NJR::NJRvector3d pos = pDOStatus->GetPosition();
+		NJR::Vector3d pos = pDOStatus->GetPosition();
 		bc.EnforceBoundaryConditions(&pos);
 		pDOStatus->SetPosition(pos);
 	}

@@ -20,8 +20,7 @@ bool NearConsultant::ISReset()
 	if ( csp->GetTimeCurrent() >= csp->GetTimeStop() )
 	{
 //		pDOWorld->WriteXML("terminate.xml");
-		pDOWorld->WriteIDO("terminate.ido");
-		pIRTbl  ->WriteIRT("terminate.irt");
+		pDOWorld->WriteIDO("terminate.ido", pIRTbl);
 	}
 	return false;
 };
@@ -46,7 +45,7 @@ static bool Detect
 	if (   (doml1->GetShapeType() == Sphere)
 		&& (doml2->GetShapeType() == Sphere) )
 	{
-		NJR::NJRvector3d vIm = dos1->GetPosition() - dos2->GetPosition();
+		NJR::Vector3d vIm = dos1->GetPosition() - dos2->GetPosition();
 		return
 			vIm.length()
 			<= ( (doml1->GetShapeAttributes().sphere.radius
@@ -57,13 +56,13 @@ static bool Detect
 		&& (doml2->GetShapeType() == QuasiCylinder) )
 	{
 		double dHHb = 0.5 * doml2->GetShapeAttributes().quasicylinder.height;
-		NJR::NJRvector3d     Ca = dos1->GetPosition();
-		NJR::NJRvector3d     Cb = dos2->GetPosition();
-		NJR::NJRvector3d Vaxial = dos2->GetOrientationZ();
-		NJR::NJRvector3d    Cap;
+		NJR::Vector3d     Ca = dos1->GetPosition();
+		NJR::Vector3d     Cb = dos2->GetPosition();
+		NJR::Vector3d Vaxial = dos2->GetOrientationZ();
+		NJR::Vector3d    Cap;
 		double Dap = (Ca - Cb)%Vaxial;
 		Cap = Cb + (Vaxial * Dap);
-		NJR::NJRvector3d vIm;
+		NJR::Vector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -96,7 +95,7 @@ static bool DetectSphere
 	const DOModel* doml1,
 	const DOModel* doml2  )
 {
-	NJR::NJRvector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
+	NJR::Vector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
 	return
 		vIm.length()
 		<= ((doml1->GetShapeAttributes().sphere.radius

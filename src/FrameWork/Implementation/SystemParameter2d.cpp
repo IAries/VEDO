@@ -1,4 +1,5 @@
 #include <NJR/Interfaces/Utility.h>
+#include <FrameWork/Interfaces/Constants.h>
 #include <FrameWork/Interfaces/SystemParameter2d.h>
 
 namespace VEDO
@@ -12,7 +13,7 @@ SystemParameter2d::SystemParameter2d
 	 const double& timeinterval,
 	 const double& timecurrent,
      const unsigned long& DONumber,
-	 const NJR::NJRvector2d& fieldforce,
+	 const NJR::Vector2d& fieldacceleration,
 	 const Boundary2d& ZOI,
 	 const Boundary2d& PBC         ):
 	 ZoneOfInterest(ZOI),
@@ -22,15 +23,15 @@ SystemParameter2d::SystemParameter2d
 	 dVelocityMax(0.0)         , dVelocityMin(0.0)         ,
 	 dAngularVelocityMax(0.0)  , dAngularVelocityMin(0.0)
 {
-	sPublish	   = PUBLISH;
-	sTitle         = title;
-	sNote          = note;
-	dTimeStart     = timestart;
-	dTimeStop      = timestop;
-	dTimeCurrent   = timecurrent;
-	dTimeInterval  = timeinterval;
-	vFieldForce    = fieldforce;
-	ulDONumber     = DONumber;
+	sPublish	       = PUBLISH;
+	sTitle             = title;
+	sNote              = note;
+	dTimeStart         = timestart;
+	dTimeStop          = timestop;
+	dTimeCurrent       = timecurrent;
+	dTimeInterval      = timeinterval;
+	vFieldAcceleration = fieldacceleration;
+	ulDONumber         = DONumber;
 };
 
 SystemParameter2d::SystemParameter2d(const SystemParameter2d& sp)
@@ -52,11 +53,11 @@ SystemParameter2d::SystemParameter2d(std::ifstream& idof, unsigned int version)
 	idof.read((char*) &dTimeStop, sizeof(double));
 	idof.read((char*) &dTimeCurrent, sizeof(double));
 	idof.read((char*) &dTimeInterval, sizeof(double));
-	idof.read((char*) &vFieldForce, sizeof(NJR::NJRvector2d));
-	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::NJRvector2d));
-	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::NJRvector2d));
+	idof.read((char*) &vFieldAcceleration, sizeof(NJR::Vector2d));
+	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::Vector2d));
+	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::Vector2d));
 	ZoneOfInterest.Correct();
-	NJR::NJRvector2d vPBC_Point(NJRDXF::ZERO);
+	NJR::Vector2d vPBC_Point(NJRDXF::ZERO);
 	PeriodicBoundaryConditions.SetLowerPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.SetUpperPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.Correct();
@@ -73,7 +74,7 @@ const SystemParameter2d& SystemParameter2d::operator = (const SystemParameter2d&
 	dTimeCurrent               = sp.dTimeCurrent;
 	dTimeInterval              = sp.dTimeInterval;
 	ulDONumber                 = sp.ulDONumber;
-	vFieldForce                = sp.vFieldForce;
+	vFieldAcceleration         = sp.vFieldAcceleration;
 	ZoneOfInterest             = sp.ZoneOfInterest;
 	PeriodicBoundaryConditions = sp.PeriodicBoundaryConditions;
 	dEnergyPotential           = sp.dEnergyPotential;
@@ -99,19 +100,24 @@ std::ofstream& SystemParameter2d::operator >> (std::ofstream& idof) const
 	idof.write((char*) &dTimeStop, sizeof(double));
 	idof.write((char*) &dTimeCurrent, sizeof(double));
 	idof.write((char*) &dTimeInterval, sizeof(double));
-	idof.write((char*) &vFieldForce, sizeof(NJR::NJRvector2d));
+	idof.write((char*) &VEDO::dSafetyFactor, sizeof(double));
+	idof.write((char*) &VEDO::uNumUDDDOStatus, sizeof(unsigned));
+	idof.write((char*) &VEDO::uNumUDDImpactStatus, sizeof(unsigned));
+	idof.write((char*) &vFieldAcceleration, sizeof(NJR::Vector2d));
 	idof.write((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*2);
-	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::NJRvector2d));
-	idof.write((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::NJRvector2d));
+	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::Vector2d));
+	idof.write((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::Vector2d));
 	idof.write((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*2);
-	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJR::NJRvector2d));
-	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJR::NJRvector2d));
+	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJR::Vector2d));
+	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJR::Vector2d));
 	idof.write((char*) &ulDONumber, sizeof(unsigned long));
 	return idof;
 };
 
 std::ifstream& SystemParameter2d::operator << (std::ifstream& idof)
 {
+    double dTemp;
+
 	NJR::ReadString(sPublish, idof);
 	NJR::ReadString(sTitle, idof);
 	NJR::ReadString(sNote, idof);
@@ -119,14 +125,19 @@ std::ifstream& SystemParameter2d::operator << (std::ifstream& idof)
 	idof.read((char*) &dTimeStop, sizeof(double));
 	idof.read((char*) &dTimeCurrent, sizeof(double));
 	idof.read((char*) &dTimeInterval, sizeof(double));
-	idof.read((char*) &vFieldForce, sizeof(NJR::NJRvector2d));
+	idof.read((char*) &VEDO::dSafetyFactor, sizeof(double));
+//	idof.read((char*) &VEDO::uNumUDDDOStatus, sizeof(unsigned));
+	idof.read((char*) &dTemp, sizeof(unsigned));
+//	idof.read((char*) &VEDO::uNumUDDImpactStatus, sizeof(unsigned));
+	idof.read((char*) &dTemp, sizeof(unsigned));
+	idof.read((char*) &vFieldAcceleration, sizeof(NJR::Vector2d));
 	idof.read((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*2);
-	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::NJRvector2d));
-	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::NJRvector2d));
+	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(NJR::Vector2d));
+	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(NJR::Vector2d));
 	ZoneOfInterest.Correct();
 	idof.read((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*2);
-	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJR::NJRvector2d));
-	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJR::NJRvector2d));
+	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(NJR::Vector2d));
+	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(NJR::Vector2d));
 	PeriodicBoundaryConditions.Correct();
 	idof.read((char*) &ulDONumber, sizeof(unsigned long));
 	return idof;

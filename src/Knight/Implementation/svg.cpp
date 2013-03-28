@@ -55,12 +55,12 @@ void svg(const VEDO::DOWorld* World, std::string filename)
 		= min_element
 			(MTab.begin(), MTab.end(), VEDO::DOMap::ComY)->cpdos()->GetPosition().y();
 
-	NJR::NJRvector3d center
+	NJR::Vector3d center
 		(400.0 * (maxX + minX) / (maxX-minX),
 		-300.0 * (maxY + minY) / (maxY- minY),
 		0.0);
 
-    NJR::NJRvector3d v(400.0, -300.0, 0.0);
+    NJR::Vector3d v(400.0, -300.0, 0.0);
 
 	center = v - center;
 
