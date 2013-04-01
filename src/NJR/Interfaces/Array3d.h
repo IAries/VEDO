@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-namespace NJR
+namespace njr
 {
 
 template <typename T>
@@ -161,6 +161,6 @@ private:
 	std::vector<std::vector<std::vector<T> > > _vvvdComponent;
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 #endif // _NJR_ARRAY_3D_H
