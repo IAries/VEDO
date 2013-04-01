@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace NJR
+namespace njr
 {
 
 class TimeHistory
@@ -46,6 +46,6 @@ protected:
 
 };   // namespace NJR
 
-std::ostream& operator << (std::ostream& os, const NJR::TimeHistory& th);
+std::ostream& operator << (std::ostream& os, const njr::TimeHistory& th);
 
 #endif // _NJR_TIME_HISTORY_H
