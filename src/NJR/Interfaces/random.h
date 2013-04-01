@@ -1,9 +1,9 @@
-#ifndef _NJR_RANDOM_GENERATOR_H
-#define _NJR_RANDOM_GENERATOR_H
+#ifndef _NJRRANDOM_H
+#define _NJRRANDOM_H
 
 #define PRANDMAX 1000000000
 
-namespace njr
+namespace NJR
 {
 
 class RandomGenerator
@@ -32,6 +32,6 @@ private:
 
 };
 
-};   // namespace njr
+};   // namespace NJR
 
-#endif // _NJR_RANDOM_GENERATOR_H
+#endif // _NJRRANDOM_H

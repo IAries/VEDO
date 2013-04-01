@@ -18,7 +18,7 @@
 #include <string>
 #include <iostream>
 
-namespace NJR
+namespace njr
 {
 
 class Vector3d
@@ -36,7 +36,7 @@ public:
 
 	explicit Vector3d(const std::string& sInit);
 
-	Vector3d(const NJRDXF::ParticularVector& pvInit);
+	Vector3d(const njrdxf::ParticularVector& pvInit);
 
 	// Assigns dx, dy, dx to x, y, z
 	const Vector3d& Set
@@ -135,7 +135,7 @@ public:
 
 	const Vector3d& operator = (const std::string& sAval);
 
-	const Vector3d& operator = (const NJRDXF::ParticularVector& pvAval);
+	const Vector3d& operator = (const njrdxf::ParticularVector& pvAval);
 
 	const Vector3d& operator = (const Vector3d& vAval);
 
@@ -174,7 +174,7 @@ private:
 	double _z;
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 
 
@@ -183,12 +183,12 @@ private:
  * scalar ds
  ******************************************************************************/
 
-NJR::Vector3d operator - (const NJR::Vector3d& v);
+njr::Vector3d operator - (const njr::Vector3d& v);
 
-NJR::Vector3d operator * (const double& ds, const NJR::Vector3d& v);
+njr::Vector3d operator * (const double& ds, const njr::Vector3d& v);
 
-std::ostream& operator << (std::ostream& os, const NJR::Vector3d& v);
+std::ostream& operator << (std::ostream& os, const njr::Vector3d& v);
 
-std::istream& operator >> (std::istream& is, NJR::Vector3d& v);
+std::istream& operator >> (std::istream& is, njr::Vector3d& v);
 
 #endif // _NJR_VECTOR_3D_H

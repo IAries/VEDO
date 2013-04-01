@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace NJR
+namespace njr
 {
 	void dos2unix(const std::string& ifile, const std::string& ofile );
 	void unix2dos(const std::string& ifile, const std::string& ofile);
@@ -98,6 +98,6 @@ namespace NJR
 		_Fn2 op;   // the functor to apply
 		typename _Fn2::second_argument_type value;	// the right operand
 	};
-};   // namespace NJR
+};   // namespace njr
 
 #endif // _NJR_UTILITY_H

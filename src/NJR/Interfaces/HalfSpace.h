@@ -14,7 +14,7 @@ enum Sense
 	l =  1
 };
 
-namespace NJR
+namespace njr
 {
 
 class HalfSpace
@@ -79,12 +79,12 @@ private:
 
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 
 
-std::ostream& operator << (std::ostream&, const NJR::HalfSpace&);
+std::ostream& operator << (std::ostream&, const njr::HalfSpace&);
 
-std::istream& operator >> (std::istream&, NJR::HalfSpace&);
+std::istream& operator >> (std::istream&, njr::HalfSpace&);
 
 #endif // _NJR_HALFSPACE_H

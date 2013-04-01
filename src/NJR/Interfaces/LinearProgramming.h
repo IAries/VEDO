@@ -5,7 +5,7 @@
 #include <NJR/Interfaces/Polyhedra.h>
 #include <NJR/Interfaces/Polygon.h>
 
-namespace NJR
+namespace njr
 {
 
 class LinearProgramming
@@ -21,13 +21,13 @@ public:
 
 	const LinearProgramming& operator = (const LinearProgramming&);
 
-	void Set(const NJR::NJRpolyhedra &);
+	void Set(const njr::NJRpolyhedra &);
 
 	bool Check();
 
 	void Clear();
 
-	NJR::NJRpolygon GetPolygon();
+	njr::NJRpolygon GetPolygon();
 
 	bool GetExtremeValue
 		(double& maxX,
@@ -77,6 +77,6 @@ private:
 
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 #endif // _NJR_LINEAR_PROGRAMMING_H

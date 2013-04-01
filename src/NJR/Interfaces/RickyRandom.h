@@ -1,7 +1,7 @@
 #ifndef _NJR_RICKY_RANDOM_H
 #define _NJR_RICKY_RANDOM_H
 
-namespace NJR
+namespace njr
 {
 
 class Rickyrandom
@@ -44,6 +44,6 @@ private:
 
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 #endif // _NJR_RICKY_RANDOM_H

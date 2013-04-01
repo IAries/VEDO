@@ -17,7 +17,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace NJR
+namespace njr
 {
 
 // Matrix is used to define cubic(NxN) or irregular (NxM) matrix.
@@ -143,11 +143,11 @@ private:
 
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 
 
 // output operator
-std::ostream& operator << (std::ostream& os, const NJR::Matrix& matrix);
+std::ostream& operator << (std::ostream& os, const njr::Matrix& matrix);
 
 #endif // _NJR_MATRIX_H

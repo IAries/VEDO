@@ -15,7 +15,7 @@
 #include <string>
 #include <iostream>
 
-namespace NJR
+namespace njr
 {
 
 // Predefine Praticular Vectors
@@ -34,7 +34,7 @@ public:
 
 	explicit Vector2d(const std::string& sInit);
 
-	Vector2d(const NJRDXF::ParticularVector& pvInit);
+	Vector2d(const njrdxf::ParticularVector& pvInit);
 
 	// Assigns dx, dy to x, y
 	const Vector2d& Set
@@ -118,7 +118,7 @@ public:
 
 	const Vector2d& operator = (const std::string& sAval);
 
-	const Vector2d& operator = (const NJRDXF::ParticularVector& pvAval);
+	const Vector2d& operator = (const njrdxf::ParticularVector& pvAval);
 
 	const Vector2d& operator = (const Vector2d& vAval);
 
@@ -154,7 +154,7 @@ private:
 
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 
 
@@ -163,12 +163,12 @@ private:
  * scalar ds
  ******************************************************************************/
 
-NJR::Vector2d operator * (const double& ds, const NJR::Vector2d& v);
+njr::Vector2d operator * (const double& ds, const njr::Vector2d& v);
 
-NJR::Vector2d operator - (const NJR::Vector2d& v);
+njr::Vector2d operator - (const njr::Vector2d& v);
 
-std::ostream& operator << (std::ostream& os, const NJR::Vector2d& v);
+std::ostream& operator << (std::ostream& os, const njr::Vector2d& v);
 
-std::istream& operator >> (std::istream& is, NJR::Vector2d& v);
+std::istream& operator >> (std::istream& is, njr::Vector2d& v);
 
 #endif // _NJR_VECTOR_2D_H

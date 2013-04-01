@@ -44,7 +44,7 @@ protected:
 	std::vector<std::pair<double, double> > _vddTimeAndValue;
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 std::ostream& operator << (std::ostream& os, const njr::TimeHistory& th);
 

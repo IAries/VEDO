@@ -4,7 +4,7 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <vector>
 
-namespace NJR
+namespace njr
 {
 
 class NJRpolygon
@@ -62,6 +62,6 @@ private:
 
 };
 
-};   // namespace NJR
+};   // namespace njr
 
 #endif // _NJR_POLYGON_H

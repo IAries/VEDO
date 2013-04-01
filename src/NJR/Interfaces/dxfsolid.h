@@ -1,9 +1,9 @@
-#ifndef _NJR_ACADXF_SOLID_H
-#define _NJR_ACADXF_SOLID_H
+#ifndef DXF3DSOLID_H
+#define DXF3DSOLID_H
 
 #include <NJR/Interfaces/Constants.h>
-#include <NJR/Interfaces/ACADXF.h>
-#include <NJR/Interfaces/Polygon.h>
+#include <NJR/Interfaces/acadxf.h>
+#include <NJR/Interfaces/polygon.h>
 #include <list>
 #include <string>
 
@@ -52,9 +52,9 @@ public:
 		(const double& dWidth,
 		const double& dLength,
 		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color& color);
 
@@ -79,9 +79,9 @@ public:
 		(const double& dlx,
 		const double& dly,
 		const double& dlz,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color& color);
 
@@ -103,9 +103,9 @@ public:
 
 	void Set
 		(const double& dRadius,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color& color);
 
@@ -128,9 +128,9 @@ public:
 	void Set
 		(const double& dRadius,
 		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color& color);
 
@@ -153,9 +153,9 @@ public:
 	void Set
 		(const double& dRadius,
 		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color& color);
 
@@ -178,9 +178,9 @@ public:
 	void Set(const double& dWidth,
 		const double& dLength,
 		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color& color);
 
@@ -203,9 +203,9 @@ public:
 
 	void Set
 		(const njr::NJRpolygon&,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
+		const njr::NJRvector3d& vP,
+		const njr::NJRvector3d& vOX,
+		const njr::NJRvector3d& vOZ,
 		const char* layer,
 		const Color &color);
 
@@ -221,4 +221,4 @@ njrdxf::ofstream& operator << (njrdxf::ofstream&, Solid*);
 
 };   // namespace njrdxf
 
-#endif // _NJR_ACADXF_SOLID_H
+#endif // DXF3DSOLID_H

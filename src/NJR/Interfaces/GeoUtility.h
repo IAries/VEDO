@@ -5,26 +5,26 @@
 #include <NJR/Interfaces/Polyhedra.h>
 #include <NJR/Interfaces/Vector3d.h>
 
-namespace NJR
+namespace njr
 {
-	double Distance(const NJR::Vector3d&, const NJR::HalfSpace&);
+	double Distance(const njr::Vector3d&, const njr::HalfSpace&);
 
-	double Distance(const NJR::HalfSpace&, const NJR::Vector3d&);
+	double Distance(const njr::HalfSpace&, const njr::Vector3d&);
 
-	double Volume(const NJR::NJRpolygon& bottom, const NJR::Vector3d& vertex);
+	double Volume(const njr::NJRpolygon& bottom, const njr::Vector3d& vertex);
 
 	double Volume
-		(const NJR::NJRpolygon& bottom,
-		const NJR::Vector3d& vertex,
-		NJR::Vector3d& MassCenter);
+		(const njr::NJRpolygon& bottom,
+		const njr::Vector3d& vertex,
+		njr::Vector3d& MassCenter);
 
-	double Volume(const NJR::NJRpolyhedra&);
+	double Volume(const njr::NJRpolyhedra&);
 
-	double Volume(const NJR::NJRpolyhedra&, NJR::Vector3d& MassCenter);
+	double Volume(const njr::NJRpolyhedra&, njr::Vector3d& MassCenter);
 
-	double CoverRadius(const NJR::NJRpolyhedra&);
+	double CoverRadius(const njr::NJRpolyhedra&);
 
-	NJR::Vector3d InertiaTensor(const NJR::NJRpolyhedra&);
+	njr::Vector3d InertiaTensor(const njr::NJRpolyhedra&);
 };
 
 #endif // _NJR_GEOUTILITY

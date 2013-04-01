@@ -5,7 +5,7 @@
 #include <math.h>
 #include <string>
 
-namespace NJR
+namespace njr
 {
 // Common math constants
 static const double      dPI             = M_PI;
@@ -19,11 +19,11 @@ static const double      dOneAndHalfPI   = 1.5 * M_PI;     // M_PI*3/2
 static const double      dDoublePI       = 2.0 * M_PI;
 static const double      dFourthThirdsPI = 4.0 / 3.0 * M_PI;
 
-};   // namespace NJR
+};   // namespace njr
 
 
 
-namespace NJRDXF
+namespace njrdxf
 {
 
 // Predefine Praticular Vectors
@@ -74,6 +74,6 @@ enum Code
 	submaker = 100
 };
 
-};   // namespace NJRDXF
+};   // namespace njrdxf
 
-#endif _NJR_CONSTANTS_H
+#endif // _NJR_CONSTANTS_H
