@@ -1,7 +1,7 @@
 #include <Common/Interfaces/SafeConsultant.h>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 SafeConsultant::SafeConsultant
@@ -79,4 +79,4 @@ void SafeConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	CollectUserDefinedData(cIact);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

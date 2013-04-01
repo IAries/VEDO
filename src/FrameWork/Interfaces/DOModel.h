@@ -9,12 +9,12 @@
 #include <string>
 #include <vector>
 
-namespace VEDO
+namespace vedo
 {
 
 // Data Type Class
 // __DXFColor declared in <Utiltity/acadxf.h>
-typedef enum NJRDXF::Color DOShapeColor;
+typedef enum njrdxf::Color DOShapeColor;
 
 enum DOShapeType
 {
@@ -99,7 +99,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::Vector3d& ExternalForce,
+		const njr::Vector3d& ExternalForce,
 		const DOShapeType&,
 		const DOShapeAttributes&,
 		const DOShapeColor&);
@@ -111,7 +111,7 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::Vector3d& ExternalForce,
+		const njr::Vector3d& ExternalForce,
 		const DOShapeType&,
 		const DOShapeAttributes&,
 		const DOShapeColor&,
@@ -124,8 +124,8 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::Vector3d& ExternalForce,
-		const NJR::NJRpolyhedra&,
+		const njr::Vector3d& ExternalForce,
+		const njr::NJRpolyhedra&,
 		const DOShapeColor&);
 
 	DOModel
@@ -135,8 +135,8 @@ public:
 		const std::string& Scope,
 		const double& Density,
 		const double& DensityFactor,
-		const NJR::Vector3d& ExternalForce,
-		const NJR::NJRpolyhedra&,
+		const njr::Vector3d& ExternalForce,
+		const njr::NJRpolyhedra&,
 		const DOShapeColor&,
 		const std::vector<DOMaterialAttribute>&);
 
@@ -178,7 +178,7 @@ public:
 		return dDensityFactor;
 	};
 
-	inline NJR::Vector3d GetExternalForce() const
+	inline njr::Vector3d GetExternalForce() const
 	{
 		return vExternalForce;
 	};
@@ -202,7 +202,7 @@ public:
 	};
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline NJR::Vector3d GetMassMomentInertia() const
+	inline njr::Vector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	};
@@ -232,7 +232,7 @@ public:
 		return matAttributes;
 	};
 
-	inline const NJR::NJRpolyhedra& GetPolyhedra() const
+	inline const njr::NJRpolyhedra& GetPolyhedra() const
 	{
 		return polyhedra;
 	};
@@ -241,29 +241,29 @@ public:
 
 	// Cross area to surface ax+by+cz=d;
 	double CrossAreaToSurface
-		(const NJR::Vector3d& vP,
+		(const njr::Vector3d& vP,
 		 const double&      a,
 		 const double&      b,
 		 const double&      c,
 		 const double&      d ) const;
 
-	std::pair<double, NJR::Vector3d> VolumeInsideBoundary
-		(const NJR::Vector3d& vP,
+	std::pair<double, njr::Vector3d> VolumeInsideBoundary
+		(const njr::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJR::Vector3d> ProjectedAreaOnXYPlane
-		(const NJR::Vector3d& vP,
+	std::pair<double, njr::Vector3d> ProjectedAreaOnXYPlane
+		(const njr::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJR::Vector3d> ProjectedAreaOnYZPlane
-		(const NJR::Vector3d& vP,
+	std::pair<double, njr::Vector3d> ProjectedAreaOnYZPlane
+		(const njr::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
-	std::pair<double, NJR::Vector3d> ProjectedAreaOnXZPlane
-		(const NJR::Vector3d& vP,
+	std::pair<double, njr::Vector3d> ProjectedAreaOnXZPlane
+		(const njr::Vector3d& vP,
 		 const Boundary*    pBC,
 		 const double&      dMeshSize) const;
 
@@ -287,19 +287,19 @@ private:
 	std::string	                     sScope;
 	double                           dDensity;
 	double                           dDensityFactor;
-	NJR::Vector3d                      vExternalForce;
+	njr::Vector3d                      vExternalForce;
 	double                           dMass;
 	double                           dSudoMass;
 	double                           dVolume;
 	double                           dRange;
-	NJR::Vector3d                      vMassMomentInertia;
+	njr::Vector3d                      vMassMomentInertia;
 	DOShapeColor                     shColor;
 	DOShapeType	                     shType;
 	DOShapeAttributes                shAttributes;
 	std::vector<DOMaterialAttribute> matAttributes;
-	NJR::NJRpolyhedra                     polyhedra;
+	njr::NJRpolyhedra                     polyhedra;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DOMODEL_H

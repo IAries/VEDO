@@ -5,15 +5,15 @@
 #include <FrameWork/Interfaces/DiscreteObject.h>
 #include <FrameWork/Interfaces/IactModel.h>
 
-namespace VEDO
+namespace vedo
 {
 
 struct ContactInfo
 {
-	NJR::Vector3d vImpactDirection;
-	NJR::Vector3d vSlideDirection;
-	NJR::Vector3d vCenterToCenter;
-	NJR::Vector3d vImpactPoint;
+	njr::Vector3d vImpactDirection;
+	njr::Vector3d vSlideDirection;
+	njr::Vector3d vCenterToCenter;
+	njr::Vector3d vImpactPoint;
 	double      dImpactDepth;
 	double      dDistance;
 	double      dOverlapArea;
@@ -60,6 +60,6 @@ protected:
 	ContactInfo cInfo;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CONTACT_DETECTOR_H

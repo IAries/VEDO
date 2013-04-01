@@ -1,6 +1,6 @@
 #include <FrameWork/Interfaces/GeometricShape.h>
 
-namespace VEDO
+namespace vedo
 {
 
 GeometricShape::GeometricShape(): _sType("Geometric Shape"), _sName("Null")
@@ -62,11 +62,11 @@ GeometricShape* GeometricShape::GetGeometricShape(std::string& st)
 };
 
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::GeometricShape& gs)
+std::ostream& operator << (std::ostream& os, vedo::GeometricShape& gs)
 {
 	std::cout << "Type: " << gs.GetType() << std::endl << gs.GetStatus() << std::endl;
 	return os;

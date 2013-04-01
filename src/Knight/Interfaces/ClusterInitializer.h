@@ -32,7 +32,7 @@ public:
     virtual ~ClusterInitializer();
 
     //! Factory method to do the actual creation.
-    void Create(std::string doName, VEDO::DOWorld* pWorld);
+    void Create(std::string doName, vedo::DOWorld* pWorld);
 
     //! Set the center of the cluster.
     void SetCenter(double clusterCenter[3]);
@@ -58,7 +58,7 @@ protected:
     one number per type of atoms (and \a positions has one leaf per type) */
     void MakeSlab(int center[3],
                   int subDimension,
-                  VEDO::DOStatus& dos, VEDO::DOWorld* pWorld);
+                  vedo::DOStatus& dos, vedo::DOWorld* pWorld);
 
     // Called at the begining of Create.
     /*!It sets the bounds on the solid in the lattice coordinates and returns an

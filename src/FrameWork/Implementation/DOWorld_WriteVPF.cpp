@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-namespace VEDO
+namespace vedo
 {
 
 void DOWorld::WriteVPF (const char* filename) const
@@ -13,9 +13,9 @@ void DOWorld::WriteVPF (const char* filename) const
     double dX, dY, dZ, thickness = 0.001;
     const DOModel* pdoml;
 	std::vector<DOStatus *>::const_iterator idos;
-	NJR::NJRpolyhedra polyhedra;
-	std::vector<NJR::NJRpolygon> faces;
-	NJR::Vector3d Vt;
+	njr::NJRpolyhedra polyhedra;
+	std::vector<njr::NJRpolygon> faces;
+	njr::Vector3d Vt;
 
 	if ((fpvpf = fopen(filename, "w"))== NULL )
 	{
@@ -41,9 +41,9 @@ void DOWorld::WriteVPF (const char* filename) const
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
 	if(ZoneOfInterest.Active())
 	{
-		NJR::Vector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
-		NJR::Vector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
-		NJR::Vector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+		njr::Vector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
+		njr::Vector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
+		njr::Vector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
 		dX                      = vUpperPoint.x() - vLowerPoint.x();
 		dY                      = vUpperPoint.y() - vLowerPoint.y();
 		dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -84,9 +84,9 @@ void DOWorld::WriteVPF (const char* filename) const
 
 	if(PeriodicBoundaryConditions.Active())
 	{
-		NJR::Vector3d	vLowerPoint = PeriodicBoundaryConditions.GetLowerPoint();
-		NJR::Vector3d	vUpperPoint = PeriodicBoundaryConditions.GetUpperPoint();
-		NJR::Vector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+		njr::Vector3d	vLowerPoint = PeriodicBoundaryConditions.GetLowerPoint();
+		njr::Vector3d	vUpperPoint = PeriodicBoundaryConditions.GetUpperPoint();
+		njr::Vector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
 		dX                      = vUpperPoint.x() - vLowerPoint.x();
 		dY                      = vUpperPoint.y() - vLowerPoint.y();
 		dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -326,9 +326,9 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 	std::vector<DOStatus *>::const_iterator  idos;
 	std::vector<DOStatus *> ocDOStatus = opw->GetDOStatus();
 	std::vector<DOStatus *>::const_iterator oidos;
-	NJR::NJRpolyhedra polyhedra;
-	std::vector<NJR::NJRpolygon> faces;
-	NJR::Vector3d Vt;
+	njr::NJRpolyhedra polyhedra;
+	std::vector<njr::NJRpolygon> faces;
+	njr::Vector3d Vt;
 
 	if ((fpvpf = fopen(filename, "w")) == NULL)
 	{
@@ -352,10 +352,10 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 
 /*
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
-	NJR::Vector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
-	NJR::Vector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
-	NJR::Vector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
-	NJR::Vector3d	vRedundant  = vCenter + NJR::Vector3d(0.0, dY, 0.0);
+	njr::Vector3d	vLowerPoint = ZoneOfInterest.GetLowerPoint();
+	njr::Vector3d	vUpperPoint = ZoneOfInterest.GetUpperPoint();
+	njr::Vector3d	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+	njr::Vector3d	vRedundant  = vCenter + njr::Vector3d(0.0, dY, 0.0);
 	dX                      = vUpperPoint.x() - vLowerPoint.x();
 	dY                      = vUpperPoint.y() - vLowerPoint.y();
 	dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -554,7 +554,7 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 			oidos++;
 		}
 		// Add redundant DiscreteObjects
-		NJR::Vector3d	vRedundant(NJRDXF::ZERO);
+		njr::Vector3d	vRedundant(njrdxf::ZERO);
 		if(gap != 0)
 		{
 			switch(GetDOModel((*oidos)->GetDOName())->GetShapeType())
@@ -658,4 +658,4 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 	fclose (fpvpf);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

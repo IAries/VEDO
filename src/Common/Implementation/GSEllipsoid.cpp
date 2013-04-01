@@ -1,7 +1,7 @@
 #include <Common/Interfaces/GSEllipsoid.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 GSEllipsoid::GSEllipsoid
@@ -13,10 +13,10 @@ GSEllipsoid::GSEllipsoid
 	_Status = new DOStatus("No Name");
 };
 
-bool GSEllipsoid::Inside(const NJR::Vector3d& p)
+bool GSEllipsoid::Inside(const njr::Vector3d& p)
 {
 	// Aries: Need to be modified.
-	//NJR::Vector3d localP(p);
+	//njr::Vector3d localP(p);
 	//localP = localP - _Status->GetPosition();
 	//double localX = localP % (_Status->GetOrientationX());
 	//double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());
@@ -24,11 +24,11 @@ bool GSEllipsoid::Inside(const NJR::Vector3d& p)
 	return true;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::GSEllipsoid& gs)
+std::ostream& operator << (std::ostream& os, vedo::GSEllipsoid& gs)
 {
 	std::cout << "XLength: " << gs.GetXLength() << '\n';
 	std::cout << "YLength: " << gs.GetYLength() << '\n';

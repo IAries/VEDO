@@ -13,7 +13,7 @@ public:
 	};
 
 	double computeDensity
-		(const VEDO::DOWorld* pWorld,
+		(const vedo::DOWorld* pWorld,
 		 double xmin,
 		 double xmax,
 		 double ymin,

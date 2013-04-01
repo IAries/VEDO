@@ -4,7 +4,7 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class GSSphere : public GeometricShape
@@ -19,7 +19,7 @@ public:
 		return _dRadius;
 	};
 
-	inline bool Inside(const NJR::Vector3d& p)
+	inline bool Inside(const njr::Vector3d& p)
 	{
 		return ((p - _Status->GetPosition()).length() <= _dRadius);
 	};
@@ -32,10 +32,10 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream&, VEDO::GSSphere&);
+std::ostream& operator << (std::ostream&, vedo::GSSphere&);
 
 #endif // _GS_SPHERE_H

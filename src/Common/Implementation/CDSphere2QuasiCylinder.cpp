@@ -4,24 +4,24 @@
 #include <Common/Interfaces/DOSphere.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 void CDSphere_QuasiCylinder::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	NJR::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	njr::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiCylinder)
-	NJR::Vector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
+	njr::Vector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Half height of Master
 	double dHHb
 		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.height;
 
 	// The center axial of Master (QuasiCylinder)
-	NJR::Vector3d vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
+	njr::Vector3d vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
 
 	// The projected point of vCa on vAxial
 	double Dap = (vCa - vCb) % vAxial;
@@ -38,8 +38,8 @@ void CDSphere_QuasiCylinder::CalDistance
      * The distance from vCaps to vCa is the shortest distance between surface
      * of Slave and Master
 	 **************************************************************************/
-	NJR::Vector3d vCaps = vCb + Dap * vAxial;
-	NJR::Vector3d vIm   = vCaps - vCa;
+	njr::Vector3d vCaps = vCb + Dap * vAxial;
+	njr::Vector3d vIm   = vCaps - vCa;
 
 	double dRs = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
 	double dRc = pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.radius;
@@ -48,7 +48,7 @@ void CDSphere_QuasiCylinder::CalDistance
 	if(cInfo.dImpactDepth > 0.0)
 	{
 		double dS          = dRs - cInfo.dImpactDepth * dRc / (dRs + dRc);
-		cInfo.dOverlapArea = (dRs * dRs - dS * dS) * NJR::dPI;
+		cInfo.dOverlapArea = (dRs * dRs - dS * dS) * njr::dPI;
 	}
 	else
 	{
@@ -81,4 +81,4 @@ void CDSphere_QuasiCylinder::Detect
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo

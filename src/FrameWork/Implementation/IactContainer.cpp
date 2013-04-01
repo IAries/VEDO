@@ -7,7 +7,7 @@
 #include <map>
 #include <typeinfo>
 
-namespace VEDO
+namespace vedo
 {
 
 IactContainer::IactContainer(): vcIact(0)
@@ -50,7 +50,7 @@ void IactContainer::CheckContactStatus()
 
 void IactContainer::Clear()
 {
-	for_each(vcIact.begin(), vcIact.end(), NJR::Delete_ptr());
+	for_each(vcIact.begin(), vcIact.end(), njr::Delete_ptr());
 	vcIact.clear();
 };
 
@@ -117,11 +117,11 @@ void IactContainer::Dump(std::string dumpfile)
 };
 
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-static std::ostream& operator << (std::ostream& os, VEDO::Interaction *pIact)
+static std::ostream& operator << (std::ostream& os, vedo::Interaction *pIact)
 {
 	static unsigned int i = 0;
 	os << i++

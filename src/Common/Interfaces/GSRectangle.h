@@ -4,7 +4,7 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class GSRectangle : public GeometricShape
@@ -29,7 +29,7 @@ public:
 		return _dHeight;
 	};
 
-	bool Inside(const NJR::Vector3d&);
+	bool Inside(const njr::Vector3d&);
 
 protected:
 
@@ -38,10 +38,10 @@ protected:
 	double _dHeight;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream&, VEDO::GSRectangle&);
+std::ostream& operator << (std::ostream&, vedo::GSRectangle&);
 
 #endif // _GS_RECTANGLE_H

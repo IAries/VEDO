@@ -44,7 +44,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\;C:\usr\xercesc\VC10\\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
@@ -70,8 +69,8 @@
     <ClInclude Include="..\..\src\FrameWork\Interfaces\Boundary2d.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\CDCFactoryDecorator.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\CDFactory.h" />
-    <ClInclude Include="..\..\src\FrameWork\Interfaces\Consultant.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\Constants.h" />
+    <ClInclude Include="..\..\src\FrameWork\Interfaces\Consultant.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\ContactDetector.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\DiscreteObject.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\DOCFactoryDecorator.h" />

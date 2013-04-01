@@ -86,28 +86,28 @@ int main (int argc, char* argv[])
 	sscanf(argv[3], "%d", &RecordStep);
 	sscanf(argv[4], "%d", &UpIact);
 
-	VEDO::DOWorld*       pDOWorld;
-	VEDO::Consultant*    pConsultant;
-	VEDO::IactRecordTab* pIactRecordTab = new VEDO::IactRecordTab();
-	VEDO::Assembler*     pAssembler = new VEDO::Assembler;
+	vedo::DOWorld*       pDOWorld;
+	vedo::Consultant*    pConsultant;
+	vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+	vedo::Assembler*     pAssembler = new vedo::Assembler;
 
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOConstrainedQuasiCylinder>(VEDO::QuasiCylinder, "constrained"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOConstrainedQuasiPlate>(VEDO::QuasiPlate, "constrained"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOFixedQuasiCylinder>(VEDO::QuasiCylinder, "fixed"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOFixedQuasiPlate>(VEDO::QuasiPlate, "fixed"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOFixedSphere>(VEDO::Sphere, "fixed"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOQuasiCylinder>(VEDO::QuasiCylinder, "mobile"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOQuasiPlate>(VEDO::QuasiPlate, "mobile"));
-	pAssembler->AddDO(new VEDO::DOcf<VEDO::DOSphere>(VEDO::Sphere, "mobile"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOConstrainedQuasiCylinder>(vedo::QuasiCylinder, "constrained"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOConstrainedQuasiPlate>(vedo::QuasiPlate, "constrained"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiCylinder>(vedo::QuasiCylinder, "fixed"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiPlate>(vedo::QuasiPlate, "fixed"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedSphere>(vedo::Sphere, "fixed"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiCylinder>(vedo::QuasiCylinder, "mobile"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiPlate>(vedo::QuasiPlate, "mobile"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOSphere>(vedo::Sphere, "mobile"));
 
-	pAssembler->AddIS(new VEDO::IScf<VEDO::ISwBSDBF>("ISwBSDBF"));
-	pAssembler->AddIS(new VEDO::IScf<VEDO::ISwBtSDBF>("ISwBtSDBF"));
+	pAssembler->AddIS(new vedo::IScf<vedo::ISwBSDBF>("ISwBSDBF"));
+	pAssembler->AddIS(new vedo::IScf<vedo::ISwBtSDBF>("ISwBtSDBF"));
 
-    pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_Sphere>          (VEDO::Sphere, VEDO::Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_QuasiCylinder>   (VEDO::Sphere, VEDO::QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-	pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_QuasiPlate>      (VEDO::Sphere, VEDO::QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    //pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_SphereAT>        (VEDO::Sphere, VEDO::Sphere       , "List- <CT>ISwLSDAT"));
-    //pAssembler->AddCD(new VEDO::CDcf<VEDO::CDSphere_QuasiCylinderAT> (VEDO::Sphere, VEDO::QuasiCylinder, "List- <CT>ISwLSDAT"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_Sphere>          (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>   (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>      (vedo::Sphere, vedo::QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_SphereAT>        (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwLSDAT"));
+    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinderAT> (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwLSDAT"));
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);
@@ -115,7 +115,7 @@ int main (int argc, char* argv[])
 
 	if ( !strcmp (strlen(argv[2]) - 4 + argv[2], ".ido") )
 	{
-		pDOWorld    = new VEDO::DOWorld;
+		pDOWorld    = new vedo::DOWorld;
 		idofilename = argv[2];
 		pDOWorld->ReadIDO(idofilename, pIactRecordTab);
 	}
@@ -124,15 +124,15 @@ int main (int argc, char* argv[])
 		usage(2);
     }
 
-	pConsultant = new VEDO::NBSParallelConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
-	//NJR::RunTime("Simulation Start !!");
+	pConsultant = new vedo::NBSParallelConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
+	//njr::RunTime("Simulation Start !!");
 
 	int rank;   // Rank   of processores
 	int NP;     // Number of processores
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &NP);
 
-	VEDO::SimMediator sm(pConsultant, pAssembler, static_cast<unsigned int>(rank), static_cast<unsigned int>(NP));
+	vedo::SimMediator sm(pConsultant, pAssembler, static_cast<unsigned int>(rank), static_cast<unsigned int>(NP));
 	sm.Initiate();
 
 	time(&endtime);
@@ -159,7 +159,7 @@ int main (int argc, char* argv[])
 	//MPI_Comm comm;
 	//MPI_Comm_dup(MPI_COMM_WORLD, &comm);
 	//MPI_Comm_free(&comm);
-	//NJR::RunTime("Simulation End !!");
+	//njr::RunTime("Simulation End !!");
 
 	timeSystem           += (sm.timeSystem);
 	timeImpactSolving     = (sm.timeImpactSolving);

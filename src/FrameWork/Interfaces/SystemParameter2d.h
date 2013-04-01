@@ -7,7 +7,7 @@
 #include <fstream>
 #define  PUBLISH "2010-08-27"
 
-namespace VEDO
+namespace vedo
 {
 
 // Data Type Class
@@ -24,7 +24,7 @@ public:
 		const double& TimeInterval,
 		const double& TimeCurrent,
 		const unsigned long int& DONumber,
-		const NJR::Vector2d& FieldAcceleration,
+		const njr::Vector2d& FieldAcceleration,
 		const Boundary2d& ZOI,
 		const Boundary2d& PBC             );
 
@@ -82,7 +82,7 @@ public:
 		ulDONumber = n;
 	};
 
-	inline NJR::Vector2d GetFieldAcceleration() const
+	inline njr::Vector2d GetFieldAcceleration() const
 	{
 		return vFieldAcceleration;
 	};
@@ -126,7 +126,7 @@ public:
 		dTimeCurrent += dTimeInterval;
 	};
 
-	inline void SetFieldAcceleration(const NJR::Vector2d& FieldAcceleration)
+	inline void SetFieldAcceleration(const njr::Vector2d& FieldAcceleration)
 	{
 		vFieldAcceleration = FieldAcceleration;
 	};
@@ -156,12 +156,12 @@ public:
 		return dEnergyRotation;
 	};
 
-	inline NJR::Vector2d GetMomentumAvg() const
+	inline njr::Vector2d GetMomentumAvg() const
 	{
 		return vMomentumAvg;
 	};
 
-	inline NJR::Vector2d GetAngularMomentumAvg() const
+	inline njr::Vector2d GetAngularMomentumAvg() const
 	{
 		return vAngularMomentumAvg;
 	};
@@ -211,12 +211,12 @@ public:
 		dEnergyRotation = e;
 	};
 
-	inline void SetMomentumAvg(const NJR::Vector2d& v)
+	inline void SetMomentumAvg(const njr::Vector2d& v)
 	{
 		vMomentumAvg = v;
 	};
 
-	inline void SetAngularMomentumAvg(const NJR::Vector2d& v)
+	inline void SetAngularMomentumAvg(const njr::Vector2d& v)
 	{
 		vAngularMomentumAvg = v;
 	};
@@ -284,7 +284,7 @@ private:
 	unsigned long ulDONumber;
 
 	// The global field acceleration
-	NJR::Vector2d vFieldAcceleration;
+	njr::Vector2d vFieldAcceleration;
 
 	Boundary2d  ZoneOfInterest;               // Zone of Interest (ZOI)
 	Boundary2d  PeriodicBoundaryConditions;   // Periodic Boundary Condition (PBC)
@@ -293,8 +293,8 @@ private:
 	double      dEnergyTranslation;           // Kinetic energy (Total, Translation part)
 	double      dEnergyRotation;              // Kinetic energy (Total, Rotation part)
 
-	NJR::Vector2d vMomentumAvg;                 // Average momentum
-	NJR::Vector2d vAngularMomentumAvg;          // Average angular momentum
+	njr::Vector2d vMomentumAvg;                 // Average momentum
+	njr::Vector2d vAngularMomentumAvg;          // Average angular momentum
 
 	double      dMomentumNorm;                // Norm of momentum (Total)
 	double      dAngularMomentumNorm;         // Norm of angular momentum (Total)
@@ -306,6 +306,6 @@ private:
 	double      dAngularVelocityMax;          // Maximal angular velocity
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _SYSTEM_PARAMETER_2D_H

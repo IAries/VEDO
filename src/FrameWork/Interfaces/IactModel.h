@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace VEDO
+namespace vedo
 {
 
 // Data type class for Old .ido file
@@ -148,6 +148,6 @@ private:
 	std::vector<IactMechanism> svIactMechanisms;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _IACT_MODEL_H

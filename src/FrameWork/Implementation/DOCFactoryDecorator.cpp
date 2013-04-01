@@ -1,8 +1,8 @@
 #include <FrameWork/Interfaces/DOCFactoryDecorator.h>
-#include <NJR/Interfaces/Utility.h>   // for NJR::Delete_ptr()
+#include <NJR/Interfaces/Utility.h>   // for njr::Delete_ptr()
 #include <algorithm>
 
-namespace VEDO
+namespace vedo
 {
 
 DOCFactoryDecorator::DOCFactoryDecorator() : lcDOCFactory(0)
@@ -11,7 +11,7 @@ DOCFactoryDecorator::DOCFactoryDecorator() : lcDOCFactory(0)
 
 DOCFactoryDecorator::~DOCFactoryDecorator()
 {
-	for_each(lcDOCFactory.begin(),lcDOCFactory.end(), NJR::Delete_ptr());
+	for_each(lcDOCFactory.begin(),lcDOCFactory.end(), njr::Delete_ptr());
 };
 
 void DOCFactoryDecorator::AddDOCFactory(DOFactory* pdof)
@@ -52,4 +52,4 @@ DiscreteObject* DOCFactoryDecorator::Create
 	exit(-1);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

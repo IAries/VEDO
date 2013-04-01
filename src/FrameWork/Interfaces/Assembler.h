@@ -13,7 +13,7 @@
 #include <FrameWork/Interfaces/Interaction.h>
 #include <list>
 
-namespace VEDO
+namespace vedo
 {
 
 class Assembler
@@ -57,6 +57,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _ASSEMBLER_H

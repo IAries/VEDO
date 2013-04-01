@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <sstream>
 
-namespace VEDO
+namespace vedo
 {
 
 struct NullExternalFieldVTKWriter
@@ -170,6 +170,6 @@ void DOWorld::WriteVTK (const char* filename) const
 };
 */
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DOWORLD_WRITE_VTK__H

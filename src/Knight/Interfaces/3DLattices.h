@@ -39,7 +39,7 @@ public:
 
     ~FCCLattice(){}
 
-    void AddAtomInCell(NJR::Vector3d atomCoord, std::string name="");
+    void AddAtomInCell(njr::Vector3d atomCoord, std::string name="");
 };
 
 class PrimitiveFCCLattice:public BravaisLatticeWithBasis
@@ -72,7 +72,7 @@ public:
 
     BCCLattice(double a=1.0);
 
-    void AddAtomInCell(NJR::Vector3d atomCoord, std::string name="");
+    void AddAtomInCell(njr::Vector3d atomCoord, std::string name="");
 };
 
 class DiamondLattice: public FCCLattice
@@ -86,7 +86,7 @@ public:
 	{
 	}
 
-    void AddAtomInCell(NJR::Vector3d atomCoord, std::string name="");
+    void AddAtomInCell(njr::Vector3d atomCoord, std::string name="");
 };
 
 class TriclinicLattice:public GeneralLattice

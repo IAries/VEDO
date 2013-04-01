@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/DiscreteObject.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class DOSphere : public DiscreteObject
@@ -31,6 +31,6 @@ private:
 	DOSphere();
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DOSPHERE_H

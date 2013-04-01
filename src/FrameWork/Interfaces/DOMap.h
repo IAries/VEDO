@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/DOWorld.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class DOMap
@@ -151,7 +151,7 @@ public:
 		 double& maxR, double& maxV,
 		 double& maxS               );
 
-	static double CalSafeDistance(DOMap m, NJR::Vector3d vFF, double dt);
+	static double CalSafeDistance(DOMap m, njr::Vector3d vFF, double dt);
 
 //	static double CalDistance(DOMap m1, DOMap m2);
 
@@ -219,6 +219,6 @@ private:
 	const double Zn;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DOMAP_H

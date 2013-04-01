@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/ISFactory.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class ISCFactoryDecorator : public ISFactory
@@ -27,6 +27,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _IMPACT_SOLVER_FACTORY_DECORATOR_H

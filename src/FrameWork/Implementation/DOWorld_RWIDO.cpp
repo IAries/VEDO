@@ -1,7 +1,7 @@
 #include <FrameWork/Interfaces/DOWorld.h>
 #include <FrameWork/Interfaces/IactRecordTab.h>
 
-namespace VEDO
+namespace vedo
 {
 
 bool DOWorld::ReadIDO(const char* filename, IactRecordTab* irtp)
@@ -348,4 +348,4 @@ void DOWorld::WriteIDO(const char* filename, const IactRecordTab* irtp) const
 	idof.close();
 };
 
-};   // namespace VEDO
+};   // namespace vedo

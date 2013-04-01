@@ -1,6 +1,6 @@
 #include <FrameWork/Interfaces/ContactDetector.h>
 
-namespace VEDO
+namespace vedo
 {
 
 ContactDetector::ContactDetector()
@@ -13,4 +13,4 @@ ContactDetector::ContactDetector()
 	pBC                = 0;
 };
 
-};   // namespace VEDO
+};   // namespace vedo

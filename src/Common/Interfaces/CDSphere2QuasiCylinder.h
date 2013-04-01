@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/ContactDetector.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class CDSphere_QuasiCylinder : public ContactDetector
@@ -23,6 +23,6 @@ public:
 	};
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CDSPHERE_2_QUASICYLINDER

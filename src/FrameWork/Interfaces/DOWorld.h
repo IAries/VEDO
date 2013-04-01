@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace VEDO
+namespace vedo
 {
 
 struct NullExternalFieldVTKWriter;
@@ -106,7 +106,7 @@ public:
 		pSystemParameter->SetTime(dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent);
 	}
 
-	void SetFieldAcceleration(const NJR::Vector3d&);
+	void SetFieldAcceleration(const njr::Vector3d&);
 
 	bool UpdateDOStatus(const std::vector<const DOStatus *>& nDOStatus);
 
@@ -186,12 +186,12 @@ public:
 //	void CalculateSystemEnergy(const IactRecordTab*);
 	void CalculateSystemEnergy();
 
-	const std::pair<NJR::Vector3d, NJR::Vector3d>
+	const std::pair<njr::Vector3d, njr::Vector3d>
 		Distribution(double& dMeshLength) const;
 
-	void Shift(const NJR::Vector3d& shift);
+	void Shift(const njr::Vector3d& shift);
 
-	void Shift(const NJR::Vector3d& shift, const std::string& DOName);
+	void Shift(const njr::Vector3d& shift, const std::string& DOName);
 
 	void Rotate
 		(const double& Angle2XAxis,
@@ -199,8 +199,8 @@ public:
 		 const double& Angle2ZAxis );
 
 	void Rotate
-		(const NJR::Vector3d& eX,
-		 const NJR::Vector3d& eZ,
+		(const njr::Vector3d& eX,
+		 const njr::Vector3d& eZ,
 		 const std::string& DOName);
 
 	const DOStatus GetDOStatus
@@ -225,6 +225,6 @@ private:
 	friend class DOCluster;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DOWORLD_H

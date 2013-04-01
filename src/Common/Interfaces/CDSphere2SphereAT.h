@@ -3,7 +3,7 @@
 
 #include <Common/Interfaces/CDSphere2Sphere.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class CDSphere_SphereAT : public CDSphere_Sphere
@@ -16,6 +16,6 @@ public:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CDSPHERE_2_SPHEREAT_H

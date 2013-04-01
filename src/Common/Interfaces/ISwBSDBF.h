@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/ImpactSolver.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class ISwBSDBF : public ImpactSolver
@@ -16,7 +16,7 @@ public:
 		const DiscreteObject* cpdoMaster,
 		const IactModel* cpiactml        );
 
-	NJR::Vector3d NextStep
+	njr::Vector3d NextStep
 		(const ContactDetector* pcd,
 		DiscreteObject* pdoSlave,
 		DiscreteObject* pdoMaster,
@@ -47,6 +47,6 @@ private:
 	double fc;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _ISwBSDBF_H

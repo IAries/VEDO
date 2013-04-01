@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 class GeometricShape
@@ -53,7 +53,7 @@ public:
 
 	virtual GeometricShape* GetGeometricShape(std::string&);
 
-	virtual bool Inside(const NJR::Vector3d&) = 0;
+	virtual bool Inside(const njr::Vector3d&) = 0;
 
 protected:
 
@@ -64,10 +64,10 @@ protected:
 	DOStatus*                  _Status;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::GeometricShape& gs);
+std::ostream& operator << (std::ostream& os, vedo::GeometricShape& gs);
 
 #endif // _GEOMETRIC_SPHERE_H

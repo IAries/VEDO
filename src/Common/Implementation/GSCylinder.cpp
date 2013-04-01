@@ -1,7 +1,7 @@
 #include <Common/Interfaces/GSCylinder.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 GSCylinder::GSCylinder(const std::string& nm, const double& r, const double& h):
@@ -12,9 +12,9 @@ GSCylinder::GSCylinder(const std::string& nm, const double& r, const double& h):
 	_Status = new DOStatus("No Name");
 };
 
-bool GSCylinder::Inside(const NJR::Vector3d& p)
+bool GSCylinder::Inside(const njr::Vector3d& p)
 {
-	NJR::Vector3d localP(p);
+	njr::Vector3d localP(p);
 	localP = localP - _Status->GetPosition();
 	double localX = localP % (_Status->GetOrientationX());
 	double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());
@@ -31,11 +31,11 @@ bool GSCylinder::Inside(const NJR::Vector3d& p)
 };
 
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::GSCylinder& gs)
+std::ostream& operator << (std::ostream& os, vedo::GSCylinder& gs)
 {
 	std::cout << "Radius: " << gs.GetRadius() << '\n';
 	std::cout << "Height: " << gs.GetHeight() << '\n';

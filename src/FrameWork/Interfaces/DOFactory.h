@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 class DOFactory
@@ -75,6 +75,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DISCRETE_OBJECT_FACTORY_H

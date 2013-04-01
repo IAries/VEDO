@@ -14,7 +14,7 @@ public:
 	};
 
 	double computeAvgCoordinateNum
-		(const VEDO::DOWorld* pWorld,
+		(const vedo::DOWorld* pWorld,
 		 double xmin,
 		 double xmax,
 		 double ymin,
@@ -23,7 +23,7 @@ public:
 		 double zmax ) const;
 
 	void outputCoordinateNumVTK
-		(const VEDO::DOWorld* pWorld, const std::string& filename) const;
+		(const vedo::DOWorld* pWorld, const std::string& filename) const;
 };
 
 #endif // _CALC_COORDINATE_NUM_H

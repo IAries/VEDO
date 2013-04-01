@@ -1,7 +1,7 @@
 #include <Common/Interfaces/DOConstrainedQuasiPlate.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 DOConstrainedQuasiPlate::DOConstrainedQuasiPlate
@@ -14,20 +14,20 @@ DOConstrainedQuasiPlate::DOConstrainedQuasiPlate
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = cpdoml->GetSudoMass();
-	vMassMomentInertia = NJR::Vector3d();
+	vMassMomentInertia = njr::Vector3d();
 };
 
 void DOConstrainedQuasiPlate::Response(double dt)
 {
-	NJR::Vector3d V   = pDOStatus->GetVelocity();
-	NJR::Vector3d AV  = pDOStatus->GetAngularVelocity();
-	NJR::Vector3d P   = pDOStatus->GetPosition();
-	NJR::Vector3d Ox  = pDOStatus->GetOrientationX();
-	NJR::Vector3d Oz  = pDOStatus->GetOrientationZ();
+	njr::Vector3d V   = pDOStatus->GetVelocity();
+	njr::Vector3d AV  = pDOStatus->GetAngularVelocity();
+	njr::Vector3d P   = pDOStatus->GetPosition();
+	njr::Vector3d Ox  = pDOStatus->GetOrientationX();
+	njr::Vector3d Oz  = pDOStatus->GetOrientationZ();
 
-	NJR::Vector3d dv  = 1.0 / dSudoMass * (vImpact.Dot(Oz) * (Oz.direction()));
-	NJR::Vector3d dp  = dt * (V + (0.5 * dv));
-	NJR::Vector3d dw  = AV * dt;
+	njr::Vector3d dv  = 1.0 / dSudoMass * (vImpact.Dot(Oz) * (Oz.direction()));
+	njr::Vector3d dp  = dt * (V + (0.5 * dv));
+	njr::Vector3d dw  = AV * dt;
 
 	pDOStatus->SetPosition(P + dp);
 	pDOStatus->SetOrientation(Ox.RotateAround(dw), Oz.RotateAround(dw));
@@ -36,4 +36,4 @@ void DOConstrainedQuasiPlate::Response(double dt)
 	ClearImpact();
 };
 
-};   // namespace VEDO
+};   // namespace vedo

@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <vector>
 
-namespace VEDO
+namespace vedo
 {
 
 void DOWorld::WriteXML(const char* filename) const
@@ -49,9 +49,9 @@ void DOWorld::WriteXML(const char* filename) const
 		pSystemParameter->GetTimeInterval(),
 		pSystemParameter->GetTimeCurrent(),
 		pSystemParameter->GetDONumber(),
-        VEDO::dSafetyFactor,
-        VEDO::uNumUDDDOStatus,
-        VEDO::uNumUDDImpactStatus,
+        vedo::dSafetyFactor,
+        vedo::uNumUDDDOStatus,
+        vedo::uNumUDDImpactStatus,
 		pSystemParameter->GetFieldAcceleration().x(),
 		pSystemParameter->GetFieldAcceleration().y(),
 		pSystemParameter->GetFieldAcceleration().z()  );
@@ -174,8 +174,8 @@ void DOWorld::WriteXML(const char* filename) const
 					(*idoml)->GetShapeAttributes().ellipsoid.zlength );
 				buffer1 = sa;
 			case Polyhedra:
-				NJR::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
-				std::vector<NJR::HalfSpace> faces = polyhedra.constrains();
+				njr::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
+				std::vector<njr::HalfSpace> faces = polyhedra.constrains();
 				sprintf(sa,"<Polyhedra>\n");
 				buffer1 = sa;
 				for (unsigned int i=0; i<faces.size(); ++i)
@@ -346,9 +346,9 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 		pSystemParameter->GetTimeInterval(),
 		pSystemParameter->GetTimeCurrent(),
 		pSystemParameter->GetDONumber(),
-        VEDO::dSafetyFactor,
-        VEDO::uNumUDDDOStatus,
-        VEDO::uNumUDDImpactStatus,
+        vedo::dSafetyFactor,
+        vedo::uNumUDDDOStatus,
+        vedo::uNumUDDImpactStatus,
 		pSystemParameter->GetFieldAcceleration().x(),
 		pSystemParameter->GetFieldAcceleration().y(),
 		pSystemParameter->GetFieldAcceleration().z()  );
@@ -471,8 +471,8 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 					(*idoml)->GetShapeAttributes().ellipsoid.zlength );
 				buffer1 = sa;
 			case Polyhedra:
-				NJR::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
-				std::vector<NJR::HalfSpace> faces = polyhedra.constrains();
+				njr::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
+				std::vector<njr::HalfSpace> faces = polyhedra.constrains();
 				sprintf(sa,"<Polyhedra>\n");
 				buffer1 = sa;
 				for (unsigned int i=0; i<faces.size(); ++i)
@@ -607,7 +607,7 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
     std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator mmapImStatus;
 	unsigned long ulMaster, ulSlave;
 	const ImpactStatus* isp;
-	NJR::Vector3d vShearForce;
+	njr::Vector3d vShearForce;
 	const double* dpUDV;
 	for (mmapImStatus=(mapImStatusP->begin()); mmapImStatus!=(mapImStatusP->end()); mmapImStatus++)
 	{
@@ -623,15 +623,15 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 			ulMaster, ulSlave, isp->Contact(), isp->Bond(), isp->Kn(),
 			vShearForce.x(), vShearForce.y(), vShearForce.z()         );
 
-        for (unsigned u=0; u<VEDO::uNumUDDImpactStatus; u++)
+        for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
             fprintf (fpxml,
                 "\t\t\t<AccumulativeUserDefinedValue ID=\"%d\" Value=\"%g\"/>\n",
                 u, *(dpUDV+u)                                        );
 
-        for (unsigned u=0; u<VEDO::uNumUDDImpactStatus; u++)
+        for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
             fprintf (fpxml,
                 "\t\t\t<UserDefinedValue ID=\"%d\" Value=\"%g\"/>\n",
-                u, *(dpUDV+3*VEDO::uNumUDDImpactStatus+u)                                        );
+                u, *(dpUDV+3*vedo::uNumUDDImpactStatus+u)                                        );
 
 		fprintf (fpxml, "\t\t</IactStatus>\n");
 	}
@@ -642,4 +642,4 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 	fclose(fpxml);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

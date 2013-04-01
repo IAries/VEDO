@@ -5,7 +5,7 @@
 #include <FrameWork/Interfaces/Interaction.h>
 #include <vector>
 
-namespace VEDO
+namespace vedo
 {
 
 class IactContainer
@@ -55,6 +55,6 @@ private:
                                                                     // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _INTERACTION_CONTAINER_H

@@ -34,19 +34,19 @@ void CubicLattice::SetLatticeConstant(double a)
 
 FCCLattice::FCCLattice(double a): CubicLattice(a)
 {
-    std::vector<NJR::Vector3d> atomsCoord;
-    atomsCoord.push_back(NJR::Vector3d(0., 0., 0.));
+    std::vector<njr::Vector3d> atomsCoord;
+    atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
-void FCCLattice::AddAtomInCell(NJR::Vector3d atomCoord, std::string name)
+void FCCLattice::AddAtomInCell(njr::Vector3d atomCoord, std::string name)
 {
     double shifts[4][3] = {{0.,0.,0.},{0.,0.5,0.5},{0.5,0.,0.5},{0.5,0.5,0.}};
     for(int at=0; at<4; ++at)
 	{
 		BravaisLatticeWithBasis::AddAtomInCell
-			(atomCoord+NJR::Vector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
+			(atomCoord+njr::Vector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
 			 name);
 	}
 }
@@ -100,19 +100,19 @@ void PrimitiveFCCLattice::SetLatticeConstant(double a)
 
 BCCLattice::BCCLattice(double a): CubicLattice(a)
 {
-    std::vector<NJR::Vector3d> atomsCoord;
-    atomsCoord.push_back(NJR::Vector3d(0., 0., 0.));
+    std::vector<njr::Vector3d> atomsCoord;
+    atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
-void BCCLattice::AddAtomInCell(NJR::Vector3d atomCoord, std::string name)
+void BCCLattice::AddAtomInCell(njr::Vector3d atomCoord, std::string name)
 {
     double shifts[2][3] = {{0.,0.,0.},{0.5,0.5,0.5}};
     for(int at=0; at<2; ++at)
 	{
         BravaisLatticeWithBasis::AddAtomInCell
-        	(atomCoord+NJR::Vector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
+        	(atomCoord+njr::Vector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
         	 name);
 	}
 }
@@ -122,21 +122,21 @@ void BCCLattice::AddAtomInCell(NJR::Vector3d atomCoord, std::string name)
 
 DiamondLattice::DiamondLattice(double a): FCCLattice(a)
 {
-    std::vector<NJR::Vector3d> atomsCoord;
-    atomsCoord.push_back(NJR::Vector3d(0., 0., 0.));
+    std::vector<njr::Vector3d> atomsCoord;
+    atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
 
 void DiamondLattice::AddAtomInCell
-	(NJR::Vector3d atomCoord, std::string name)
+	(njr::Vector3d atomCoord, std::string name)
 {
     double shifts[2][3] = {{0.,0.,0.},{0.25,0.25,0.25}};
 	FCCLattice::AddAtomInCell
-		(atomCoord+NJR::Vector3d(shifts[0][0], shifts[0][1], shifts[0][2]), name);
+		(atomCoord+njr::Vector3d(shifts[0][0], shifts[0][1], shifts[0][2]), name);
     FCCLattice::AddAtomInCell
-    	(atomCoord+NJR::Vector3d(shifts[1][0], shifts[1][1], shifts[1][2]), name);
+    	(atomCoord+njr::Vector3d(shifts[1][0], shifts[1][1], shifts[1][2]), name);
 }
 
 

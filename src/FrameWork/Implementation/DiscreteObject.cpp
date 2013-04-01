@@ -1,6 +1,6 @@
 #include <FrameWork/Interfaces/DiscreteObject.h>
 
-namespace VEDO
+namespace vedo
 {
 
 unsigned long DiscreteObject::ulCounter = 0;
@@ -13,8 +13,8 @@ DiscreteObject::DiscreteObject
 	dVolume        = cpdoml->GetVolume();
 	dMass          = cpdoml->GetMass();
 	dSudoMass      = cpdoml->GetSudoMass();
-	vImpact        = NJRDXF::ZERO;
-	vAngularImpact = NJRDXF::ZERO;
+	vImpact        = njrdxf::ZERO;
+	vAngularImpact = njrdxf::ZERO;
 	ulCounter++;
 };
 
@@ -24,24 +24,24 @@ DiscreteObject::~DiscreteObject ()
 	delete pDOStatus;
 };
 
-void DiscreteObject::ModifyVelocity(const NJR::Vector3d& vdv)
+void DiscreteObject::ModifyVelocity(const njr::Vector3d& vdv)
 {
 	pDOStatus->SetVelocity ( (pDOStatus->GetVelocity()) + vdv);
 };
 
-void DiscreteObject::ModifyPosition(const NJR::Vector3d& vdp)
+void DiscreteObject::ModifyPosition(const njr::Vector3d& vdp)
 {
 	pDOStatus->SetPosition ( (pDOStatus->GetPosition()) + vdp);
 };
 
 void DiscreteObject::ClearImpact()
 {
-	vImpact        = NJRDXF::ZERO;
-	vAngularImpact = NJRDXF::ZERO;
+	vImpact        = njrdxf::ZERO;
+	vAngularImpact = njrdxf::ZERO;
 };
 
 void DiscreteObject::AddImpact
-	(const NJR::Vector3d& impact, const NJR::Vector3d& angularimpact)
+	(const njr::Vector3d& impact, const njr::Vector3d& angularimpact)
 {
 	vImpact        = vImpact        + impact;
 	vAngularImpact = vAngularImpact + angularimpact;
@@ -57,10 +57,10 @@ void DiscreteObject::EnforcePeriodicBoundaryConditions
 {
 	if(cpDOModel->GetBehavior() == "mobile")
 	{
-		NJR::Vector3d pos = pDOStatus->GetPosition();
+		njr::Vector3d pos = pDOStatus->GetPosition();
 		bc.EnforceBoundaryConditions(&pos);
 		pDOStatus->SetPosition(pos);
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo

@@ -21,7 +21,7 @@
 #undef max
 #undef min
 
-namespace VEDO
+namespace vedo
 {
 
 class NBSParallelConsultant : public Consultant
@@ -141,7 +141,7 @@ void NBSParallelConsultant::subReset
 	const SystemParameter* csp = Consultant::pDOWorld->GetSystemParameter();
 
 	unsigned long numberDO           = csp->GetDONumber();
-	NJR::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
+	njr::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
 	double        dt                 = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
@@ -187,7 +187,7 @@ void NBSParallelConsultant::subReset
 		cpdos  = Consultant::pDOWorld->GetDOStatus(i);
 		cpdoml = Consultant::pDOWorld->GetDOModel(cpdos->GetDOName());
 		safeD
-			= VEDO::dSafetyFactor
+			= vedo::dSafetyFactor
             * (   2.0 * cpdoml->GetRange()
                 + dt  * (cpdos->GetVelocity()).length()
                 + 0.5 * dt * dt * vFieldAcceleration.length() );
@@ -205,7 +205,7 @@ void NBSParallelConsultant::subReset
 	}
 
 	double ZoneRange
-        = VEDO::dSafetyFactor
+        = vedo::dSafetyFactor
         * (2.0 * SphereRMax + dt * SphereVMax + 0.5 * dt * dt * vFieldAcceleration.length());
 
 	// Determine how many "safety region" per direction
@@ -235,7 +235,7 @@ void NBSParallelConsultant::subReset
 	//std::map<Trir, std::vector<DOMap>* > locMap;
 	std::vector<DOMap> GlobalElement;
 
-	NJR::Vector3d pos;
+	njr::Vector3d pos;
 	for (unsigned long i=0; i<numberDO; ++i)
 	{
 		if (vDOMap[i].cpdoml()->GetScope() == "local")
@@ -710,6 +710,6 @@ void NBSParallelConsultant::subReset
 	delete[] displs;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _NBS_PARALLEL_CONSULTANT_H

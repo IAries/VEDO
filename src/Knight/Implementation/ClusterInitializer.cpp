@@ -29,18 +29,18 @@ void ClusterInitializer::SetBravaisLattice(const BravaisLatticeWithBasis *bravai
     this->bravais = bravais;
 }
 
-void ClusterInitializer::Create(std::string doName, VEDO::DOWorld* pWorld)
+void ClusterInitializer::Create(std::string doName, vedo::DOWorld* pWorld)
 {
     int zeroCenter[3];
     for (int coord=0; coord<3; coord++) zeroCenter[coord] = 0;
 
-	VEDO::DOStatus dos
+	vedo::DOStatus dos
 		(doName,
-		NJR::Vector3d(NJRDXF::ZERO),
-		NJR::Vector3d(NJRDXF::ZERO),
-		NJR::Vector3d(NJRDXF::AXIALX),
-		NJR::Vector3d(NJRDXF::AXIALZ),
-		NJR::Vector3d(NJRDXF::ZERO));
+		njr::Vector3d(njrdxf::ZERO),
+		njr::Vector3d(njrdxf::ZERO),
+		njr::Vector3d(njrdxf::AXIALX),
+		njr::Vector3d(njrdxf::AXIALZ),
+		njr::Vector3d(njrdxf::ZERO));
 
     // Recursion to work in general 3:
     MakeSlab(zeroCenter, 3, dos, pWorld);
@@ -56,7 +56,7 @@ void ClusterInitializer::SetCenter(double clusterCenter[3])
 
 void ClusterInitializer::MakeSlab(int center[3],
                                   int sub3,
-                                  VEDO::DOStatus& dos, VEDO::DOWorld* pWorld)
+                                  vedo::DOStatus& dos, vedo::DOWorld* pWorld)
 {
     int newCenter[3];
     for(int coord=sub3; coord<3; coord++)
@@ -92,11 +92,11 @@ void ClusterInitializer::MakeSlab(int center[3],
                 if (Inside(potentialPos))
                 {
 					dos.SetPosition
-						(NJR::Vector3d
+						(njr::Vector3d
 							(potentialPos[0],
 							 potentialPos[1],
 							 potentialPos[2]));
-					pWorld->AddDOStatus(new VEDO::DOStatus(dos));
+					pWorld->AddDOStatus(new vedo::DOStatus(dos));
                 }
             }
         }

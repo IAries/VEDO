@@ -4,7 +4,7 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/Constants.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class ImpactStatus
@@ -16,7 +16,7 @@ public:
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const double& Kn,
-         const NJR::Vector3d& ShearForce, const double* UDVp       );
+         const njr::Vector3d& ShearForce, const double* UDVp       );
 
 	ImpactStatus(const ImpactStatus&);
 
@@ -54,12 +54,12 @@ public:
 		dKn = dK;
 	};
 
-	inline NJR::Vector3d ShearForce() const
+	inline njr::Vector3d ShearForce() const
 	{
 		return vShearForce;
 	};
 
-	inline void SetShearForce(NJR::Vector3d& vS)
+	inline void SetShearForce(njr::Vector3d& vS)
 	{
 		vShearForce = vS;
 	};
@@ -91,7 +91,7 @@ private:
 	bool          bContact;                      // Contacted or not
 	bool          bBond;                         // Bond exists or not
 	double        dKn;                           // Stiffness of normal spring
-	NJR::Vector3d vShearForce;                   // Shear force
+	njr::Vector3d vShearForce;                   // Shear force
 	double        dUDV[uNumUDDImpactStatus*4];   // User-defined value
                                                  // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value
                                                  // uNumUDDImpactStatus ~ 2*uNumUDDImpactStatus-1: Unsynchronized part of Accumulative user-defined value
@@ -99,6 +99,6 @@ private:
                                                  // 3*uNumUDDImpactStatus ~ 4*uNumUDDImpactStatus-1: User-defined value
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _IMPACT_STATUS_H

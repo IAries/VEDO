@@ -1,7 +1,7 @@
 #include <NJR/Interfaces/Utility.h>
 #include <FrameWork/Interfaces/IactModel.h>
 
-namespace VEDO
+namespace vedo
 {
 
 IactModel::IactModel(const std::string& mg, const std::string& sg)
@@ -97,9 +97,9 @@ const IactModel& IactModel::operator = (const IactModel& iactml)
 
 std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 {
-	NJR::WriteString(sMasterDOGroup, idof);
-	NJR::WriteString(sSlaveDOGroup,  idof);
-	NJR::WriteString(sEquationType,  idof);
+	njr::WriteString(sMasterDOGroup, idof);
+	njr::WriteString(sSlaveDOGroup,  idof);
+	njr::WriteString(sEquationType,  idof);
 
 	unsigned int ims = (unsigned int) svIactMechanisms.size();
 	idof.write((const char*) &ims, sizeof(int));
@@ -107,7 +107,7 @@ std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 	for (unsigned int i=0; i<ims; i++)
 	{
 		im = svIactMechanisms[i];
-		NJR::WriteString(im.Name, idof);
+		njr::WriteString(im.Name, idof);
 		idof.write((const char*) &(im.Value), sizeof(double));
 	}
 	return idof;
@@ -115,16 +115,16 @@ std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 
 std::ifstream& IactModel::operator << (std::ifstream& idof)
 {
-	NJR::ReadString(sMasterDOGroup, idof);
-	NJR::ReadString(sSlaveDOGroup,  idof);
-	NJR::ReadString(sEquationType,  idof);
+	njr::ReadString(sMasterDOGroup, idof);
+	njr::ReadString(sSlaveDOGroup,  idof);
+	njr::ReadString(sEquationType,  idof);
 
     unsigned int ims;
 	idof.read((char*) &ims, sizeof (int));
 	IactMechanism im;
 	for (unsigned int i=0; i<ims; i++)
 	{
-		NJR::ReadString(im.Name, idof);
+		njr::ReadString(im.Name, idof);
 		idof.read((char*) &(im.Value), sizeof(double));
 		svIactMechanisms.push_back(im);
 	}
@@ -134,9 +134,9 @@ std::ifstream& IactModel::operator << (std::ifstream& idof)
 
 IactModel::IactModel(std::ifstream& idof, unsigned int _version)
 {
-	NJR::ReadString(sMasterDOGroup, idof);
-	NJR::ReadString(sSlaveDOGroup,  idof);
-	NJR::ReadString(sEquationType,  idof);
+	njr::ReadString(sMasterDOGroup, idof);
+	njr::ReadString(sSlaveDOGroup,  idof);
+	njr::ReadString(sEquationType,  idof);
 
 	IactMechanism im;
     IactMechanism2006 im2006;
@@ -159,11 +159,11 @@ IactModel::IactModel(std::ifstream& idof, unsigned int _version)
             im.Value = im2006.friction;
        		svIactMechanisms.push_back(im);
             // Start to read the extend information
-            NJR::ReadString(im.Name, idof);
+            njr::ReadString(im.Name, idof);
         	idof.read((char*) &imExtendSize, sizeof (int));
         	for (int i=0; i<imExtendSize; i++)
 	        {
-                NJR::ReadString(im.Name, idof);
+                njr::ReadString(im.Name, idof);
                 idof.read((char*) &(im.Value), sizeof(double));
            		svIactMechanisms.push_back(im);
             }
@@ -194,12 +194,12 @@ IactModel::IactModel(std::ifstream& idof, unsigned int _version)
             im.Name  = "KineticFriction";
             im.Value = im2007.KineticFriction;
        		svIactMechanisms.push_back(im);
-            NJR::ReadString(im.Name, idof);
+            njr::ReadString(im.Name, idof);
             // Start to read the extend information
         	idof.read((char*) &imExtendSize, sizeof (int));
         	for (int i=0; i<imExtendSize; i++)
 	        {
-                NJR::ReadString(im.Name, idof);
+                njr::ReadString(im.Name, idof);
                 idof.read((char*) &(im.Value), sizeof(double));
            		svIactMechanisms.push_back(im);
             }
@@ -209,4 +209,4 @@ IactModel::IactModel(std::ifstream& idof, unsigned int _version)
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo

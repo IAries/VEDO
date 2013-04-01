@@ -6,7 +6,7 @@
 #include <FrameWork/Interfaces/DiscreteObject.h>
 #include <FrameWork/Interfaces/ImpactSolver.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class Interaction
@@ -100,6 +100,6 @@ private:
 	Interaction();
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _INTERACTION_H

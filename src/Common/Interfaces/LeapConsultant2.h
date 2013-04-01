@@ -1,5 +1,5 @@
-#ifndef _LEAP_CONSULTANT_H
-#define _LEAP_CONSULTANT_H
+#ifndef _LEAP_CONSULTANT2_H
+#define _LEAP_CONSULTANT2_H
 
 #include <FrameWork/Interfaces/Consultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
@@ -12,22 +12,19 @@
 #include <utility>
 #include <vector>
 
-namespace vedo
-{
-
-class LeapConsultant: public Consultant
+class LeapConsultant2 : public Consultant
 {
 
 public:
 
-	LeapConsultant
+	LeapConsultant2
 		(DOWorld* DOWorld,
 		IactRecordTab* pIactRecordTab,
 		char filename[],
 		unsigned long ulwrite ,
 		unsigned long ulupdate        );
 
-	~LeapConsultant()
+	~LeapConsultant2()
 	{
 	};
 
@@ -71,8 +68,8 @@ private:
 };
 
 template<class TrirComp>
-//void LeapConsultant::subReset(TrirComp Comp)
-void LeapConsultant::subReset
+//void LeapConsultant2::subReset(TrirComp Comp)
+void LeapConsultant2::subReset
 	(TrirComp Comp, double SphereXMin, double SphereXMax,
 					double SphereYMin, double SphereYMax,
 					double SphereZMin, double SphereZMax,
@@ -83,9 +80,9 @@ void LeapConsultant::subReset
 
 	const SystemParameter* csp = Consultant::pDOWorld->GetSystemParameter();
 
-	unsigned long numberDO           = csp->GetDONumber();
-	njr::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
-	double        dt                 = culUpIact * csp->GetTimeInterval();
+	unsigned long numberDO     = csp->GetDONumber();
+	NJRvector3d   vFieldForce  = csp->GetFieldForce();
+	double        dt           = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
 /*
@@ -129,27 +126,49 @@ void LeapConsultant::subReset
 		Consultant::vcDO.push_back(i);
 		cpdos  = Consultant::pDOWorld->GetDOStatus(i);
 		cpdoml = Consultant::pDOWorld->GetDOModel(cpdos->GetDOName());
-		safeD
-			= vedo::dSafetyFactor
-            * (   2.0 * cpdoml->GetRange()
-                + dt  * (cpdos->GetVelocity()).length()
-                + 0.5 * dt * dt * vFieldAcceleration.length() );
+/******************************************************************************
+ * Aries' Comment (2006/03/31)
+ *
+ *    The safety distance contains the influence of the radius, velocity, and
+ * acceleration. However, the safety vector of sphere should be 1.1 ?
+ ******************************************************************************/
+		// «H¼ý
+		switch(cpdoml->GetShapeType())
+		{
+			case QuasiPlate:
+				safeD
+					= 1.1 * (0.5 * cpdoml->GetShapeAttributes().quasiplate.height
+						     + (cpdos->GetVelocity()).length() * dt              )
+					+ 0.5 * dt * dt * vFieldForce.length();
+				break;
+			case QuasiCylinder:
+				safeD
+					= 1.1 * (0.5 * cpdoml->GetShapeAttributes().quasicylinder.radius
+						     + (cpdos->GetVelocity()).length() * dt                 )
+					+ 0.5 * dt * dt * vFieldForce.length();
+				break;
+			default:
+				safeD
+					= 1.1 * (cpdoml->GetRange() + (cpdos->GetVelocity()).length() * dt)
+					+ 0.5 * dt * dt * vFieldForce.length();
+		}
 /*
-        xmin = std::min(xmin, cpdos->GetPosition().x());
-        xmax = std::max(xmax, cpdos->GetPosition().x());
-		ymin = std::min(ymin, cpdos->GetPosition().y());
-		ymax = std::max(ymax, cpdos->GetPosition().y());
-		zmin = std::min(zmin, cpdos->GetPosition().z());
-		zmax = std::max(zmax, cpdos->GetPosition().z());
-		vmax = std::max(vmax, cpdos->GetVelocity().length());
-		rmax = cpdoml->GetShapeAttributes().sphere.radius;
+				xmin = std::min(xmin, cpdos->GetPosition().x());
+				xmax = std::max(xmax, cpdos->GetPosition().x());
+				ymin = std::min(ymin, cpdos->GetPosition().y());
+				ymax = std::max(ymax, cpdos->GetPosition().y());
+				zmin = std::min(zmin, cpdos->GetPosition().z());
+				zmax = std::max(zmax, cpdos->GetPosition().z());
+				vmax = std::max(vmax, cpdos->GetVelocity().length());
+				rmax = cpdoml->GetShapeAttributes().sphere.radius;
 */
 		vDOMap.push_back(DOMap(i, cpdos, cpdoml, safeD));
 	}
 
+	// The maximal safe distance, Safety factor = 1.1 (1.1*2.0=2.2)
 	double ZoneRange
-        = vedo::dSafetyFactor
-        * (2.0 * SphereRMax + dt * SphereVMax + 0.5 * dt * dt * vFieldAcceleration.length());
+		= SphereVMax * dt
+		+ 2.2 * SphereRMax + 0.5 * dt * dt * vFieldForce.length();
 
 	// Determine how many "safety region" per direction
 	int ncelx = std::ceil((SphereXMax - SphereXMin) / ZoneRange);
@@ -178,12 +197,17 @@ void LeapConsultant::subReset
 	//std::map<Trir, std::vector<DOMap>* > locMap;
 	std::vector<DOMap> GlobalElement;
 
-	njr::Vector3d pos;
+	NJRvector3d pos;
 	for (unsigned long i=0; i<numberDO; ++i)
 	{
 		if (vDOMap[i].cpdoml()->GetScope() == "local")
 		{
 			pos = vDOMap[i].cpdos()->GetPosition();
+/******************************************************************************
+ * Aries' Comment (2006/03/31)
+ *
+ *    What's the class of "Trir" ?
+ ******************************************************************************/
 			Trir zone
 				(static_cast<int>((pos.x() - SphereXMin) / ZoneRange),
 				 static_cast<int>((pos.y() - SphereYMin) / ZoneRange),
@@ -191,7 +215,7 @@ void LeapConsultant::subReset
 
 			if (locMap.find(zone) == locMap.end())
 			{
-				locMap.insert(std::make_pair(zone, new std::vector<DOMap>()));
+				locMap.insert(make_pair(zone, new std::vector<DOMap>()));
 			}
 			locMap[zone]->push_back(vDOMap[i]);
 		}
@@ -524,9 +548,7 @@ void LeapConsultant::subReset
 	}
 
 /*
-	#ifdef _VEDO_DEBUG
-	//	std::cout << "Size of total IactTab = " << IactPairTab.size() << std::endl;
-	#endif   // _VEDO_DEBUG
+//	std::cerr << "Size of total IactTab = " << IactPairTab.size() << std::endl;
 
 	std::time(&starttime);
 
@@ -537,21 +559,16 @@ void LeapConsultant::subReset
 
 	ConstructDOandOverLapTab();
 
-	#ifdef _VEDO_DEBUG
-		std::cout
-			<< "Size of Cutting Zone (ncelx, necly, ncelz) = ("
-			<< ncelx << ", " << ncely << ", " << ncelz << ")" << std::endl
-			<< "Size of Interaction = "
-			<< (unsigned int)LeapConsultant::IactPairTab.size() << std::endl
-			<< "Size of Overlap Table = (" << overlapTab.size() << ")" << std::endl;
-	#endif   // _VEDO_DEBUG
+	std::cerr
+		<< "Size of Cutting Zone (ncelx, necly, ncelz) = ("
+		<< ncelx << ", " << ncely << ", " << ncelz << ")" << std::endl
+		<< "Size of Interaction = "
+		<< (unsigned int)LeapConsultant2::IactPairTab.size() << std::endl
+		<< "Size of Overlap Table = (" << overlapTab.size() << ")" << std::endl;
 
 	delete[] pAllIactPair;
 	delete[] pLocalIactPair;
 */
-};
+}
 
-};   // namespace vedo
-
-
-#endif // _LEAP_CONSULTANT_H
+#endif // _LEAP_CONSULTANT2_H

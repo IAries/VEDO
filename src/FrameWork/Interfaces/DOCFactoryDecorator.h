@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/DOFactory.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class DOCFactoryDecorator : public DOFactory
@@ -25,6 +25,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DISCRETE_OBJECT_FACTORY_DECORATOR_H

@@ -1,6 +1,6 @@
 #include <Common/Interfaces/CDSphere2SphereAT.h>
 
-namespace VEDO
+namespace vedo
 {
 
 void CDSphere_SphereAT::Detect
@@ -9,7 +9,7 @@ void CDSphere_SphereAT::Detect
 	CDSphere_Sphere::CalDistance(pdoSlave, pdoMaster);
 
 	// Center of Slave
-	NJR::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	njr::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Radius of Slave
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
@@ -18,4 +18,4 @@ void CDSphere_SphereAT::Detect
 		= vCa + (cInfo.vImpactDirection * (dRa - cInfo.dImpactDepth/2.0));
 };
 
-};   // namespace VEDO
+};   // namespace vedo

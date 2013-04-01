@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 class DiscreteObject
@@ -32,7 +32,7 @@ public:
 		return dSudoMass;
 	};
 
-	inline NJR::Vector3d GetMassMomentInertia() const
+	inline njr::Vector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	}
@@ -57,42 +57,42 @@ public:
 		return pDOStatus;
 	};
 
-	inline const NJR::Vector3d& GetImpact() const
+	inline const njr::Vector3d& GetImpact() const
 	{
 		return vImpact;
 	};
 
-	inline const NJR::Vector3d& GetAngularImpact() const
+	inline const njr::Vector3d& GetAngularImpact() const
 	{
 		return vAngularImpact;
 	};
 
-	inline void SetVelocity(const NJR::Vector3d& vV)
+	inline void SetVelocity(const njr::Vector3d& vV)
 	{
 		pDOStatus->SetVelocity(vV);
 	};
 
-	inline void SetAngularVelocity(const NJR::Vector3d& vAV)
+	inline void SetAngularVelocity(const njr::Vector3d& vAV)
 	{
 		pDOStatus->SetAngularVelocity(vAV);
 	};
 
-	void ModifyVelocity(const NJR::Vector3d& vdv);
+	void ModifyVelocity(const njr::Vector3d& vdv);
 
-	void ModifyPosition(const NJR::Vector3d& vdp);
+	void ModifyPosition(const njr::Vector3d& vdp);
 
 	void ClearImpact();
 
 	virtual void AddImpact
-		(const NJR::Vector3d& vImpact, const NJR::Vector3d& vAngularImpact = NJRDXF::ZERO);
+		(const njr::Vector3d& vImpact, const njr::Vector3d& vAngularImpact = njrdxf::ZERO);
 
 /*
-	inline NJR::Vector3d GetFieldImpact() const
+	inline njr::Vector3d GetFieldImpact() const
 	{
 		return pDOStatus->GetFieldImpact();
 	};
 
-	inline void SetFieldImpact(const NJR::Vector3d& vi)
+	inline void SetFieldImpact(const njr::Vector3d& vi)
 	{
 		pDOStatus->SetFieldImpact(vi);
 	};
@@ -121,9 +121,9 @@ protected:
 
 	DOStatus* pDOStatus;
 
-	NJR::Vector3d	vImpact;
+	njr::Vector3d	vImpact;
 
-	NJR::Vector3d	vAngularImpact;
+	njr::Vector3d	vAngularImpact;
 
 	double dVolume;
 
@@ -131,7 +131,7 @@ protected:
 
 	double dSudoMass;
 
-	NJR::Vector3d	vMassMomentInertia;
+	njr::Vector3d	vMassMomentInertia;
 
 	DiscreteObject(const DOStatus* cpdos, const DOModel* cpdoml);
 
@@ -143,6 +143,6 @@ private:
 	DiscreteObject(const DiscreteObject&);
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DISCRETE_OBJECT_H

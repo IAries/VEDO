@@ -1,7 +1,7 @@
 #include <Common/Interfaces/GSSphere.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 GSSphere::GSSphere(const std::string& nm, const double& r): _dRadius(r)
@@ -12,11 +12,11 @@ GSSphere::GSSphere(const std::string& nm, const double& r): _dRadius(r)
 };
 
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::GSSphere& gs)
+std::ostream& operator << (std::ostream& os, vedo::GSSphere& gs)
 {
 	std::cout << "Radius: " << gs.GetRadius() << '\n';
 	return os;

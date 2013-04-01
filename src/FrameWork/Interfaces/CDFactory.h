@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 class CDFactory
@@ -116,6 +116,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CONTACT_DETECTOR_FACTORY_H

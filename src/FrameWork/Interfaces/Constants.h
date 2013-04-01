@@ -5,7 +5,7 @@
 #include <math.h>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 static const std::string sPublish            = "2013-03-28";
@@ -16,6 +16,6 @@ static const unsigned    uImpactBufferSize   = 65535;   // Consultant
 
 static const unsigned    uNumUDDDOStatus     = 0;    // Number of user-defined data in DOStatus
 static const unsigned    uNumUDDImpactStatus = 18;   // Number of user-defined data in ImpactStatus
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif _VEDO_CONSTANTS_H

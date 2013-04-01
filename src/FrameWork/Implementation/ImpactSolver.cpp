@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 
-namespace VEDO
+namespace vedo
 {
 
 ImpactSolver::ImpactSolver(const IactModel* cpIactml) : ImStatus()
@@ -15,4 +15,4 @@ ImpactSolver::~ImpactSolver()
 {
 };
 
-};   // namespace VEDO
+};   // namespace vedo

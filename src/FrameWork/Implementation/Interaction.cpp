@@ -1,6 +1,6 @@
 #include <FrameWork/Interfaces/Interaction.h>
 
-namespace VEDO
+namespace vedo
 {
 
 Interaction::Interaction
@@ -48,4 +48,4 @@ void Interaction::DetectContact()
 	pcd->Detect(pdoSlave, pdoMaster);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

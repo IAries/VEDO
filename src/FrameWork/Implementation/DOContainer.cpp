@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <functional>
 
-namespace VEDO
+namespace vedo
 {
 
 DOContainer::DOContainer(): lcDO(0), lcDOS(0)
@@ -16,7 +16,7 @@ DOContainer::~DOContainer()
 	DOContainer::Clear();
 };
 
-void DOContainer::AddFieldImpact(const NJR::Vector3d& vFieldImpact)
+void DOContainer::AddFieldImpact(const njr::Vector3d& vFieldImpact)
 {
 	std::vector<DiscreteObject *>::iterator ido;
 	for(ido=lcDO.begin(); ido!=lcDO.end(); ++ido)
@@ -27,19 +27,19 @@ void DOContainer::AddFieldImpact(const NJR::Vector3d& vFieldImpact)
 
 void DOContainer::AddImpact
 	(const unsigned long& ul,
-	 const NJR::Vector3d& vImpact,
-	 const NJR::Vector3d& vAngularImpact)
+	 const njr::Vector3d& vImpact,
+	 const njr::Vector3d& vAngularImpact)
 {
 	lcDO[ul]->AddImpact(vImpact, vAngularImpact);
 };
 
 /*
 void DOContainer::AddExternalImpact
-	(const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >&
+	(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >&
 	 vvExternalImpact                                        )
 {
 	std::vector<DiscreteObject*>::iterator ido;
-	std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >::iterator iExternalImpact;
+	std::vector<std::pair<njr::Vector3d, njr::Vector3d> >::iterator iExternalImpact;
 	unsigned long ul = 0;
 	for(ido=lcDO.begin();
 		ido!=lcDO.end(), ul<vvExternalImpact.size();
@@ -70,7 +70,7 @@ void DOContainer::EnforcePeriodicBoundaryConditions(const Boundary& pbc)
 {
 	typedef std::mem_fun1_t<void, DiscreteObject, const Boundary&> Func_Type;
 	Func_Type func_obj(&DiscreteObject::EnforcePeriodicBoundaryConditions);
-	NJR::binder2nd_refArg<Func_Type> binded_func(func_obj, pbc);
+	njr::binder2nd_refArg<Func_Type> binded_func(func_obj, pbc);
 	for_each(lcDO.begin(), lcDO.end(), binded_func);
 };
 
@@ -79,7 +79,7 @@ void DOContainer::Clear()
 	for_each
 		(lcDO.begin(),
 		lcDO.end(),
-		NJR::Delete_ptr() );
+		njr::Delete_ptr() );
 	lcDO.clear();
 	lcDOS.clear();
 };
@@ -180,4 +180,4 @@ void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
 };
 */
 
-};   // namespace VEDO
+};   // namespace vedo

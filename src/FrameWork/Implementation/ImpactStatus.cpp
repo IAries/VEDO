@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace VEDO
+namespace vedo
 {
 
 ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearForce()
@@ -13,7 +13,7 @@ ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearFor
 
 ImpactStatus::ImpactStatus
     (const bool& Contact, const bool& Bond, const double& Kn,
-     const NJR::Vector3d& ShearForce, const double* UDVp       ):
+     const njr::Vector3d& ShearForce, const double* UDVp       ):
     bContact(Contact), bBond(Bond),dKn(Kn), vShearForce(ShearForce)
 {
 	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
@@ -139,4 +139,4 @@ void ImpactStatus::Clean()
 		dUDV[u] = 0.0;
 };
 
-};   // namespace VEDO
+};   // namespace vedo

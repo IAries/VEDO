@@ -4,7 +4,7 @@
 #include <FrameWork/Interfaces/Consultant.h>
 #include <utility>
 
-namespace VEDO
+namespace vedo
 {
 
 class NBSConsultant : public Consultant
@@ -127,6 +127,6 @@ public:
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _NBS_CONSULTANT_H

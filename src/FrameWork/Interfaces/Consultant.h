@@ -19,7 +19,7 @@
 #include <ctime>
 #include <vector>
 
-namespace VEDO
+namespace vedo
 {
 
 // The EnsureLength function
@@ -219,6 +219,6 @@ protected:
 	virtual void CollectUserDefinedData(IactContainer&);
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CONSULTANT_H

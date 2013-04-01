@@ -6,7 +6,7 @@
 #include <fstream>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 // Data Type Class
@@ -19,11 +19,11 @@ public:
 
 	DOStatus
 		(const std::string& DOName,
-		const NJR::Vector3d& vPosition,
-		const NJR::Vector3d& vVelocity,
-		const NJR::Vector3d& vOrientationX,
-		const NJR::Vector3d& vOrientationZ,
-		const NJR::Vector3d& vAngularVelocity);
+		const njr::Vector3d& vPosition,
+		const njr::Vector3d& vVelocity,
+		const njr::Vector3d& vOrientationX,
+		const njr::Vector3d& vOrientationZ,
+		const njr::Vector3d& vAngularVelocity);
 
 	// Function for algorithm std::find_if
 	explicit DOStatus(const std::string& DOname);
@@ -38,27 +38,27 @@ public:
 
 	bool operator () (const DOStatus* p) const;
 
-	inline NJR::Vector3d GetPosition() const
+	inline njr::Vector3d GetPosition() const
 	{
 		return vPosition;
 	};
 
-	inline NJR::Vector3d GetVelocity() const
+	inline njr::Vector3d GetVelocity() const
 	{
 		return vVelocity;
 	};
 
-	inline NJR::Vector3d GetOrientationX() const
+	inline njr::Vector3d GetOrientationX() const
 	{
 		return vOrientationX;
 	};
 
-	inline NJR::Vector3d GetOrientationZ() const
+	inline njr::Vector3d GetOrientationZ() const
 	{
 		return vOrientationZ;
 	};
 
-	inline NJR::Vector3d GetAngularVelocity() const
+	inline njr::Vector3d GetAngularVelocity() const
 	{
 		return vAngularVelocity;
 	};
@@ -68,20 +68,20 @@ public:
 		return sDOName;
 	};
 
-	inline void SetPosition(const NJR::Vector3d& position)
+	inline void SetPosition(const njr::Vector3d& position)
 	{
 		vPosition = position;
 	};
 
-	inline void SetVelocity(const NJR::Vector3d& velocity)
+	inline void SetVelocity(const njr::Vector3d& velocity)
 	{
 		vVelocity = velocity;
 	};
 
 	void SetOrientation
-		(const NJR::Vector3d& OrientationX, const NJR::Vector3d& OrientationZ);
+		(const njr::Vector3d& OrientationX, const njr::Vector3d& OrientationZ);
 
-	inline void SetAngularVelocity(const NJR::Vector3d& angularvelocity)
+	inline void SetAngularVelocity(const njr::Vector3d& angularvelocity)
 	{
 		vAngularVelocity = angularvelocity;
 	};
@@ -109,12 +109,12 @@ public:
 */
 
 /*
-	inline NJR::Vector3d GetFieldImpact() const
+	inline njr::Vector3d GetFieldImpact() const
 	{
 		return vFieldImpact;
 	};
 
-	inline void SetFieldImpact(const NJR::Vector3d vi)
+	inline void SetFieldImpact(const njr::Vector3d vi)
 	{
 		vFieldImpact = vi;
 	};
@@ -158,16 +158,16 @@ public:
 
 private:
 
-	NJR::Vector3d vPosition;
-	NJR::Vector3d vVelocity;
-	NJR::Vector3d vOrientationX;
-	NJR::Vector3d vOrientationZ;
-	NJR::Vector3d vAngularVelocity;
+	njr::Vector3d vPosition;
+	njr::Vector3d vVelocity;
+	njr::Vector3d vOrientationX;
+	njr::Vector3d vOrientationZ;
+	njr::Vector3d vAngularVelocity;
 	std::string	  sDOName;
 	double        dGranularTemperatureV;    // Granular Temperature (Velocity)
 	double        dGranularTemperatureAV;   // Granular Temperature (Angular Velocity)
 	bool          beMonitored;              // Should be monotored or not;
-	//NJR::Vector3d vFieldImpact;           // Field Impact
+	//njr::Vector3d vFieldImpact;           // Field Impact
 //	double        dUDV[uNumUDDDOStatus];    // User-defined value
                                             // 0 ~ uNumUDDDOStatus: Accumulative user-defined value
                                             // uNumUDDDOStatus ~ 2*uNumUDDDOStatus-1: Unsynchronized part of Accumulative user-defined value
@@ -175,6 +175,6 @@ private:
                                             // 3*uNumUDDDOStatus ~ 4*uNumUDDDOStatus-1: User-defined value
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DOSTATUS_H

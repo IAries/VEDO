@@ -3,7 +3,7 @@
 
 #include <Common/Interfaces/CDSphere2QuasiCylinder.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class CDSphere_QuasiCylinderAT : public CDSphere_QuasiCylinder
@@ -16,6 +16,6 @@ public:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CDSPHERE_2_QUASICYLINDERAT_H

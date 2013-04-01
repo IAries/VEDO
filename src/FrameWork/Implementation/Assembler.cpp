@@ -1,6 +1,6 @@
 #include <FrameWork/Interfaces/Assembler.h>
 
-namespace VEDO
+namespace vedo
 {
 
 Assembler::Assembler()
@@ -92,4 +92,4 @@ Interaction* Assembler::CreateInteraction
 	return new Interaction (pDOslave, pDOmaster, pCD, pIS);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

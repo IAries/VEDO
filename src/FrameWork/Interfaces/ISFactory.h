@@ -7,7 +7,7 @@
 #include <list>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 class ISFactory
@@ -58,6 +58,6 @@ private:
 	IScf& operator == (IScf&);
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif	// _IMPACT_SOLVER_FACTORY_H

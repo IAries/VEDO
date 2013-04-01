@@ -1,7 +1,7 @@
 #include <Common/Interfaces/GSRectangle.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 GSRectangle::GSRectangle
@@ -13,9 +13,9 @@ GSRectangle::GSRectangle
 	_Status = new DOStatus("No Name");
 };
 
-bool GSRectangle::Inside(const NJR::Vector3d& p)
+bool GSRectangle::Inside(const njr::Vector3d& p)
 {
-	NJR::Vector3d localP(p);
+	njr::Vector3d localP(p);
 	localP = localP - _Status->GetPosition();
 	double localX = localP % (_Status->GetOrientationX());
 	double localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());
@@ -32,11 +32,11 @@ bool GSRectangle::Inside(const NJR::Vector3d& p)
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::GSRectangle& gs)
+std::ostream& operator << (std::ostream& os, vedo::GSRectangle& gs)
 {
 	std::cout << "Width : " << gs.GetWidth()  << '\n';
 	std::cout << "Length: " << gs.GetLength() << '\n';

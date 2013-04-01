@@ -1,5 +1,5 @@
 #include <NJR/Interfaces/Utility.h>
-#include <Common/Interfaces/LeapConsultant.h>
+#include <Common/Interfaces/LeapConsultant2.h>
 #include <Common/Interfaces/NBSConsultant.h>
 #include <algorithm>
 #include <cmath>
@@ -8,10 +8,146 @@
 #include <iterator>
 #include <map>
 
-namespace vedo
-{
+using namespace std;
 
-LeapConsultant::LeapConsultant
+class X_Comp
+{
+public:
+
+	X_Comp(const vector<DOMap>& vDOMap) : map(vDOMap)
+	{
+	}
+
+	bool operator() (const IactPair& p1,const IactPair& p2)
+	{
+		return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
+	}
+
+private:
+
+	vector<DOMap> map;
+	double CalcIactCoordinate(const IactPair& p)
+	{
+		if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
+		{
+			return map[p.second].cpdos()->GetPosition().x();
+		}
+		else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
+		{
+			return map[p.first].cpdos()->GetPosition().x();
+		}
+		else
+		{
+			return
+				min
+					(map[p.second].cpdos()->GetPosition().x(),
+					map[p.first].cpdos()->GetPosition().x()   );
+		}
+	}
+};
+
+
+
+class Y_Comp
+{
+public:
+
+	Y_Comp(const vector<DOMap>& vDOMap) : map(vDOMap)
+	{
+	}
+
+	bool operator() (const IactPair& p1, const IactPair& p2)
+	{
+		return (CalcIactCoordinate(p1) <= CalcIactCoordinate(p2));
+	}
+
+private:
+
+	vector<DOMap> map;
+	double CalcIactCoordinate(const IactPair& p)
+	{
+		if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
+		{
+			return map[p.second].cpdos()->GetPosition().y();
+		}
+		else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
+		{
+			return map[p.first].cpdos()->GetPosition().y();
+		}
+		else
+		{
+			return
+				min
+					(map[p.second].cpdos()->GetPosition().y(),
+					map[p.first].cpdos()->GetPosition().y()   );
+		}
+	}
+};
+
+
+
+class Z_Comp
+{
+public:
+
+	Z_Comp(const vector<DOMap>& vDOMap) : map(vDOMap)
+	{
+	}
+
+	bool operator() (const IactPair& p1, const IactPair& p2)
+	{
+		return (CalcIactCoordinate(p1)<=CalcIactCoordinate(p2));
+	}
+
+private:
+
+	vector<DOMap> map;
+
+	double CalcIactCoordinate(const IactPair& p)
+	{
+		if (DOMap::ISConstrained(map[p.first]) || DOMap::ISFixed(map[p.first]))
+		{
+			return map[p.second].cpdos()->GetPosition().z();
+		}
+		else if (DOMap::ISConstrained(map[p.second]) || DOMap::ISFixed(map[p.second]))
+		{
+			return map[p.first].cpdos()->GetPosition().z();
+		}
+		else
+		{
+			return
+				min
+					(map[p.second].cpdos()->GetPosition().z(),
+					map[p.first].cpdos()->GetPosition().z()   );
+		}
+	}
+};
+
+// The EnsureLength function
+static void EnsureLength
+	(unsigned int base,
+	unsigned long target,
+	unsigned long& length,
+	double*& array)
+{
+	if ((base*target) > length)
+	{
+		while ((base*target) > length)
+        {
+        	length *= 2;
+        }
+		delete[] array;
+		array = new double[length];
+		// Monitor the status of "Impact Buffer"
+		cerr
+			<< "Resizing Impact Buffer = "
+			<< length
+			<< " (LeapConsulant::EnsureLength)"
+			<< endl;
+	}
+}
+
+LeapConsultant2::LeapConsultant2
 	(DOWorld* DOWorld,
 	IactRecordTab* pIactRecordTab,
 	char filename[],
@@ -25,22 +161,22 @@ LeapConsultant::LeapConsultant
 	Reset();
 }
 
-unsigned long LeapConsultant::GetIactNum() const
+unsigned long LeapConsultant2::GetIactNum() const
 {
 	return (unsigned long)IactPairTab.size();
 };
 
-unsigned long LeapConsultant::GetIactMaster(unsigned long i) const
+unsigned long LeapConsultant2::GetIactMaster(unsigned long i) const
 {
 	return IactPairTab[i].first;
 };
 
-unsigned long LeapConsultant::GetIactSlave(unsigned long i) const
+unsigned long LeapConsultant2::GetIactSlave(unsigned long i) const
 {
 	return IactPairTab[i].second;
 };
 
-void LeapConsultant::SyncWorld(DOContainer& vDO)
+void LeapConsultant2::SyncWorld(DOContainer& vDO)
 {
 	const DOStatus* SourceDOStatus = 0;
 	      DOStatus* TargetDOStatus = 0;
@@ -60,7 +196,7 @@ void LeapConsultant::SyncWorld(DOContainer& vDO)
 	}
 }
 
-bool LeapConsultant::NextStep(DOContainer& vDO, IactContainer& cIact)
+bool LeapConsultant2::NextStep(DOContainer& vDO, IactContainer& cIact)
 {
 	bool rebuild = false;
 	ulRoundCount++;
@@ -73,7 +209,7 @@ bool LeapConsultant::NextStep(DOContainer& vDO, IactContainer& cIact)
 		RebuildIactRecordTab(cIact);
 		rebuild = true;
 		CleanUp(vDO, cIact);
-		HasMobileElement = LeapConsultant::Reset();
+		HasMobileElement = LeapConsultant2::Reset();
 	}
 
 	if (ISRecord())
@@ -100,29 +236,30 @@ bool LeapConsultant::NextStep(DOContainer& vDO, IactContainer& cIact)
 		}
 
 //		pDOWorld->WriteXML("terminate.xml");
-		pDOWorld->WriteIDO("terminate.ido", pIRTbl);
+		pDOWorld->WriteIDO("terminate.ido");
+		pIRTbl  ->WriteIRT("terminate.irt");
 	}
 
 	return HasMobileElement;
 }
 
-bool LeapConsultant::ISReset()
+bool LeapConsultant2::ISReset()
 {
 	return ((ulRoundCount % culUpIact) == 0);
 };
 
-bool LeapConsultant::Reset()
+bool LeapConsultant2::Reset()
 {
 	vcDO.clear();
 	IactPairTab.clear();
 
     unsigned long numberDO = pDOWorld->GetSystemParameter()->GetDONumber();
 
-	std::vector<double> vecxloc;
-	std::vector<double> vecyloc;
-	std::vector<double> veczloc;
-	std::vector<double> vecvloc;
-	std::vector<double> vecrloc;
+	vector<double> vecxloc;
+	vector<double> vecyloc;
+	vector<double> veczloc;
+	vector<double> vecvloc;
+	vector<double> vecrloc;
 
 	const DOStatus* cpdos  = 0;
 	const DOModel*  cpdoml = 0;
@@ -242,8 +379,8 @@ bool LeapConsultant::Reset()
 	return true;
 };
 
-void LeapConsultant::BuildIactTab
-	(std::vector<DOMap>& v1, std::vector<DOMap>& v2)
+void LeapConsultant2::BuildIactTab
+	(vector<DOMap>& v1, vector<DOMap>& v2)
 {
 	const Boundary* pbc
 		= &(pDOWorld->GetSystemParameter()->GetPeriodicBoundaryConditions());
@@ -271,17 +408,17 @@ void LeapConsultant::BuildIactTab
 
 			if (v1[i].id() < v2[j].id())
         	{
-				IactPairTab.push_back(std::make_pair(v1[i].id(), v2[j].id()));
+				IactPairTab.push_back(make_pair(v1[i].id(), v2[j].id()));
 	        }
 			else
     	    {
-				IactPairTab.push_back(std::make_pair(v2[j].id(), v1[i].id()));
+				IactPairTab.push_back(make_pair(v2[j].id(), v1[i].id()));
         	}
 		}
 	}
 }
 
-void LeapConsultant::BuildIactTab(std::vector<DOMap>& v)
+void LeapConsultant2::BuildIactTab(vector<DOMap>& v)
 {
 	//PBC by Liao 2009/5/28
 	const Boundary* pbc
@@ -308,17 +445,17 @@ void LeapConsultant::BuildIactTab(std::vector<DOMap>& v)
 
 			if ( v[i].id() < v[j].id())
             {
-				IactPairTab.push_back(std::make_pair(v[i].id(), v[j].id()));
+				IactPairTab.push_back(make_pair(v[i].id(), v[j].id()));
             }
 			else
             {
-				IactPairTab.push_back(std::make_pair(v[j].id(), v[i].id()));
+				IactPairTab.push_back(make_pair(v[j].id(), v[i].id()));
             }
 		}
     }
 }
 
-void LeapConsultant::RebuildIactRecordTab(IactContainer& cIact)
+void LeapConsultant2::RebuildIactRecordTab(IactContainer& cIact)
 {
 	CollectUserDefinedData(cIact);
 
@@ -335,9 +472,5 @@ void LeapConsultant::RebuildIactRecordTab(IactContainer& cIact)
 					 *pInt->GetImpactStatus());
 	}
 
-	#ifdef _VEDO_DEBUG
-		std::cout << "Size of IactRecordTab = " << pIRTbl->GetTabSize() << std::endl;
-	#endif   // _VEDO_DEBUG
-};
-
-};   // namespace vedo
+	cerr << "Size of IactRecordTab = " << pIRTbl->GetTabSize() << endl;
+}

@@ -4,7 +4,7 @@
 #include <FrameWork/Interfaces/CDFactory.h>
 #include <list>
 
-namespace VEDO
+namespace vedo
 {
 
 class CDCFactoryDecorator : public CDFactory
@@ -29,6 +29,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _CONTACT_DETECTOR_FACTORY_DECORATOR_H

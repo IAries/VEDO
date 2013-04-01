@@ -5,7 +5,7 @@
 #include <Knight/Interfaces/CalcCoordinateNum.h>
 
 double CalcCoordinateNum::computeAvgCoordinateNum
-	(const VEDO::DOWorld* pWorld,
+	(const vedo::DOWorld* pWorld,
 	double xmin,
 	double xmax,
 	double ymin,
@@ -18,16 +18,16 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 	 * (xmin-r, xmax+r, ymin-r, ymax+r, zmin-r, zmax+r), where r denote
 	 * particle radius
 	 **************************************************************************/
-	std::vector<VEDO::DOMap> vDOMap;
-	std::vector<VEDO::DOMap> wholeMap = VEDO::DOMap::GetDOMap(pWorld);
+	std::vector<vedo::DOMap> vDOMap;
+	std::vector<vedo::DOMap> wholeMap = vedo::DOMap::GetDOMap(pWorld);
 
 	double xp, yp, zp, radius;
 
 	for (unsigned int i=0; i<(pWorld->GetSystemParameter()->GetDONumber()); ++i)
 	{
-		const VEDO::DOStatus* pdos = pWorld->GetDOStatus(i);
-		const VEDO::DOModel* pmodel = pWorld->GetDOModel(pdos->GetDOName());
-		if (pmodel->GetShapeType() != VEDO::Sphere)
+		const vedo::DOStatus* pdos = pWorld->GetDOStatus(i);
+		const vedo::DOModel* pmodel = pWorld->GetDOModel(pdos->GetDOName());
+		if (pmodel->GetShapeType() != vedo::Sphere)
 		{
 			continue;
 		}
@@ -43,7 +43,7 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 			&& (zp > (zmin - radius)) )
 		{
 			vDOMap.push_back
-				(VEDO::DOMap(i, pdos, pmodel, pdos->GetVelocity().length()));
+				(vedo::DOMap(i, pdos, pmodel, pdos->GetVelocity().length()));
 		}
 	}
 
@@ -54,14 +54,14 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 		count=0;
 		for (unsigned int j=0; j<wholeMap.size(); ++j)
 		{
-			VEDO::DOMap m1 = vDOMap[i];
-			VEDO::DOMap m2 = wholeMap[j];
+			vedo::DOMap m1 = vDOMap[i];
+			vedo::DOMap m2 = wholeMap[j];
 
 			if (m1.cpdos() == m2.cpdos())
 			{
 				continue;
 			}
-			if (m2.cpdoml()->GetShapeType() != VEDO::Sphere)
+			if (m2.cpdoml()->GetShapeType() != vedo::Sphere)
 			{
 				continue;
 			}
@@ -78,33 +78,33 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 }
 
 void CalcCoordinateNum::outputCoordinateNumVTK
-	(const VEDO::DOWorld* pWorld, const std::string& filename) const
+	(const vedo::DOWorld* pWorld, const std::string& filename) const
 {
-	std::vector<VEDO::DOMap> wholeMap = VEDO::DOMap::GetDOMap(pWorld);
+	std::vector<vedo::DOMap> wholeMap = vedo::DOMap::GetDOMap(pWorld);
 	std::vector<double> coordNumArr;
 
 	for (unsigned int i=0; i<wholeMap.size(); ++i)
 	{
-		VEDO::DOMap m1 = wholeMap[i];
-		if (m1.cpdoml()->GetShapeType() != VEDO::Sphere)
+		vedo::DOMap m1 = wholeMap[i];
+		if (m1.cpdoml()->GetShapeType() != vedo::Sphere)
 			continue;
 		coordNumArr.push_back(0);
 	}
 
 	for (unsigned int i=0; i<wholeMap.size(); ++i)
 	{
-		VEDO::DOMap m1 = wholeMap[i];
-		if (m1.cpdoml()->GetShapeType() != VEDO::Sphere)
+		vedo::DOMap m1 = wholeMap[i];
+		if (m1.cpdoml()->GetShapeType() != vedo::Sphere)
 			continue;
 
 		for (unsigned int j=i+1; j<wholeMap.size(); ++j)
 		{
-			VEDO::DOMap m2 = wholeMap[j];
+			vedo::DOMap m2 = wholeMap[j];
 
 			if (m1.cpdos() == m2.cpdos())
 				continue;
 
-			if (m2.cpdoml()->GetShapeType() != VEDO::Sphere)
+			if (m2.cpdoml()->GetShapeType() != vedo::Sphere)
 				continue;
 
 			if (((m1.cpdos()->GetPosition() - m2.cpdos()->GetPosition()).length())
@@ -116,7 +116,7 @@ void CalcCoordinateNum::outputCoordinateNumVTK
 			}
 		}
 	}
-	VEDO::DataFieldVTKWriter* coordVTKField = VEDO::DataFieldVTKWriter::Instance();
+	vedo::DataFieldVTKWriter* coordVTKField = vedo::DataFieldVTKWriter::Instance();
 	coordVTKField->clearAll();
 	coordVTKField->addArray("CoordinateNumber", 1, coordNumArr);
 //	pWorld->WriteVTK<DataFieldVTKWriter>(filename.c_str());

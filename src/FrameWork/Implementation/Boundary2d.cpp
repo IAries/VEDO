@@ -1,14 +1,14 @@
 #include <FrameWork/Interfaces/Boundary2d.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 Boundary2d::Boundary2d()
 {
 	sName = "Boundary2d";
-	vLowerPoint = NJRDXF::ZERO;
-	vUpperPoint = NJRDXF::ZERO;
+	vLowerPoint = njrdxf::ZERO;
+	vUpperPoint = njrdxf::ZERO;
 	bSwitch[0] = false;
 	bSwitch[1] = false;
 	Correct();
@@ -17,8 +17,8 @@ Boundary2d::Boundary2d()
 Boundary2d::Boundary2d
 	(std::string sN,
 	 const bool* bS,
-	 const NJR::Vector2d vLP,
-	 const NJR::Vector2d vUP): sName(sN)
+	 const njr::Vector2d vLP,
+	 const njr::Vector2d vUP): sName(sN)
 {
 	bSwitch[0]  = *bS;
 	bSwitch[1]  = *(bS+1);
@@ -29,8 +29,8 @@ Boundary2d::Boundary2d
 
 Boundary2d::Boundary2d
 	(const bool* bS,
-	 const NJR::Vector2d vLP,
-	 const NJR::Vector2d vUP )
+	 const njr::Vector2d vLP,
+	 const njr::Vector2d vUP )
 {
 	sName = "Boundary2d";
 	bSwitch[0] = *bS;
@@ -42,15 +42,15 @@ Boundary2d::Boundary2d
 
 Boundary2d::Boundary2d
 	(std::string sN,
-	 const NJR::Vector2d vLP,
-	 const NJR::Vector2d vUP): sName(sN)
+	 const njr::Vector2d vLP,
+	 const njr::Vector2d vUP): sName(sN)
 {
 	vLowerPoint = vLP;
 	vUpperPoint = vUP;
 	Correct();
 };
 
-Boundary2d::Boundary2d(const NJR::Vector2d vLP, const NJR::Vector2d vUP)
+Boundary2d::Boundary2d(const njr::Vector2d vLP, const njr::Vector2d vUP)
 {
 	sName = "Boundary2d";
 	vLowerPoint = vLP;
@@ -119,26 +119,26 @@ void Boundary2d::Correct()
 	};
 };
 
-void Boundary2d::SetLowerPoint(const NJR::Vector2d* point)
+void Boundary2d::SetLowerPoint(const njr::Vector2d* point)
 {
 	vLowerPoint = *point;
 	Correct();
 };
 
-void Boundary2d::SetUpperPoint(const NJR::Vector2d* point)
+void Boundary2d::SetUpperPoint(const njr::Vector2d* point)
 {
 	vUpperPoint = *point;
 	Correct();
 };
 
-void Boundary2d::SetCenter(const NJR::Vector2d* cNewCenter)
+void Boundary2d::SetCenter(const njr::Vector2d* cNewCenter)
 {
-	NJR::Vector2d vShift = (*cNewCenter) - vCenter;
+	njr::Vector2d vShift = (*cNewCenter) - vCenter;
 	vLowerPoint += vShift;
 	vUpperPoint += vShift;
 };
 
-void Boundary2d::SetRange(const NJR::Vector2d* vNewRange)
+void Boundary2d::SetRange(const njr::Vector2d* vNewRange)
 {
 	double dX = fabs(vNewRange->x());
 	double dY = fabs(vNewRange->y());
@@ -148,7 +148,7 @@ void Boundary2d::SetRange(const NJR::Vector2d* vNewRange)
 	Correct();
 };
 
-bool Boundary2d::InBoundary(const NJR::Vector2d* p) const
+bool Boundary2d::InBoundary(const njr::Vector2d* p) const
 {
 	if(Active())
 	{
@@ -174,7 +174,7 @@ bool Boundary2d::InBoundary(const NJR::Vector2d* p) const
 	return true;
 };
 
-bool Boundary2d::InBoundary(const NJR::Vector2d* p, const double r) const
+bool Boundary2d::InBoundary(const njr::Vector2d* p, const double r) const
 {
 	if(Active())
 	{
@@ -200,7 +200,7 @@ bool Boundary2d::InBoundary(const NJR::Vector2d* p, const double r) const
 	return true;
 };
 
-void Boundary2d::EnforceBoundaryConditions(NJR::Vector2d* vPosition) const
+void Boundary2d::EnforceBoundaryConditions(njr::Vector2d* vPosition) const
 {
 	double dPx = vPosition->x();
 	double dPy = vPosition->y();
@@ -263,7 +263,7 @@ void Boundary2d::EnforceBoundaryConditions(NJR::Vector2d* vPosition) const
 	vPosition->Set(dPx, dPy);
 };
 
-void Boundary2d::DifferenceBoundaryConditions(NJR::Vector2d* vDisplacement) const
+void Boundary2d::DifferenceBoundaryConditions(njr::Vector2d* vDisplacement) const
 {
 	double dPx = vDisplacement->x();
 	double dPy = vDisplacement->y();
@@ -329,11 +329,11 @@ void Boundary2d::print() const
 	};
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream& os, VEDO::Boundary2d& b)
+std::ostream& operator << (std::ostream& os, vedo::Boundary2d& b)
 {
 	if(!(b.Active()))
 	{

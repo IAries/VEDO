@@ -99,12 +99,12 @@ public:
 
     //! This function is swigged in BravaisLatticeWithBasis.i
     void SetAtomsCoordinatesInCell
-    	(std::vector<NJR::Vector3d> atomsCoord,
+    	(std::vector<njr::Vector3d> atomsCoord,
     	 std::vector<std::string> *atomTypes=0);
 
-    virtual void AddAtomInCell(NJR::Vector3d atomCoord, std::string name="");
+    virtual void AddAtomInCell(njr::Vector3d atomCoord, std::string name="");
 
-    inline const NJR::Vector3d &GetAtomsCoordinatesInCell(int atom) const
+    inline const njr::Vector3d &GetAtomsCoordinatesInCell(int atom) const
     {
     	return atomsCoordinatesInCell[atom];
     }
@@ -134,7 +134,7 @@ protected:
 
     double volumeOfCell;
 //! The coordinates of the atoms in units of the lattice vectors (coordinates must be between 0 and 1)
-    std::vector<NJR::Vector3d> atomsCoordinatesInCell;
+    std::vector<njr::Vector3d> atomsCoordinatesInCell;
 //! The type name of the atoms in the basis
     std::vector<std::string> atomTypes;
 

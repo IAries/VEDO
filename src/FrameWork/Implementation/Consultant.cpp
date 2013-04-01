@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace VEDO
+namespace vedo
 {
 
 void EnsureLength
@@ -143,7 +143,7 @@ Consultant::Consultant
 	culRecord(ulwrite),
 	rank(0),
 	NP(1),
-	ImpactBufferSize(VEDO::uImpactBufferSize)
+	ImpactBufferSize(vedo::uImpactBufferSize)
 {
 	pDOWorld                      = DOWorld;
 	pIRTbl                        = pIactRecordTab;
@@ -239,7 +239,7 @@ const ImpactStatus* Consultant::RetrieveImpactStatus
 
 bool Consultant::InBoundary(unsigned long i) const
 {
-	NJR::Vector3d p = (pDOWorld->GetDOStatus())[i]->GetPosition();
+	njr::Vector3d p = (pDOWorld->GetDOStatus())[i]->GetPosition();
 	return
 		pDOWorld
 			->GetSystemParameter()
@@ -331,4 +331,4 @@ double Consultant::GetUserDefinedValue(unsigned u) const
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo

@@ -1,9 +1,9 @@
 #include <FrameWork/Interfaces/CDCFactoryDecorator.h>
-#include <NJR/Interfaces/Utility.h>   // for NJR::Delete_ptr()
+#include <NJR/Interfaces/Utility.h>   // for njr::Delete_ptr()
 #include <algorithm>
 #include <typeinfo>
 
-namespace VEDO
+namespace vedo
 {
 
 CDCFactoryDecorator::CDCFactoryDecorator() : lcCDCFactory(0)
@@ -12,7 +12,7 @@ CDCFactoryDecorator::CDCFactoryDecorator() : lcCDCFactory(0)
 
 CDCFactoryDecorator::~CDCFactoryDecorator()
 {
-	for_each(lcCDCFactory.begin(), lcCDCFactory.end(), NJR::Delete_ptr());
+	for_each(lcCDCFactory.begin(), lcCDCFactory.end(), njr::Delete_ptr());
 };
 
 void CDCFactoryDecorator::AddCDCFactory(CDFactory* pcdf)
@@ -59,4 +59,4 @@ ContactDetector* CDCFactoryDecorator::Create
 	exit(-1);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

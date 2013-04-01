@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/Consultant.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class NearConsultant : public Consultant
@@ -24,7 +24,7 @@ public:
 	virtual void RebuildIactRecordTab(IactContainer& cIact);
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 #endif //_NEAR_CONSULTANT_H

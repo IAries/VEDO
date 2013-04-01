@@ -1,10 +1,10 @@
 #include <FrameWork/Interfaces/ISCFactoryDecorator.h>
-#include <NJR/Interfaces/Utility.h>   // for NJR::Delete_ptr()
+#include <NJR/Interfaces/Utility.h>   // for njr::Delete_ptr()
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
 
-namespace VEDO
+namespace vedo
 {
 
 ISCFactoryDecorator::ISCFactoryDecorator() : lcISCFactory(0)
@@ -13,7 +13,7 @@ ISCFactoryDecorator::ISCFactoryDecorator() : lcISCFactory(0)
 
 ISCFactoryDecorator::~ISCFactoryDecorator()
 {
-	for_each(lcISCFactory.begin(), lcISCFactory.end(), NJR::Delete_ptr());
+	for_each(lcISCFactory.begin(), lcISCFactory.end(), njr::Delete_ptr());
 };
 
 void ISCFactoryDecorator::AddISCFactory(ISFactory* pisf)
@@ -57,4 +57,4 @@ ImpactSolver* ISCFactoryDecorator::Create
 	exit(-1);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

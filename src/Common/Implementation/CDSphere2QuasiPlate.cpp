@@ -3,25 +3,25 @@
 #include <Common/Interfaces/DOFixedQuasiPlate.h>
 #include <Common/Interfaces/DOSphere.h>
 
-namespace VEDO
+namespace vedo
 {
 
 void CDSphere_QuasiPlate::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	NJR::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
+	njr::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiPlate)
-	NJR::Vector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
+	njr::Vector3d vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Local axials of Master (QuasiPlate)
-	NJR::Vector3d vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
-	NJR::Vector3d vOx = pdoMaster->GetDOStatus()->GetOrientationX();
-	NJR::Vector3d vOy = vOz * vOx;
+	njr::Vector3d vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
+	njr::Vector3d vOx = pdoMaster->GetDOStatus()->GetOrientationX();
+	njr::Vector3d vOy = vOz * vOx;
 
 	// The projection of Ca on Vaxial
-	NJR::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+	njr::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 	// Half height of Master
 	double dHHb
@@ -58,8 +58,8 @@ void CDSphere_QuasiPlate::CalDistance
      * The distance from vCaps to vCa is the shortest distance between surface
      * of Slave and Master
 	 **************************************************************************/
-	NJR::Vector3d vCaps      = (vOx * Dapx) + (vOy * Dapy) + vCb;
-	NJR::Vector3d vIm        = vCaps - vCa;
+	njr::Vector3d vCaps      = (vOx * Dapx) + (vOy * Dapy) + vCb;
+	njr::Vector3d vIm        = vCaps - vCa;
 	cInfo.vCenterToCenter  = vIm;
 
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
@@ -68,7 +68,7 @@ void CDSphere_QuasiPlate::CalDistance
 	if(cInfo.dImpactDepth > 0.0)
 	{
 		double dS          = dRa - cInfo.dImpactDepth;
-		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * NJR::dPI;
+		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * njr::dPI;
 	}
 	else
 	{
@@ -100,4 +100,4 @@ void CDSphere_QuasiPlate::Detect
 	}
 };
 
-};   // namespace VEDO
+};   // namespace vedo

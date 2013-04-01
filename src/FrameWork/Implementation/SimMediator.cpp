@@ -12,7 +12,7 @@
 #include <iterator>
 #include <map>
 
-namespace VEDO
+namespace vedo
 {
 
 DataFieldVTKWriter* DataFieldVTKWriter::_instance = 0;
@@ -173,7 +173,7 @@ void SimMediator::ShowInteraction()
 	const Interaction*  iap = 0;
 	const ContactInfo*  cip = 0;
 	const ImpactStatus* isp = 0;
-	NJR::Vector3d
+	njr::Vector3d
 		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
 
 	if (NP == 1)
@@ -388,7 +388,7 @@ void SimMediator::ShowInteraction()
 
 	const DiscreteObject* dop = 0;
 	const DOStatus*       dos = 0;
-	NJR::Vector3d
+	njr::Vector3d
 		vPosition, vVelocity, vAngularVelocity,
 		vOrientationX, vOrientationZ,
 		vImpact, vAngularImpact;
@@ -479,7 +479,7 @@ void SimMediator::ShowInteraction()
 
 void SimMediator::WriteInteractionForce
 	(const char* filename,
-	 const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >* vvExternalImpact)
+	 const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >* vvExternalImpact)
 {
 	const SystemParameter* csp = pConsultant->GetDOWorld()->GetSystemParameter();
 	const double           dt  = csp->GetTimeInterval();
@@ -498,10 +498,10 @@ void SimMediator::WriteInteractionForce
 		if (dop->GetDOModel()->GetBehavior() != "mobile")
 			continue;
 
-		NJR::Vector3d iactForce  = dop->GetImpact() * (1.0/dt);
-		NJR::Vector3d fieldForce = csp->GetFieldAcceleration();
-		NJR::Vector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : NJRDXF::ZERO;
-		NJR::Vector3d totalForce = iactForce + fieldForce + extForce;
+		njr::Vector3d iactForce  = dop->GetImpact() * (1.0/dt);
+		njr::Vector3d fieldForce = csp->GetFieldAcceleration();
+		njr::Vector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : njrdxf::ZERO;
+		njr::Vector3d totalForce = iactForce + fieldForce + extForce;
 
 		iactForce_vec.push_back(iactForce.x());
 		iactForce_vec.push_back(iactForce.y());
@@ -736,7 +736,7 @@ bool SimMediator::Run()
 };
 
 bool SimMediator::Run
-	(const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >& vvExternalImpact)
+	(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >& vvExternalImpact)
 {
 	time(&starttime);
 
@@ -890,8 +890,8 @@ bool SimMediator::ReDistribute()
 	// Freeze all elements
 	for (unsigned long ul=0; ul<cDO.size(); ul++)
 	{
-		cDO[ul]->SetVelocity(NJR::Vector3d(NJRDXF::ZERO));
-		cDO[ul]->SetAngularVelocity(NJR::Vector3d(NJRDXF::ZERO));
+		cDO[ul]->SetVelocity(njr::Vector3d(njrdxf::ZERO));
+		cDO[ul]->SetAngularVelocity(njr::Vector3d(njrdxf::ZERO));
 	}
 
 	// Check the number of contact pairs
@@ -1005,4 +1005,4 @@ bool SimMediator::ReDistribute()
 		(pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop())      );
 };
 
-};   // namespace VEDO
+};   // namespace vedo

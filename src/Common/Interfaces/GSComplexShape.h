@@ -4,7 +4,7 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <FrameWork/Interfaces/GeometricShape.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class GSComplexShape : public GeometricShape
@@ -14,13 +14,13 @@ public:
 
 	GSComplexShape(const std::string&);
 
-	bool Inside(const NJR::Vector3d&);
+	bool Inside(const njr::Vector3d&);
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 
 
-std::ostream& operator << (std::ostream&, VEDO::GSComplexShape&);
+std::ostream& operator << (std::ostream&, vedo::GSComplexShape&);
 
 #endif // _GS_COMPLEX_SHAPE_H

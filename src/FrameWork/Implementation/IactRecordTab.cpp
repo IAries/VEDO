@@ -4,7 +4,7 @@
 #include <cstring>
 #include <fstream>
 
-namespace VEDO
+namespace vedo
 {
 
 IactRecordTab::IactRecordTab()
@@ -35,7 +35,7 @@ bool IactRecordTab::ReadIRT2010(const char* filename)
 	bool          bContact, bBond;
 	double        dKn;
 	int           iStage;
-	NJR::Vector3d vShearForce;
+	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
 	double dudv[4*uNumUDDImpactStatus];
@@ -93,7 +93,7 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 	bool          bContact, bBond;
 	double        dKn;
 	int           iStage;
-	NJR::Vector3d vShearForce;
+	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
 	double dudv[4*uNumUDDImpactStatus];
@@ -228,7 +228,7 @@ bool IactRecordTab::ReadTextIRT(const char* filename)
 
 	unsigned long ulInteractionNumber, ulElement1, ulElement2;
 	bool          bContact, bBond;
-	NJR::Vector3d   vShearForce, vUDV;
+	njr::Vector3d   vShearForce, vUDV;
 	double        dKn, dVx, dVy, dVz, dUDV, vUDVx, vUDVy, vUDVz;
 	ImpactStatus  is;
 
@@ -328,7 +328,7 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 	const ImpactStatus* isp;
 	bool                bTemp;
 	double              dTemp;
-	NJR::Vector3d       vTemp;
+	njr::Vector3d       vTemp;
 	const double*       dpUDV;
     for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator mapImStatusP = mapImStatus.begin();
         mapImStatusP != mapImStatus.end();
@@ -347,8 +347,8 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
         idof.write((char*) &vTemp                             , 3*sizeof(double));
 
         dpUDV = isp->RetrieveAllUserDefinedValue();
-        idof.write((char*) dpUDV                              , VEDO::uNumUDDImpactStatus*sizeof(double));
-        idof.write((char*) (dpUDV+3*VEDO::uNumUDDImpactStatus), VEDO::uNumUDDImpactStatus*sizeof(double));
+        idof.write((char*) dpUDV                              , vedo::uNumUDDImpactStatus*sizeof(double));
+        idof.write((char*) (dpUDV+3*vedo::uNumUDDImpactStatus), vedo::uNumUDDImpactStatus*sizeof(double));
     }
 
 	return idof;
@@ -363,9 +363,9 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 	std::pair<unsigned long, unsigned long> pElements;
 	bool          bContact, bBond;
 	double        dKn;
-	NJR::Vector3d vShearForce;
+	njr::Vector3d vShearForce;
 	ImpactStatus  is;
-	double dpudv[4*VEDO::uNumUDDImpactStatus];
+	double dpudv[4*vedo::uNumUDDImpactStatus];
 	memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
 
     for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
@@ -384,8 +384,8 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
         idof.read((char*) &vShearForce                       , 3*sizeof(double));
         is.SetShearForce(vShearForce);
 
-        idof.read((char*) &dpudv[0]                          , VEDO::uNumUDDImpactStatus*sizeof(double));
-        idof.read((char*) &dpudv[3*VEDO::uNumUDDImpactStatus], VEDO::uNumUDDImpactStatus*sizeof(double));
+        idof.read((char*) &dpudv[0]                          , vedo::uNumUDDImpactStatus*sizeof(double));
+        idof.read((char*) &dpudv[3*vedo::uNumUDDImpactStatus], vedo::uNumUDDImpactStatus*sizeof(double));
 
         mapImStatus.insert(std::make_pair(pElements, is));
     }
@@ -394,4 +394,4 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 };
 
 
-};   // namespace VEDO
+};   // namespace vedo

@@ -1,7 +1,7 @@
 #include <Common/Interfaces/ISwBtSDBF.h>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 ISwBtSDBF::ISwBtSDBF
@@ -30,7 +30,7 @@ bool ISwBtSDBF::InitialStep
 	return true;
 };
 
-NJR::Vector3d ISwBtSDBF::NextStep
+njr::Vector3d ISwBtSDBF::NextStep
 	(const ContactDetector* CInfo,
 	DiscreteObject* A,
 	DiscreteObject* B,
@@ -41,7 +41,7 @@ NJR::Vector3d ISwBtSDBF::NextStep
 	 * represents direction of (Position B - Position A)
 	 **********************************************************************/
 	const double      dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
-	const NJR::Vector3d vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
+	const njr::Vector3d vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
 
 	if (   (!(CInfo->GetContactInfo()->bActive))
 		&& (!(ism->NormalBond(kn, cn, bn, dImpDepth))) )
@@ -49,27 +49,27 @@ NJR::Vector3d ISwBtSDBF::NextStep
 		// Normal bond break
 		//ImStatus.stage = 2;
 		ImStatus.Clean();
-		return NJR::Vector3d(NJRDXF::ZERO);
+		return njr::Vector3d(njrdxf::ZERO);
 	}
 
 	const DOStatus*   dosA = A->GetDOStatus();
 	const DOStatus*   dosB = B->GetDOStatus();
 
-	const NJR::Vector3d vIa  = A->GetMassMomentInertia();
-	const NJR::Vector3d vIb  = B->GetMassMomentInertia();
+	const njr::Vector3d vIa  = A->GetMassMomentInertia();
+	const njr::Vector3d vIb  = B->GetMassMomentInertia();
 
-	const NJR::Vector3d vVa  = dosA->GetVelocity();
-	const NJR::Vector3d vVb  = dosB->GetVelocity();
-	const NJR::Vector3d vAVa = dosA->GetAngularVelocity();
-	const NJR::Vector3d vAVb = dosB->GetAngularVelocity();
+	const njr::Vector3d vVa  = dosA->GetVelocity();
+	const njr::Vector3d vVb  = dosB->GetVelocity();
+	const njr::Vector3d vAVa = dosA->GetAngularVelocity();
+	const njr::Vector3d vAVb = dosB->GetAngularVelocity();
 
-	NJR::Vector3d vImpPoint;
-	NJR::Vector3d vDepthRadiusA, vDepthRadiusB;
-	NJR::Vector3d vRelativeV;                 // The relative velocity std::vector of A respect to B in the contact point
-	NJR::Vector3d vRelativeVn, vRelativeVs;   // Normal and tangential component of vRelativeV
-	NJR::Vector3d vForceAn, vForceAs;         // The force in normal/shear component of A
-	NJR::Vector3d vForceA, ImpactA;           // The total "impact force" and "impact" on A
-	NJR::Vector3d vAngMomentA, vAngMomentB;   // Angular impact
+	njr::Vector3d vImpPoint;
+	njr::Vector3d vDepthRadiusA, vDepthRadiusB;
+	njr::Vector3d vRelativeV;                 // The relative velocity std::vector of A respect to B in the contact point
+	njr::Vector3d vRelativeVn, vRelativeVs;   // Normal and tangential component of vRelativeV
+	njr::Vector3d vForceAn, vForceAs;         // The force in normal/shear component of A
+	njr::Vector3d vForceA, ImpactA;           // The total "impact force" and "impact" on A
+	njr::Vector3d vAngMomentA, vAngMomentB;   // Angular impact
 
 	if (dImpDepth > 0.0)
 	{
@@ -142,4 +142,4 @@ NJR::Vector3d ISwBtSDBF::NextStep
 	return ImpactA;
 };
 
-};   // namespace VEDO
+};   // namespace vedo

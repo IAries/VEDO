@@ -1,7 +1,7 @@
 #include <Common/Interfaces/NearConsultant.h>
 #include <string>
 
-namespace VEDO
+namespace vedo
 {
 
 NearConsultant::NearConsultant
@@ -45,7 +45,7 @@ static bool Detect
 	if (   (doml1->GetShapeType() == Sphere)
 		&& (doml2->GetShapeType() == Sphere) )
 	{
-		NJR::Vector3d vIm = dos1->GetPosition() - dos2->GetPosition();
+		njr::Vector3d vIm = dos1->GetPosition() - dos2->GetPosition();
 		return
 			vIm.length()
 			<= ( (doml1->GetShapeAttributes().sphere.radius
@@ -56,13 +56,13 @@ static bool Detect
 		&& (doml2->GetShapeType() == QuasiCylinder) )
 	{
 		double dHHb = 0.5 * doml2->GetShapeAttributes().quasicylinder.height;
-		NJR::Vector3d     Ca = dos1->GetPosition();
-		NJR::Vector3d     Cb = dos2->GetPosition();
-		NJR::Vector3d Vaxial = dos2->GetOrientationZ();
-		NJR::Vector3d    Cap;
+		njr::Vector3d     Ca = dos1->GetPosition();
+		njr::Vector3d     Cb = dos2->GetPosition();
+		njr::Vector3d Vaxial = dos2->GetOrientationZ();
+		njr::Vector3d    Cap;
 		double Dap = (Ca - Cb)%Vaxial;
 		Cap = Cb + (Vaxial * Dap);
-		NJR::Vector3d vIm;
+		njr::Vector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -95,7 +95,7 @@ static bool DetectSphere
 	const DOModel* doml1,
 	const DOModel* doml2  )
 {
-	NJR::Vector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
+	njr::Vector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
 	return
 		vIm.length()
 		<= ((doml1->GetShapeAttributes().sphere.radius
@@ -168,4 +168,4 @@ void NearConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	CollectUserDefinedData(cIact);
 };
 
-};   // namespace VEDO
+};   // namespace vedo

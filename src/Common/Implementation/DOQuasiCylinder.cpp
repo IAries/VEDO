@@ -1,6 +1,6 @@
 #include <Common/Interfaces/DOQuasiCylinder.h>
 
-namespace VEDO
+namespace vedo
 {
 
 DOQuasiCylinder::DOQuasiCylinder
@@ -12,19 +12,19 @@ DOQuasiCylinder::DOQuasiCylinder
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = 0.0;
-	vMassMomentInertia = NJR::Vector3d();
+	vMassMomentInertia = njr::Vector3d();
 };
 
 void DOQuasiCylinder::Response(double dt)
 {
-	NJR::Vector3d V  = pDOStatus->GetVelocity();
-	NJR::Vector3d AV = pDOStatus->GetAngularVelocity();
-	NJR::Vector3d P  = pDOStatus->GetPosition();
-	NJR::Vector3d Ox = pDOStatus->GetOrientationX();
-	NJR::Vector3d Oz = pDOStatus->GetOrientationZ();
+	njr::Vector3d V  = pDOStatus->GetVelocity();
+	njr::Vector3d AV = pDOStatus->GetAngularVelocity();
+	njr::Vector3d P  = pDOStatus->GetPosition();
+	njr::Vector3d Ox = pDOStatus->GetOrientationX();
+	njr::Vector3d Oz = pDOStatus->GetOrientationZ();
 
-	NJR::Vector3d dp =  V * dt;
-	NJR::Vector3d dw = AV * dt;
+	njr::Vector3d dp =  V * dt;
+	njr::Vector3d dw = AV * dt;
 
 	pDOStatus->SetPosition(P + dp);
 	pDOStatus->SetOrientation(Ox.RotateAround(dw), Oz.RotateAround(dw));
@@ -33,4 +33,4 @@ void DOQuasiCylinder::Response(double dt)
 	ClearImpact();
 };
 
-};   // namespace VEDO
+};   // namespace vedo

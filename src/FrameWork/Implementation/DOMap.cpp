@@ -2,10 +2,10 @@
 #include <FrameWork/Interfaces/DOMap.h>
 #include <algorithm>
 
-namespace VEDO
+namespace vedo
 {
 
-double DOMap::CalSafeDistance(DOMap m, NJR::Vector3d vFF, double dt)
+double DOMap::CalSafeDistance(DOMap m, njr::Vector3d vFF, double dt)
 {
 	switch (m._cpdoml->GetShapeType() )
 	{
@@ -14,21 +14,21 @@ double DOMap::CalSafeDistance(DOMap m, NJR::Vector3d vFF, double dt)
 			return
 				(m._cpdos->GetVelocity()*dt).length()
 				+ (vFF * (0.5*dt*dt)).length()
-				+ m._cpdoml->GetShapeAttributes().quasiplate.height * VEDO::dSafetyFactor;
+				+ m._cpdoml->GetShapeAttributes().quasiplate.height * vedo::dSafetyFactor;
 		case QuasiCylinder:
 //			return (m._cpdoml->GetShapeAttributes().quasicylinder.radius)*2.0;
 			return
 				(m._cpdos->GetVelocity()*dt).length()
 				+ (vFF * (0.5*dt*dt)).length()
-				+ m._cpdoml->GetShapeAttributes().quasicylinder.radius * 2.0 * VEDO::dSafetyFactor;
+				+ m._cpdoml->GetShapeAttributes().quasicylinder.radius * 2.0 * vedo::dSafetyFactor;
 		case Sphere:
 			return
 				(m._cpdos->GetVelocity()*dt).length()
 				+ (vFF * (0.5*dt*dt)).length()
-				+ (m._cpdoml->GetShapeAttributes().sphere.radius * VEDO::dSafetyFactor);
+				+ (m._cpdoml->GetShapeAttributes().sphere.radius * vedo::dSafetyFactor);
 		default:
 			std::cerr
-				<< "Error!! Code: DOMap::CalSafeDistance(DOMap, NJR::Vector3d, double)" << std::endl
+				<< "Error!! Code: DOMap::CalSafeDistance(DOMap, njr::Vector3d, double)" << std::endl
 				<< "        Note: DOShape is not in the std::list of LeapConsultant" << std::endl;
 			exit(-1);
 	}
@@ -45,19 +45,19 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 	if (   (m1._cpdoml->GetShapeType() == Sphere)
 		&& (m2._cpdoml->GetShapeType() == Sphere) )
 	{
-		NJR::Vector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
+		njr::Vector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
 		return vIm.length();
 	}
 
 	if (   (m1._cpdoml->GetShapeType() == Sphere    )
 		&& (m2._cpdoml->GetShapeType() == QuasiPlate) )
 	{
-		NJR::Vector3d vCa  = m1._cpdos->GetPosition();
-		NJR::Vector3d vCb  = m2._cpdos->GetPosition();
-		NJR::Vector3d vOz  = m2._cpdos->GetOrientationZ();
-		NJR::Vector3d vOx  = m2._cpdos->GetOrientationX();
-		NJR::Vector3d vOy  = vOz * vOx;
-		NJR::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+		njr::Vector3d vCa  = m1._cpdos->GetPosition();
+		njr::Vector3d vCb  = m2._cpdos->GetPosition();
+		njr::Vector3d vOz  = m2._cpdos->GetOrientationZ();
+		njr::Vector3d vOx  = m2._cpdos->GetOrientationX();
+		njr::Vector3d vOy  = vOz * vOx;
+		njr::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 		double dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		double dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
@@ -83,8 +83,8 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 			Dapy = dHLb;
 		}
 
-		NJR::Vector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		NJR::Vector3d vIm   =  vCaps - vCa;
+		njr::Vector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		njr::Vector3d vIm   =  vCaps - vCa;
 		return vIm.length();
 	}
 
@@ -93,15 +93,15 @@ double DOMap::CalDistance(DOMap m1, DOMap m2)
 	{
 		double dHHb
 			= 0.5 * (m2._cpdoml->GetShapeAttributes().quasicylinder.height);
-		NJR::Vector3d Ca     = m1._cpdos->GetPosition();
-		NJR::Vector3d Cb     = m2._cpdos->GetPosition();
-		NJR::Vector3d Vaxial = m2._cpdos->GetOrientationZ();
+		njr::Vector3d Ca     = m1._cpdos->GetPosition();
+		njr::Vector3d Cb     = m2._cpdos->GetPosition();
+		njr::Vector3d Vaxial = m2._cpdos->GetOrientationZ();
 
 		double Dap = (Ca - Cb)%Vaxial;
 
-		NJR::Vector3d Cap    = Cb + (Vaxial * Dap);
+		njr::Vector3d Cap    = Cb + (Vaxial * Dap);
 
-		NJR::Vector3d vIm;
+		njr::Vector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -136,7 +136,7 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 	if (   (m1._cpdoml->GetShapeType() == Sphere)
 		&& (m2._cpdoml->GetShapeType() == Sphere) )
 	{
-		NJR::Vector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
+		njr::Vector3d vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
 		if(pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -147,12 +147,12 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 	if (   (m1._cpdoml->GetShapeType() == Sphere    )
 		&& (m2._cpdoml->GetShapeType() == QuasiPlate) )
 	{
-		NJR::Vector3d vCa  = m1._cpdos->GetPosition();
-		NJR::Vector3d vCb  = m2._cpdos->GetPosition();
-		NJR::Vector3d vOz  = m2._cpdos->GetOrientationZ();
-		NJR::Vector3d vOx  = m2._cpdos->GetOrientationX();
-		NJR::Vector3d vOy  = vOz * vOx;
-		NJR::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+		njr::Vector3d vCa  = m1._cpdos->GetPosition();
+		njr::Vector3d vCb  = m2._cpdos->GetPosition();
+		njr::Vector3d vOz  = m2._cpdos->GetOrientationZ();
+		njr::Vector3d vOx  = m2._cpdos->GetOrientationX();
+		njr::Vector3d vOy  = vOz * vOx;
+		njr::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 		double dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		double dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
@@ -178,8 +178,8 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 			Dapy = dHLb;
 		}
 
-		NJR::Vector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		NJR::Vector3d vIm   =  vCaps - vCa;
+		njr::Vector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		njr::Vector3d vIm   =  vCaps - vCa;
 		if(pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -192,15 +192,15 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 	{
 		double dHHb
 			= 0.5 * (m2._cpdoml->GetShapeAttributes().quasicylinder.height);
-		NJR::Vector3d Ca     = m1._cpdos->GetPosition();
-		NJR::Vector3d Cb     = m2._cpdos->GetPosition();
-		NJR::Vector3d Vaxial = m2._cpdos->GetOrientationZ();
+		njr::Vector3d Ca     = m1._cpdos->GetPosition();
+		njr::Vector3d Cb     = m2._cpdos->GetPosition();
+		njr::Vector3d Vaxial = m2._cpdos->GetOrientationZ();
 
 		double Dap = (Ca - Cb)%Vaxial;
 
-		NJR::Vector3d Cap    = Cb + (Vaxial * Dap);
+		njr::Vector3d Cap    = Cb + (Vaxial * Dap);
 
-		NJR::Vector3d vIm;
+		njr::Vector3d vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -278,4 +278,4 @@ void DOMap::ExtremeValue
 		= max_element(Map.begin(), Map.end(), ComS)->SafeLength();
 };
 
-};   // namespace VEDO
+};   // namespace vedo

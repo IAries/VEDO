@@ -6,7 +6,7 @@
 #include <map>
 #include <limits>
 
-namespace VEDO
+namespace vedo
 {
 
 NBSConsultant::NBSConsultant
@@ -90,7 +90,7 @@ bool NBSConsultant::Reset()
 	time_t starttime;
 	time(&starttime);
 
-	//NJR::RunTime("Enter NBS Reset");
+	//njr::RunTime("Enter NBS Reset");
 
 	unsigned long ul;
 	vcDO.clear();
@@ -98,7 +98,7 @@ bool NBSConsultant::Reset()
 
 	const SystemParameter* csp = pDOWorld->GetSystemParameter();
 	unsigned long numberDO = csp->GetDONumber();
-	NJR::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
+	njr::Vector3d vFieldAcceleration = csp->GetFieldAcceleration();
 	double dt = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
@@ -126,7 +126,7 @@ bool NBSConsultant::Reset()
 		cpdoml = pDOWorld->GetDOModel(cpdos->GetDOName());
 
 		safeD
-			= VEDO::dSafetyFactor
+			= vedo::dSafetyFactor
             * (   2.0 * cpdoml->GetRange()
                 + dt  * (cpdos->GetVelocity()).length()
                 + 0.5 * dt * dt * vFieldAcceleration.length() );
@@ -147,7 +147,7 @@ bool NBSConsultant::Reset()
 	}
 	// Max safe distance
 	double ZoneRange
-        = VEDO::dSafetyFactor
+        = vedo::dSafetyFactor
         * (2.0 * rmax + dt * vmax + 0.5 * dt * dt * vFieldAcceleration.length());
 	// Determine how many "safety region" per direction
 	int ncelx = std::ceil((xmax - xmin) / ZoneRange);
@@ -175,7 +175,7 @@ bool NBSConsultant::Reset()
 	{
 		if (vDOMap[ul].cpdoml()->GetScope() == "local")
 		{
-			NJR::Vector3d p = vDOMap[ul].cpdos()->GetPosition();
+			njr::Vector3d p = vDOMap[ul].cpdos()->GetPosition();
 			Trir zone
 				(static_cast<int>((p.x()-xmin)/ZoneRange),
 				static_cast<int>((p.y()-ymin)/ZoneRange),
@@ -335,7 +335,7 @@ bool NBSConsultant::Reset()
 		delete iter1->second;
 	}
 
-	//NJR::RunTime("Leap Reset Accomplished");
+	//njr::RunTime("Leap Reset Accomplished");
 
 	time_t endtime;
 	time(&endtime);
@@ -441,4 +441,4 @@ void NBSConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		<< '\n';
 };
 
-};   // namespace VEDO
+};   // namespace vedo

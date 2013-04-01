@@ -6,25 +6,25 @@
 #include <cstdlib>
 #include <cmath>
 
-namespace VEDO
+namespace vedo
 {
 
 void DOWorld::Draw(const char* filename)  const
 {
-	NJRDXF::ofstream bdxf(filename);
+	njrdxf::ofstream bdxf(filename);
 	std::vector<DOStatus *>::const_iterator idos;
 	const DOModel* pdoml;
 	DOShapeAttributes shA;
 
-	NJR::NJRpolyhedra polyhedra;
-	std::vector<NJR::NJRpolygon> faces;
-	NJRDXF::Polygon	polygon;
+	njr::NJRpolyhedra polyhedra;
+	std::vector<njr::NJRpolygon> faces;
+	njrdxf::Polygon	polygon;
 
-    NJRDXF::Ellipsoid  ellipsoid(NJR::dQuarterPI);
-	NJRDXF::Sphere     sphere(NJR::dOneThirdPI);
-	NJRDXF::QuasiPlate cuboid;
-	NJRDXF::Cylinder   cylinder(NJR::dQuarterPI);
-	NJRDXF::Text       text;
+    njrdxf::Ellipsoid  ellipsoid(njr::dQuarterPI);
+	njrdxf::Sphere     sphere(njr::dOneThirdPI);
+	njrdxf::QuasiPlate cuboid;
+	njrdxf::Cylinder   cylinder(njr::dQuarterPI);
+	njrdxf::Text       text;
 
 	for (idos = cDOStatus.begin(); idos != cDOStatus.end(); ++idos)
 	{
@@ -102,20 +102,20 @@ void DOWorld::Draw(const char* filename)  const
 
 void DOWorld::HighDraw(const char* filename) const
 {
-	NJRDXF::ofstream bdxf(filename);
+	njrdxf::ofstream bdxf(filename);
 	std::vector<DOStatus *>::const_iterator idos;
 	const DOModel* pdoml;
 	DOShapeAttributes shA;
 
-	NJR::NJRpolyhedra polyhedra;
-	std::vector<NJR::NJRpolygon> faces;
-	NJRDXF::Polygon polygon;
+	njr::NJRpolyhedra polyhedra;
+	std::vector<njr::NJRpolygon> faces;
+	njrdxf::Polygon polygon;
 
-    NJRDXF::Ellipsoid ellipsoid;
-	NJRDXF::Sphere sphere(NJR::dOneEighthPI);
-	NJRDXF::QuasiPlate qplate;
-	NJRDXF::QuasiCylinder qcylinder;
-	NJRDXF::Text text;
+    njrdxf::Ellipsoid ellipsoid;
+	njrdxf::Sphere sphere(njr::dOneEighthPI);
+	njrdxf::QuasiPlate qplate;
+	njrdxf::QuasiCylinder qcylinder;
+	njrdxf::Text text;
 
 	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
 	{
@@ -192,4 +192,4 @@ void DOWorld::HighDraw(const char* filename) const
 	};
 };
 
-};   // namespace VEDO
+};   // namespace vedo

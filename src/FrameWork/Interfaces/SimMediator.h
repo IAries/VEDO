@@ -10,7 +10,7 @@
 #include <string>
 #include <fstream>
 
-namespace VEDO
+namespace vedo
 {
 
 class SimMediator
@@ -26,7 +26,7 @@ public:
 		const unsigned int);
 	virtual ~SimMediator();
 	virtual bool Run();
-	virtual bool Run(const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >&);
+	virtual bool Run(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >&);
 	virtual bool ReDistribute();
 	virtual void Initiate();
 	virtual void TimeInitiate();
@@ -53,7 +53,7 @@ public:
 
 	void ShowInteraction();
 
-	void WriteInteractionForce(const char* filename, const std::vector<std::pair<NJR::Vector3d, NJR::Vector3d> >* extImpact=0);
+	void WriteInteractionForce(const char* filename, const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >* extImpact=0);
 
 	void CalculateSystemEnergy();
 
@@ -83,6 +83,6 @@ private:
 	std::ofstream    FileLogEnergy;   // Energy log file
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _SIMULATEMEDIATOR_H

@@ -18,8 +18,8 @@ BravaisLatticeWithBasis::BravaisLatticeWithBasis()
         for(int coord=0; coord<3; coord++)
             latticeVectors[vec][coord] = (vec==coord? 1. :0.);
 
-    std::vector<NJR::Vector3d> atomsCoord;
-    atomsCoord.push_back(NJR::Vector3d(0., 0., 0.));
+    std::vector<njr::Vector3d> atomsCoord;
+    atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
 }
 
@@ -418,7 +418,7 @@ void BravaisLatticeWithBasis::SetLatticeVectors
 }
 
 void BravaisLatticeWithBasis::SetAtomsCoordinatesInCell(
-                              std::vector<NJR::Vector3d> atomsCoord,
+                              std::vector<njr::Vector3d> atomsCoord,
                               std::vector<std::string> *pAtomTypes)
 {
     atomTypes.clear();
@@ -431,7 +431,7 @@ void BravaisLatticeWithBasis::SetAtomsCoordinatesInCell(
     }
 }
 
-void BravaisLatticeWithBasis::AddAtomInCell(NJR::Vector3d atomCoord,
+void BravaisLatticeWithBasis::AddAtomInCell(njr::Vector3d atomCoord,
                                             std::string name)
 {
     // make sure the atoms coordinates are between 0 and 1.
@@ -441,7 +441,7 @@ void BravaisLatticeWithBasis::AddAtomInCell(NJR::Vector3d atomCoord,
     if(y < 0.) y += 1.;
     double z = fmod(atomCoord.z(), 1.);
     if(z < 0.) z += 1.;
-    atomsCoordinatesInCell.push_back(NJR::Vector3d(x,y,z));
+    atomsCoordinatesInCell.push_back(njr::Vector3d(x,y,z));
     atomTypes.push_back(name);
     UpdateMemberVariables();
 }

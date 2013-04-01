@@ -3,7 +3,7 @@
 
 #include <FrameWork/Interfaces/DiscreteObject.h>
 
-namespace VEDO
+namespace vedo
 {
 
 class DOConstrainedQuasiCylinder : public DiscreteObject
@@ -37,6 +37,6 @@ private:
 
 };
 
-};   // namespace VEDO
+};   // namespace vedo
 
 #endif // _DO_CONSTRAINEDQUASICYLINDER_H

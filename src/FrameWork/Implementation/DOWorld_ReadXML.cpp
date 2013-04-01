@@ -157,12 +157,12 @@ static bool node2data(bool& des, const DOMNode* node)
 	return true;
 };
 
-static bool node2data(VEDO::DOShapeColor& des, const DOMNode* node)
+static bool node2data(vedo::DOShapeColor& des, const DOMNode* node)
 {
 	std::string sTmp;
 	if (node == 0)
 	{
-		des = NJRDXF::bylayer;
+		des = njrdxf::bylayer;
 		return false;
 	}
 
@@ -170,41 +170,41 @@ static bool node2data(VEDO::DOShapeColor& des, const DOMNode* node)
 
 	if (sTmp =="red")
 	{
-		des = NJRDXF::red;
+		des = njrdxf::red;
 	}
 	else if (sTmp =="yellow")
 	{
-		des = NJRDXF::yellow;
+		des = njrdxf::yellow;
 	}
 	else if (sTmp =="green")
 	{
-		des = NJRDXF::green;
+		des = njrdxf::green;
 	}
 	else if (sTmp =="cyan")
 	{
-		des = NJRDXF::cyan;
+		des = njrdxf::cyan;
 	}
 	else if (sTmp =="blue")
 	{
-		des = NJRDXF::blue;
+		des = njrdxf::blue;
 	}
 	else if (sTmp =="magenta")
 	{
-		des = NJRDXF::magenta;
+		des = njrdxf::magenta;
 	}
 	else if (sTmp =="bylayer")
 	{
-		des = NJRDXF::bylayer;
+		des = njrdxf::bylayer;
 	}
 	else
 	{
-		des = NJRDXF::bylayer;
+		des = njrdxf::bylayer;
 	}
 	return true;
 };
 
 static bool node2data
-	(VEDO::DOShapeType& st, VEDO::DOShapeAttributes& sa, const DOMNode* node)
+	(vedo::DOShapeType& st, vedo::DOShapeAttributes& sa, const DOMNode* node)
 {
 	const DOMElement* element = (DOMElement*) node;
 	const DOMElement* shape;
@@ -213,7 +213,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans("Sphere"))->item(0);
 	if (shape != 0)
 	{
-		st = VEDO::Sphere;
+		st = vedo::Sphere;
 		node2data
 			(sa.sphere.radius, shape->getAttributeNode(XMLtrans("Radius")));
 		return true;
@@ -223,7 +223,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans("QuasiPlate"))->item(0);
 	if (shape != 0)
 	{
-		st = VEDO::QuasiPlate;
+		st = vedo::QuasiPlate;
 		node2data(sa.quasiplate.width , shape->getAttributeNode(XMLtrans("Width" )));
 		node2data(sa.quasiplate.length, shape->getAttributeNode(XMLtrans("Length")));
 		node2data(sa.quasiplate.height, shape->getAttributeNode(XMLtrans("Height")));
@@ -234,7 +234,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans("QuasiCylinder"))->item(0);
 	if (shape != 0)
 	{
-		st = VEDO::QuasiCylinder;
+		st = vedo::QuasiCylinder;
 		node2data(sa.quasicylinder.radius, shape->getAttributeNode(XMLtrans("Radius")));
 		node2data(sa.quasicylinder.height, shape->getAttributeNode(XMLtrans("Height")));
 		return true;
@@ -244,7 +244,7 @@ static bool node2data
 		->getElementsByTagName(XMLtrans ("Ellipsoid"))->item(0);
 	if (shape != 0)
 	{
-		st = VEDO::Ellipsoid;
+		st = vedo::Ellipsoid;
 		node2data(sa.ellipsoid.xlength, shape->getAttributeNode(XMLtrans("XLength")));
 		node2data(sa.ellipsoid.ylength, shape->getAttributeNode(XMLtrans("YLength")));
 		node2data(sa.ellipsoid.zlength, shape->getAttributeNode(XMLtrans("ZLength")));
@@ -255,15 +255,15 @@ static bool node2data
 		->getElementsByTagName(XMLtrans ("Polyhedra"))->item(0);
 	if (shape != 0)
 	{
-		st = VEDO::Polyhedra;
+		st = vedo::Polyhedra;
 		return true;
 	}
 
-	st = VEDO::NoType;
+	st = vedo::NoType;
 	return false;
 };
 
-static bool node2data(NJR::Vector3d& des, const DOMNode *node)
+static bool node2data(njr::Vector3d& des, const DOMNode *node)
 {
 	double x, y, z;
 	if (node == 0)
@@ -280,7 +280,7 @@ static bool node2data(NJR::Vector3d& des, const DOMNode *node)
 	return true;
 };
 
-static bool node2data(NJR::HalfSpace& des, const DOMNode *node)
+static bool node2data(njr::HalfSpace& des, const DOMNode *node)
 {
 	double a, b, c, d;
 	std::string sense;
@@ -316,23 +316,23 @@ static bool node2data(NJR::HalfSpace& des, const DOMNode *node)
 	return true;
 };
 
-static VEDO::DOModel* node2doml(const DOMNode* node)
+static vedo::DOModel* node2doml(const DOMNode* node)
 {
 	std::string               sDOName;
 	std::string               sDOGroup;
-	VEDO::DOShapeColor        cColor;
+	vedo::DOShapeColor        cColor;
 	std::string               sBehavior;
 	std::string               sScope;
 	double                    dDensity;
 	double                    dDensityFactor;
-	NJR::Vector3d          vExternalForce;
+	njr::Vector3d          vExternalForce;
 
-	VEDO::DOShapeType         st;
-	VEDO::DOShapeAttributes   sa;
+	vedo::DOShapeType         st;
+	vedo::DOShapeAttributes   sa;
 
-	std::vector<VEDO::DOMaterialAttribute> cMatOpt(0);
+	std::vector<vedo::DOMaterialAttribute> cMatOpt(0);
 
-	VEDO::DOMaterialAttribute DOMatOpt;
+	vedo::DOMaterialAttribute DOMatOpt;
 	DOMNodeList*              nl_MatOpt;
 
 	unsigned long int i;
@@ -378,11 +378,11 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 		cMatOpt.push_back(DOMatOpt);
 	}
 
-	if (st == VEDO::Polyhedra)
+	if (st == vedo::Polyhedra)
 	{
 		DOMNodeList* nl_hf = element->getElementsByTagName(XMLtrans("HalfSpace"));
-		NJR::NJRpolyhedra polyhedra;
-		NJR::HalfSpace hf;
+		njr::NJRpolyhedra polyhedra;
+		njr::HalfSpace hf;
 
 		unsigned long ulHalfSpaceSize = nl_hf->getLength();
 		for (i=0; i<ulHalfSpaceSize; ++i)
@@ -391,7 +391,7 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 			polyhedra.AddConstrain(hf);
 		}
 
-		return new VEDO::DOModel
+		return new vedo::DOModel
 			(sDOName,
 			 sDOGroup,
 			 sBehavior,
@@ -404,7 +404,7 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 			 cMatOpt        );
 	}
 
-	return new VEDO::DOModel
+	return new vedo::DOModel
 		(sDOName,
 		 sDOGroup,
 		 sBehavior,
@@ -418,14 +418,14 @@ static VEDO::DOModel* node2doml(const DOMNode* node)
 		 cMatOpt        );
 };
 
-static VEDO::DOStatus* node2dos (const DOMNode* node)
+static vedo::DOStatus* node2dos (const DOMNode* node)
 {
 	std::string sDOName;
-	NJR::Vector3d vPosition;
-	NJR::Vector3d vVelocity;
-	NJR::Vector3d vOrientationX;
-	NJR::Vector3d	vOrientationZ;
-	NJR::Vector3d vAngularVelocity;
+	njr::Vector3d vPosition;
+	njr::Vector3d vVelocity;
+	njr::Vector3d vOrientationX;
+	njr::Vector3d	vOrientationZ;
+	njr::Vector3d vAngularVelocity;
 
 	const DOMElement* element = (DOMElement*) node;
 
@@ -436,7 +436,7 @@ static VEDO::DOStatus* node2dos (const DOMNode* node)
 	node2data(vOrientationZ   , element->getElementsByTagName(XMLtrans("OrientationZ"))->item(0));
 	node2data(vAngularVelocity, element->getElementsByTagName(XMLtrans("AngularVelocity"))->item(0));
 
-	return new VEDO::DOStatus
+	return new vedo::DOStatus
 		(sDOName,
 		 vPosition,
 		 vVelocity,
@@ -445,15 +445,15 @@ static VEDO::DOStatus* node2dos (const DOMNode* node)
 		 vAngularVelocity);
 };
 
-static std::pair<std::pair<unsigned long, unsigned long>, VEDO::ImpactStatus*> node2is(const DOMNode* node)
+static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> node2is(const DOMNode* node)
 {
 	unsigned long ulMaster, ulSlave;
 	bool          bContact, bBond;
 	double        dKn;
-	NJR::Vector3d vShearForce;
-	double        dudv[4*VEDO::uNumUDDImpactStatus];
+	njr::Vector3d vShearForce;
+	double        dudv[4*vedo::uNumUDDImpactStatus];
 	double*       dpudv = &dudv[0];
-	for(unsigned u=VEDO::uNumUDDImpactStatus; u<3*VEDO::uNumUDDImpactStatus; u++)
+	for(unsigned u=vedo::uNumUDDImpactStatus; u<3*vedo::uNumUDDImpactStatus; u++)
 		dudv[u] = 0.0;
 
 	DOMNodeList*  nl_IactUDV;
@@ -468,29 +468,29 @@ static std::pair<std::pair<unsigned long, unsigned long>, VEDO::ImpactStatus*> n
 	node2data(vShearForce, element->getElementsByTagName(XMLtrans("ShearForce"))->item(0));
 
 	nl_IactUDV = element->getElementsByTagName(XMLtrans("AccumulativeUserDefinedValue"));
-	for (unsigned u=0; u<VEDO::uNumUDDImpactStatus; u++, dpudv++)
+	for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
 		node2data
 			(*dpudv,
 			((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
 
 	nl_IactUDV = element->getElementsByTagName(XMLtrans("UserDefinedValue"));
-	dpudv += 2*VEDO::uNumUDDImpactStatus;
-	for (unsigned u=0; u<VEDO::uNumUDDImpactStatus; u++, dpudv++)
+	dpudv += 2*vedo::uNumUDDImpactStatus;
+	for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
 		node2data
 			(*dpudv,
 			((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
 
-	return std::make_pair(std::make_pair(ulMaster, ulSlave), new VEDO::ImpactStatus(bContact, bBond, dKn, vShearForce, &dudv[0]));
+	return std::make_pair(std::make_pair(ulMaster, ulSlave), new vedo::ImpactStatus(bContact, bBond, dKn, vShearForce, &dudv[0]));
 };
 
-static VEDO::IactModel* node2iactml (const DOMNode* node)
+static vedo::IactModel* node2iactml (const DOMNode* node)
 {
 	std::string                      sMasterGroup;
 	std::string                      sSlaveGroup;
 	std::string                      sEquationType;
-	std::vector<VEDO::IactMechanism> svIactMechanisms(0);
+	std::vector<vedo::IactMechanism> svIactMechanisms(0);
 
-	VEDO::IactMechanism              im;
+	vedo::IactMechanism              im;
 	DOMNodeList*                     nl_IactM;
 
 	const DOMElement* element = (DOMElement*)node;
@@ -512,13 +512,13 @@ static VEDO::IactModel* node2iactml (const DOMNode* node)
 		svIactMechanisms.push_back(im);
 	}
 
-	return new VEDO::IactModel
+	return new vedo::IactModel
 		(sMasterGroup, sSlaveGroup, sEquationType, svIactMechanisms);
 };
 
 
 
-namespace VEDO
+namespace vedo
 {
 
 bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
@@ -527,11 +527,11 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 	std::string   sTitle   = "noTitle";
 	std::string   sPublish = "noPublish";
 	std::string   sNote    = "noNote";
-	NJR::Vector3d   vFieldAcceleration;
-	NJR::Vector3d   vLowerBoundaryZOI;
-	NJR::Vector3d   vUpperBoundaryZOI;
-	NJR::Vector3d   vLowerBoundaryPBC;
-	NJR::Vector3d   vUpperBoundaryPBC;
+	njr::Vector3d   vFieldAcceleration;
+	njr::Vector3d   vLowerBoundaryZOI;
+	njr::Vector3d   vUpperBoundaryZOI;
+	njr::Vector3d   vLowerBoundaryPBC;
+	njr::Vector3d   vUpperBoundaryPBC;
 	double        dStart;
 	double        dStop;
 	double        dInterval;
@@ -657,10 +657,10 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 
     if(element)
     {
-        node2data(VEDO::dSafetyFactor, element->getAttributeNode(XMLtrans("ContactDetectSafetyFactor")));
+        node2data(vedo::dSafetyFactor, element->getAttributeNode(XMLtrans("ContactDetectSafetyFactor")));
         // Aries: We have not finish it. At here, we ignore "NumUDDOStatus" and "NumUDIactStatus".
-        //node2data(VEDO::uNumUDDDOStatus, element->getAttributeNode(XMLtrans("NumUDDOStatus")));
-        //node2data(VEDO::uNumUDDImpactStatus, element->getAttributeNode(XMLtrans("NumUDIactStatus")));
+        //node2data(vedo::uNumUDDDOStatus, element->getAttributeNode(XMLtrans("NumUDDOStatus")));
+        //node2data(vedo::uNumUDDImpactStatus, element->getAttributeNode(XMLtrans("NumUDIactStatus")));
     }
 
 	double dBV[3];
@@ -763,7 +763,7 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 
 	nl_is = doc->getElementsByTagName(XMLtrans("IactStatus"));
 	unsigned long ulIactStatusSize = nl_is->getLength();
-	std::pair<std::pair<unsigned long, unsigned long>, VEDO::ImpactStatus*> ululis;
+	std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> ululis;
 	for (i=0; i<ulIactStatusSize; ++i)
 	{
 	    ululis = node2is(nl_is->item(i));
@@ -781,11 +781,11 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	std::string   sTitle   = "noTitle";
 	std::string   sPublish = "noPublish";
 	std::string   sNote    = "noNote";
-	NJR::Vector3d   vFieldAcceleration;
-	NJR::Vector3d   vLowerBoundaryZOI;
-	NJR::Vector3d   vUpperBoundaryZOI;
-	NJR::Vector3d   vLowerBoundaryPBC;
-	NJR::Vector3d   vUpperBoundaryPBC;
+	njr::Vector3d   vFieldAcceleration;
+	njr::Vector3d   vLowerBoundaryZOI;
+	njr::Vector3d   vUpperBoundaryZOI;
+	njr::Vector3d   vLowerBoundaryPBC;
+	njr::Vector3d   vUpperBoundaryPBC;
 	double        dStart;
 	double        dStop;
 	double        dInterval;
@@ -910,9 +910,9 @@ bool DOWorld::ReadXML(const char* xmlFile)
 
     if(element)
     {
-        node2data(VEDO::dSafetyFactor, element->getAttributeNode(XMLtrans("ContactDetectSafetyFactor")));
-        //node2data(VEDO::uNumUDDDOStatus, element->getAttributeNode(XMLtrans("NumUDDOStatus")));
-        //node2data(VEDO::uNumUDDImpactStatus, element->getAttributeNode(XMLtrans("NumUDIactStatus")));
+        node2data(vedo::dSafetyFactor, element->getAttributeNode(XMLtrans("ContactDetectSafetyFactor")));
+        //node2data(vedo::uNumUDDDOStatus, element->getAttributeNode(XMLtrans("NumUDDOStatus")));
+        //node2data(vedo::uNumUDDImpactStatus, element->getAttributeNode(XMLtrans("NumUDIactStatus")));
     }
 
 	double dBV[3];
@@ -1018,4 +1018,4 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	return DOWorld::Check();
 };
 
-};   // namespace VEDO
+};   // namespace vedo

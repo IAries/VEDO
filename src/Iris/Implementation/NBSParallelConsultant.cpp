@@ -17,7 +17,7 @@
 #undef max
 #undef min
 
-namespace VEDO
+namespace vedo
 {
 
 unsigned long NBSParallelConsultant::GetDONum() const
@@ -52,14 +52,14 @@ void NBSParallelConsultant::WriteDOSubWorld(DOContainer &vDO) const
 		(pDOWorld->GetDOModel().begin(),
 		pDOWorld->GetDOModel().end(),
 		back_inserter(listModel),
-		NJR::Copy_obj()                 );
+		njr::Copy_obj()                 );
 
 	std::list<IactModel*> listIModel;
 	transform
 		(pDOWorld->GetIactModel().begin(),
 		pDOWorld->GetIactModel().end(),
 		back_inserter(listIModel),
-		NJR::Copy_obj()                   );
+		njr::Copy_obj()                   );
 
 	std::vector<DOStatus*> vecStatus;
 
@@ -385,11 +385,11 @@ void NBSParallelConsultant::SyncDOContainer(DOContainer & vDO)
 			idx = G2LTab[ overlapTab[i][j] ];
 			vDO[idx]
 				->AddImpact
-					(NJR::Vector3d
+					(njr::Vector3d
 						(impactRecBuf[6*j],
 						impactRecBuf[6*j+1],
 						impactRecBuf[6*j+2]),
-					NJR::Vector3d
+					njr::Vector3d
 						(impactRecBuf[6*j+3],
 						impactRecBuf[6*j+4],
 						impactRecBuf[6*j+5]) );
@@ -561,32 +561,32 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 			}
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetPosition
-					(NJR::Vector3d
+					(njr::Vector3d
 						(recStatus[15*j],
 						recStatus[15*j+1],
 						recStatus[15*j+2]));
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetVelocity
-					(NJR::Vector3d
+					(njr::Vector3d
 						(recStatus[15*j+3],
 						recStatus[15*j+4],
 						recStatus[15*j+5]) );
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetOrientation
-					(NJR::Vector3d
+					(njr::Vector3d
 						(recStatus[15*j+6],
 						recStatus[15*j+7],
 						recStatus[15*j+8]),
-					NJR::Vector3d
+					njr::Vector3d
 						(recStatus[15*j+9],
 						recStatus[15*j+10],
 						recStatus[15*j+11]) );
 
 			(pDOWorld->GetDOStatus())[ridx]
 				->SetAngularVelocity
-					(NJR::Vector3d
+					(njr::Vector3d
 						(recStatus[15*j+12],
 						recStatus[15*j+13],
 						recStatus[15*j+14]) );
@@ -1130,7 +1130,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		= pIRTbl->GetData();
 
 	unsigned u = 0;
-	NJR::Vector3d vTemp;
+	njr::Vector3d vTemp;
 	const double* cdpudv;
 	for (iter=m.begin(); iter!=m.end(); ++iter)
     {
@@ -1201,7 +1201,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		MPI_COMM_WORLD);
 
 	ImpactStatus s;
-	NJR::Vector3d NewShearForce;
+	njr::Vector3d NewShearForce;
 	for (unsigned u=0; u<NP; ++u)
 	{
 		if (u == rank)
@@ -1263,4 +1263,4 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	delete[] recvUDV;
 };
 
-};   // namespace VEDO
+};   // namespace vedo
