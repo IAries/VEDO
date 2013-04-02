@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/CDCFactoryDecorator.h>
+#include <Framework/Interfaces/CDCFactoryDecorator.h>
 #include <NJR/Interfaces/Utility.h>   // for njr::Delete_ptr()
 #include <algorithm>
 #include <typeinfo>

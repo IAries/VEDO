@@ -1,7 +1,7 @@
 #ifndef _DOMAP_H
 #define _DOMAP_H
 
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld.h>
 
 namespace vedo
 {

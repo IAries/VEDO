@@ -1,7 +1,7 @@
 #ifndef _NBS_CONSULTANT_H
 #define _NBS_CONSULTANT_H
 
-#include <FrameWork/Interfaces/Consultant.h>
+#include <Framework/Interfaces/Consultant.h>
 #include <utility>
 
 namespace vedo

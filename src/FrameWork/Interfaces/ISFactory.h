@@ -1,9 +1,9 @@
 #ifndef _IMPACT_SOLVER_FACTORY_H
 #define _IMPACT_SOLVER_FACTORY_H
 
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
-#include <FrameWork/Interfaces/ImpactSolver.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/ImpactSolver.h>
 #include <list>
 #include <string>
 

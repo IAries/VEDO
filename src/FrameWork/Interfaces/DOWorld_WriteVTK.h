@@ -1,7 +1,7 @@
 #ifndef _DOWORLD_WRITE_VTK__H
 #define _DOWORLD_WRITE_VTK__H
 
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld.h>
 
 #include <cstdio>
 #include <cstdlib>

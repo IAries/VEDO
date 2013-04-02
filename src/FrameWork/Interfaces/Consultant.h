@@ -10,12 +10,12 @@
 #ifndef _CONSULTANT_H
 #define _CONSULTANT_H
 
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/DOContainer.h>
-#include <FrameWork/Interfaces/DOMap.h>
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/IactContainer.h>
-#include <FrameWork/Interfaces/IactRecordTab.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/DOContainer.h>
+#include <Framework/Interfaces/DOMap.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/IactContainer.h>
+#include <Framework/Interfaces/IactRecordTab.h>
 #include <ctime>
 #include <vector>
 

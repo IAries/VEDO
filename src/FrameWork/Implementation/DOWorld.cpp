@@ -1,7 +1,7 @@
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/DOMap.h>
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/DOMap.h>
+#include <Framework/Interfaces/DOWorld.h>
 #include <NJR/Interfaces/Utility.h>
 #include <cmath>
 #include <iostream>

@@ -1,7 +1,7 @@
 #ifndef _LEAP_CONSULTANT_H
 #define _LEAP_CONSULTANT_H
 
-#include <FrameWork/Interfaces/Consultant.h>
+#include <Framework/Interfaces/Consultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
 #include <algorithm>
 #include <cmath>

@@ -2,7 +2,7 @@
 #define _NBS_PARALLEL_CONSULTANT_H
 
 #include <mpi.h>
-#include <FrameWork/Interfaces/Consultant.h>
+#include <Framework/Interfaces/Consultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
 //#include <Iris/Interfaces/MPIAssistant.h>
 #include <algorithm>

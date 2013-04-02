@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/GeometricShape.h>
+#include <Framework/Interfaces/GeometricShape.h>
 
 namespace vedo
 {

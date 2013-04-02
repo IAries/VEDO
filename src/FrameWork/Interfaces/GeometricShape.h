@@ -2,7 +2,7 @@
 #define _GEOMETRIC_SHAPE_H
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/DOStatus.h>
+#include <Framework/Interfaces/DOStatus.h>
 #include <list>
 #include <string>
 

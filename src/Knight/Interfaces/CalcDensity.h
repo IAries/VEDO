@@ -1,7 +1,7 @@
 #ifndef _CALC_DENSITY_H
 #define _CALC_DENSITY_H
 
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld.h>
 
 class CalcDensity
 {

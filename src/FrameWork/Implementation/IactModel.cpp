@@ -1,5 +1,5 @@
 #include <NJR/Interfaces/Utility.h>
-#include <FrameWork/Interfaces/IactModel.h>
+#include <Framework/Interfaces/IactModel.h>
 
 namespace vedo
 {

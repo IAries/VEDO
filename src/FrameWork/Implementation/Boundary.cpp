@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/Boundary.h>
+#include <Framework/Interfaces/Boundary.h>
 #include <cmath>
 
 namespace vedo

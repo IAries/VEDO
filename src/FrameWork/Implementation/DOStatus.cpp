@@ -1,6 +1,6 @@
 // DOStatus.cpp: implementation of the DOStatus class.
 
-#include <FrameWork/Interfaces/DOStatus.h>
+#include <Framework/Interfaces/DOStatus.h>
 #include <NJR/Interfaces/Utility.h>
 #include <cstring>
 

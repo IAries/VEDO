@@ -1,7 +1,7 @@
 #include <NJR/Interfaces/RandomGenerator.h>
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/DOWorld_WriteVTK.h>
-#include <FrameWork/Interfaces/DOMap.h>
+#include <Framework/Interfaces/DOWorld_WriteVTK.h>
+#include <Framework/Interfaces/DOMap.h>
 #include <Knight/Interfaces/CalcCoordinateNum.h>
 
 double CalcCoordinateNum::computeAvgCoordinateNum

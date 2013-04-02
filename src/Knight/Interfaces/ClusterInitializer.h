@@ -5,8 +5,8 @@
 #ifndef CLUSTERINITIALIZER_H
 #define CLUSTERINITIALIZER_H
 
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DOStatus.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOStatus.h>
 #include <Knight/Interfaces/BravaisLatticeWithBasis.h>
 #include <string>
 

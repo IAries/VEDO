@@ -1,7 +1,7 @@
 #ifndef _DOSPHERE_H
 #define _DOSPHERE_H
 
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 
 namespace vedo
 {

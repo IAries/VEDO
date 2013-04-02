@@ -1,7 +1,7 @@
 #ifndef _CDSPHERE_2_QUASIPLATE_H
 #define _CDSPHERE_2_QUASIPLATE_H
 
-#include <FrameWork/Interfaces/ContactDetector.h>
+#include <Framework/Interfaces/ContactDetector.h>
 
 namespace vedo
 {

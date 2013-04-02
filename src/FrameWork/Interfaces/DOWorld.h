@@ -1,11 +1,11 @@
 #ifndef _DOWORLD_H
 #define _DOWORLD_H
 
-#include <FrameWork/Interfaces/DOModel.h>
-#include <FrameWork/Interfaces/DOStatus.h>
-#include <FrameWork/Interfaces/IactModel.h>
-//#include <FrameWork/Interfaces/IactRecordTab.h>
-#include <FrameWork/Interfaces/SystemParameter.h>
+#include <Framework/Interfaces/DOModel.h>
+#include <Framework/Interfaces/DOStatus.h>
+#include <Framework/Interfaces/IactModel.h>
+//#include <Framework/Interfaces/IactRecordTab.h>
+#include <Framework/Interfaces/SystemParameter.h>
 #include <algorithm>
 #include <list>
 #include <string>

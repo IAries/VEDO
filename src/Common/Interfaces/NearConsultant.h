@@ -1,7 +1,7 @@
 #ifndef _NEAR_CONSULTANT_H
 #define _NEAR_CONSULTANT_H
 
-#include <FrameWork/Interfaces/Consultant.h>
+#include <Framework/Interfaces/Consultant.h>
 
 namespace vedo
 {

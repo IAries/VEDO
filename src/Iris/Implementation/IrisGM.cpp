@@ -1,10 +1,10 @@
 #include <mpi.h>
 #include <NJR/Interfaces/Utility.h>
-#include <FrameWork/Interfaces/Assembler.h>
-#include <FrameWork/Interfaces/Consultant.h>
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/GeometricShape.h>
-#include <FrameWork/Interfaces/SimMediator.h>
+#include <Framework/Interfaces/Assembler.h>
+#include <Framework/Interfaces/Consultant.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/GeometricShape.h>
+#include <Framework/Interfaces/SimMediator.h>
 
 #include <Common/Interfaces/CDSphere2QuasiCylinder.h>
 #include <Common/Interfaces/CDSphere2QuasiCylinderAT.h>

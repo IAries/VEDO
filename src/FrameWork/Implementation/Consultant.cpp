@@ -1,5 +1,5 @@
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/Consultant.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/Consultant.h>
 #include <NJR/Interfaces/Utility.h>
 #include <cstdio>
 #include <cstring>

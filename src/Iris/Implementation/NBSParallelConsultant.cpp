@@ -1,7 +1,7 @@
 #include <mpi.h>
 #include <Iris/Interfaces/NBSParallelConsultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
-#include <FrameWork/Interfaces/Constants.h>
+#include <Framework/Interfaces/Constants.h>
 #include <NJR/Interfaces/Utility.h>
 #include <algorithm>
 #include <cmath>

@@ -1,11 +1,11 @@
 #ifndef _SIMULATEMEDIATOR_H
 #define _SIMULATEMEDIATOR_H
 
-#include <FrameWork/Interfaces/Assembler.h>
-#include <FrameWork/Interfaces/Consultant.h>
-#include <FrameWork/Interfaces/DOContainer.h>
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/IactContainer.h>
+#include <Framework/Interfaces/Assembler.h>
+#include <Framework/Interfaces/Consultant.h>
+#include <Framework/Interfaces/DOContainer.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/IactContainer.h>
 #include <ctime>
 #include <string>
 #include <fstream>

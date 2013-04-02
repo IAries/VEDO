@@ -2,7 +2,7 @@
 #define _SYSTEM_PARAMETER_2D_H
 
 #include <NJR/Interfaces/Vector2d.h>
-#include <FrameWork/Interfaces/Boundary2d.h>
+#include <Framework/Interfaces/Boundary2d.h>
 #include <string>
 #include <fstream>
 #define  PUBLISH "2010-08-27"

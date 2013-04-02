@@ -1,9 +1,9 @@
 #ifndef _CONTACT_DETECTOR_FACTORY_H
 #define _CONTACT_DETECTOR_FACTORY_H
 
-#include <FrameWork/Interfaces/ContactDetector.h>
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/ContactDetector.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 
 #include <string>
 

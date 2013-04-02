@@ -7,10 +7,10 @@
  * template
  ******************************************************************************/
 
-#include <FrameWork/Interfaces/CDCFactoryDecorator.h>
-#include <FrameWork/Interfaces/DOCFactoryDecorator.h>
-#include <FrameWork/Interfaces/ISCFactoryDecorator.h>
-#include <FrameWork/Interfaces/Interaction.h>
+#include <Framework/Interfaces/CDCFactoryDecorator.h>
+#include <Framework/Interfaces/DOCFactoryDecorator.h>
+#include <Framework/Interfaces/ISCFactoryDecorator.h>
+#include <Framework/Interfaces/Interaction.h>
 #include <list>
 
 namespace vedo

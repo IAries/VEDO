@@ -1,7 +1,7 @@
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/SimMediator.h>
-#include <FrameWork/Interfaces/DOMap.h>
-#include <FrameWork/Interfaces/DOWorld_WriteVTK.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/SimMediator.h>
+#include <Framework/Interfaces/DOMap.h>
+#include <Framework/Interfaces/DOWorld_WriteVTK.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld.h>
 #include <Knight/Interfaces/ClusterInitializer.h>
 #include <Knight/Interfaces/BravaisLatticeWithBasis.h>
 

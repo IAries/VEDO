@@ -1,11 +1,11 @@
 #ifndef _IMPACT_SOLVER_H
 #define _IMPACT_SOLVER_H
 
-#include <FrameWork/Interfaces/ContactDetector.h>
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
-#include <FrameWork/Interfaces/ISwModels.h>
-#include <FrameWork/Interfaces/ImpactStatus.h>
+#include <Framework/Interfaces/ContactDetector.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/ISwModels.h>
+#include <Framework/Interfaces/ImpactStatus.h>
 
 namespace vedo
 {

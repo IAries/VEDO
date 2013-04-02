@@ -2,7 +2,7 @@
 #define _GS_COMPLEX_SHAPE_H
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/GeometricShape.h>
+#include <Framework/Interfaces/GeometricShape.h>
 
 namespace vedo
 {

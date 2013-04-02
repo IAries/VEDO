@@ -1,11 +1,11 @@
 #include <NJR/Interfaces/Utility.h>
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DOWorld_WriteVTK.h>
-#include <FrameWork/Interfaces/GeometricShape.h>
-#include <FrameWork/Interfaces/IactRecordTab.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld_WriteVTK.h>
+#include <Framework/Interfaces/GeometricShape.h>
+#include <Framework/Interfaces/IactRecordTab.h>
 #include <Common/Interfaces/GSComplexShape.h>
 #include <Common/Interfaces/GSCylinder.h>
 #include <Common/Interfaces/GSRectangle.h>

@@ -1,7 +1,7 @@
 // DOModel.cpp: implementation of the DOModel class.
 
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/DOModel.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/DOModel.h>
 #include <NJR/Interfaces/Utility.h>
 #include <cmath>
 #include <cstdlib>

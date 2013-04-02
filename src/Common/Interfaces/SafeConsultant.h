@@ -1,7 +1,7 @@
 #ifndef _SAFE_CONSULTANT_H
 #define _SAFE_CONSULTANT_H
 
-#include <FrameWork/Interfaces/Consultant.h>
+#include <Framework/Interfaces/Consultant.h>
 
 namespace vedo
 {

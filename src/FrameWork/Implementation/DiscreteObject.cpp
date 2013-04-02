@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 
 namespace vedo
 {

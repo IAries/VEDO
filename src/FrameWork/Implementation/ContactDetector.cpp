@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/ContactDetector.h>
+#include <Framework/Interfaces/ContactDetector.h>
 
 namespace vedo
 {

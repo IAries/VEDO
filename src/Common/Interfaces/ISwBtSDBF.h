@@ -1,7 +1,7 @@
 #ifndef _ISwBtSDBF_H
 #define _ISwBtSDBF_H
 
-#include <FrameWork/Interfaces/ImpactSolver.h>
+#include <Framework/Interfaces/ImpactSolver.h>
 // Interaction model with a "transient" shear spring
 
 namespace vedo

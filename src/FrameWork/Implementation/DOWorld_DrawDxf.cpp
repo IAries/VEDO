@@ -1,7 +1,7 @@
 #include <NJR/Interfaces/ACADXF.h>
 #include <NJR/Interfaces/ACADXF_Solid.h>
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/DOWorld.h>
 #include <algorithm>
 #include <cstdlib>
 #include <cmath>

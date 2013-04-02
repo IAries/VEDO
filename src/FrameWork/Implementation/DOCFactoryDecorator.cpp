@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/DOCFactoryDecorator.h>
+#include <Framework/Interfaces/DOCFactoryDecorator.h>
 #include <NJR/Interfaces/Utility.h>   // for njr::Delete_ptr()
 #include <algorithm>
 

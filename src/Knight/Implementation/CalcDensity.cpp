@@ -1,6 +1,6 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <NJR/Interfaces/RandomGenerator.h>
-#include <FrameWork/Interfaces/DOMap.h>
+#include <Framework/Interfaces/DOMap.h>
 #include <Knight/Interfaces/CalcDensity.h>
 
 using namespace std;

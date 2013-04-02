@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/Interaction.h>
+#include <Framework/Interfaces/Interaction.h>
 
 namespace vedo
 {

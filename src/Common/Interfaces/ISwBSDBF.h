@@ -1,7 +1,7 @@
 #ifndef _ISwBSDBF_H
 #define _ISwBSDBF_H
 
-#include <FrameWork/Interfaces/ImpactSolver.h>
+#include <Framework/Interfaces/ImpactSolver.h>
 
 namespace vedo
 {

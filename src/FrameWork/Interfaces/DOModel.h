@@ -3,7 +3,7 @@
 
 #include <NJR/Interfaces/ACADXF.h>
 #include <NJR/Interfaces/Polyhedra.h>
-#include <FrameWork/Interfaces/Boundary.h>
+#include <Framework/Interfaces/Boundary.h>
 #include <fstream>
 #include <iostream>
 #include <string>

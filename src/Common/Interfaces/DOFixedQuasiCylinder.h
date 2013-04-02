@@ -1,7 +1,7 @@
 #ifndef _DO_FIXEDQUASICYLINDER_H
 #define _DO_FIXEDQUASICYLINDER_H
 
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 
 namespace vedo
 {

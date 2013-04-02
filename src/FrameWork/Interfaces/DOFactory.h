@@ -1,8 +1,8 @@
 #ifndef _DISCRETE_OBJECT_FACTORY_H
 #define _DISCRETE_OBJECT_FACTORY_H
 
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 #include <list>
 #include <string>
 

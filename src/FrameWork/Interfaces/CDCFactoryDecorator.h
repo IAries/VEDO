@@ -1,7 +1,7 @@
 #ifndef _CONTACT_DETECTOR_FACTORY_DECORATOR_H
 #define _CONTACT_DETECTOR_FACTORY_DECORATOR_H
 
-#include <FrameWork/Interfaces/CDFactory.h>
+#include <Framework/Interfaces/CDFactory.h>
 #include <list>
 
 namespace vedo

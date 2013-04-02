@@ -2,7 +2,7 @@
 #define _SYSTEM_PARAMETER_H
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/Boundary.h>
+#include <Framework/Interfaces/Boundary.h>
 #include <string>
 #include <fstream>
 #define  PUBLISH "2010-08-27"

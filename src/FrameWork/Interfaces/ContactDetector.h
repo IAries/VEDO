@@ -1,9 +1,9 @@
 #ifndef _CONTACT_DETECTOR_H
 #define _CONTACT_DETECTOR_H
 
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
-#include <FrameWork/Interfaces/IactModel.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/IactModel.h>
 
 namespace vedo
 {

@@ -1,5 +1,5 @@
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/ISwModels.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/ISwModels.h>
 #include <cmath>
 
 namespace vedo

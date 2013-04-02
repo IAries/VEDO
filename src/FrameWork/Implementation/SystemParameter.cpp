@@ -1,6 +1,6 @@
 #include <NJR/Interfaces/Utility.h>
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/SystemParameter.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/SystemParameter.h>
 
 namespace vedo
 {

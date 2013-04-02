@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/ISCFactoryDecorator.h>
+#include <Framework/Interfaces/ISCFactoryDecorator.h>
 #include <NJR/Interfaces/Utility.h>   // for njr::Delete_ptr()
 #include <algorithm>
 #include <cstdlib>

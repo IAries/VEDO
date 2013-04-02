@@ -1,7 +1,7 @@
 #ifndef _CALC_COORDINATE_NUM_H
 #define _CALC_COORDINATE_NUM_H
 
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld.h>
 #include <string>
 
 class CalcCoordinateNum

@@ -1,5 +1,5 @@
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/IactRecordTab.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/IactRecordTab.h>
 
 namespace vedo
 {

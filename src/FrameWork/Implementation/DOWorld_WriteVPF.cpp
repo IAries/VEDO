@@ -1,5 +1,5 @@
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/DOWorld.h>
 #include <cstdio>
 #include <cstdlib>
 

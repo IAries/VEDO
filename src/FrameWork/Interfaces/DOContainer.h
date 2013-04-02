@@ -1,8 +1,8 @@
 #ifndef _DISCRETE_OBJECT_CONTAINER_H
 #define _DISCRETE_OBJECT_CONTAINER_H
 
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 #include <vector>
 
 namespace vedo

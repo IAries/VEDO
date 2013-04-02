@@ -1,7 +1,7 @@
 #ifndef _DO_FIXEDSPHERE_H
 #define _DO_FIXEDSPHERE_H
 
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 
 namespace vedo
 {

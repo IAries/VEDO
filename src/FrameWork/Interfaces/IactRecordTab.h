@@ -1,8 +1,8 @@
 #ifndef _IACT_RECORD_TAB_H
 #define _IACT_RECORD_TAB_H
 
-#include <FrameWork/Interfaces/ImpactSolver.h>
-#include <FrameWork/Interfaces/ImpactStatus.h>
+#include <Framework/Interfaces/ImpactSolver.h>
+#include <Framework/Interfaces/ImpactStatus.h>
 #include <map>
 #include <vector>
 

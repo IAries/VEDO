@@ -1,10 +1,10 @@
 #ifndef _INTERACTION_H
 #define _INTERACTION_H
 
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/ContactDetector.h>
-#include <FrameWork/Interfaces/DiscreteObject.h>
-#include <FrameWork/Interfaces/ImpactSolver.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/ContactDetector.h>
+#include <Framework/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/ImpactSolver.h>
 
 namespace vedo
 {

@@ -1,7 +1,7 @@
 #ifndef _DISCRETE_OBJECT_FACTORY_DECORATOR_H
 #define _DISCRETE_OBJECT_FACTORY_DECORATOR_H
 
-#include <FrameWork/Interfaces/DOFactory.h>
+#include <Framework/Interfaces/DOFactory.h>
 
 namespace vedo
 {

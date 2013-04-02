@@ -1,4 +1,4 @@
-#include <FrameWork/Interfaces/ImpactSolver.h>
+#include <Framework/Interfaces/ImpactSolver.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>

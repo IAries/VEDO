@@ -1,7 +1,7 @@
 #ifndef _DO_FIXEDQUASIPLATE_H
 #define _DO_FIXEDQUASIPLATE_H
 
-#include <FrameWork/Interfaces/DiscreteObject.h>
+#include <Framework/Interfaces/DiscreteObject.h>
 
 namespace vedo
 {

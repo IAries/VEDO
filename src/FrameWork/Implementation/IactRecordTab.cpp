@@ -1,6 +1,6 @@
 #include <NJR/Interfaces/Utility.h>
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/IactRecordTab.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/IactRecordTab.h>
 #include <cstring>
 #include <fstream>
 

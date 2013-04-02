@@ -1,8 +1,8 @@
 #ifndef _INTERACTION_CONTAINER_H
 #define _INTERACTION_CONTAINER_H
 
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/Interaction.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/Interaction.h>
 #include <vector>
 
 namespace vedo

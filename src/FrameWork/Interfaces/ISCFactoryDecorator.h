@@ -1,7 +1,7 @@
 #ifndef _IMPACT_SOLVER_FACTORY_DECORATOR_H
 #define _IMPACT_SOLVER_FACTORY_DECORATOR_H
 
-#include <FrameWork/Interfaces/ISFactory.h>
+#include <Framework/Interfaces/ISFactory.h>
 
 namespace vedo
 {

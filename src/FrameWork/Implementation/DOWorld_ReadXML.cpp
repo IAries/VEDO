@@ -1,6 +1,6 @@
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/IactRecordTab.h>
-#include <FrameWork/Interfaces/ImpactStatus.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/IactRecordTab.h>
+#include <Framework/Interfaces/ImpactStatus.h>
 #include <xercesc/dom/DOMAttr.hpp>
 //#include <xercesc/dom/DOMBuilder.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
@@ -98,7 +98,7 @@ private :
 	bool fSawErrors;
 };
 
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOWorld.h>
 
 static const char* trans(const XMLCh* const toTranscode)
 {

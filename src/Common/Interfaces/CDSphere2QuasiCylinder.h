@@ -1,7 +1,7 @@
 #ifndef _CDSPHERE_2_QUASICYLINDER
 #define _CDSPHERE_2_QUASICYLINDER
 
-#include <FrameWork/Interfaces/ContactDetector.h>
+#include <Framework/Interfaces/ContactDetector.h>
 
 namespace vedo
 {

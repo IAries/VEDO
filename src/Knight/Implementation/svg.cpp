@@ -1,5 +1,5 @@
-#include <FrameWork/Interfaces/DOWorld.h>
-#include <FrameWork/Interfaces/DOMap.h>
+#include <Framework/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/DOMap.h>
 #include <algorithm>
 #include <iterator>
 

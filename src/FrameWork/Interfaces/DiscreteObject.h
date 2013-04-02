@@ -2,8 +2,8 @@
 #define _DISCRETE_OBJECT_H
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/Boundary.h>
-#include <FrameWork/Interfaces/DOWorld.h>
+#include <Framework/Interfaces/Boundary.h>
+#include <Framework/Interfaces/DOWorld.h>
 
 #include <string>
 

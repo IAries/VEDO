@@ -2,7 +2,7 @@
 #define _IMPACT_STATUS_H
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/Constants.h>
+#include <Framework/Interfaces/Constants.h>
 
 namespace vedo
 {

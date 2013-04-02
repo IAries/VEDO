@@ -1,5 +1,5 @@
-#include <FrameWork/Interfaces/Constants.h>
-#include <FrameWork/Interfaces/DOMap.h>
+#include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/DOMap.h>
 #include <algorithm>
 
 namespace vedo

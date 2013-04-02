@@ -2,7 +2,7 @@
 #define _GS_ELLIPSOID_H
 
 #include <NJR/Interfaces/Vector3d.h>
-#include <FrameWork/Interfaces/GeometricShape.h>
+#include <Framework/Interfaces/GeometricShape.h>
 
 namespace vedo
 {
