@@ -47,10 +47,10 @@ iris-debug: libs-debug
 
 # All Static Libraries
 .PHONY: libs
-libs: NJR FrameWork Common
+libs: NJR Framework Common
 
 .PHONY: libs-debug
-libs-debug: NJR-debug FrameWork-debug Common-debug
+libs-debug: NJR-debug Framework-debug Common-debug
 
 # NJR (Utility Library)
 .PHONY: njr
@@ -66,10 +66,10 @@ njr-debug:
 
 # Abstract Class
 .PHONY: framework
-FrameWork: framework
 Framework: framework
+FrameWork: framework
 framework:
-	(cd FrameWork; ${MAKE} release)
+	(cd Framework; ${MAKE} release)
 
 .PHONY: framework-debug
 FrameWork-Debug: framework-debug
@@ -77,7 +77,7 @@ FrameWork-debug: framework-debug
 Framework-Debug: framework-debug
 Framework-debug: framework-debug
 framework-debug:
-	(cd FrameWork; ${MAKE} debug)
+	(cd Framework; ${MAKE} debug)
 
 # Extended Class
 .PHONY: common
