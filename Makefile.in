@@ -1,4 +1,4 @@
-PREFIX           = /d/VEDO/
+PREFIX           = /d/Code/GitHub/VEDO/
 
 USR_INC          = /usr/include/
 USR_CXX_FLAG     = -I${USR_INC}
