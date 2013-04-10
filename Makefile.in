@@ -1,15 +1,15 @@
 ###### User-defind system parameters start ######
 
-PREFIX           = /d/Code/GitHub/VEDO/
-XERCESC_ROOT     = /c/usr/xercesc/GCC/
-COMPILER_MODE := mingw
-MAKE             = /bin/make
+PREFIX          = /d/Code/VEDO/VEDO/
+XERCESC_ROOT    = /c/usr/xercesc/GCC/
+COMPILER_MODE  := mingw
+MAKE            = /bin/make
 
-#PREFIX           = ${HOME}/usr/local/vedo/
-#XERCESC_ROOT     = ${HOME}/usr/local/xerces-c/
+#PREFIX         = ${HOME}/usr/local/vedo/
+#XERCESC_ROOT   = ${HOME}/usr/local/xerces-c/
 #COMPILER_MODE := gcc
 #COMPILER_MODE := intel
-#MAKE             = gmake
+#MAKE           = gmake
 
 ####### User-defind system parameters end #######
 
