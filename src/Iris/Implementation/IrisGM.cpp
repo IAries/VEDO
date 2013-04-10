@@ -43,7 +43,7 @@
 void usage (int g)
 {
     std::cout
-    	<< "IrisGM X3 build 328" << std::endl
+    	<< "IrisGM X3 build 410" << std::endl
 		<< std::endl
 		<< "\tUsage:" << std::endl
 		<< "\tIris <Mode> <IDO file> <Record> <UpIact>" << std::endl

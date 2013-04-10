@@ -31,7 +31,7 @@
 void usage()
 {
 	std::cout
-		<< "Knight X3 build 328" << std::endl
+		<< "Knight X3 build 410" << std::endl
 		<< std::endl
 		<< "Usage:" << std::endl
 		<< std::endl

@@ -8,7 +8,7 @@
 namespace vedo
 {
 
-static const std::string sPublish            = "2013-03-28";
+static const std::string sPublish            = "2013-04-10";
 static       double      dSafetyFactor       = 1.1;
 static const unsigned    uImpactBufferSize   = 65535;   // Consultant
 // uImpactBufferSize ~= 18,000 for 60,000 elements / 4 processors
