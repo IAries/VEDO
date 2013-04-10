@@ -6,12 +6,12 @@
 #include <iostream>
 #include <string>
 
-namespace NJR
+namespace njr
 {
 
 Vector2d::Vector2d()
 {
-	*this = NJRDXF::ORIGIN;
+	*this = njrdxf::ORIGIN;
 };
 
 Vector2d::Vector2d(const double& dx, const double& dy)
@@ -34,7 +34,7 @@ Vector2d::Vector2d(const std::string& sInit)
 	*this = sInit;
 };
 
-Vector2d::Vector2d(const NJRDXF::ParticularVector& pvInit)
+Vector2d::Vector2d(const njrdxf::ParticularVector& pvInit)
 {
 	*this = pvInit;
 };
@@ -114,20 +114,20 @@ const Vector2d& Vector2d::operator = (const char* cInit)
 	return *this;
 };
 
-const Vector2d& Vector2d::operator = (const NJRDXF::ParticularVector& pvAval)
+const Vector2d& Vector2d::operator = (const njrdxf::ParticularVector& pvAval)
 {
 	switch (pvAval)
 	{
-		case NJRDXF::ORIGIN:
+		case njrdxf::ORIGIN:
 			this->Set(0.0, 0.0);
 			break;
-		case NJRDXF::AXIALX:
+		case njrdxf::AXIALX:
 			this->Set(1.0, 0.0);
 			break;
-		case NJRDXF::AXIALY:
+		case njrdxf::AXIALY:
 			this->Set(0.0, 1.0);
 			break;
-		case NJRDXF::ZERO:
+		case njrdxf::ZERO:
 			this->Set(0.0, 0.0);
 			break;
 	};
@@ -222,25 +222,25 @@ void Vector2d::print() const
 
 
 
-NJR::Vector2d operator * (const double& ds, const NJR::Vector2d& v)
+njr::Vector2d operator * (const double& ds, const njr::Vector2d& v)
 {
-	 NJR::Vector2d out(v.x()*ds, v.y()*ds);
+	 njr::Vector2d out(v.x()*ds, v.y()*ds);
 	 return out;
 };
 
-NJR::Vector2d operator - (const NJR::Vector2d& v)
+njr::Vector2d operator - (const njr::Vector2d& v)
 {
-	 NJR::Vector2d out(-v.x(), -v.y());
+	 njr::Vector2d out(-v.x(), -v.y());
 	 return out;
 };
 
-std::ostream& operator << (std::ostream& os, const NJR::Vector2d& v)
+std::ostream& operator << (std::ostream& os, const njr::Vector2d& v)
 {
 	os << '(' << v.x() << ", " << v.y() << ")" << std::endl;
 	return os;
 };
 
-std::istream& operator >> (std::istream& is, NJR::Vector2d& v)
+std::istream& operator >> (std::istream& is, njr::Vector2d& v)
 {
 	double x;
 	double y;

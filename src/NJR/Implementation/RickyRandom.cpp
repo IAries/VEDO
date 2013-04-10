@@ -1,7 +1,7 @@
 #include <NJR/Interfaces/RickyRandom.h>
 #include <cmath>
 
-namespace NJR
+namespace njr
 {
 
 double Rickyrandom::u[97];

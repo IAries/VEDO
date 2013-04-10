@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <string>
 
-namespace NJRDXF
+namespace njrdxf
 {
 
 Solid::Solid() : lcon3dFace(0)
@@ -15,7 +15,7 @@ Solid::Solid() : lcon3dFace(0)
 
 Solid::~Solid()
 {
-	for_each(lcon3dFace.begin(), lcon3dFace.end(), NJR::Delete_ptr());
+	for_each(lcon3dFace.begin(), lcon3dFace.end(), njr::Delete_ptr());
 };
 
 std::list< Face* >& Solid::Get3dFaceContainer()
@@ -37,29 +37,29 @@ void Cuboid::Set
 	(const double& dWidth,
 	const double& dLength,
 	const double& dHeight,
-	const NJR::Vector3d& vP,
-	const NJR::Vector3d &vOX,
-	const NJR::Vector3d& vOZ,
+	const njr::Vector3d& vP,
+	const njr::Vector3d &vOX,
+	const njr::Vector3d& vOZ,
 	const char* layer,
 	const Color& color)
 {
  	std::list<Face *>::iterator i3dFace = lcon3dFace.begin();
 
-	NJR::Vector3d LX =     vOX.direction() * dWidth  * 0.5;
-    NJR::Vector3d LZ =     vOZ.direction() * dHeight * 0.5;
-    NJR::Vector3d LY = (LZ*LX).direction() * dLength * 0.5;
+	njr::Vector3d LX =     vOX.direction() * dWidth  * 0.5;
+    njr::Vector3d LZ =     vOZ.direction() * dHeight * 0.5;
+    njr::Vector3d LY = (LZ*LX).direction() * dLength * 0.5;
 
-	NJR::Vector3d v(1.0, 1.0, 1.0);
+	njr::Vector3d v(1.0, 1.0, 1.0);
 
 	// The four vertexes on the top of this ApproximatePlate
-    NJR::Vector3d Ft[4];
+    njr::Vector3d Ft[4];
 	Ft[0] = v.Trans( LX, LY, LZ) + vP;
 	Ft[1] = v.Trans(-LX, LY, LZ) + vP;
 	Ft[2] = v.Trans(-LX,-LY, LZ) + vP;
 	Ft[3] = v.Trans( LX,-LY, LZ) + vP;
 
 	// The four vertexes on the bottom of this ApproximatePlate
-	NJR::Vector3d Fb[4];
+	njr::Vector3d Fb[4];
 	Fb[0] = v.Trans( LX, LY,-LZ) + vP;
 	Fb[1] = v.Trans(-LX, LY,-LZ) + vP;
 	Fb[2] = v.Trans(-LX,-LY,-LZ) + vP;
@@ -85,9 +85,9 @@ Ellipsoid::Ellipsoid (const double& vfpa)
 
 	fpa = vfpa;
 
-	for (alpha=0.0; alpha<NJR::dPI; alpha+=fpa)
+	for (alpha=0.0; alpha<njr::dPI; alpha+=fpa)
 	{
-		for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+		for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 		{
 			lcon3dFace.push_back (new Face);
 		}
@@ -100,25 +100,25 @@ void Ellipsoid::Set
 	(const double& dlx,
 	const double& dly,
 	const double& dlz,
-	const NJR::Vector3d& vP,
-	const NJR::Vector3d& vOX,
-	const NJR::Vector3d& vOZ,
+	const njr::Vector3d& vP,
+	const njr::Vector3d& vOX,
+	const njr::Vector3d& vOZ,
 	const char* layer,
 	const Color& color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
 
-	NJR::Vector3d LX =     vOX.direction() * dlx;
-    NJR::Vector3d LZ =     vOZ.direction() * dly;
-    NJR::Vector3d LY = (LZ*LX).direction() * dlz;
-	NJR::Vector3d Co[4];
+	njr::Vector3d LX =     vOX.direction() * dlx;
+    njr::Vector3d LZ =     vOZ.direction() * dly;
+    njr::Vector3d LY = (LZ*LX).direction() * dlz;
+	njr::Vector3d Co[4];
 
 	double alpha;
 	double thita;
 
-	for (alpha=0.0; alpha<NJR::dPI; alpha+=fpa)
+	for (alpha=0.0; alpha<njr::dPI; alpha+=fpa)
 	{
-		for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+		for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 		{
 			Co[0].SetSphere(1.0,          alpha, thita);
 			Co[1].SetSphere(1.0, alpha+fpa*1.05, thita);
@@ -143,9 +143,9 @@ Sphere::Sphere(const double& vfpa) : Ellipsoid(vfpa)
 
 void Sphere::Set
 	(const double &dR,
-	const NJR::Vector3d &vP,
-	const NJR::Vector3d &vOX,
-	const NJR::Vector3d &vOZ,
+	const njr::Vector3d &vP,
+	const njr::Vector3d &vOX,
+	const njr::Vector3d &vOZ,
 	const char *layer,
 	const Color &color)
 {
@@ -158,7 +158,7 @@ Cylinder::Cylinder(const double& vfpa )
 	double thita;
 	fpa = vfpa;
 
-	for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+	for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 	{
 		lcon3dFace.push_back (new Face);
 	}
@@ -169,21 +169,21 @@ Cylinder::Cylinder(const double& vfpa )
 void Cylinder::Set
 	(const double& dR,
 	const double& dH,
-	const NJR::Vector3d& vP,
-	const NJR::Vector3d& vOX,
-	const NJR::Vector3d& vOZ,
+	const njr::Vector3d& vP,
+	const njr::Vector3d& vOX,
+	const njr::Vector3d& vOZ,
 	const char* layer,
 	const Color& color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin() ;
 
-	NJR::Vector3d LX = vOX.direction();
-    NJR::Vector3d LZ = vOZ.direction();
-    NJR::Vector3d LY = LZ*LX ;
-	NJR::Vector3d Co[4];
+	njr::Vector3d LX = vOX.direction();
+    njr::Vector3d LZ = vOZ.direction();
+    njr::Vector3d LY = LZ*LX ;
+	njr::Vector3d Co[4];
 
 	double thita;
-	for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+	for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 	{
 	    Co[0].SetCylinder(dR, thita         ,  dH*0.5);
 	    Co[1].SetCylinder(dR, thita+fpa*1.05,  dH*0.5);
@@ -205,14 +205,14 @@ QuasiCylinder::QuasiCylinder (const double& vfpa)
 	double thita;
 	fpa = vfpa;
 
-	for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+	for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 	{
 		lcon3dFace.push_back(new Face);
 	}
 
-	for (alpha=0.0; alpha<NJR::dPI; alpha+=fpa)
+	for (alpha=0.0; alpha<njr::dPI; alpha+=fpa)
 	{
-		for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+		for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 		{
 			lcon3dFace.push_back(new Face);
 		}
@@ -224,23 +224,23 @@ QuasiCylinder::QuasiCylinder (const double& vfpa)
 void QuasiCylinder::Set
 	(const double& dRadius,
 	const double& dHeight,
-	const NJR::Vector3d& vP,
-	const NJR::Vector3d& vOX,
-	const NJR::Vector3d& vOZ,
+	const njr::Vector3d& vP,
+	const njr::Vector3d& vOX,
+	const njr::Vector3d& vOZ,
 	const char* layer,
 	const Color& color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
 
-	NJR::Vector3d LX = vOX.direction();
-    NJR::Vector3d LZ = vOZ.direction();
-    NJR::Vector3d LY = LZ*LX ;
-	NJR::Vector3d Co[4];
-    NJR::Vector3d bottom;
+	njr::Vector3d LX = vOX.direction();
+    njr::Vector3d LZ = vOZ.direction();
+    njr::Vector3d LY = LZ*LX ;
+	njr::Vector3d Co[4];
+    njr::Vector3d bottom;
 
 	double alpha;
 	double thita;
-	for (thita=0.0; thita<NJR::dDoublePI; thita+=fpa)
+	for (thita=0.0; thita<njr::dDoublePI; thita+=fpa)
 	{
 		Co[0].SetCylinder(dRadius, thita         ,  dHeight*0.5);
 		Co[1].SetCylinder(dRadius, thita+fpa*1.05,  dHeight*0.5);
@@ -256,16 +256,16 @@ void QuasiCylinder::Set
 			color);
 	}
 
-	for (alpha=0.0; alpha<NJR::dPI; alpha+= fpa)
+	for (alpha=0.0; alpha<njr::dPI; alpha+= fpa)
 	{
-		for (thita=0.0; thita<NJR::dDoublePI;thita+= fpa)
+		for (thita=0.0; thita<njr::dDoublePI;thita+= fpa)
 		{
 			Co[0].SetSphere(dRadius, alpha         ,thita);
 			Co[1].SetSphere(dRadius, alpha+fpa*1.05,thita);
 			Co[2].SetSphere(dRadius, alpha+fpa*1.05,thita+fpa*1.05);
 			Co[3].SetSphere(dRadius, alpha         ,thita+fpa*1.05);
 
-			bottom = vP + vOZ * dHeight * ((alpha<NJR::dHalfPI) ? 0.5 : -0.5);
+			bottom = vP + vOZ * dHeight * ((alpha<njr::dHalfPI) ? 0.5 : -0.5);
 
 			(*i3dFace ++)->Set
 				(Co[0].Trans(LX,LY,LZ) + bottom,
@@ -293,9 +293,9 @@ void QuasiPlate::Set
 	(const double& dWidth,
 	const double& dLength,
 	const double& dHeight,
-	const NJR::Vector3d &vP,
-	const NJR::Vector3d& vOX,
-	const NJR::Vector3d &vOZ,
+	const njr::Vector3d &vP,
+	const njr::Vector3d& vOX,
+	const njr::Vector3d &vOZ,
 	const char* layer,
 	const Color &color)
 {
@@ -307,23 +307,23 @@ void QuasiPlate::Set
 	double Hlength = dLength * 0.5;
 	double Hheight = dHeight * 0.5;
 
-	NJR::Vector3d PlateVertex[54] ;
-	NJR::Vector3d LX = vOX.direction() ;
-	NJR::Vector3d LZ = vOZ.direction() ;
-	NJR::Vector3d LY = LZ*LX ;
+	njr::Vector3d PlateVertex[54] ;
+	njr::Vector3d LX = vOX.direction() ;
+	njr::Vector3d LZ = vOZ.direction() ;
+	njr::Vector3d LY = LZ*LX ;
 
 	double Bc[9]
 		= {0.0,
-			NJR::dHalfPI-0.001,
-			NJR::dHalfPI,
-			NJR::dPI-0.001,
-			NJR::dPI,
-			NJR::dOneAndHalfPI-0.001,
-			NJR::dOneAndHalfPI,
-			NJR::dDoublePI-0.001,
+			njr::dHalfPI-0.001,
+			njr::dHalfPI,
+			njr::dPI-0.001,
+			njr::dPI,
+			njr::dOneAndHalfPI-0.001,
+			njr::dOneAndHalfPI,
+			njr::dDoublePI-0.001,
 			0.0};
 
-	double Qc[6] = {0.0, 0.18*NJR::dPI, 0.41*NJR::dPI ,0.59*NJR::dPI , 0.82*NJR::dPI, NJR::dPI};
+	double Qc[6] = {0.0, 0.18*njr::dPI, 0.41*njr::dPI ,0.59*njr::dPI , 0.82*njr::dPI, njr::dPI};
 
 	double Lx[9]
 		= {Hwidth,
@@ -404,10 +404,10 @@ Polygon::Polygon()
 };
 
 void Polygon::Set
-	(const NJR::NJRpolygon& polygon,
-	const NJR::Vector3d& vP,
-	const NJR::Vector3d& vOX,
-	const NJR::Vector3d& vOZ,
+	(const njr::NJRpolygon& polygon,
+	const njr::Vector3d& vP,
+	const njr::Vector3d& vOX,
+	const njr::Vector3d& vOZ,
 	const char* layer,
 	const Color &color)
 {
@@ -418,16 +418,16 @@ void Polygon::Set
 
 	std::list< Face* >::iterator i3dFace;
 
-	std::for_each(lcon3dFace.begin(), lcon3dFace.end(), NJR::Delete_ptr());
+	std::for_each(lcon3dFace.begin(), lcon3dFace.end(), njr::Delete_ptr());
 
 	lcon3dFace.clear();
 
-	NJR::Vector3d LX = vOX.direction();
-    NJR::Vector3d LZ = vOZ.direction();
-    NJR::Vector3d LY = LZ*LX ;
+	njr::Vector3d LX = vOX.direction();
+    njr::Vector3d LZ = vOZ.direction();
+    njr::Vector3d LY = LZ*LX ;
 
 
-	std::vector<NJR::Vector3d> vertexes = polygon.vertexes();
+	std::vector<njr::Vector3d> vertexes = polygon.vertexes();
 	unsigned int num = (unsigned int)(vertexes.size());
 
 	for (unsigned int i=0; i<num; i++)
@@ -472,7 +472,7 @@ void Polygon::Set
 
 
 
-NJRDXF::ofstream& operator << (NJRDXF::ofstream& dxf, Solid* Solid)
+njrdxf::ofstream& operator << (njrdxf::ofstream& dxf, Solid* Solid)
 {
  	std::list<Face *>::iterator i3dFace;
 	for

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-namespace NJR
+namespace njr
 {
 
 const char* Matrix::characteristic() const
@@ -328,7 +328,7 @@ double Matrix::Get(const unsigned int& r, const unsigned int& c) const
 
 
 
-std::ostream& operator << (std::ostream& os, const NJR::Matrix& m)
+std::ostream& operator << (std::ostream& os, const njr::Matrix& m)
 {
 	register unsigned int i;
 	register unsigned int j;

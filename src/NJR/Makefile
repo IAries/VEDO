@@ -4,10 +4,10 @@ TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
 all: debug release
-debug: ${VEDO_LIB}libVEDO-NJR-Debug.a
-release: ${VEDO_LIB}libVEDO-NJR.a
+debug: ${VEDO_LIB}libvedo-njr-debug.a
+release: ${VEDO_LIB}libvedo-njr.a
 
-${VEDO_LIB}libVEDO-NJR-Debug.a: ${TMP_DEBUG}ACADXF.o            \
+${VEDO_LIB}libvedo-njr-debug.a: ${TMP_DEBUG}ACADXF.o            \
                                 ${TMP_DEBUG}ACADXF_Solid.o      \
                                 ${TMP_DEBUG}GeoUtility.o        \
                                 ${TMP_DEBUG}HalfSpace.o         \
@@ -26,7 +26,7 @@ ${VEDO_LIB}libVEDO-NJR-Debug.a: ${TMP_DEBUG}ACADXF.o            \
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
-${VEDO_LIB}libVEDO-NJR.a: ${TMP_RELEASE}ACADXF.o            \
+${VEDO_LIB}libvedo-njr.a: ${TMP_RELEASE}ACADXF.o            \
                           ${TMP_RELEASE}ACADXF_Solid.o      \
                           ${TMP_RELEASE}GeoUtility.o        \
                           ${TMP_RELEASE}HalfSpace.o         \

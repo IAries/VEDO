@@ -4,41 +4,41 @@
 #include <algorithm>
 #include <cmath>
 
-namespace NJR
+namespace njr
 {
 
-double Distance(const NJR::Vector3d& v, const NJR::HalfSpace& hf)
+double Distance(const njr::Vector3d& v, const njr::HalfSpace& hf)
 {
 	return Distance(hf, v);
 };
 
-double Distance(const NJR::HalfSpace& hf, const NJR::Vector3d& v)
+double Distance(const njr::HalfSpace& hf, const njr::Vector3d& v)
 {
 	return (fabs( hf.a()*v.x() + hf.b()*v.y() + hf.c()*v.z() - hf.d() ) /
 			sqrt ( hf.a()*hf.a() + hf.b()*hf.b() + hf.c()*hf.c() )       );
 };
 
-double Volume(const NJR::NJRpolygon& bottom, const NJR::Vector3d& vertex)
+double Volume(const njr::NJRpolygon& bottom, const njr::Vector3d& vertex)
 {
 	if ( (bottom.vertexes().size())<3 )
 	{
 		return 0;
 	}
 
-	std::vector<NJR::Vector3d> vertexes = bottom.vertexes();
+	std::vector<njr::Vector3d> vertexes = bottom.vertexes();
 
-	NJR::Vector3d n = (vertexes[1]-vertexes[0]) * (vertexes[2]-vertexes[0]);
+	njr::Vector3d n = (vertexes[1]-vertexes[0]) * (vertexes[2]-vertexes[0]);
 
 	double d = Distance
-		(NJR::HalfSpace(n.x(), n.y(), n.z(), E, n%vertexes[0]), vertex);
+		(njr::HalfSpace(n.x(), n.y(), n.z(), E, n%vertexes[0]), vertex);
 
 	return d*bottom.area()/3.0;
 };
 
 double Volume
-	(const NJR::NJRpolygon& bottom,
-	const NJR::Vector3d& vertex,
-	NJR::Vector3d& MassCenter)
+	(const njr::NJRpolygon& bottom,
+	const njr::Vector3d& vertex,
+	njr::Vector3d& MassCenter)
 {
 
 	if ( (bottom.vertexes().size()) < 3)
@@ -46,11 +46,11 @@ double Volume
 		return 0;
 	}
 
-	NJR::Vector3d center = bottom.center();
+	njr::Vector3d center = bottom.center();
 
-	std::vector<NJR::Vector3d> vertexes = bottom.vertexes();
+	std::vector<njr::Vector3d> vertexes = bottom.vertexes();
 
-	NJR::Vector3d mr(NJRDXF::ZERO);
+	njr::Vector3d mr(njrdxf::ZERO);
 
 	double tm = 0;
 
@@ -72,9 +72,9 @@ double Volume
 };
 
 
-double Volume(const NJR::NJRpolyhedra& poly)
+double Volume(const njr::NJRpolyhedra& poly)
 {
-	std::vector<NJR::NJRpolygon> faces = poly.faces();
+	std::vector<njr::NJRpolygon> faces = poly.faces();
 
 	double dVolume = 0;
 
@@ -86,13 +86,13 @@ double Volume(const NJR::NJRpolyhedra& poly)
 	return dVolume;
 };
 
-double Volume(const NJR::NJRpolyhedra& poly, NJR::Vector3d& MassCenter)
+double Volume(const njr::NJRpolyhedra& poly, njr::Vector3d& MassCenter)
 {
-	std::vector<NJR::NJRpolygon> faces = poly.faces();
+	std::vector<njr::NJRpolygon> faces = poly.faces();
 
 	double dVolume = 0;
-	NJR::Vector3d center;
-	NJR::Vector3d mr(NJRDXF::ZERO);
+	njr::Vector3d center;
+	njr::Vector3d mr(njrdxf::ZERO);
 
 	for (unsigned int i=1; i<faces.size(); ++i)
 	{
@@ -111,27 +111,27 @@ class maxCR
 {
 private:
 
-	const NJR::Vector3d center;
+	const njr::Vector3d center;
 
 public:
 
-	explicit maxCR(const NJR::Vector3d& c) : center (c)
+	explicit maxCR(const njr::Vector3d& c) : center (c)
 	{
 	};
 
-	bool operator() (const NJR::Vector3d& a, const NJR::Vector3d& b)
+	bool operator() (const njr::Vector3d& a, const njr::Vector3d& b)
 	{
 		return ( ((a-center).length()) < ((b-center).length()) );
 	};
 };
 
-double CoverRadius(const NJR::NJRpolyhedra& p)
+double CoverRadius(const njr::NJRpolyhedra& p)
 {
 
-	std::vector<NJR::NJRpolygon> faces = p.faces();
-	std::vector<NJR::Vector3d> vertexes;
+	std::vector<njr::NJRpolygon> faces = p.faces();
+	std::vector<njr::Vector3d> vertexes;
 	std::vector<double> MR(faces.size());
-	NJR::Vector3d center = p.center();
+	njr::Vector3d center = p.center();
 
 	for(unsigned int i=0; i<faces.size(); ++i)
 	{
@@ -145,10 +145,10 @@ double CoverRadius(const NJR::NJRpolyhedra& p)
 	return *( max_element(MR.begin(), MR.end() ) );
 };
 
-NJR::Vector3d InertiaTensor(const NJR::NJRpolyhedra& p)
+njr::Vector3d InertiaTensor(const njr::NJRpolyhedra& p)
 {
-	NJR::LinearProgramming lp;
-	NJR::NJRpolyhedra a,b;
+	njr::LinearProgramming lp;
+	njr::NJRpolyhedra a,b;
 	lp.Set(p);
 
 	double Ux;
@@ -166,11 +166,11 @@ NJR::Vector3d InertiaTensor(const NJR::NJRpolyhedra& p)
 
 	if ((lp.GetExtremeValue(Ux, Lx, Uy, Ly, Uz, Lz)) == false)
 	{
-		return NJRDXF::ZERO;
+		return njrdxf::ZERO;
 	}
 
 	double dVolume;
-	NJR::Vector3d MassCenter;
+	njr::Vector3d MassCenter;
 	double Ix=0.0, Iy=0.0, Iz=0.0;
 
 	a = p;
@@ -190,14 +190,14 @@ NJR::Vector3d InertiaTensor(const NJR::NJRpolyhedra& p)
 			{
 				b = a;
 
-				b.AddConstrain(NJR::HalfSpace(1, 0, 0, G, x));
-				b.AddConstrain(NJR::HalfSpace(1, 0, 0, L, x+Rx));
-				b.AddConstrain(NJR::HalfSpace(0, 1, 0, G, y));
-				b.AddConstrain(NJR::HalfSpace(0, 1, 0, L, y+Ry));
-				b.AddConstrain(NJR::HalfSpace(0, 0, 1, G, z));
-				b.AddConstrain(NJR::HalfSpace(0, 0, 1, L, z+Rz));
+				b.AddConstrain(njr::HalfSpace(1, 0, 0, G, x));
+				b.AddConstrain(njr::HalfSpace(1, 0, 0, L, x+Rx));
+				b.AddConstrain(njr::HalfSpace(0, 1, 0, G, y));
+				b.AddConstrain(njr::HalfSpace(0, 1, 0, L, y+Ry));
+				b.AddConstrain(njr::HalfSpace(0, 0, 1, G, z));
+				b.AddConstrain(njr::HalfSpace(0, 0, 1, L, z+Rz));
 
-				b.SetCenter(NJR::Vector3d(x+0.5*Rx, y+0.5*Ry, z+0.5*Rz));
+				b.SetCenter(njr::Vector3d(x+0.5*Rx, y+0.5*Ry, z+0.5*Rz));
 
 				dVolume = Volume(b,MassCenter);
 
@@ -211,7 +211,7 @@ NJR::Vector3d InertiaTensor(const NJR::NJRpolyhedra& p)
 		}
 	}
 
-	return NJR::Vector3d(Iy+Iz, Ix+Iz, Ix+Iy);
+	return njr::Vector3d(Iy+Iz, Ix+Iz, Ix+Iy);
 };
 
 };   // namespace NJR

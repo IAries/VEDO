@@ -2,7 +2,7 @@
 #include <NJR/Interfaces/RandomGenerator.h>
 #include <cmath>
 
-namespace NJR
+namespace njr
 {
 
 int  RandomGenerator::a;

@@ -4,10 +4,10 @@ TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
 all: debug release
-debug: ${VEDO_LIB}libVEDO-Common-Debug.a
-release: ${VEDO_LIB}libVEDO-Common.a
+debug: ${VEDO_LIB}libvedo-common-debug.a
+release: ${VEDO_LIB}libvedo-common.a
 
-${VEDO_LIB}libVEDO-Common-Debug.a: ${TMP_DEBUG}CDSphere2QuasiCylinder.o     \
+${VEDO_LIB}libvedo-common-debug.a: ${TMP_DEBUG}CDSphere2QuasiCylinder.o     \
                                    ${TMP_DEBUG}CDSphere2QuasiCylinderAT.o   \
                                    ${TMP_DEBUG}CDSphere2QuasiPlate.o        \
                                    ${TMP_DEBUG}CDSphere2Sphere.o            \
@@ -36,7 +36,7 @@ ${VEDO_LIB}libVEDO-Common-Debug.a: ${TMP_DEBUG}CDSphere2QuasiCylinder.o     \
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
-${VEDO_LIB}libVEDO-Common.a: ${TMP_RELEASE}CDSphere2QuasiCylinder.o     \
+${VEDO_LIB}libvedo-common.a: ${TMP_RELEASE}CDSphere2QuasiCylinder.o     \
                              ${TMP_RELEASE}CDSphere2QuasiCylinderAT.o   \
                              ${TMP_RELEASE}CDSphere2QuasiPlate.o        \
                              ${TMP_RELEASE}CDSphere2Sphere.o            \

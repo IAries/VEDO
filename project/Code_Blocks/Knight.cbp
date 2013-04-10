@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../../bin/Code_Blocks/Knight-Debug" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../../obj/Code_Blocks/Debug/" />
+				<Option output="../../bin/Code_Blocks/knight-debug" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/Code_Blocks/debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -16,15 +16,15 @@
 					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="..\..\lib\Code_Blocks\libVEDO-Common-Debug.a" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework-Debug.a" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR-Debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Common-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR-debug.a" />
 					<Add library="C:\usr\xercesc\GCC\lib\libxerces-c.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="../../bin/Code_Blocks/Knight" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../../obj/Code_Blocks/Release/" />
+				<Option output="../../bin/Code_Blocks/knight" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/Code_Blocks/release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <iterator>
 
-namespace NJR
+namespace njr
 {
 
 void ReadString(std::string& os, std::ifstream &idof)

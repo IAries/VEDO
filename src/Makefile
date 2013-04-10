@@ -1,4 +1,5 @@
 include ../Makefile.in
+
 # Default Target
 .PHONY: all
 all: debug release
@@ -47,10 +48,10 @@ iris-debug: libs-debug
 
 # All Static Libraries
 .PHONY: libs
-libs: NJR Framework Common
+libs: njr framework common
 
 .PHONY: libs-debug
-libs-debug: NJR-debug Framework-debug Common-debug
+libs-debug: njr-debug framework-debug common-debug
 
 # NJR (Utility Library)
 .PHONY: njr
@@ -102,14 +103,14 @@ BuildingDir: clean
 	mkdir ${VEDO_OBJ}
 	mkdir ${VEDO_OBJ_DEBUG}
 	mkdir ${VEDO_OBJ_DEBUG}NJR
-	mkdir ${VEDO_OBJ_DEBUG}FrameWork
+	mkdir ${VEDO_OBJ_DEBUG}Framework
 	mkdir ${VEDO_OBJ_DEBUG}Common
 	mkdir ${VEDO_OBJ_DEBUG}Knight
 	mkdir ${VEDO_OBJ_DEBUG}Anne
 	mkdir ${VEDO_OBJ_DEBUG}Iris
 	mkdir ${VEDO_OBJ_RELEASE}
 	mkdir ${VEDO_OBJ_RELEASE}NJR
-	mkdir ${VEDO_OBJ_RELEASE}FrameWork
+	mkdir ${VEDO_OBJ_RELEASE}Framework
 	mkdir ${VEDO_OBJ_RELEASE}Common
 	mkdir ${VEDO_OBJ_RELEASE}Knight
 	mkdir ${VEDO_OBJ_RELEASE}Anne

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-namespace NJR
+namespace njr
 {
 
 TimeHistory::TimeHistory()
@@ -128,7 +128,7 @@ double TimeHistory::GetValue(double dTime) const
 
 };   // namespace NJR
 
-std::ostream& operator << (std::ostream& os, const NJR::TimeHistory& t)
+std::ostream& operator << (std::ostream& os, const njr::TimeHistory& t)
 {
 	os << "File name: " << t.GetFileName() << std::endl;
 	for (unsigned u=0; u<t.GetNumHistory(); u++)

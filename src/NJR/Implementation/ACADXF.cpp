@@ -8,7 +8,7 @@
 #include <string>
 #include <functional>
 
-namespace NJRDXF
+namespace njrdxf
 {
 
 Group::Group(const  Code& code) : _code(code)
@@ -100,7 +100,7 @@ bool Entitity::AddGroup(const Code& code)
 {
 	std::list< Group* >::iterator iGroup
 		= std::find_if
-			(lconGroup.begin(), lconGroup.end(), NJRDXF::CodeEQ(code));
+			(lconGroup.begin(), lconGroup.end(), njrdxf::CodeEQ(code));
 
 	if (iGroup != lconGroup.end())
 	{
@@ -116,7 +116,7 @@ bool  Entitity::SetValue(const Code& code, const void* value)
 {
 	std::list< Group* >::iterator iGroup
 		= std::find_if
-		(lconGroup.begin(), lconGroup.end(), NJRDXF::CodeEQ(code));
+		(lconGroup.begin(), lconGroup.end(), njrdxf::CodeEQ(code));
 
 	if (iGroup == lconGroup.end())
 	{
@@ -163,8 +163,8 @@ Line:: Line()
 };
 
 void Line::Set
-	(const NJR::Vector3d& p1,
-	const NJR::Vector3d& p2,
+	(const njr::Vector3d& p1,
+	const njr::Vector3d& p2,
 	const char* layer,
 	const Color& color)
 {
@@ -174,7 +174,7 @@ void Line::Set
 	Entitity::SetLayer(layer);
 };
 
-void Line::SetPoint1(const NJR::Vector3d& point)
+void Line::SetPoint1(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -182,7 +182,7 @@ void Line::SetPoint1(const NJR::Vector3d& point)
 	Entitity::SetValue(pz0, p+2);
 };
 
-void Line::SetPoint2(const NJR::Vector3d& point)
+void Line::SetPoint2(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -208,10 +208,10 @@ Face::Face()
 };
 
 void Face::Set
-	(const NJR::Vector3d& p1,
-	const NJR::Vector3d& p2,
-	const NJR::Vector3d& p3,
-	const NJR::Vector3d& p4,
+	(const njr::Vector3d& p1,
+	const njr::Vector3d& p2,
+	const njr::Vector3d& p3,
+	const njr::Vector3d& p4,
 	const char* layer,
 	const Color& color)
 {
@@ -223,7 +223,7 @@ void Face::Set
 	Entitity::SetLayer(layer);
 };
 
-void Face::SetPoint1(const NJR::Vector3d& point)
+void Face::SetPoint1(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -231,7 +231,7 @@ void Face::SetPoint1(const NJR::Vector3d& point)
 	Entitity::SetValue(pz0, p+2);
 };
 
-void Face::SetPoint2(const NJR::Vector3d& point)
+void Face::SetPoint2(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -239,7 +239,7 @@ void Face::SetPoint2(const NJR::Vector3d& point)
 	Entitity::SetValue(pz1, p+2);
 };
 
-void Face::SetPoint3(const NJR::Vector3d& point)
+void Face::SetPoint3(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px2, p);
@@ -247,7 +247,7 @@ void Face::SetPoint3(const NJR::Vector3d& point)
 	Entitity::SetValue(pz2, p+2);
 };
 
-void Face::SetPoint4(const NJR::Vector3d& point)
+void Face::SetPoint4(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px3, p);
@@ -267,7 +267,7 @@ Text:: Text()
 }
 
 void Text::Set
-	(const NJR::Vector3d& p1,
+	(const njr::Vector3d& p1,
 	const char* text,
 	const double& dheight,
 	const double& dangle,
@@ -280,7 +280,7 @@ void Text::Set
 	 Entitity::SetLayer(layer);
 };
 
-void Text::SetPoint(const NJR::Vector3d& point)
+void Text::SetPoint(const njr::Vector3d& point)
 {
 	double p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -336,7 +336,7 @@ ofstream::~ofstream()
 	bdxf.close();
 };
 
-ofstream& NJRDXF::ofstream::operator << (Entitity* entitity)
+ofstream& njrdxf::ofstream::operator << (Entitity* entitity)
 {
 	entitity->SetHandle(hand++);
 
@@ -361,4 +361,4 @@ ofstream& NJRDXF::ofstream::operator << (Entitity* entitity)
 	return *this;
 };
 
-}; // NJRDXF namespace
+}; // njrdxf namespace

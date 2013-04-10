@@ -1,44 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
-	<File name="..\..\src\Knight\Interfaces\ClusterInitializer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="264" topLine="8" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Interfaces\CalcCoordinateNum.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="82" topLine="3" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Interfaces\CalcDensity.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="68" topLine="3" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Implementation\CalcCoordinateNum.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="151" topLine="3" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Implementation\CalcDensity.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="100" topLine="2" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Implementation\ClusterInitializer.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="206" topLine="5" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Implementation\Knight.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="321" topLine="7" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Knight\Implementation\svg.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="61" topLine="1" />
-		</Cursor>
-	</File>
 </CodeBlocks_layout_file>

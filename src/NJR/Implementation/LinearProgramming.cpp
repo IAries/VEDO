@@ -5,7 +5,7 @@
 #include <cstring>
 #include <functional>
 
-namespace NJR
+namespace njr
 {
 
 Vector3d BMvector(1e6, 1e6, 1e6);
@@ -265,7 +265,7 @@ const LinearProgramming& LinearProgramming::operator =
 	return *this;
 };
 
-void LinearProgramming::Set(const NJR::NJRpolyhedra &a)
+void LinearProgramming::Set(const njr::NJRpolyhedra &a)
 {
 	LinearProgramming::Clear();
 
@@ -276,7 +276,7 @@ void LinearProgramming::Set(const NJR::NJRpolyhedra &a)
 	unsigned int n;
 	unsigned int b;
 
-	std::vector<NJR::HalfSpace> vchf = a.constrains();
+	std::vector<njr::HalfSpace> vchf = a.constrains();
 
 	for (i=0; i<vchf.size(); ++i)
 	{
@@ -284,7 +284,7 @@ void LinearProgramming::Set(const NJR::NJRpolyhedra &a)
 	}
 
 	for_each
-		(vchf.begin(), vchf.end(), std::mem_fun_ref(&NJR::HalfSpace::AbsRhs));
+		(vchf.begin(), vchf.end(), std::mem_fun_ref(&njr::HalfSpace::AbsRhs));
 
 	number = (unsigned int) vchf.size();
 
@@ -687,27 +687,27 @@ bool LinearProgramming::GetExtremeValue
 	}
 
 	obj(0,0) = 1.0;
-	maxX     =  LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
+	maxX     =  LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALX;
 
 	obj(0,0) = -1.0;
-	minX     = -LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALX;
+	minX     = -LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALX;
 
 	obj(0,0) = 0.0;
 
 	obj(0,1) = 1.0;
-	maxY     =  LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
+	maxY     =  LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALY;
 
 	obj(0,1) = -1.0;
-	minY     = -LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALY;
+	minY     = -LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALY;
 
 	obj(0,1) = 0.0;
 
 	obj(0,2) = 1.0;
-	maxZ     = LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
+	maxZ     = LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALZ;
 
 	obj(0,2) = -1.0;
 
-	minZ     = -LinearProgramming::GetObjValue() - BMvector % NJRDXF::AXIALZ;
+	minZ     = -LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALZ;
 
 	obj(0,2) = 0.0;
 

@@ -6,12 +6,12 @@
 #include <iostream>
 #include <string>
 
-namespace NJR
+namespace njr
 {
 
 Vector3d::Vector3d()
 {
-	*this = NJRDXF::ORIGIN;
+	*this = njrdxf::ORIGIN;
 };
 
 Vector3d::Vector3d(const double& dx, const double& dy, const double& dz)
@@ -34,7 +34,7 @@ Vector3d::Vector3d(const std::string& sInit)
 	*this = sInit;
 };
 
-Vector3d::Vector3d(const NJRDXF::ParticularVector& pvInit)
+Vector3d::Vector3d(const njrdxf::ParticularVector& pvInit)
 {
 	*this = pvInit;
 };
@@ -120,23 +120,23 @@ const Vector3d& Vector3d::operator = (const char* cInit)
 	return *this;
 };
 
-const Vector3d& Vector3d::operator = (const NJRDXF::ParticularVector& pvAval)
+const Vector3d& Vector3d::operator = (const njrdxf::ParticularVector& pvAval)
 {
 	switch (pvAval)
 	{
-		case NJRDXF::ORIGIN:
+		case njrdxf::ORIGIN:
 			this->Set(0.0, 0.0, 0.0);
 			break;
-		case NJRDXF::AXIALX:
+		case njrdxf::AXIALX:
 			this->Set(1.0, 0.0, 0.0);
 			break;
-		case NJRDXF::AXIALY:
+		case njrdxf::AXIALY:
 			this->Set(0.0, 1.0, 0.0);
 			break;
-		case NJRDXF::AXIALZ:
+		case njrdxf::AXIALZ:
 			this->Set(0.0, 0.0, 1.0);
 			break;
-		case NJRDXF::ZERO:
+		case njrdxf::ZERO:
 			this->Set(0.0, 0.0, 0.0);
 			break;
 	};
@@ -255,25 +255,25 @@ void Vector3d::print() const
 
 
 
-NJR::Vector3d operator - (const NJR::Vector3d& v)
+njr::Vector3d operator - (const njr::Vector3d& v)
 {
-	 NJR::Vector3d out(-v.x(), -v.y(), -v.z());
+	 njr::Vector3d out(-v.x(), -v.y(), -v.z());
 	 return out;
 };
 
-NJR::Vector3d operator * (const double& ds , const NJR::Vector3d& v)
+njr::Vector3d operator * (const double& ds , const njr::Vector3d& v)
 {
-	 NJR::Vector3d out(v.x()*ds, v.y()*ds, v.z()*ds);
+	 njr::Vector3d out(v.x()*ds, v.y()*ds, v.z()*ds);
 	 return out;
 };
 
-std::ostream& operator << (std::ostream& os, const NJR::Vector3d& v)
+std::ostream& operator << (std::ostream& os, const njr::Vector3d& v)
 {
 	os << '(' << v.x() << ", " << v.y() << ", " << v.z() << ')' << std::endl;
 	return os;
 };
 
-std::istream& operator >> (std::istream& is, NJR::Vector3d& v)
+std::istream& operator >> (std::istream& is, njr::Vector3d& v)
 {
 	double x;
 	double y;

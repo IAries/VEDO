@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 
-namespace NJR
+namespace njr
 {
 
 HalfSpace::HalfSpace()
@@ -89,7 +89,7 @@ void HalfSpace::RotateAround(const Vector3d &dw)
 
 
 
-std::ostream& operator << (std::ostream& os, const NJR::HalfSpace& hf)
+std::ostream& operator << (std::ostream& os, const njr::HalfSpace& hf)
 {
     os	<< "[" << hf.a() << " X " << hf.b() << " Y " << hf.c() << " Z ";
 
@@ -109,7 +109,7 @@ std::ostream& operator << (std::ostream& os, const NJR::HalfSpace& hf)
 	return os;
 };
 
-std::istream& operator >> (std::istream& is, NJR::HalfSpace& hf)
+std::istream& operator >> (std::istream& is, njr::HalfSpace& hf)
 {
 	double a;
 	double b;

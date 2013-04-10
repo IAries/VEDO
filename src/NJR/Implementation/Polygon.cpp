@@ -1,6 +1,6 @@
 #include <NJR/Interfaces/Polygon.h>
 
-namespace NJR
+namespace njr
 {
 
 NJRpolygon::NJRpolygon() : _vertexes(0)
@@ -51,7 +51,7 @@ void NJRpolygon::CalCenter()
 {
 	register unsigned int i;
 
-	Vector3d w(NJRDXF::ZERO);
+	Vector3d w(njrdxf::ZERO);
 
 	for (i=0; i<_vertexes.size(); ++i)
 	{

@@ -4,10 +4,10 @@ TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
 all: debug release
-debug: ${VEDO_BIN}Knight-Debug
-release: ${VEDO_BIN}Knight
+debug: ${VEDO_BIN}knight-debug
+release: ${VEDO_BIN}knight
 
-${VEDO_BIN}Knight-Debug: ${TMP_DEBUG}3DLattices.o                    \
+${VEDO_BIN}knight-debug: ${TMP_DEBUG}3DLattices.o                    \
                          ${TMP_DEBUG}BravaisLatticeWithBasis.o       \
                          ${TMP_DEBUG}CalcCoordinateNum.o             \
                          ${TMP_DEBUG}CalcDensity.o                   \
@@ -20,7 +20,7 @@ ${VEDO_BIN}Knight-Debug: ${TMP_DEBUG}3DLattices.o                    \
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGxd} -c $<
 
-${VEDO_BIN}Knight: ${TMP_RELEASE}3DLattices.o                    \
+${VEDO_BIN}knight: ${TMP_RELEASE}3DLattices.o                    \
                    ${TMP_RELEASE}BravaisLatticeWithBasis.o       \
                    ${TMP_RELEASE}CalcCoordinateNum.o             \
                    ${TMP_RELEASE}CalcDensity.o                   \
