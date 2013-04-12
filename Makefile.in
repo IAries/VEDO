@@ -1,13 +1,12 @@
 ###### User-defind system parameters start ######
 
-PREFIX          = /d/Code/VEDO/VEDO/
+PREFIX          = /d/Code/GitHub/VEDO/
 XERCESC_ROOT    = /c/usr/xercesc/GCC/
 COMPILER_MODE  := mingw
 MAKE            = /bin/make
 
 #PREFIX         = ${HOME}/usr/local/vedo/
 #XERCESC_ROOT   = ${HOME}/usr/local/xerces-c/
-#COMPILER_MODE := gcc
 #COMPILER_MODE := intel
 #MAKE           = gmake
 
@@ -84,41 +83,6 @@ ifeq ($(COMPILER_MODE), mingw)
    AR_FLAG       = -r
    AR_FLAGx      = -r
 else
-ifeq ($(COMPILER_MODE), gcc)
-   MPI_ROOT      = /d/mpich2/32/
-   MPI_INC       = ${MPI_ROOT}include/
-   MPI_CXX_FLAG  = -I${MPI_INC}
-   MPI_LIB       = ${MPI_ROOT}lib/
-   MPI_LNK_FLAG  = -L${MPI_LIB} -lmpi
-   COMPILER_ROOT = /usr/
-   COMPILER_INC  = ${COMPILER_ROOT}include/
-   COMPILER_LIB  = ${COMPILER_ROOT}lib/
-   CXX           = /mingw/bin/g++
-   CXX_FLAG      = ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGx     = ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   mCXX          = ${CXX}
-   #mCXX          = ${MPI_ROOT}bin/mpicxx
-   mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-   mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
-   #mCXX_FLAGg    = ${PARMETIS_INC} ${mCXX_FLAG}
-   #mCXX_FLAGgd   = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAGg}
-   LNK           = ${CXX}
-   LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB}
-   LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB}
-   LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB}
-   LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB}
-   mLNK          = ${mCXX}
-   mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
-   mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
-   #mLNK_FLAGg    = ${PARMETIS_LIB} -lparmetis -lmetis ${MPI_LIB} ${SHARE_LNK_FLAG}
-   #mLNK_FLAGgd   = ${PARMETIS_LIB} -lparmetis -lmetis ${MPI_LIB} ${SHARE_LNK_FLAGd}
-   #mLNK_FLAGpo   = ${MPI_LIB} ${SHARE_LNK_FLAGpo}
-   AR            = /usr/bin/ar
-   AR_FLAG       = -r
-   AR_FLAGx      = -r
-else
 ifeq ($(COMPILER_MODE), intel)
    MPI_ROOT      = /opt/openmpi/1.4.3/intel/
    MPI_INC       = ${MPI_ROOT}include/
@@ -152,6 +116,5 @@ ifeq ($(COMPILER_MODE), intel)
    AR            = /usr/bin/ar
    AR_FLAG       = -r
    AR_FLAGx      = -r
-endif
 endif
 endif
