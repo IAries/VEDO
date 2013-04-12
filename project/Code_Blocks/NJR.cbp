@@ -50,7 +50,6 @@
 		<Unit filename="../../src/NJR/Implementation/Polygon.cpp" />
 		<Unit filename="../../src/NJR/Implementation/RandomGenerator.cpp" />
 		<Unit filename="../../src/NJR/Implementation/RickyRandom.cpp" />
-		<Unit filename="../../src/NJR/Implementation/TimeHistory.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Utility.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Vector2d.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Vector3d.cpp" />
