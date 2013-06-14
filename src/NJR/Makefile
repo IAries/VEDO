@@ -17,7 +17,6 @@ ${VEDO_LIB}libvedo-njr-debug.a: ${TMP_DEBUG}ACADXF.o            \
                                 ${TMP_DEBUG}Polyhedra.o         \
                                 ${TMP_DEBUG}RandomGenerator.o   \
                                 ${TMP_DEBUG}RickyRandom.o       \
-                                ${TMP_DEBUG}TimeHistory.o       \
                                 ${TMP_DEBUG}Utility.o           \
                                 ${TMP_DEBUG}Vector2d.o          \
                                 ${TMP_DEBUG}Vector3d.o
@@ -36,7 +35,6 @@ ${VEDO_LIB}libvedo-njr.a: ${TMP_RELEASE}ACADXF.o            \
                           ${TMP_RELEASE}Polyhedra.o         \
                           ${TMP_RELEASE}RandomGenerator.o   \
                           ${TMP_RELEASE}RickyRandom.o       \
-                          ${TMP_RELEASE}TimeHistory.o       \
                           ${TMP_RELEASE}Utility.o           \
                           ${TMP_RELEASE}Vector2d.o          \
                           ${TMP_RELEASE}Vector3d.o
