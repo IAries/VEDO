@@ -7,8 +7,12 @@ namespace vedo
 
 ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearForce()
 {
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dUDV[u] = 0.0;
+	if(uNumUDDImpactStatus != 0)
+	{
+	    dpUDV = new double[4*uNumUDDImpactStatus];
+        for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+            *(dpUDV+u) = 0.0;
+	}
 };
 
 ImpactStatus::ImpactStatus
@@ -16,8 +20,18 @@ ImpactStatus::ImpactStatus
      const njr::Vector3d& ShearForce, const double* UDVp       ):
     bContact(Contact), bBond(Bond),dKn(Kn), vShearForce(ShearForce)
 {
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dUDV[u] = *(UDVp+u);
+	if(uNumUDDImpactStatus != 0)
+	{
+	    dpUDV = new double[4*uNumUDDImpactStatus];
+        memcpy(dpUDV, UDVp, 4*uNumUDDImpactStatus*sizeof(double));
+	}
+};
+
+ImpactStatus::ImpactStatus
+    (const bool& Contact, const bool& Bond, const double& Kn,
+     const njr::Vector3d& ShearForce                         ):
+    bContact(Contact), bBond(Bond),dKn(Kn), vShearForce(ShearForce)
+{
 };
 
 ImpactStatus::ImpactStatus(const ImpactStatus& is)
@@ -31,12 +45,17 @@ const ImpactStatus& ImpactStatus::operator = (const ImpactStatus& is)
 	bBond       = is.bBond;
 	dKn         = is.dKn;
 	vShearForce = is.vShearForce;
-	memcpy(dUDV, is.dUDV, 4*uNumUDDImpactStatus*sizeof(double));
+	if(uNumUDDImpactStatus != 0)
+	{
+	    dpUDV = new double[uNumUDDImpactStatus*4];
+        memcpy(dpUDV, is.dpUDV, 4*uNumUDDImpactStatus*sizeof(double));
+	}
 	return *this;
 };
 
 ImpactStatus::~ImpactStatus()
 {
+    delete dpUDV;
 };
 
 void ImpactStatus::CleanShearForce()
@@ -48,7 +67,7 @@ void ImpactStatus::SetUserDefinedValue(unsigned u, double d)
 {
 	if (u < uNumUDDImpactStatus)
 	{
-		dUDV[u+3*uNumUDDImpactStatus] = d;
+		*(dpUDV+u+3*uNumUDDImpactStatus)= d;
 	}
 	else
 	{
@@ -61,7 +80,7 @@ double ImpactStatus::GetUserDefinedValue(unsigned u) const
 {
 	if (u < uNumUDDImpactStatus)
 	{
-		return dUDV[u+3*uNumUDDImpactStatus];
+		return *(dpUDV+u+3*uNumUDDImpactStatus);
 	}
 	else
 	{
@@ -76,8 +95,8 @@ void ImpactStatus::AddAccumulativeUserDefinedValue(unsigned u, double d)
 {
 	if (u < uNumUDDImpactStatus)
 	{
-		dUDV[u                    ] += d;
-		dUDV[u+uNumUDDImpactStatus] += d;
+		*(dpUDV+u)                     += d;
+		*(dpUDV+u+uNumUDDImpactStatus) += d;
 	}
 	else
 	{
@@ -89,43 +108,42 @@ void ImpactStatus::AddAccumulativeUserDefinedValue(unsigned u, double d)
 const double* ImpactStatus::RetrieveUserDefinedValue()
 {
 	memcpy
-		(&dUDV[2*uNumUDDImpactStatus]      ,
-		 &dUDV[uNumUDDImpactStatus]        ,
+		(dpUDV+2*uNumUDDImpactStatus       ,
+		 dpUDV+uNumUDDImpactStatus         ,
 		 uNumUDDImpactStatus*sizeof(double) );
 
 	for(unsigned u=0; u<uNumUDDImpactStatus; u++)
-		dUDV[u+uNumUDDImpactStatus] = 0.0;
+		*(dpUDV+u+uNumUDDImpactStatus) = 0.0;
 
-	return &dUDV[2*uNumUDDImpactStatus];
+	return dpUDV+2*uNumUDDImpactStatus;
 };
 
 const double* ImpactStatus::RetrieveAllUserDefinedValue() const
 {
-	return &dUDV[0];
+	return dpUDV;
 };
 
 void ImpactStatus::SetAllUserDefinedValue(const double* dp)
 {
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dUDV[u] = *(dp+u);
+    memcpy(dpUDV, dp, 4*uNumUDDImpactStatus*sizeof(double));
 };
 
 void ImpactStatus::CleanAllUserDefinedValue()
 {
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dUDV[u] = 0.0;
+    for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+        *(dpUDV+u) = 0.0;
 };
 
 void ImpactStatus::CleanUserDefinedValue()
 {
-	for(unsigned u=0; u<uNumUDDImpactStatus; u++)
-		dUDV[u+3*uNumUDDImpactStatus] = 0.0;
+    for(unsigned u=0; u<uNumUDDImpactStatus; u++)
+		*(dpUDV+u+3*uNumUDDImpactStatus) = 0.0;
 };
 
 void ImpactStatus::CleanAccumulativeUserDefinedValue()
 {
 	for(unsigned u=0; u<3*uNumUDDImpactStatus; u++)
-		dUDV[u] = 0.0;
+		*(dpUDV+u) = 0.0;
 };
 
 void ImpactStatus::Clean()
@@ -134,9 +152,7 @@ void ImpactStatus::Clean()
 	bBond    = false;
 	dKn      = 0.0;
 	CleanShearForce();
-
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dUDV[u] = 0.0;
+    CleanAllUserDefinedValue();
 };
 
 };   // namespace vedo

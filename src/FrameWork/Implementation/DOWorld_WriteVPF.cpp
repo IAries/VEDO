@@ -9,7 +9,7 @@ namespace vedo
 void DOWorld::WriteVPF (const char* filename) const
 {
 	FILE *fpvpf;
-    double Radius, Height, Width, Length;
+    double Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;
     double dX, dY, dZ, thickness = 0.001;
     const DOModel* pdoml;
 	std::vector<DOStatus *>::const_iterator idos;
@@ -241,6 +241,57 @@ void DOWorld::WriteVPF (const char* filename) const
 //					(*idos)->GetGranularTemperatureV(),
 //					(*idos)->GetGranularTemperatureAV());
 				break;
+			case QuasiPlateWithCircularHole:
+				Height
+					= DOWorld::GetDOModel
+						((*idos)->GetDOName())
+							->GetShapeAttributes().quasiplatewithcircularhole.height;
+				Width
+					= DOWorld::GetDOModel
+						((*idos)->GetDOName())
+							->GetShapeAttributes().quasiplatewithcircularhole.width;
+				Length
+					= DOWorld::GetDOModel
+						((*idos)->GetDOName())
+							->GetShapeAttributes().quasiplatewithcircularhole.length;
+
+                HoleRadius = DOWorld::GetDOModel
+						((*idos)->GetDOName())
+							->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
+
+                HoleXOffset = DOWorld::GetDOModel
+						((*idos)->GetDOName())
+							->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
+
+                HoleYOffset = DOWorld::GetDOModel
+						((*idos)->GetDOName())
+							->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
+
+				fprintf
+					(fpvpf,
+//					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+					"plate",
+					(*idos)->GetDOName().c_str(),
+					(*idos)->GetPosition().x(),
+					(*idos)->GetPosition().y(),
+					(*idos)->GetPosition().z(),
+					(*idos)->GetOrientationX().x(),
+					(*idos)->GetOrientationX().y(),
+					(*idos)->GetOrientationX().z(),
+					(*idos)->GetOrientationZ().x(),
+					(*idos)->GetOrientationZ().y(),
+					(*idos)->GetOrientationZ().z(),
+                    Length,
+					Width,
+					Height,
+					HoleRadius,
+					HoleXOffset,
+					HoleYOffset );
+//					Height,
+//					(*idos)->GetGranularTemperatureV(),
+//					(*idos)->GetGranularTemperatureAV());
+				break;
 			case QuasiCylinder:
 				Height
 					= DOWorld::GetDOModel
@@ -320,7 +371,7 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 */
 
 	FILE *fpvpf;
-    double Radius, Height, Width, Length;
+    double Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;
     double dX, dY, dZ, thickness = 0.001;
     const DOModel* pdoml;
 	std::vector<DOStatus *>::const_iterator  idos;
@@ -515,6 +566,66 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 //						(*idos)->GetGranularTemperatureV(),
 //						(*idos)->GetGranularTemperatureAV());
 					break;
+                case QuasiPlateWithCircularHole:
+                    Height
+                        = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().quasiplatewithcircularhole.height;
+                    Width
+                        = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().quasiplatewithcircularhole.width;
+                    Length
+                        = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().quasiplatewithcircularhole.length;
+
+                    HoleRadius = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
+
+                    HoleXOffset = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
+
+                    HoleYOffset = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
+
+                    fprintf
+                        (fpvpf,
+                        "%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+                        "plate",
+                        (*idos)->GetDOName().c_str(),
+                        (*idos)->GetPosition().x(),
+                        (*idos)->GetPosition().y(),
+                        (*idos)->GetPosition().z(),
+                        (*idos)->GetOrientationX().x(),
+                        (*idos)->GetOrientationX().y(),
+                        (*idos)->GetOrientationX().z(),
+                        (*idos)->GetOrientationZ().x(),
+                        (*idos)->GetOrientationZ().y(),
+                        (*idos)->GetOrientationZ().z(),
+                        Length,
+                        Width,
+                        Height,
+                        HoleRadius,
+                        HoleXOffset,
+                        HoleYOffset );
+					fprintf
+						(fpvpf,
+						"%s %s %g %g %g %g %g %g %g %g\n",
+						"cylinder",
+						(*idos)->GetDOName().c_str(),
+                        (*idos)->GetPosition().x() + HoleXOffset,
+                        (*idos)->GetPosition().y() + HoleYOffset,
+                        (*idos)->GetPosition().z(),
+						HoleRadius,
+						Height,
+						(*idos)->GetOrientationZ().x(),
+						(*idos)->GetOrientationZ().y(),
+						(*idos)->GetOrientationZ().z());
+                    break;
 				case QuasiCylinder:
 					Height
 						= DOWorld::GetDOModel
@@ -554,7 +665,7 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 			oidos++;
 		}
 		// Add redundant DiscreteObjects
-		njr::Vector3d	vRedundant(njrdxf::ZERO);
+		njr::Vector3d vRedundant;
 		if(gap != 0)
 		{
 			switch(GetDOModel((*oidos)->GetDOName())->GetShapeType())
@@ -619,6 +730,22 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 					}
 					break;
 				case QuasiPlate:
+					for(unsigned ulj=0; ulj<gap; ulj++)
+					{
+						fprintf
+							(fpvpf,
+							"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+							"plate",
+							(*oidos)->GetDOName().c_str(),
+							vRedundant.x(), vRedundant.y(), vRedundant.z(),
+							1.0, 0.0, 0.0,
+							0.0, 0.0, 1.0,
+							0.001, 0.001, 0.001,
+							0.0                                            );
+						oidos++;
+					}
+					break;
+				case QuasiPlateWithCircularHole:
 					for(unsigned ulj=0; ulj<gap; ulj++)
 					{
 						fprintf

@@ -15,6 +15,12 @@ double DOMap::CalSafeDistance(DOMap m, njr::Vector3d vFF, double dt)
 				(m._cpdos->GetVelocity()*dt).length()
 				+ (vFF * (0.5*dt*dt)).length()
 				+ m._cpdoml->GetShapeAttributes().quasiplate.height * vedo::dSafetyFactor;
+		case QuasiPlateWithCircularHole:
+//			return m._cpdoml->GetShapeAttributes().quasiplatewithcircularhole.height;
+			return
+				(m._cpdos->GetVelocity()*dt).length()
+				+ (vFF * (0.5*dt*dt)).length()
+				+ m._cpdoml->GetShapeAttributes().quasiplatewithcircularhole.height * vedo::dSafetyFactor;
 		case QuasiCylinder:
 //			return (m._cpdoml->GetShapeAttributes().quasicylinder.radius)*2.0;
 			return
@@ -156,6 +162,49 @@ double DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 
 		double dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		double dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
+
+		double Dapx = (vCap - vCb) % vOx;
+
+		if ( Dapx < -dHWb)
+		{
+			Dapx = -dHWb;
+		}
+		else if ( Dapx >  dHWb)
+		{
+			Dapx = dHWb;
+		}
+
+		double Dapy = (vCap - vCb) % vOy;
+		if (Dapy < -dHLb)
+		{
+			Dapy = -dHLb;
+		}
+		else if (Dapy > dHLb)
+		{
+			Dapy = dHLb;
+		}
+
+		njr::Vector3d vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		njr::Vector3d vIm   =  vCaps - vCa;
+		if(pbc)
+		{
+			pbc->DifferenceBoundaryConditions(&vIm);
+		};
+		return vIm.length();
+	}
+
+	if (   (m1._cpdoml->GetShapeType() == Sphere                    )
+		&& (m2._cpdoml->GetShapeType() == QuasiPlateWithCircularHole) )
+	{
+		njr::Vector3d vCa  = m1._cpdos->GetPosition();
+		njr::Vector3d vCb  = m2._cpdos->GetPosition();
+		njr::Vector3d vOz  = m2._cpdos->GetOrientationZ();
+		njr::Vector3d vOx  = m2._cpdos->GetOrientationX();
+		njr::Vector3d vOy  = vOz * vOx;
+		njr::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
+
+		double dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplatewithcircularhole.width );
+		double dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplatewithcircularhole.length);
 
 		double Dapx = (vCap - vCb) % vOx;
 

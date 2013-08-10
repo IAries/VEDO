@@ -12,7 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8EE79D93-E8C1-465D-909A-F2D47DAD53FB}</ProjectGuid>
-    <RootNamespace>NJR</RootNamespace>
+    <RootNamespace>njr</RootNamespace>
+    <ProjectName>njr</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -36,9 +37,9 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\VC11\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\Debug\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\debug\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\VC11\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\Release\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\release\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -47,7 +48,7 @@
       <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)-debug$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -58,7 +59,7 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libVEDO-$(ProjectName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -90,7 +91,6 @@
     <ClCompile Include="..\..\src\NJR\Implementation\Polyhedra.cpp" />
     <ClCompile Include="..\..\src\NJR\Implementation\RandomGenerator.cpp" />
     <ClCompile Include="..\..\src\NJR\Implementation\RickyRandom.cpp" />
-    <ClCompile Include="..\..\src\NJR\Implementation\TimeHistory.cpp" />
     <ClCompile Include="..\..\src\NJR\Implementation\Utility.cpp" />
     <ClCompile Include="..\..\src\NJR\Implementation\Vector2d.cpp" />
     <ClCompile Include="..\..\src\NJR\Implementation\Vector3d.cpp" />

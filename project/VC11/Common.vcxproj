@@ -12,7 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{21F378B0-A1D0-4B65-A1DF-A692F11E6560}</ProjectGuid>
-    <RootNamespace>Common</RootNamespace>
+    <RootNamespace>common</RootNamespace>
+    <ProjectName>common</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -36,9 +37,9 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\VC11\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\Debug\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\debug\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\VC11\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\Release\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\release\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -47,7 +48,7 @@
       <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)-debug$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -58,13 +59,14 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libVEDO-$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)libvedo-$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinder.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinderAT.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiPlate.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiPlateWithCircularHole.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2Sphere.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2SphereAT.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\DOConstrainedQuasiCylinder.h" />
@@ -74,6 +76,7 @@
     <ClInclude Include="..\..\src\Common\Interfaces\DOFixedSphere.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiCylinder.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiPlate.h" />
+    <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiPlateWithCircularHole.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\DOSphere.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\GSComplexShape.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\GSCylinder.h" />
@@ -91,6 +94,7 @@
     <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiCylinder.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiCylinderAT.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiPlate.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiPlateWithCircularHole.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\CDSphere2Sphere.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\CDSphere2SphereAT.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\DOConstrainedQuasiCylinder.cpp" />
@@ -100,6 +104,7 @@
     <ClCompile Include="..\..\src\Common\Implementation\DOFixedSphere.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\DOQuasiCylinder.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\DOQuasiPlate.cpp" />
+    <ClCompile Include="..\..\src\Common\Implementation\DOQuasiPlateWithCircularHole.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\DOSphere.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\GSComplexShape.cpp" />
     <ClCompile Include="..\..\src\Common\Implementation\GSCylinder.cpp" />

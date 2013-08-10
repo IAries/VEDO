@@ -12,7 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A8B27909-5F6A-4CC7-A156-9FDB5A818DB0}</ProjectGuid>
-    <RootNamespace>Framework</RootNamespace>
+    <RootNamespace>framework</RootNamespace>
+    <ProjectName>framework</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -36,17 +37,18 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\VC11\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\Debug\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\obj\VC11\debug\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\VC11\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\Release\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\obj\VC11\release\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\;C:\usr\xercesc\VC10\\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)libVEDO-$(ProjectName)-Debug$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)-debug$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -60,7 +62,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Lib>
-      <OutputFile>$(OutDir)libVEDO-$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)libvedo-$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -69,8 +71,8 @@
     <ClInclude Include="..\..\src\FrameWork\Interfaces\Boundary2d.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\CDCFactoryDecorator.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\CDFactory.h" />
-    <ClInclude Include="..\..\src\FrameWork\Interfaces\Constants.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\Consultant.h" />
+    <ClInclude Include="..\..\src\FrameWork\Interfaces\Constants.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\ContactDetector.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\DiscreteObject.h" />
     <ClInclude Include="..\..\src\FrameWork\Interfaces\DOCFactoryDecorator.h" />

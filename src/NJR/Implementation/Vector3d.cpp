@@ -11,7 +11,7 @@ namespace njr
 
 Vector3d::Vector3d()
 {
-	*this = njrdxf::ORIGIN;
+	*this = ORIGIN;
 };
 
 Vector3d::Vector3d(const double& dx, const double& dy, const double& dz)
@@ -34,7 +34,7 @@ Vector3d::Vector3d(const std::string& sInit)
 	*this = sInit;
 };
 
-Vector3d::Vector3d(const njrdxf::ParticularVector& pvInit)
+Vector3d::Vector3d(const njr::ParticularVector& pvInit)
 {
 	*this = pvInit;
 };
@@ -60,12 +60,24 @@ Vector3d Vector3d::direction() const
 Vector3d Vector3d::RotateAround(const Vector3d& va) const
 {
 	Vector3d u   = va.direction();
-	double      a   = va.length();
-	double      s   = cos (0.5*a);
-	double      t   = sin (0.5*a);
+	double   a   = va.length();
+	double   s   = cos (0.5*a);
+	double   t   = sin (0.5*a);
 	Vector3d v   = u*t;
 	Vector3d p   = *this;
 	Vector3d out = (p*s*s) + (v*(p%v)) + (2.0*s*(v*p)) + (v*(v*p));
+	//	NJRvector3d u   = va.direction();
+	//	double      a   = va.length();
+	//	double      s   = cos (0.5*a);
+	//	double      t   = sin (0.5*a);
+	//double      cs   = cos (va.length());
+	//	double      t   = sin (a);
+	//	NJRvector3d v   = u*t;
+	//	NJRvector3d p   = (*this);
+	//	NJRvector3d out = (p*s*s) + (v*(p%v)) + (2.0*s*(v*p)) + (v*(v*p));
+	//	M: another slightly quick rotation method
+	//NJRvector3d out = ((*this)*cs) + va.Cross(*this) + 1.0/(1+cs)*va*(va.Dot(*this));
+
 	return out;
 };
 
@@ -120,25 +132,27 @@ const Vector3d& Vector3d::operator = (const char* cInit)
 	return *this;
 };
 
-const Vector3d& Vector3d::operator = (const njrdxf::ParticularVector& pvAval)
+const Vector3d& Vector3d::operator = (const njr::ParticularVector& pvAval)
 {
 	switch (pvAval)
 	{
-		case njrdxf::ORIGIN:
+		case ORIGIN:
 			this->Set(0.0, 0.0, 0.0);
 			break;
-		case njrdxf::AXIALX:
+		case AXIALX:
 			this->Set(1.0, 0.0, 0.0);
 			break;
-		case njrdxf::AXIALY:
+		case AXIALY:
 			this->Set(0.0, 1.0, 0.0);
 			break;
-		case njrdxf::AXIALZ:
+		case AXIALZ:
 			this->Set(0.0, 0.0, 1.0);
 			break;
-		case njrdxf::ZERO:
+		case ZERO:
 			this->Set(0.0, 0.0, 0.0);
 			break;
+		default:
+			this->Set(0.0, 0.0, 0.0);
 	};
 	return *this;
 };

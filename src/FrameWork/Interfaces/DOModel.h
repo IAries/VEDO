@@ -18,14 +18,15 @@ typedef enum njrdxf::Color DOShapeColor;
 
 enum DOShapeType
 {
-	NoType        = 0,
-	Sphere        = 1,
-	Ellipsoid     = 2,
-	QuasiCylinder = 3,
-	QuasiPlate    = 4,
-	Polyhedra     = 5,
-	DMSphere      = 6,
-	PolyhedraBRep = 7
+	NoType                     = 0,
+	Sphere                     = 1,
+	Ellipsoid                  = 2,
+	QuasiCylinder              = 3,
+	QuasiPlate                 = 4,
+	QuasiPlateWithCircularHole = 5,
+	Polyhedra                  = 6,
+	DMSphere                   = 7,
+	PolyhedraBRep              = 8
 };
 
 
@@ -49,6 +50,16 @@ union DOShapeAttributes
 		double height;
 		double length;
 	} quasiplate;
+
+	struct
+	{
+		double width;
+		double height;
+		double length;
+		double holeradius;
+		double holexoffset;
+		double holeyoffset;
+	} quasiplatewithcircularhole;
 
 	struct
 	{
@@ -287,17 +298,17 @@ private:
 	std::string	                     sScope;
 	double                           dDensity;
 	double                           dDensityFactor;
-	njr::Vector3d                      vExternalForce;
+	njr::Vector3d                    vExternalForce;
 	double                           dMass;
 	double                           dSudoMass;
 	double                           dVolume;
 	double                           dRange;
-	njr::Vector3d                      vMassMomentInertia;
+	njr::Vector3d                    vMassMomentInertia;
 	DOShapeColor                     shColor;
 	DOShapeType	                     shType;
 	DOShapeAttributes                shAttributes;
 	std::vector<DOMaterialAttribute> matAttributes;
-	njr::NJRpolyhedra                     polyhedra;
+	njr::NJRpolyhedra                polyhedra;
 };
 
 };   // namespace vedo

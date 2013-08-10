@@ -126,6 +126,9 @@ void DOWorld::WriteVTK (const char* filename) const
 			case QuasiPlate:
 				// TODO:
 				break;
+			case QuasiPlateWithCircularHole:
+				// TODO:
+				break;
 			case QuasiCylinder:
 				// TODO:
 				break;

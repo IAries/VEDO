@@ -34,7 +34,7 @@ public:
 
 	explicit Vector2d(const std::string& sInit);
 
-	Vector2d(const njrdxf::ParticularVector& pvInit);
+	Vector2d(const njr::ParticularVector& pvInit);
 
 	// Assigns dx, dy to x, y
 	const Vector2d& Set
@@ -118,7 +118,7 @@ public:
 
 	const Vector2d& operator = (const std::string& sAval);
 
-	const Vector2d& operator = (const njrdxf::ParticularVector& pvAval);
+	const Vector2d& operator = (const njr::ParticularVector& pvAval);
 
 	const Vector2d& operator = (const Vector2d& vAval);
 

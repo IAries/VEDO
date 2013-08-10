@@ -43,32 +43,40 @@
 		</Compiler>
 		<Unit filename="../../src/NJR/Implementation/ACADXF.cpp" />
 		<Unit filename="../../src/NJR/Implementation/ACADXF_Solid.cpp" />
+		<Unit filename="../../src/NJR/Implementation/EFPathDependent.cpp" />
 		<Unit filename="../../src/NJR/Implementation/GeoUtility.cpp" />
 		<Unit filename="../../src/NJR/Implementation/HalfSpace.cpp" />
 		<Unit filename="../../src/NJR/Implementation/LinearProgramming.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Matrix.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Polygon.cpp" />
+		<Unit filename="../../src/NJR/Implementation/Polyhedra.cpp" />
 		<Unit filename="../../src/NJR/Implementation/RandomGenerator.cpp" />
 		<Unit filename="../../src/NJR/Implementation/RickyRandom.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Utility.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Vector2d.cpp" />
 		<Unit filename="../../src/NJR/Implementation/Vector3d.cpp" />
-		<Unit filename="../../src/NJR/Implementation/polyhedra.cpp" />
 		<Unit filename="../../src/NJR/Interfaces/ACADXF.h" />
 		<Unit filename="../../src/NJR/Interfaces/ACADXF_Solid.h" />
+		<Unit filename="../../src/NJR/Interfaces/Array3d.h" />
 		<Unit filename="../../src/NJR/Interfaces/Constants.h" />
+		<Unit filename="../../src/NJR/Interfaces/EFPathDependent.h" />
+		<Unit filename="../../src/NJR/Interfaces/EFSExtrapolation.h" />
+		<Unit filename="../../src/NJR/Interfaces/EFSTimeHistory.h" />
+		<Unit filename="../../src/NJR/Interfaces/EFScatter.h" />
+		<Unit filename="../../src/NJR/Interfaces/ExplicitFunction.h" />
 		<Unit filename="../../src/NJR/Interfaces/GeoUtility.h" />
 		<Unit filename="../../src/NJR/Interfaces/HalfSpace.h" />
 		<Unit filename="../../src/NJR/Interfaces/LinearProgramming.h" />
 		<Unit filename="../../src/NJR/Interfaces/Matrix.h" />
+		<Unit filename="../../src/NJR/Interfaces/ParameterSet.h" />
 		<Unit filename="../../src/NJR/Interfaces/Polygon.h" />
+		<Unit filename="../../src/NJR/Interfaces/Polyhedra.h" />
 		<Unit filename="../../src/NJR/Interfaces/RandomGenerator.h" />
 		<Unit filename="../../src/NJR/Interfaces/RickyRandom.h" />
-		<Unit filename="../../src/NJR/Interfaces/TimeHistory.h" />
+		<Unit filename="../../src/NJR/Interfaces/TimeControlVariable.h" />
 		<Unit filename="../../src/NJR/Interfaces/Utility.h" />
 		<Unit filename="../../src/NJR/Interfaces/Vector2d.h" />
 		<Unit filename="../../src/NJR/Interfaces/Vector3d.h" />
-		<Unit filename="../../src/NJR/Interfaces/polyhedra.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

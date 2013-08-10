@@ -20,11 +20,12 @@ void DOWorld::Draw(const char* filename)  const
 	std::vector<njr::NJRpolygon> faces;
 	njrdxf::Polygon	polygon;
 
-    njrdxf::Ellipsoid  ellipsoid(njr::dQuarterPI);
-	njrdxf::Sphere     sphere(njr::dOneThirdPI);
-	njrdxf::QuasiPlate cuboid;
-	njrdxf::Cylinder   cylinder(njr::dQuarterPI);
-	njrdxf::Text       text;
+    njrdxf::Ellipsoid                  ellipsoid(njr::dQuarterPI);
+	njrdxf::Sphere                     sphere(njr::dOneThirdPI);
+	njrdxf::QuasiPlate                 cuboid;
+	njrdxf::QuasiPlateWithCircularHole cuboid2;
+	njrdxf::Cylinder                   cylinder(njr::dQuarterPI);
+	njrdxf::Text                       text;
 
 	for (idos = cDOStatus.begin(); idos != cDOStatus.end(); ++idos)
 	{
@@ -66,6 +67,19 @@ void DOWorld::Draw(const char* filename)  const
 					pdoml->GetDOGroup().c_str(),
 					pdoml->GetShapeColor());
 				bdxf << &cuboid;
+				break;
+			case QuasiPlateWithCircularHole:
+			    // Aries: Need to be modified. It was copied from the QuasiPlate but not consider about the hole
+				cuboid2.Set
+					(shA.quasiplatewithcircularhole.width,
+					shA.quasiplatewithcircularhole.length,
+					shA.quasiplatewithcircularhole.height,
+					(*idos)->GetPosition(),
+					(*idos)->GetOrientationX(),
+					(*idos)->GetOrientationZ(),
+					pdoml->GetDOGroup().c_str(),
+					pdoml->GetShapeColor());
+				bdxf << &cuboid2;
 				break;
 			case QuasiCylinder:
 				cylinder.Set
@@ -114,6 +128,7 @@ void DOWorld::HighDraw(const char* filename) const
     njrdxf::Ellipsoid ellipsoid;
 	njrdxf::Sphere sphere(njr::dOneEighthPI);
 	njrdxf::QuasiPlate qplate;
+	njrdxf::QuasiPlateWithCircularHole qplate2;
 	njrdxf::QuasiCylinder qcylinder;
 	njrdxf::Text text;
 
@@ -157,6 +172,19 @@ void DOWorld::HighDraw(const char* filename) const
 					pdoml->GetDOGroup().c_str(),
 					pdoml->GetShapeColor());
 				bdxf << &qplate;
+				break;
+
+			case QuasiPlateWithCircularHole:
+				qplate2.Set
+					(shA.quasiplatewithcircularhole.width,
+					shA.quasiplatewithcircularhole.length,
+					shA.quasiplatewithcircularhole.height,
+					(*idos)->GetPosition(),
+					(*idos)->GetOrientationX(),
+					(*idos)->GetOrientationZ(),
+					pdoml->GetDOGroup().c_str(),
+					pdoml->GetShapeColor());
+				bdxf << &qplate2;
 				break;
 
 			case QuasiCylinder:

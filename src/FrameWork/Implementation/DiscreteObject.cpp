@@ -13,8 +13,8 @@ DiscreteObject::DiscreteObject
 	dVolume        = cpdoml->GetVolume();
 	dMass          = cpdoml->GetMass();
 	dSudoMass      = cpdoml->GetSudoMass();
-	vImpact        = njrdxf::ZERO;
-	vAngularImpact = njrdxf::ZERO;
+	vImpact        = njr::ZERO;
+	vAngularImpact = njr::ZERO;
 	ulCounter++;
 };
 
@@ -36,8 +36,8 @@ void DiscreteObject::ModifyPosition(const njr::Vector3d& vdp)
 
 void DiscreteObject::ClearImpact()
 {
-	vImpact        = njrdxf::ZERO;
-	vAngularImpact = njrdxf::ZERO;
+	vImpact        = njr::ZERO;
+	vAngularImpact = njr::ZERO;
 };
 
 void DiscreteObject::AddImpact

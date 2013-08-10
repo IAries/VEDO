@@ -9,6 +9,7 @@
 #include <Common/Interfaces/CDSphere2QuasiCylinder.h>
 #include <Common/Interfaces/CDSphere2QuasiCylinderAT.h>
 #include <Common/Interfaces/CDSphere2QuasiPlate.h>
+#include <Common/Interfaces/CDSphere2QuasiPlateWithCircularHole.h>
 #include <Common/Interfaces/CDSphere2Sphere.h>
 #include <Common/Interfaces/CDSphere2SphereAT.h>
 
@@ -19,6 +20,7 @@
 #include <Common/Interfaces/DOFixedSphere.h>
 #include <Common/Interfaces/DOQuasiCylinder.h>
 #include <Common/Interfaces/DOQuasiPlate.h>
+#include <Common/Interfaces/DOQuasiPlateWithCircularHole.h>
 #include <Common/Interfaces/DOSphere.h>
 
 //#include <Common/Interfaces/GSComplexShape.h>
@@ -43,10 +45,10 @@
 void usage (int g)
 {
     std::cout
-    	<< "IrisGM X3 build 410" << std::endl
+    	<< "IrisGM X3 build 809" << std::endl
 		<< std::endl
 		<< "\tUsage:" << std::endl
-		<< "\tIris <Mode> <IDO file> <Record> <UpIact>" << std::endl
+		<< "\tiris <Mode> <IDO file> <Record> <UpIact>" << std::endl
 		<< std::endl
 		<< "\tMode  : geometric/show/redistribute" << std::endl
 		<< "\tRecord: integer" << std::endl
@@ -94,18 +96,21 @@ int main (int argc, char* argv[])
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOConstrainedQuasiCylinder>(vedo::QuasiCylinder, "constrained"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOConstrainedQuasiPlate>(vedo::QuasiPlate, "constrained"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiCylinder>(vedo::QuasiCylinder, "fixed"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOConstrainedQuasiPlate>(vedo::QuasiCylinder, "fixed"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiPlate>(vedo::QuasiPlate, "fixed"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedSphere>(vedo::Sphere, "fixed"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiCylinder>(vedo::QuasiCylinder, "mobile"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiPlate>(vedo::QuasiPlate, "mobile"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiPlateWithCircularHole>(vedo::QuasiPlateWithCircularHole, "mobile"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOSphere>(vedo::Sphere, "mobile"));
 
 	pAssembler->AddIS(new vedo::IScf<vedo::ISwBSDBF>("ISwBSDBF"));
 	pAssembler->AddIS(new vedo::IScf<vedo::ISwBtSDBF>("ISwBtSDBF"));
 
-    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_Sphere>          (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>   (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>      (vedo::Sphere, vedo::QuasiPlate   , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_Sphere>                     (vedo::Sphere, vedo::Sphere                    , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>              (vedo::Sphere, vedo::QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>                 (vedo::Sphere, vedo::QuasiPlate                , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
+	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlateWithCircularHole> (vedo::Sphere, vedo::QuasiPlateWithCircularHole, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
     //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_SphereAT>        (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwLSDAT"));
     //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinderAT> (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwLSDAT"));
 

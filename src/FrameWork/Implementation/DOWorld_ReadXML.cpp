@@ -231,6 +231,20 @@ static bool node2data
 	}
 
 	shape = (DOMElement*) element
+		->getElementsByTagName(XMLtrans("QuasiPlateWithCircularHole"))->item(0);
+	if (shape != 0)
+	{
+		st = vedo::QuasiPlateWithCircularHole;
+		node2data(sa.quasiplatewithcircularhole.width      , shape->getAttributeNode(XMLtrans("Width"      )));
+		node2data(sa.quasiplatewithcircularhole.length     , shape->getAttributeNode(XMLtrans("Length"     )));
+		node2data(sa.quasiplatewithcircularhole.height     , shape->getAttributeNode(XMLtrans("Height"     )));
+		node2data(sa.quasiplatewithcircularhole.holeradius , shape->getAttributeNode(XMLtrans("HoleRadius" )));
+		node2data(sa.quasiplatewithcircularhole.holexoffset, shape->getAttributeNode(XMLtrans("HoleXOffset")));
+		node2data(sa.quasiplatewithcircularhole.holeyoffset, shape->getAttributeNode(XMLtrans("HoleYOffset")));
+		return true;
+	}
+
+	shape = (DOMElement*) element
 		->getElementsByTagName(XMLtrans("QuasiCylinder"))->item(0);
 	if (shape != 0)
 	{
@@ -447,19 +461,11 @@ static vedo::DOStatus* node2dos (const DOMNode* node)
 
 static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> node2is(const DOMNode* node)
 {
-	unsigned long ulMaster, ulSlave;
-	bool          bContact, bBond;
-	double        dKn;
-	njr::Vector3d vShearForce;
-	double        dudv[4*vedo::uNumUDDImpactStatus];
-	double*       dpudv = &dudv[0];
-	for(unsigned u=vedo::uNumUDDImpactStatus; u<3*vedo::uNumUDDImpactStatus; u++)
-		dudv[u] = 0.0;
-
-	DOMNodeList*  nl_IactUDV;
-
+	unsigned long     ulMaster, ulSlave;
+	bool              bContact, bBond;
+	double            dKn;
+	njr::Vector3d     vShearForce;
 	const DOMElement* element = (DOMElement*) node;
-
 	node2data(ulMaster   , element->getAttributeNode(XMLtrans("MasterDOStatusID")));
 	node2data(ulSlave    , element->getAttributeNode(XMLtrans("SlaveDOStatusID")));
 	node2data(bContact   , element->getAttributeNode(XMLtrans("Contact")));
@@ -467,20 +473,37 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> n
 	node2data(dKn        , element->getAttributeNode(XMLtrans("NormalStiffness")));
 	node2data(vShearForce, element->getElementsByTagName(XMLtrans("ShearForce"))->item(0));
 
-	nl_IactUDV = element->getElementsByTagName(XMLtrans("AccumulativeUserDefinedValue"));
-	for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
-		node2data
-			(*dpudv,
-			((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+	if(vedo::uNumUDDImpactStatus != 0)
+	{
+		double* dpudv = new double[4*vedo::uNumUDDImpactStatus];
+		for(unsigned u=vedo::uNumUDDImpactStatus; u<3*vedo::uNumUDDImpactStatus; u++)
+			*(dpudv+u) = 0.0;
 
-	nl_IactUDV = element->getElementsByTagName(XMLtrans("UserDefinedValue"));
-	dpudv += 2*vedo::uNumUDDImpactStatus;
-	for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
-		node2data
-			(*dpudv,
-			((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+		DOMNodeList* nl_IactUDV = element->getElementsByTagName(XMLtrans("AccumulativeUserDefinedValue"));
+		for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
+			node2data
+				(*dpudv,
+				 ((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
 
-	return std::make_pair(std::make_pair(ulMaster, ulSlave), new vedo::ImpactStatus(bContact, bBond, dKn, vShearForce, &dudv[0]));
+		nl_IactUDV = element->getElementsByTagName(XMLtrans("UserDefinedValue"));
+		dpudv += 2*vedo::uNumUDDImpactStatus;
+		for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
+			node2data
+				(*dpudv,
+				 ((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+
+		return
+			std::make_pair
+				(std::make_pair(ulMaster, ulSlave),
+				 new vedo::ImpactStatus(bContact, bBond, dKn, vShearForce, dpudv));
+	}
+	else
+	{
+		return
+			std::make_pair
+				(std::make_pair(ulMaster, ulSlave),
+				 new vedo::ImpactStatus(bContact, bBond, dKn, vShearForce));
+	}
 };
 
 static vedo::IactModel* node2iactml (const DOMNode* node)

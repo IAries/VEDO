@@ -125,14 +125,14 @@ public:
 
 private:
 
-	std::string sName;
-	bool bActive;
-	bool bSwitch[3];           // Open or close
-	njr::Vector3d	vLowerPoint;   // Lower boundary
-	njr::Vector3d	vUpperPoint;   // Upper boundary
-	njr::Vector3d	vCenter;       // Center
-	double dVolume;            // Volume (space inside the boundary)
-	njr::Vector3d	vRange;        // Range (length in x, y, z directions)
+	std::string   sName;
+	bool          bActive;
+	bool          bSwitch[3];    // Open or close
+	njr::Vector3d vLowerPoint;   // Lower boundary
+	njr::Vector3d vUpperPoint;   // Upper boundary
+	njr::Vector3d vCenter;       // Center
+	double        dVolume;       // Volume (space inside the boundary)
+	njr::Vector3d vRange;        // Range (length in x, y, z directions)
 };
 
 };   // namespace vedo

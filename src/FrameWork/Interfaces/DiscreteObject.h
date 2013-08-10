@@ -84,7 +84,7 @@ public:
 	void ClearImpact();
 
 	virtual void AddImpact
-		(const njr::Vector3d& vImpact, const njr::Vector3d& vAngularImpact = njrdxf::ZERO);
+		(const njr::Vector3d& vImpact, const njr::Vector3d& vAngularImpact = njr::ZERO);
 
 /*
 	inline njr::Vector3d GetFieldImpact() const

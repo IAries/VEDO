@@ -117,7 +117,7 @@ njr::Vector3d ISwModels::NormalForceNoTension
 		njr::Vector3d vSpringForce = - dKn * dImpactDepth * vImpactDirection;
 		njr::Vector3d vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
 		if(vShearViscousDampingForce.length() > vSpringForce.length())
-			return njr::Vector3d(njrdxf::ZERO);
+			return njr::ZERO;
 		else
 			return vSpringForce + vShearViscousDampingForce;
 	}
@@ -166,7 +166,7 @@ njr::Vector3d ISwModels::NormalForceNoTension
 		njr::Vector3d vSpringForce = - dKn * dImpactDepth * vImpactDirection;
 		njr::Vector3d vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
 		if(vShearViscousDampingForce.length() > vSpringForce.length())
-			return njr::Vector3d(njrdxf::ZERO);
+			return njr::ZERO;
 		else
 			return vSpringForce + vShearViscousDampingForce;
 	}

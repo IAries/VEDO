@@ -30,7 +30,7 @@ Cuboid::Cuboid()
 		lcon3dFace.push_back(new Face);
 	}
 
-	this->Set (1, 1, 1, ORIGIN, AXIALX, AXIALZ, "NJRdefault", red);
+	this->Set (1, 1, 1, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", red);
 };
 
 void Cuboid::Set
@@ -93,7 +93,7 @@ Ellipsoid::Ellipsoid (const double& vfpa)
 		}
 	}
 
-	this->Set(1.0, 2.0, 3.0, ORIGIN, AXIALX, AXIALZ, "NJRdefault", bylayer);
+	this->Set(1.0, 2.0, 3.0, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", bylayer);
 };
 
 void Ellipsoid::Set
@@ -138,7 +138,7 @@ void Ellipsoid::Set
 
 Sphere::Sphere(const double& vfpa) : Ellipsoid(vfpa)
 {
-	this->Set(1.0, ORIGIN, AXIALX, AXIALZ, "NJRdefault", red);
+	this->Set(1.0, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", red);
 };
 
 void Sphere::Set
@@ -163,7 +163,7 @@ Cylinder::Cylinder(const double& vfpa )
 		lcon3dFace.push_back (new Face);
 	}
 
-	this->Set(1.0, 10.0, ORIGIN, AXIALX, AXIALZ, "NJRdefault", red);
+	this->Set(1.0, 10.0, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", red);
 };
 
 void Cylinder::Set
@@ -218,7 +218,7 @@ QuasiCylinder::QuasiCylinder (const double& vfpa)
 		}
 	}
 
-	this->Set(1.0, 10.0, ORIGIN, AXIALX, AXIALZ, "NJRdefault", red);
+	this->Set(1.0, 10.0, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", red);
 };
 
 void QuasiCylinder::Set
@@ -286,10 +286,131 @@ QuasiPlate::QuasiPlate(const double& vfpa)
 		lcon3dFace.push_back (new Face);
 	}
 
-	this->Set(10.0, 10.0, 1.0, ORIGIN, AXIALX, AXIALZ, "NJRdefault", red);
+	this->Set(10.0, 10.0, 1.0, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", red);
 };
 
 void QuasiPlate::Set
+	(const double& dWidth,
+	const double& dLength,
+	const double& dHeight,
+	const njr::Vector3d &vP,
+	const njr::Vector3d& vOX,
+	const njr::Vector3d &vOZ,
+	const char* layer,
+	const Color &color)
+{
+ 	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
+	register int i;
+	register int j;
+	register int k;
+	double Hwidth  = dWidth  * 0.5;
+	double Hlength = dLength * 0.5;
+	double Hheight = dHeight * 0.5;
+
+	njr::Vector3d PlateVertex[54] ;
+	njr::Vector3d LX = vOX.direction() ;
+	njr::Vector3d LZ = vOZ.direction() ;
+	njr::Vector3d LY = LZ*LX ;
+
+	double Bc[9]
+		= {0.0,
+			njr::dHalfPI-0.001,
+			njr::dHalfPI,
+			njr::dPI-0.001,
+			njr::dPI,
+			njr::dOneAndHalfPI-0.001,
+			njr::dOneAndHalfPI,
+			njr::dDoublePI-0.001,
+			0.0};
+
+	double Qc[6] = {0.0, 0.18*njr::dPI, 0.41*njr::dPI ,0.59*njr::dPI , 0.82*njr::dPI, njr::dPI};
+
+	double Lx[9]
+		= {Hwidth,
+			Hwidth,
+			-Hwidth,
+			-Hwidth,
+			-Hwidth,
+			-Hwidth,
+			Hwidth,
+			Hwidth,
+			Hwidth};
+
+	double Ly[9]
+		= {Hlength,
+			Hlength,
+			Hlength,
+			Hlength,
+			-Hlength,
+			-Hlength,
+			-Hlength,
+			-Hlength,
+			Hlength};
+
+	// Drawing top face of this ApproximatePlate
+    (*i3dFace ++)->Set
+		((LX* Hwidth)+(LY* Hlength)+(vOZ*Hheight)+vP,
+		(LX*-Hwidth)+(LY* Hlength)+(vOZ*Hheight)+vP,
+		(LX*-Hwidth)+(LY*-Hlength)+(vOZ*Hheight)+vP,
+		(LX* Hwidth)+(LY*-Hlength)+(vOZ*Hheight)+vP,
+		layer,
+		color);
+
+	// Drawing bottom face of this ApproximatePlate
+    (*i3dFace ++)->Set
+		((LX* Hwidth)+(LY* Hlength)+(vOZ*-Hheight)+vP,
+		(LX*-Hwidth)+(LY* Hlength)+(vOZ*-Hheight)+vP,
+		(LX*-Hwidth)+(LY*-Hlength)+(vOZ*-Hheight)+vP,
+		(LX* Hwidth)+(LY*-Hlength)+(vOZ*-Hheight)+vP,
+		layer,
+		color);
+
+	/*************************************************************
+	 * Calculating surrounding vertexes on surrounding faces of
+	 * this ApproximatePlate
+	 *************************************************************/
+    for (k=0, i=0; i<6; i++)
+	{
+		for (j=0; j<9; j++, k++)
+		{
+			PlateVertex[k]
+				= (LX * (Hheight * std::sin(Qc[i]) * std::cos(Bc[j]) ) )
+				+ (LY * (Hheight * std::sin(Qc[i]) * std::sin(Bc[j]) ) )
+				+ (LZ * (Hheight * std::cos(Qc[i])                   ) )
+				+ vP
+				+ LX*Lx[j]
+				+ LY*Ly[j];
+		}
+	}
+
+	// Drawing surrounding faces of this ApproximatePlate
+    for (i=0; i<5; i++)
+	{
+		for (j=0; j<8; j++)
+		{
+			(*i3dFace ++)->Set
+				(PlateVertex[i*9+j],
+				PlateVertex[i*9+j+1],
+				PlateVertex[(i+1)*9+j+1],
+				PlateVertex[(i+1)*9+j],
+				layer,
+				color);
+		}
+	}
+};
+
+QuasiPlateWithCircularHole::QuasiPlateWithCircularHole(const double& vfpa)
+{
+	fpa = vfpa;
+	for (int i=0; i<42; ++i)
+	{
+		lcon3dFace.push_back (new Face);
+	}
+
+	this->Set(10.0, 10.0, 1.0, njr::ORIGIN, njr::AXIALX, njr::AXIALZ, "NJRdefault", red);
+};
+
+void QuasiPlateWithCircularHole::Set
 	(const double& dWidth,
 	const double& dLength,
 	const double& dHeight,

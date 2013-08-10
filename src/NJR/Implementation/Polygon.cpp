@@ -51,7 +51,7 @@ void NJRpolygon::CalCenter()
 {
 	register unsigned int i;
 
-	Vector3d w(njrdxf::ZERO);
+	Vector3d w;
 
 	for (i=0; i<_vertexes.size(); ++i)
 	{

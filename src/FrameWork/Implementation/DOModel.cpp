@@ -16,11 +16,11 @@ bool DOModel::operator () (const DOModel* p) const
 
 void DOModel::Analysis()
 {
-	double r, w, h, l, dmmi, x, y, z;
+	double r, w, h, l, hr, hxo, hyo, dmmi, x, y, z;
 	//double dmmiX, dmmiY, dmmiZ;
 	switch (shType)
 	{
-		case 1:
+		case Sphere:
 			r                        = shAttributes.sphere.radius;
 			dRange                   = r;
 			dVolume                  = njr::dFourthThirdsPI * r * r * r;
@@ -29,7 +29,7 @@ void DOModel::Analysis()
 			dmmi                     = 0.4 * dMass * r * r;
 			vMassMomentInertia       = njr::Vector3d(dmmi, dmmi, dmmi);
 			break;
-		case 2:
+		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2006/08/02)
  *
@@ -44,7 +44,7 @@ void DOModel::Analysis()
 			dSudoMass                = dDensityFactor * dMass;
 			vMassMomentInertia       = njr::Vector3d();
 			break;
-		case 3:
+		case QuasiCylinder:
 			r                        = shAttributes.quasicylinder.radius;
 			h                        = shAttributes.quasicylinder.height;
 
@@ -67,7 +67,7 @@ void DOModel::Analysis()
  ******************************************************************************/
 			vMassMomentInertia       = njr::Vector3d();
 			break;
-		case 4:
+		case QuasiPlate:
 			w                        = shAttributes.quasiplate.width;
 			h                        = shAttributes.quasiplate.height;
 			l                        = shAttributes.quasiplate.length;
@@ -93,7 +93,47 @@ void DOModel::Analysis()
  ******************************************************************************/
 			vMassMomentInertia       = njr::Vector3d();
 			break;
-		case 5:
+		case QuasiPlateWithCircularHole:
+			w                        = shAttributes.quasiplatewithcircularhole.width;
+			h                        = shAttributes.quasiplatewithcircularhole.height;
+			l                        = shAttributes.quasiplatewithcircularhole.length;
+            hr                       = shAttributes.quasiplatewithcircularhole.holeradius;
+            hxo                      = shAttributes.quasiplatewithcircularhole.holexoffset;
+            hyo                      = shAttributes.quasiplatewithcircularhole.holeyoffset;
+
+			if(sScope == "local")
+                dRange               = 0.5 * std::max(std::max(w, h), l);
+            else
+                dRange               = 0.5 * h;
+
+            if(    (std::abs(hxo) <= (0.5 * w - hr))
+                && (std::abs(hyo) <= (0.5 * l - hr)) )
+            {
+                dVolume              = w * h * l - hr * hr * njr::dPI * h;
+
+            }
+            else
+            {
+                std::cerr << "Error!! Code: DOModel::Analysis()" << std::endl;
+                exit(-1);
+            }
+
+			dMass                    = dDensity * dVolume;
+			dSudoMass                = dDensityFactor * dMass;
+/******************************************************************************
+ * Aries' Debug (2006/08/02)
+ *
+ *    Unfortunately, Mass moment of inertia depend on the direction of
+ * coordinate system.
+ *
+			dmmiX              = dMass * (h * h + l * l) / 12.0;
+			dmmiY              = dMass * (w * w + l * l) / 12.0;
+			dmmiZ              = dMass * (h * h + w * w) / 12.0;
+			vMassMomentInertia = njr::Vector3d(dmmiX, dmmiY, dmmiZ);
+ ******************************************************************************/
+			vMassMomentInertia       = njr::Vector3d();
+			break;
+		case Polyhedra:
 /******************************************************************************
  * Aries' Debug (2006/08/02)
  *
@@ -105,7 +145,7 @@ void DOModel::Analysis()
 			dSudoMass                = 0.0;
 			vMassMomentInertia       = njr::Vector3d();
 			break;
-		case 6:
+		case DMSphere:
 /******************************************************************************
  * Aries' Debug (2006/08/02)
  *
@@ -117,7 +157,7 @@ void DOModel::Analysis()
 			dSudoMass                = 0.0;
 			vMassMomentInertia       = njr::Vector3d();
 			break;
-		case 7:
+		case PolyhedraBRep:
 /******************************************************************************
  * Aries' Debug (2006/08/02)
  *
@@ -453,7 +493,7 @@ double DOModel::CrossAreaToSurface
 	njr::Vector3d vSurfaceNormal(a, b, c);   // Surface: ax+by+cz=d
 	switch (shType)
 	{
-		case 1:
+		case Sphere:
 			r   = shAttributes.sphere.radius;
 			dSphere2Surface
 				= fabs(d - (vP%vSurfaceNormal)/vSurfaceNormal.length());
@@ -466,7 +506,7 @@ double DOModel::CrossAreaToSurface
 				return (r * r - dSphere2Surface * dSphere2Surface) * njr::dPI;
 			}
 			break;
-		case 2:
+		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2007/08/11)
  *
@@ -474,7 +514,7 @@ double DOModel::CrossAreaToSurface
  ******************************************************************************/
 			return 0.0;
 			break;
-		case 3:
+		case QuasiCylinder:
 /******************************************************************************
  * Aries' Debug (2007/08/11)
  *
@@ -482,7 +522,7 @@ double DOModel::CrossAreaToSurface
  ******************************************************************************/
 			return 0.0;
 			break;
-		case 4:
+		case QuasiPlate:
 /******************************************************************************
  * Aries' Debug (2007/08/11)
  *
@@ -490,7 +530,15 @@ double DOModel::CrossAreaToSurface
  ******************************************************************************/
 			return 0.0;
 			break;
-		case 5:
+		case QuasiPlateWithCircularHole:
+/******************************************************************************
+ * Aries' Debug (2007/08/11)
+ *
+ *    QuasiPlateWithCircularHole, need to modify.
+ ******************************************************************************/
+			return 0.0;
+			break;
+		case Polyhedra:
 /******************************************************************************
  * Aries' Debug (2007/08/11)
  *
@@ -498,11 +546,19 @@ double DOModel::CrossAreaToSurface
  ******************************************************************************/
 			return 0.0;
 			break;
-		case 6:
+		case DMSphere:
 /******************************************************************************
  * Aries' Debug (2007/08/11)
  *
  *    DMSphere, need to modify.
+ ******************************************************************************/
+			return 0.0;
+			break;
+		case PolyhedraBRep:
+/******************************************************************************
+ * Aries' Debug (2007/08/11)
+ *
+ *    PolyhedraBRep, need to modify.
  ******************************************************************************/
 			return 0.0;
 			break;
@@ -553,12 +609,12 @@ std::pair<double, njr::Vector3d> DOModel::VolumeInsideBoundary
 
 	switch (shType)
 	{
-		case 1:
+		case Sphere:
 			R = shAttributes.sphere.radius;
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+				return std::make_pair(0.0, njr::ZERO);
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 					&& (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
@@ -610,48 +666,64 @@ std::pair<double, njr::Vector3d> DOModel::VolumeInsideBoundary
 					 njr::Vector3d(dMassCenterX, dMassCenterY, dMassCenterZ));
 			};
 			break;
-		case 2:
+		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 3:
+		case QuasiCylinder:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 4:
+		case QuasiPlate:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 5:
+		case QuasiPlateWithCircularHole:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    QuasiPlateWithCircularHole, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case Polyhedra:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 6:
+		case DMSphere:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case PolyhedraBRep:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    PolyhedraBRep, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
 			break;
 		default:
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 	};
 };
 
@@ -671,12 +743,12 @@ std::pair<double, njr::Vector3d> DOModel::ProjectedAreaOnXYPlane
 
 	switch (shType)
 	{
-		case 1:
+		case Sphere:
 			R = shAttributes.sphere.radius;
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+				return std::make_pair(0.0, njr::ZERO);
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 				    && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
@@ -719,48 +791,64 @@ std::pair<double, njr::Vector3d> DOModel::ProjectedAreaOnXYPlane
 					(dProjectedArea, njr::Vector3d(dCentroidX, dCentroidY, vP.z()));
 			};
 			break;
-		case 2:
+		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 3:
+		case QuasiCylinder:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 4:
+		case QuasiPlate:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 5:
+		case QuasiPlateWithCircularHole:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    QuasiPlateWithCircularHole, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case Polyhedra:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 6:
+		case DMSphere:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case PolyhedraBRep:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    PolyhedraBRep, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
 			break;
 		default:
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 	};
 };
 
@@ -780,12 +868,12 @@ std::pair<double, njr::Vector3d> DOModel::ProjectedAreaOnYZPlane
 
 	switch (shType)
 	{
-		case 1:
+		case Sphere:
 			R = shAttributes.sphere.radius;
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+				return std::make_pair(0.0, njr::ZERO);
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 				    && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
@@ -829,48 +917,64 @@ std::pair<double, njr::Vector3d> DOModel::ProjectedAreaOnYZPlane
 					(dProjectedArea, njr::Vector3d(vP.x(), dCentroidY, dCentroidZ));
 			};
 			break;
-		case 2:
+		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 3:
+		case QuasiCylinder:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 4:
+		case QuasiPlate:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 5:
+		case QuasiPlateWithCircularHole:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    QuasiPlateWithCircularHole, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case Polyhedra:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 6:
+		case DMSphere:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case PolyhedraBRep:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    PolyhedraBRep, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
 			break;
 		default:
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 	};
 };
 
@@ -890,12 +994,12 @@ std::pair<double, njr::Vector3d> DOModel::ProjectedAreaOnXZPlane
 
 	switch (shType)
 	{
-		case 1:
+		case Sphere:
 			R = shAttributes.sphere.radius;
 			if(   (Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R))
 			   || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)) )
 			{
-				return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+				return std::make_pair(0.0, njr::ZERO);
 			}
 			else if(   (Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R))
 				    && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)) )
@@ -939,48 +1043,64 @@ std::pair<double, njr::Vector3d> DOModel::ProjectedAreaOnXZPlane
 					(dProjectedArea, njr::Vector3d(dCentroidX, vP.y(), dCentroidZ));
 			};
 			break;
-		case 2:
+		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 3:
+		case QuasiCylinder:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 4:
+		case QuasiPlate:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 5:
+		case QuasiPlateWithCircularHole:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    QuasiPlateWithCircularHole, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case Polyhedra:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 			break;
-		case 6:
+		case DMSphere:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
+			break;
+		case PolyhedraBRep:
+/******************************************************************************
+ * Aries' Debug (2008/08/20)
+ *
+ *    PolyhedraBRep, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, njr::ZERO);
 			break;
 		default:
-			return std::make_pair(0.0, njr::Vector3d(njrdxf::ZERO));
+			return std::make_pair(0.0, njr::ZERO);
 	};
 };
 

@@ -36,7 +36,7 @@ public:
 
 	explicit Vector3d(const std::string& sInit);
 
-	Vector3d(const njrdxf::ParticularVector& pvInit);
+	Vector3d(const njr::ParticularVector& pvInit);
 
 	// Assigns dx, dy, dx to x, y, z
 	const Vector3d& Set
@@ -135,7 +135,7 @@ public:
 
 	const Vector3d& operator = (const std::string& sAval);
 
-	const Vector3d& operator = (const njrdxf::ParticularVector& pvAval);
+	const Vector3d& operator = (const njr::ParticularVector& pvAval);
 
 	const Vector3d& operator = (const Vector3d& vAval);
 

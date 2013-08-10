@@ -12,13 +12,18 @@ namespace vedo
 
 IactContainer::IactContainer(): vcIact(0)
 {
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		dUDVInEachProcessor[u] = 0.0;
+	if(uNumUDDImpactStatus != 0)
+	{
+	    dpUDVInEachProcessor = new double[2*uNumUDDImpactStatus];
+        for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+            *(dpUDVInEachProcessor+u) = 0.0;
+	}
 };
 
 IactContainer::~IactContainer()
 {
 	IactContainer::Clear();
+	delete dpUDVInEachProcessor;
 };
 
 void IactContainer::CalculateImpact(const double dt)
@@ -70,7 +75,7 @@ double IactContainer::GetUserDefinedValue(unsigned u) const
 {
 	if(u < 2*uNumUDDImpactStatus)
 	{
-		return dUDVInEachProcessor[u];
+		return *(dpUDVInEachProcessor+u);
 	}
 	else
 	{
@@ -83,17 +88,20 @@ double IactContainer::GetUserDefinedValue(unsigned u) const
 
 void IactContainer::CollectUserDefinedData()
 {
-	const double* dpUDV;
+	if(uNumUDDImpactStatus != 0)
+    {
+        const double* dpUDV;
 
-	for(unsigned u=uNumUDDImpactStatus; u<2*uNumUDDImpactStatus; u++)
-		dUDVInEachProcessor[u] = 0.0;
+        for(unsigned u=uNumUDDImpactStatus; u<2*uNumUDDImpactStatus; u++)
+            *(dpUDVInEachProcessor+u) = 0.0;
 
-	for(unsigned long ul=0; ul<vcIact.size(); ul++)
-	{
-		dpUDV = vcIact[ul]->RetrieveUserDefinedValue();
-		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-			dUDVInEachProcessor[u] += *(dpUDV+u);
-	}
+        for(unsigned long ul=0; ul<vcIact.size(); ul++)
+        {
+            dpUDV = vcIact[ul]->RetrieveUserDefinedValue();
+            for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+                *(dpUDVInEachProcessor+u) += *(dpUDV+u);
+        }
+    }
 };
 
 bool IactContainer::InteractionDetectContact(unsigned long ul)

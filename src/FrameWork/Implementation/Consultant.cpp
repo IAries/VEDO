@@ -153,8 +153,12 @@ Consultant::Consultant
 	sfilename[strlen(filename)-4] = 0;
 	timePartitioning              = 0.0;
 
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		dUDVIS[u] = 0.0;
+	if(uNumUDDImpactStatus != 0)
+	{
+        dpUDVIS = new double[2*uNumUDDImpactStatus];
+        for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+            *(dpUDVIS+u) = 0.0;
+	}
 
 //	for(unsigned u=0; u<2*uNumUDDDOStatus; u++)
 //		dUDVDS[u] = 0.0;
@@ -162,6 +166,7 @@ Consultant::Consultant
 
 Consultant::~Consultant()
 {
+    delete dpUDVIS;
 };
 
 unsigned long Consultant::GetDONum() const
@@ -311,16 +316,17 @@ void Consultant::BuildIactTab(std::vector<DOMap>& v)
 void Consultant::CollectUserDefinedData(IactContainer& cIact)
 {
 	cIact.CollectUserDefinedData();
-
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		dUDVIS[u] = cIact.GetUserDefinedValue(u);
+    memcpy
+        (dpUDVIS                             ,
+         cIact.GetUserDefinedValue()         ,
+         2*uNumUDDImpactStatus*sizeof(double) );
 };
 
 double Consultant::GetUserDefinedValue(unsigned u) const
 {
 	if(u < 2*uNumUDDImpactStatus)
 	{
-		return dUDVIS[u];
+		return *(dpUDVIS+u);
 	}
 	else
 	{

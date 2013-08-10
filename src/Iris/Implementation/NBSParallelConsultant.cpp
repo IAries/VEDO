@@ -5,6 +5,7 @@
 #include <NJR/Interfaces/Utility.h>
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <limits>
 #include <iostream>
 #include <iterator>
@@ -1023,28 +1024,30 @@ const ImpactStatus* NBSParallelConsultant::RetrieveImpactStatus
 
 void NBSParallelConsultant::CollectUserDefinedData(IactContainer& cIact)
 {
-	// Every processor collect their-owned user-defined data from all "Interaction"s
-	cIact.CollectUserDefinedData();
+	if(uNumUDDImpactStatus != 0)
+	{
+		// Every processor collect their-owned user-defined data from all "Interaction"s
+		cIact.CollectUserDefinedData();
 
-	// All processors collect and sum their-owned user-defined data
-	double dUserDefinedDataSend[2*uNumUDDImpactStatus];
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		dUserDefinedDataSend[u] = cIact.GetUserDefinedValue(u);
+		// All processors collect and sum their-owned user-defined data
+		double* dpUserDefinedDataSend = new double[2*uNumUDDImpactStatus];
+		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+			*(dpUserDefinedDataSend+u) = cIact.GetUserDefinedValue(u);
 
-	double dUserDefinedDataSum[2*uNumUDDImpactStatus];
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		dUserDefinedDataSum[u] = 0.0;
+		double* dpUserDefinedDataSum = new double(2*uNumUDDImpactStatus);
+		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+			*(dpUserDefinedDataSum+u) = 0.0;
 
-	MPI_Allreduce
-		(&dUserDefinedDataSend,
-		 &dUserDefinedDataSum,
-		 2*uNumUDDImpactStatus,
-		 MPI_DOUBLE,
-		 MPI_SUM,
-		 MPI_COMM_WORLD);
+		MPI_Allreduce
+			(dpUserDefinedDataSend,
+			 dpUserDefinedDataSum ,
+			 2*uNumUDDImpactStatus,
+			 MPI_DOUBLE           ,
+			 MPI_SUM              ,
+			 MPI_COMM_WORLD        );
 
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		dUDVIS[u] = dUserDefinedDataSum[u];
+        memcpy(dpUDVIS, dpUserDefinedDataSum, 2*uNumUDDImpactStatus*sizeof(double));
+	}
 };
 
 void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
@@ -1095,10 +1098,10 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	int totalSize = 0;
 	for (unsigned u=0; u<NP; ++u)
 	{
-		totalSize     +=                                      numRecords[u];
-		recvPair  [u]  = 2                                  * numRecords[u];
-		recvC_Bond[u]  = 2                                  * numRecords[u];
-		recvKn_SF [u]  = 4                                  * numRecords[u];
+		totalSize     +=                           numRecords[u];
+		recvPair  [u]  = 2                       * numRecords[u];
+		recvC_Bond[u]  = 2                       * numRecords[u];
+		recvKn_SF [u]  = 4                       * numRecords[u];
 		recvUDV   [u]  = 4 * uNumUDDImpactStatus * numRecords[u];
 	}
 
@@ -1108,20 +1111,20 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	offUDV   [0] = 0;
 	for(unsigned int u2=1; u2<NP; ++u2)
     {
-		offPair  [u2] = offPair  [u2-1] + 2                                  * numRecords[u2-1];
-		offC_Bond[u2] = offC_Bond[u2-1] + 2                                  * numRecords[u2-1];
-		offKn_SF [u2] = offKn_SF [u2-1] + 4                                  * numRecords[u2-1];
+		offPair  [u2] = offPair  [u2-1] + 2                       * numRecords[u2-1];
+		offC_Bond[u2] = offC_Bond[u2-1] + 2                       * numRecords[u2-1];
+		offKn_SF [u2] = offKn_SF [u2-1] + 4                       * numRecords[u2-1];
 		offUDV   [u2] = offUDV   [u2-1] + 4 * uNumUDDImpactStatus * numRecords[u2-1];
 	}
 
-	unsigned long* p       = new unsigned long [2                                  * totalSize];
-	unsigned*      c_bond  = new unsigned      [2                                  * totalSize];
-	double*        kn_sf   = new double        [4                                  * totalSize];
+	unsigned long* p       = new unsigned long [2                       * totalSize];
+	unsigned*      c_bond  = new unsigned      [2                       * totalSize];
+	double*        kn_sf   = new double        [4                       * totalSize];
 	double*        udv     = new double        [4 * uNumUDDImpactStatus * totalSize];
 
-	unsigned long* lp      = new unsigned long [2                                  * tblSize];
-	unsigned*      lc_bond = new unsigned      [2                                  * tblSize];
-	double*        lkn_sf  = new double        [4                                  * tblSize];
+	unsigned long* lp      = new unsigned long [2                       * tblSize];
+	unsigned*      lc_bond = new unsigned      [2                       * tblSize];
+	double*        lkn_sf  = new double        [4                       * tblSize];
 	double*        ludv    = new double        [4 * uNumUDDImpactStatus * tblSize];
 
 	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;

@@ -38,9 +38,6 @@ bool IactRecordTab::ReadIRT2010(const char* filename)
 	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
-	double dudv[4*uNumUDDImpactStatus];
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dudv[u] = 0.0;
 	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
 	for(unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 	{
@@ -65,8 +62,6 @@ bool IactRecordTab::ReadIRT2010(const char* filename)
 		}
 
 		is.SetBond(bBond);
-
-		is.SetAllUserDefinedValue(&dudv[0]);
 
 		mapImStatus.insert(std::make_pair(pElements, is));
 	}
@@ -96,10 +91,6 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
-	double dudv[4*uNumUDDImpactStatus];
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
-		dudv[u] = 0.0;
-
 	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
 	for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 	{
@@ -116,8 +107,6 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 
 		irtif.read((char*) &vShearForce, 3*sizeof(double));
 		is.SetShearForce(vShearForce);
-
-		is.SetAllUserDefinedValue(&dudv[0]);
 
 		mapImStatus.insert(std::make_pair(pElements, is));
 	}
@@ -365,8 +354,13 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 	double        dKn;
 	njr::Vector3d vShearForce;
 	ImpactStatus  is;
-	double dpudv[4*vedo::uNumUDDImpactStatus];
-	memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
+
+	double* dpudv;
+	if(uNumUDDImpactStatus != 0)
+	{
+		dpudv = new double[4*vedo::uNumUDDImpactStatus];
+		memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
+	}
 
     for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
     {
@@ -384,8 +378,8 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
         idof.read((char*) &vShearForce                       , 3*sizeof(double));
         is.SetShearForce(vShearForce);
 
-        idof.read((char*) &dpudv[0]                          , vedo::uNumUDDImpactStatus*sizeof(double));
-        idof.read((char*) &dpudv[3*vedo::uNumUDDImpactStatus], vedo::uNumUDDImpactStatus*sizeof(double));
+        idof.read((char*) dpudv                      , uNumUDDImpactStatus*sizeof(double));
+        idof.read((char*) dpudv+3*uNumUDDImpactStatus, uNumUDDImpactStatus*sizeof(double));
 
         mapImStatus.insert(std::make_pair(pElements, is));
     }

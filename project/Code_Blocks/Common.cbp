@@ -44,6 +44,7 @@
 		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiCylinder.cpp" />
 		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiCylinderAT.cpp" />
 		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/CDSphere2QuasiPlateWithCircularHole.cpp" />
 		<Unit filename="../../src/Common/Implementation/CDSphere2Sphere.cpp" />
 		<Unit filename="../../src/Common/Implementation/CDSphere2SphereAT.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOConstrainedQuasiCylinder.cpp" />
@@ -53,6 +54,7 @@
 		<Unit filename="../../src/Common/Implementation/DOFixedSphere.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOQuasiCylinder.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOQuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOQuasiPlateWithCircularHole.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOSphere.cpp" />
 		<Unit filename="../../src/Common/Implementation/GSComplexShape.cpp" />
 		<Unit filename="../../src/Common/Implementation/GSCylinder.cpp" />
@@ -68,6 +70,7 @@
 		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiCylinder.h" />
 		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiCylinderAT.h" />
 		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/CDSphere2QuasiPlateWithCircularHole.h" />
 		<Unit filename="../../src/Common/Interfaces/CDSphere2Sphere.h" />
 		<Unit filename="../../src/Common/Interfaces/CDSphere2SphereAT.h" />
 		<Unit filename="../../src/Common/Interfaces/DOConstrainedQuasiCylinder.h" />
@@ -77,6 +80,7 @@
 		<Unit filename="../../src/Common/Interfaces/DOFixedSphere.h" />
 		<Unit filename="../../src/Common/Interfaces/DOQuasiCylinder.h" />
 		<Unit filename="../../src/Common/Interfaces/DOQuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/DOQuasiPlateWithCircularHole.h" />
 		<Unit filename="../../src/Common/Interfaces/DOSphere.h" />
 		<Unit filename="../../src/Common/Interfaces/GSComplexShape.h" />
 		<Unit filename="../../src/Common/Interfaces/GSCylinder.h" />

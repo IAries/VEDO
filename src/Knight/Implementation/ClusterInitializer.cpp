@@ -36,11 +36,11 @@ void ClusterInitializer::Create(std::string doName, vedo::DOWorld* pWorld)
 
 	vedo::DOStatus dos
 		(doName,
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		njr::ZERO,
+		njr::ZERO,
+		njr::AXIALX,
+		njr::AXIALZ,
+		njr::ZERO);
 
     // Recursion to work in general 3:
     MakeSlab(zeroCenter, 3, dos, pWorld);

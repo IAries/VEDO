@@ -7,7 +7,7 @@ all: debug release
 debug: ${VEDO_BIN}irisGM-debug
 release: ${VEDO_BIN}irisGM
 
-${VEDO_BIN}irisGM-debug: ${TMP_DEBUG}IrisGM.o                \
+${VEDO_BIN}irisGM-debug: ${TMP_DEBUG}IrisGM.o        \
                          ${TMP_DEBUG}NBSParallelConsultant.o
 	${mLNK} -o $@ $^ ${mLNK_FLAGd}
 

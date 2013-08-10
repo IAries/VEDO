@@ -57,7 +57,7 @@ SystemParameter2d::SystemParameter2d(std::ifstream& idof, unsigned int version)
 	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(njr::Vector2d));
 	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(njr::Vector2d));
 	ZoneOfInterest.Correct();
-	njr::Vector2d vPBC_Point(njrdxf::ZERO);
+	njr::Vector2d vPBC_Point;
 	PeriodicBoundaryConditions.SetLowerPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.SetUpperPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.Correct();

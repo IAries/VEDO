@@ -11,7 +11,7 @@ namespace njr
 
 Vector2d::Vector2d()
 {
-	*this = njrdxf::ORIGIN;
+	*this = ORIGIN;
 };
 
 Vector2d::Vector2d(const double& dx, const double& dy)
@@ -34,7 +34,7 @@ Vector2d::Vector2d(const std::string& sInit)
 	*this = sInit;
 };
 
-Vector2d::Vector2d(const njrdxf::ParticularVector& pvInit)
+Vector2d::Vector2d(const njr::ParticularVector& pvInit)
 {
 	*this = pvInit;
 };
@@ -114,22 +114,24 @@ const Vector2d& Vector2d::operator = (const char* cInit)
 	return *this;
 };
 
-const Vector2d& Vector2d::operator = (const njrdxf::ParticularVector& pvAval)
+const Vector2d& Vector2d::operator = (const njr::ParticularVector& pvAval)
 {
 	switch (pvAval)
 	{
-		case njrdxf::ORIGIN:
+		case ORIGIN:
 			this->Set(0.0, 0.0);
 			break;
-		case njrdxf::AXIALX:
+		case AXIALX:
 			this->Set(1.0, 0.0);
 			break;
-		case njrdxf::AXIALY:
+		case AXIALY:
 			this->Set(0.0, 1.0);
 			break;
-		case njrdxf::ZERO:
+		case ZERO:
 			this->Set(0.0, 0.0);
 			break;
+		default:
+			this->Set(0.0, 0.0);
 	};
 	return *this;
 };

@@ -210,7 +210,8 @@ protected:
 	virtual void BuildIactTab(std::vector<DOMap>& v1, std::vector<DOMap>& v2);
 	virtual void BuildIactTab(std::vector<DOMap>& v);
 
-	double dUDVIS[2*uNumUDDImpactStatus];   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
+	double* dpUDVIS;   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
+	//double dUDVIS[2*uNumUDDImpactStatus];   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
                                             // uNumUDDImpactStatus ~ 2*uNumUDDImpactStatus-1: User-defined value in ImpactStatus
 
 //	double dUDVDS[2*uNumUDDDOStatus];       // 0 ~ uNumUDDDOStatus: Accumulative user-defined value in DOStatus

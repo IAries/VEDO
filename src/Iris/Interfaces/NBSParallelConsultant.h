@@ -181,6 +181,7 @@ void NBSParallelConsultant::subReset
 	double safeD;   // The safe distance of each element
 	const DOStatus* cpdos  = 0;
 	const DOModel*  cpdoml = 0;
+	// Aries: The following loop can be merged with the next loop
 	for (unsigned long i=0; i<numberDO; ++i)
 	{
 		Consultant::vcDO.push_back(i);
@@ -236,6 +237,7 @@ void NBSParallelConsultant::subReset
 	std::vector<DOMap> GlobalElement;
 
 	njr::Vector3d pos;
+	// Aries: The following loop can be merged with the least loop
 	for (unsigned long i=0; i<numberDO; ++i)
 	{
 		if (vDOMap[i].cpdoml()->GetScope() == "local")

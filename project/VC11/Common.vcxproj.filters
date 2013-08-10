@@ -15,180 +15,162 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\CDSphere2QuasiCylinder.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\CDSphere2QuasiCylinderAT.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinderAT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\CDSphere2QuasiPlate.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiPlate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\CDSphere2Sphere.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\CDSphere2SphereAT.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2SphereAT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOConstrainedQuasiCylinder.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOConstrainedQuasiCylinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOConstrainedQuasiPlate.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOConstrainedQuasiPlate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOFixedQuasiCylinder.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOFixedQuasiCylinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOFixedQuasiPlate.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOFixedQuasiPlate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOFixedSphere.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOFixedSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOQuasiCylinder.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiCylinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOQuasiPlate.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOQuasiPlate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\DOSphere.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\DOSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\GSComplexShape.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\GSComplexShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\GSCylinder.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\GSCylinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\GSEllipsoid.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\GSEllipsoid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\GSRectangle.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\GSRectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\GSSphere.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\GSSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\ISwBSDBF.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwBSDBF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\ISwBtSDBF.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwBtSDBF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\ISwH.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\ISwHWS.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\ISwHWS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\ISwTest1.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\ISwTest2.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\NBSConsultant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\LeapConsultant.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\NearConsultant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\LeapConsultant2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\NBSConsultant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\NearConsultant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Common\Interfaces\SafeConsultant.h">
+    <ClInclude Include="..\..\src\Common\Interfaces\SafeConsultant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\CDSphere2QuasiCylinder.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiCylinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\CDSphere2QuasiCylinderAT.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiCylinderAT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\CDSphere2QuasiPlate.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2QuasiPlate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\CDSphere2Sphere.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\CDSphere2SphereAT.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\CDSphere2SphereAT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOConstrainedQuasiCylinder.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOConstrainedQuasiCylinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOConstrainedQuasiPlate.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOConstrainedQuasiPlate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOFixedQuasiCylinder.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOFixedQuasiCylinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOFixedQuasiPlate.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOFixedQuasiPlate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOFixedSphere.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOFixedSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOQuasiCylinder.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOQuasiCylinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOQuasiPlate.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOQuasiPlate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\DOSphere.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\DOSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\GSComplexShape.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\GSComplexShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\GSCylinder.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\GSCylinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\GSEllipsoid.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\GSEllipsoid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\GSRectangle.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\GSRectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\GSSphere.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\GSSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\ISwBSDBF.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\ISwBSDBF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\ISwBtSDBF.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\ISwBtSDBF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\ISwH.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\ISwH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\ISwHWS.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\ISwHWS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\ISwTest1.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\ISwTest2.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\NBSConsultant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\LeapConsultant.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\NearConsultant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\LeapConsultant2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\NBSConsultant.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\NearConsultant.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Common\Implementation\SafeConsultant.cpp">
+    <ClCompile Include="..\..\src\Common\Implementation\SafeConsultant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

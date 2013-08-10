@@ -7,8 +7,8 @@ namespace vedo
 Boundary2d::Boundary2d()
 {
 	sName = "Boundary2d";
-	vLowerPoint = njrdxf::ZERO;
-	vUpperPoint = njrdxf::ZERO;
+	vLowerPoint = njr::ZERO;
+	vUpperPoint = njr::ZERO;
 	bSwitch[0] = false;
 	bSwitch[1] = false;
 	Correct();

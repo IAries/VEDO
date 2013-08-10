@@ -16,6 +16,10 @@ public:
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const double& Kn,
+         const njr::Vector3d& ShearForce                         );
+
+	ImpactStatus
+        (const bool& Contact, const bool& Bond, const double& Kn,
          const njr::Vector3d& ShearForce, const double* UDVp       );
 
 	ImpactStatus(const ImpactStatus&);
@@ -88,11 +92,12 @@ public:
 
 private:
 
-	bool          bContact;                      // Contacted or not
-	bool          bBond;                         // Bond exists or not
-	double        dKn;                           // Stiffness of normal spring
-	njr::Vector3d vShearForce;                   // Shear force
-	double        dUDV[uNumUDDImpactStatus*4];   // User-defined value
+	bool          bContact;      // Contacted or not
+	bool          bBond;         // Bond exists or not
+	double        dKn;           // Stiffness of normal spring
+	njr::Vector3d vShearForce;   // Shear force
+	double*       dpUDV;         // User-defined value
+//	double        dUDV[uNumUDDImpactStatus*4];   // User-defined value
                                                  // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value
                                                  // uNumUDDImpactStatus ~ 2*uNumUDDImpactStatus-1: Unsynchronized part of Accumulative user-defined value
                                                  // 2*uNumUDDImpactStatus ~ 3*uNumUDDImpactStatus-1: Unsynchronized part of Accumulative user-defined value (to be referenced)

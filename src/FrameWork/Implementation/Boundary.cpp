@@ -7,8 +7,8 @@ namespace vedo
 Boundary::Boundary()
 {
 	sName = "Boundary";
-	vLowerPoint = njrdxf::ZERO;
-	vUpperPoint = njrdxf::ZERO;
+	vLowerPoint = njr::ZERO;
+	vUpperPoint = njr::ZERO;
 	for(unsigned int i=0; i<3; i++)
 	{
 		bSwitch[i] = false;

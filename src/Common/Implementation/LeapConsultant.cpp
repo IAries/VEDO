@@ -159,17 +159,17 @@ bool LeapConsultant::Reset()
  *
  *    I modified these codes. Although they are uglier, but faster.
  ******************************************************************************/
-	unsigned int NumOfSphere = vecxloc.size();
-	double SphereXMin        = vecxloc[0];
-	double SphereXMax        = vecxloc[NumOfSphere-1];
-	double SphereYMin        = vecyloc[0];
-	double SphereYMax        = vecyloc[NumOfSphere-1];
-	double SphereZMin        = veczloc[0];
-	double SphereZMax        = veczloc[NumOfSphere-1];
-	double SphereVMax        = vecvloc[NumOfSphere-1];
-	double SphereRMax        = vecrloc[NumOfSphere-1];
-	double DiscardRatio      = 0.02;
-	double TempDouble        = 1.0 - DiscardRatio;
+	unsigned long NumOfSphere = vecxloc.size();
+	double SphereXMin         = vecxloc[0];
+	double SphereXMax         = vecxloc[NumOfSphere-1];
+	double SphereYMin         = vecyloc[0];
+	double SphereYMax         = vecyloc[NumOfSphere-1];
+	double SphereZMin         = veczloc[0];
+	double SphereZMax         = veczloc[NumOfSphere-1];
+	double SphereVMax         = vecvloc[NumOfSphere-1];
+	double SphereRMax         = vecrloc[NumOfSphere-1];
+	double DiscardRatio       = 0.02;
+	double TempDouble         = 1.0 - DiscardRatio;
 
 	double xSpan
 		= vecxloc[TempDouble*NumOfSphere-1] - vecxloc[DiscardRatio*NumOfSphere];
@@ -323,15 +323,15 @@ void LeapConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	CollectUserDefinedData(cIact);
 
 	pIRTbl->Clear();
-	for (unsigned int i=0; i<cIact.size(); ++i)
+	for (unsigned long ul=0; ul<cIact.size(); ++ul)
     {
-		const Interaction* pInt = cIact.GetInteraction(i);
+		const Interaction* pInt = cIact.GetInteraction(ul);
 
 		if (pInt->IsActive())
 			pIRTbl
 				->PushRecord
-					(IactPairTab[i].first,
-					 IactPairTab[i].second,
+					(IactPairTab[ul].first,
+					 IactPairTab[ul].second,
 					 *pInt->GetImpactStatus());
 	}
 

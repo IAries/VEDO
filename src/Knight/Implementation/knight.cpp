@@ -31,7 +31,7 @@
 void usage()
 {
 	std::cout
-		<< "Knight X3 build 410" << std::endl
+		<< "Knight X3 build 809" << std::endl
 		<< std::endl
 		<< "Usage:" << std::endl
 		<< std::endl
@@ -376,6 +376,9 @@ vedo::DOWorld* info(vedo::DOWorld *oWorld)
 				break;
 			case vedo::QuasiPlate:
 				shape = "QuasiPlate";
+				break;
+			case vedo::QuasiPlateWithCircularHole:
+				shape = "QuasiPlateWithCircularHole";
 				break;
 		 	case vedo::QuasiCylinder:
 		 		shape = "QuasiCylinder";
@@ -726,11 +729,11 @@ void AddDOInSpace
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
 	vedo::DOStatus dos
 		(DOName,
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		njr::ZERO,
+		njr::ZERO,
+		njr::AXIALX,
+		njr::AXIALZ,
+		njr::ZERO);
 	*LowerBoundary += njr::Vector3d(R, R, R);
 	*UpperBoundary -= njr::Vector3d(R, R, R);
 	for(double y=(LowerBoundary->y()); y<=(UpperBoundary->y()); y+=(2.0*R))
@@ -758,11 +761,11 @@ void AddPotentialEnergy
 	const njr::Vector3d ff = oWorld->GetSystemParameter()->GetFieldAcceleration();
 	vedo::DOStatus new_dos
 		(DOName,
-		 njr::Vector3d(njrdxf::ZERO),
-		 njr::Vector3d(njrdxf::ZERO),
-		 njr::Vector3d(njrdxf::AXIALX),
-		 njr::Vector3d(njrdxf::AXIALZ),
-		 njr::Vector3d(njrdxf::ZERO));
+		 njr::ZERO,
+		 njr::ZERO,
+		 njr::AXIALX,
+		 njr::AXIALZ,
+		 njr::ZERO);
 	const vedo::DOStatus* dos = 0;
     double TempVelocitySquare;
 	for(unsigned long ul=0;
@@ -799,11 +802,11 @@ void AddExternalVelocity
 	njr::Vector3d vel;
 	vedo::DOStatus new_dos
 		(DOName,
-		 njr::Vector3d(njrdxf::ZERO),
-		 njr::Vector3d(njrdxf::ZERO),
-		 njr::Vector3d(njrdxf::AXIALX),
-		 njr::Vector3d(njrdxf::AXIALZ),
-		 njr::Vector3d(njrdxf::ZERO));
+		 njr::ZERO,
+		 njr::ZERO,
+		 njr::AXIALX,
+		 njr::AXIALZ,
+		 njr::ZERO);
 	const vedo::DOStatus* dos = 0;
 	for(unsigned long ul=0;
         ul < oWorld->GetSystemParameter()->GetDONumber();
@@ -828,11 +831,11 @@ void AddExternalAngularVelocity
 	njr::Vector3d avel;
 	vedo::DOStatus new_dos
 		(DOName,
-		 njr::Vector3d(njrdxf::ZERO),
-		 njr::Vector3d(njrdxf::ZERO),
-		 njr::Vector3d(njrdxf::AXIALX),
-		 njr::Vector3d(njrdxf::AXIALZ),
-		 njr::Vector3d(njrdxf::ZERO));
+		 njr::ZERO,
+		 njr::ZERO,
+		 njr::AXIALX,
+		 njr::AXIALZ,
+		 njr::ZERO);
 	const vedo::DOStatus* dos = 0;
 	for(unsigned long ul=0;
         ul < oWorld->GetSystemParameter()->GetDONumber();
@@ -859,11 +862,11 @@ void AddRandomDOInCartesianSpace
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
 	vedo::DOStatus dos
 		(DOName,
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		njr::ZERO,
+		njr::ZERO,
+		njr::AXIALX,
+		njr::AXIALZ,
+		njr::ZERO);
 	*LowerBoundary += njr::Vector3d(R, R, R);
 	*UpperBoundary -= njr::Vector3d(R, R, R);
 	double temp_x, temp_y, temp_z;
@@ -893,11 +896,11 @@ void AddRandomDOInCylindricalSpace
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
 	vedo::DOStatus dos
 		(DOName,
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		njr::ZERO,
+		njr::ZERO,
+		njr::AXIALX,
+		njr::AXIALZ,
+		njr::ZERO);
 
 	*r -= R;
 	double dSquare_r = (*r) * (*r);
@@ -1013,11 +1016,11 @@ void AddRandomDOInSphericalSpace
 	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
 	vedo::DOStatus dos
 		(DOName,
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		njr::ZERO,
+		njr::ZERO,
+		njr::AXIALX,
+		njr::AXIALZ,
+		njr::ZERO);
 	*r -= R;
 	double temp_x, temp_y, temp_z, temp_radius, temp_angle_1, temp_angle_2;
 	srand(time(0));
@@ -1043,12 +1046,7 @@ void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld)
 	unsigned long rNum = rWorld->GetSystemParameter()->GetDONumber();
 	unsigned long oNum = oWorld->GetSystemParameter()->GetDONumber();
 	vedo::DOStatus dos
-		("NoName",
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		("NoName", njr::ZERO, njr::ZERO, njr::AXIALX, njr::AXIALZ, njr::ZERO);
 	for(unsigned long ul=0; ul<oNum; ul++)
 	{
 		dos = *(oWorld->GetDOStatus(ul));
@@ -1061,17 +1059,41 @@ void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld)
 	}
 };
 
+void CombineModels
+	(vedo::DOWorld*       rWorld         ,
+	 vedo::IactRecordTab* rpIactRecordTab,
+	 vedo::DOWorld*       oWorld         ,
+	 vedo::IactRecordTab* opIactRecordTab )
+{
+	unsigned long rNum = rWorld->GetSystemParameter()->GetDONumber();
+	unsigned long oNum = oWorld->GetSystemParameter()->GetDONumber();
+	vedo::DOStatus dos
+		("NoName", njr::ZERO, njr::ZERO, njr::AXIALX, njr::AXIALZ, njr::ZERO);
+		unsigned long ulCounter = 0;
+	for(unsigned long ul=0; ul<oNum; ul++)
+	{
+		dos = *(oWorld->GetDOStatus(ul));
+		if (oWorld
+			->GetDOModel(oWorld->GetDOStatus(ul)->GetDOName())->GetBehavior()
+				== "mobile"                                                  )
+		{
+			ulCounter++;
+			rWorld->AddDOStatus(new vedo::DOStatus(dos));
+		}
+	}
+};
+
 void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld, const std::string& sDOName)
 {
 	unsigned long rNum = rWorld->GetSystemParameter()->GetDONumber();
 	unsigned long oNum = oWorld->GetSystemParameter()->GetDONumber();
 	vedo::DOStatus dos
 		("NoName",
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::ZERO),
-		njr::Vector3d(njrdxf::AXIALX),
-		njr::Vector3d(njrdxf::AXIALZ),
-		njr::Vector3d(njrdxf::ZERO));
+		njr::ZERO,
+		njr::ZERO,
+		njr::AXIALX,
+		njr::AXIALZ,
+		njr::ZERO);
 	for(unsigned long ul=0; ul<oNum; ul++)
 	{
 		dos = *(oWorld->GetDOStatus(ul));
@@ -1087,15 +1109,15 @@ double SCCFlowabilityIndex
 	double StartPoint,
 	double EndPoint)
 {
-	unsigned long   DOnum  = oWorld->GetSystemParameter()->GetDONumber();
-	double          DOsize =  0.0;
+	unsigned long         DOnum  = oWorld->GetSystemParameter()->GetDONumber();
+	double                DOsize =  0.0;
 	const vedo::DOStatus* dos    =  0;
 	const vedo::DOModel*  dom    =  0;
-	njr::Vector3d     DOpos(njrdxf::ZERO);
-	double          H1     =  0.0;
-	double          H2     =  0.0;
-	double          L1     =  0.0;
-	double          L      = EndPoint - StartPoint;
+	njr::Vector3d         DOpos;
+	double                H1     =  0.0;
+	double                H2     =  0.0;
+	double                L1     =  0.0;
+	double                L      = EndPoint - StartPoint;
 	for(unsigned long i=0; i<DOnum; i++)
 	{
 		dos = oWorld->GetDOStatus(i);
@@ -1167,7 +1189,7 @@ bool SCCViscosityIndex(vedo::DOWorld* oWorld)
 	unsigned long   NumElementsInside  = 0;
 	unsigned long   NumElementsOutside = 0;
 	double          DOsize             = 0.0;
-	njr::Vector3d     DOpos(njrdxf::ZERO);
+	njr::Vector3d   DOpos;
 	for(unsigned long i=0; i<DOnum; i++)
 	{
 		dos = oWorld->GetDOStatus(i);
@@ -3972,8 +3994,8 @@ int main (int argc, char* argv[])
 	    // Aries: We only combine the DOStatus of two DOWorlds.
 	    // In the future, we should also combine their Interactions (IactRecordTab).
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
-		vedo::DOWorld* rWorld = ReadDOWorld(arg[2], pIactRecordTab);
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		vedo::DOWorld* rWorld = ReadDOWorld(arg[2]);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[3], pIactRecordTab);
 		CombineModels(rWorld, oWorld);
 		delete WriteDOWorld(arg[4], rWorld, pIactRecordTab);
 		delete pIactRecordTab;
@@ -3983,11 +4005,11 @@ int main (int argc, char* argv[])
 	    // Aries: We only combine the DOStatus of two DOWorlds.
 	    // In the future, we should also combine their Interactions (IactRecordTab).
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
-		vedo::DOWorld* rWorld = ReadDOWorld(arg[2], pIactRecordTab);
+		vedo::DOWorld* rWorld = ReadDOWorld(arg[2]);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		std::string DOName = argv[4];
 		CombineModels(rWorld, oWorld, DOName);
-		delete WriteDOWorld(arg[5], rWorld, pIactRecordTab);
+		delete WriteDOWorld(arg[5], rWorld);
 		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-cu") && (arg.size() == 5))
@@ -4376,10 +4398,10 @@ int main (int argc, char* argv[])
 						(new vedo::DOStatus
 							("No Name",
 							 njr::Vector3d(x, y, z),
-							 njr::Vector3d(njrdxf::ZERO),
-							 njr::Vector3d(njrdxf::AXIALX),
-							 njr::Vector3d(njrdxf::AXIALZ),
-							 njr::Vector3d(njrdxf::ZERO)    ));
+							 njr::ZERO,
+							 njr::AXIALX,
+							 njr::AXIALZ,
+							 njr::ZERO    ));
 					gt = CalculateGranularTemperature(oWorld, space, DOName);
 					FileGT
 						<< "Zone-"
@@ -4423,10 +4445,10 @@ int main (int argc, char* argv[])
 			(new vedo::DOStatus
 				("No Name",
 				 njr::Vector3d(x, y, z),
-				 njr::Vector3d(njrdxf::ZERO),
+				 njr::ZERO,
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::Vector3d(njrdxf::ZERO)       ));
+				 njr::ZERO       ));
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4468,10 +4490,10 @@ int main (int argc, char* argv[])
 			(new vedo::DOStatus
 				("No Name",
 				 njr::Vector3d(x, y, z),
-				 njr::Vector3d(njrdxf::ZERO),
+				 njr::ZERO,
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::Vector3d(njrdxf::ZERO)       ));
+				 njr::ZERO       ));
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4512,10 +4534,10 @@ int main (int argc, char* argv[])
 			(new vedo::DOStatus
 				("No Name",
 				 njr::Vector3d(x, y, z),
-				 njr::Vector3d(njrdxf::ZERO),
+				 njr::ZERO,
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::Vector3d(njrdxf::ZERO)       ));
+				 njr::ZERO       ));
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4559,10 +4581,10 @@ int main (int argc, char* argv[])
 			(new vedo::DOStatus
 				("No Name",
 				 njr::Vector3d(x, y, z),
-				 njr::Vector3d(njrdxf::ZERO),
+				 njr::ZERO,
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::Vector3d(njrdxf::ZERO)       ));
+				 njr::ZERO       ));
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;

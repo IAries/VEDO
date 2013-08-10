@@ -98,7 +98,6 @@ private:
 	inline ISwModels(const ISwModels&)
 	{
 	};
-
 };
 
 };   // namespace vedo

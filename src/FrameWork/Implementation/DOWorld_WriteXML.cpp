@@ -157,6 +157,18 @@ void DOWorld::WriteXML(const char* filename) const
 					(*idoml)->GetShapeAttributes().quasiplate.height );
 				 buffer1 = sa;
 				 break;
+			case QuasiPlateWithCircularHole:
+				sprintf
+					(sa,
+					"<QuasiPlate Width=\"%g\" Length=\"%g\" Height=\"%g\" HoleRadius=\"%g\" HoleXOffset=\"%g\" HoleYOffset=\"%g\"/>\0",
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.width,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.length,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.height,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeradius,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holexoffset,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset);
+				 buffer1 = sa;
+				 break;
 			case QuasiCylinder:
 				sprintf
 					(sa,
@@ -452,6 +464,18 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 					(*idoml)->GetShapeAttributes().quasiplate.width,
 					(*idoml)->GetShapeAttributes().quasiplate.length,
 					(*idoml)->GetShapeAttributes().quasiplate.height );
+				 buffer1 = sa;
+				 break;
+			case QuasiPlateWithCircularHole:
+				sprintf
+					(sa,
+					"<QuasiPlate Width=\"%g\" Length=\"%g\" Height=\"%g\" HoleRadius=\"%g\" HoleXOffset=\"%g\" HoleYOffset=\"%g\"/>\0",
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.width,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.length,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.height,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeradius,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holexoffset,
+					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset);
 				 buffer1 = sa;
 				 break;
 			case QuasiCylinder:

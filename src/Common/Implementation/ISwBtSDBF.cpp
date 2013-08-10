@@ -49,7 +49,7 @@ njr::Vector3d ISwBtSDBF::NextStep
 		// Normal bond break
 		//ImStatus.stage = 2;
 		ImStatus.Clean();
-		return njr::Vector3d(njrdxf::ZERO);
+		return njr::ZERO;
 	}
 
 	const DOStatus*   dosA = A->GetDOStatus();

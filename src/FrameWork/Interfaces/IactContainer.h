@@ -45,14 +45,20 @@ public:
 
 	double GetUserDefinedValue(unsigned u) const;
 
+	inline double* GetUserDefinedValue() const
+	{
+	    return dpUDVInEachProcessor;
+	};
+
 	void CollectUserDefinedData();
 
 private:
 
 	std::vector<Interaction*> vcIact;
 
-	double dUDVInEachProcessor[uNumUDDImpactStatus*2];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
-                                                                    // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
+	double* dpUDVInEachProcessor;   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+	//double dUDVInEachProcessor[2*uNumUDDImpactStatus];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+                                                         // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
 };
 
 };   // namespace vedo

@@ -192,8 +192,33 @@ private:
 
 };
 
-// QuasiPlate is used to hold and set those faces of a QuasiPlate
+// Aries: Need to modified. It was copied from the QuasiPlate but noy consider about the circular hole
+// QuasiPlateWithCircularHole is used to hold and set those faces of a QuasiPlateWithCircularHole
+class QuasiPlateWithCircularHole: public Solid
+{
 
+public:
+
+	QuasiPlateWithCircularHole(const double& fpa = njr::dOneTwelfthPI);
+
+	void Set(const double& dWidth,
+		const double& dLength,
+		const double& dHeight,
+		const njr::Vector3d& vP,
+		const njr::Vector3d& vOX,
+		const njr::Vector3d& vOZ,
+		const char* layer,
+		const Color& color);
+
+private:
+
+	QuasiPlateWithCircularHole(const QuasiPlateWithCircularHole&);
+
+	QuasiPlateWithCircularHole& operator = (const QuasiPlateWithCircularHole&);
+
+};
+
+// Polygon is used to hold and set those faces of a Polygon
 class Polygon : public Solid
 {
 

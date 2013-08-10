@@ -500,7 +500,7 @@ void SimMediator::WriteInteractionForce
 
 		njr::Vector3d iactForce  = dop->GetImpact() * (1.0/dt);
 		njr::Vector3d fieldForce = csp->GetFieldAcceleration();
-		njr::Vector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : njrdxf::ZERO;
+		njr::Vector3d extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : njr::ZERO;
 		njr::Vector3d totalForce = iactForce + fieldForce + extForce;
 
 		iactForce_vec.push_back(iactForce.x());
@@ -890,8 +890,8 @@ bool SimMediator::ReDistribute()
 	// Freeze all elements
 	for (unsigned long ul=0; ul<cDO.size(); ul++)
 	{
-		cDO[ul]->SetVelocity(njr::Vector3d(njrdxf::ZERO));
-		cDO[ul]->SetAngularVelocity(njr::Vector3d(njrdxf::ZERO));
+		cDO[ul]->SetVelocity(njr::ZERO);
+		cDO[ul]->SetAngularVelocity(njr::ZERO);
 	}
 
 	// Check the number of contact pairs

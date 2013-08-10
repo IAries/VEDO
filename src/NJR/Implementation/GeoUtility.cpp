@@ -50,7 +50,7 @@ double Volume
 
 	std::vector<njr::Vector3d> vertexes = bottom.vertexes();
 
-	njr::Vector3d mr(njrdxf::ZERO);
+	njr::Vector3d mr;
 
 	double tm = 0;
 
@@ -91,8 +91,7 @@ double Volume(const njr::NJRpolyhedra& poly, njr::Vector3d& MassCenter)
 	std::vector<njr::NJRpolygon> faces = poly.faces();
 
 	double dVolume = 0;
-	njr::Vector3d center;
-	njr::Vector3d mr(njrdxf::ZERO);
+	njr::Vector3d center, mr;
 
 	for (unsigned int i=1; i<faces.size(); ++i)
 	{
@@ -165,9 +164,7 @@ njr::Vector3d InertiaTensor(const njr::NJRpolyhedra& p)
 	double z;
 
 	if ((lp.GetExtremeValue(Ux, Lx, Uy, Ly, Uz, Lz)) == false)
-	{
-		return njrdxf::ZERO;
-	}
+		return njr::ZERO;
 
 	double dVolume;
 	njr::Vector3d MassCenter;

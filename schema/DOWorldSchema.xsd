@@ -154,6 +154,19 @@
 															<xs:attribute name="Height" type="xs:double" use="required"/>
 														</xs:complexType>
 													</xs:element>
+													<xs:element name="QuasiPlateWithCircularHole">
+														<xs:annotation>
+															<xs:documentation>width,length,height,hole radirs, hole X-offset, hole Y-offset</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:attribute name="Width" type="xs:double" use="required"/>
+															<xs:attribute name="Length" type="xs:double" use="required"/>
+															<xs:attribute name="Height" type="xs:double" use="required"/>
+															<xs:attribute name="HoleRadius" type="xs:double" use="required"/>
+															<xs:attribute name="HoleXOffset" type="xs:double" use="required"/>
+															<xs:attribute name="HoleYOffset" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
 													<xs:element name="Ellipsoid">
 														<xs:annotation>
 															<xs:documentation>xlength,ylength,zlength</xs:documentation>

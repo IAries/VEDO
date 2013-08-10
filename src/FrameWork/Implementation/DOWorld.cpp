@@ -410,9 +410,9 @@ void DOWorld::FreezeAllElements()
 {
 	for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
 	{
-//		cDOStatus[ul]->SetOrientation(njr::Vector3d(njrdxf::AXIALX), njr::Vector3d(njrdxf::AXIALZ));
-		cDOStatus[ul]->SetVelocity(njr::Vector3d(njrdxf::ZERO));
-		cDOStatus[ul]->SetAngularVelocity(njr::Vector3d(njrdxf::ZERO));
+//		cDOStatus[ul]->SetOrientation(njr::Vector3d(AXIALX), njr::Vector3d(AXIALZ));
+		cDOStatus[ul]->SetVelocity(njr::ZERO);
+		cDOStatus[ul]->SetAngularVelocity(njr::ZERO);
 	}
 };
 
@@ -422,9 +422,9 @@ void DOWorld::FreezeElements(std::string& sDOName)
 	{
 		if (cDOStatus[ul]->GetDOName() == sDOName)
 		{
-//			cDOStatus[ul]->SetOrientation(njr::Vector3d(njrdxf::AXIALX), njr::Vector3d(njrdxf::AXIALZ));
-			cDOStatus[ul]->SetVelocity(njr::Vector3d(njrdxf::ZERO));
-			cDOStatus[ul]->SetAngularVelocity(njr::Vector3d(njrdxf::ZERO));
+//			cDOStatus[ul]->SetOrientation(njr::AXIALX, njr::AXIALZ));
+			cDOStatus[ul]->SetVelocity(njr::ZERO);
+			cDOStatus[ul]->SetAngularVelocity(njr::ZERO);
 		}
 	}
 };

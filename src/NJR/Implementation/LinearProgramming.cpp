@@ -687,27 +687,27 @@ bool LinearProgramming::GetExtremeValue
 	}
 
 	obj(0,0) = 1.0;
-	maxX     =  LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALX;
+	maxX     =  LinearProgramming::GetObjValue() - BMvector % njr::AXIALX;
 
 	obj(0,0) = -1.0;
-	minX     = -LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALX;
+	minX     = -LinearProgramming::GetObjValue() - BMvector % njr::AXIALX;
 
 	obj(0,0) = 0.0;
 
 	obj(0,1) = 1.0;
-	maxY     =  LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALY;
+	maxY     =  LinearProgramming::GetObjValue() - BMvector % njr::AXIALY;
 
 	obj(0,1) = -1.0;
-	minY     = -LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALY;
+	minY     = -LinearProgramming::GetObjValue() - BMvector % njr::AXIALY;
 
 	obj(0,1) = 0.0;
 
 	obj(0,2) = 1.0;
-	maxZ     = LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALZ;
+	maxZ     = LinearProgramming::GetObjValue() - BMvector % njr::AXIALZ;
 
 	obj(0,2) = -1.0;
 
-	minZ     = -LinearProgramming::GetObjValue() - BMvector % njrdxf::AXIALZ;
+	minZ     = -LinearProgramming::GetObjValue() - BMvector % njr::AXIALZ;
 
 	obj(0,2) = 0.0;
 
