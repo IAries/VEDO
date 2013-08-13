@@ -1,20 +1,25 @@
 include ../../Makefile.in
 
+TMP_TARGET=${patsubst %/,%,${patsubst ${VEDO_SRC}%,%,${PWD}}}
+
 TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
-all: debug release
-debug: ${VEDO_BIN}anne-debug
-release: ${VEDO_BIN}anne
+TMP_OBJS_DEBUG=${patsubst ${IMP}%,${TMP_DEBUG}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
+TMP_OBJS_RELEASE=${patsubst ${IMP}%,${TMP_RELEASE}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
 
-${VEDO_BIN}anne-debug: ${TMP_DEBUG}Anne.o
-	${LNK} -o $@ $< ${LNK_FLAGd}
+all: debug release
+debug: ${VEDO_BIN}${TMP_TARGET}-debug
+release: ${VEDO_BIN}${TMP_TARGET}
+
+${VEDO_BIN}${TMP_TARGET}-debug: ${TMP_OBJS_DEBUG}
+	${LNK} -o $@ $^ ${LNK_FLAGd}
 
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
-${VEDO_BIN}anne: ${TMP_RELEASE}Anne.o
-	${LNK} -o $@ $< ${LNK_FLAG}
+${VEDO_BIN}${TMP_TARGET}: ${TMP_OBJS_RELEASE}
+	${LNK} -o $@ $^ ${LNK_FLAG}
 
 ${TMP_RELEASE}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAG} -c $<

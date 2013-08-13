@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../../bin/Code_Blocks/irisGM-debug" prefix_auto="1" extension_auto="1" />
+				<Option output="../../bin/Code_Blocks/IrisGM-debug" prefix_auto="1" extension_auto="1" />
 				<Option object_output="../../obj/Code_Blocks/debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,14 +16,14 @@
 					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="..\..\lib\Code_Blocks\libVEDO-Common-debug.a" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework-debug.a" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR-debug.a" />
-					<Add library="C:\usr\mpich2\32\lib\mpi.lib" />
+					<Add library="../../lib/Code_Blocks/libvedo-Common-debug.a" />
+					<Add library="../../lib/Code_Blocks/libvedo-Framework-debug.a" />
+					<Add library="../../lib/Code_Blocks/libvedo-NJR-debug.a" />
+					<Add library="C:/usr/mpich2/32/lib/mpi.lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="../../bin/Code_Blocks/irisGM" prefix_auto="1" extension_auto="1" />
+				<Option output="../../bin/Code_Blocks/IrisGM" prefix_auto="1" extension_auto="1" />
 				<Option object_output="../../obj/Code_Blocks/release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -32,10 +32,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-Common.a" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-Framework.a" />
-					<Add library="..\..\lib\Code_Blocks\libVEDO-NJR.a" />
-					<Add library="C:\usr\mpich2\32\lib\mpi.lib" />
+					<Add library="../../lib/Code_Blocks/libvedo-Common.a" />
+					<Add library="../../lib/Code_Blocks/libvedo-Framework.a" />
+					<Add library="../../lib/Code_Blocks/libvedo-NJR.a" />
+					<Add library="C:/usr/mpich2/32/lib/mpi.lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -52,9 +52,9 @@
 			<Add directory="../../lib/Code_Blocks/" />
 			<Add directory="C:/usr/mpich2/32/lib/" />
 		</Linker>
-		<Unit filename="../../src/Iris/Implementation/IrisGM.cpp" />
-		<Unit filename="../../src/Iris/Implementation/NBSParallelConsultant.cpp" />
-		<Unit filename="../../src/Iris/Interfaces/NBSParallelConsultant.h" />
+		<Unit filename="../../src/IrisGM/Implementation/IrisGM.cpp" />
+		<Unit filename="../../src/IrisGM/Implementation/NBSParallelConsultant.cpp" />
+		<Unit filename="../../src/IrisGM/Interfaces/NBSParallelConsultant.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

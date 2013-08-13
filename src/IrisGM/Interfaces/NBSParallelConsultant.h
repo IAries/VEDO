@@ -4,7 +4,6 @@
 #include <mpi.h>
 #include <Framework/Interfaces/Consultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
-//#include <Iris/Interfaces/MPIAssistant.h>
 #include <algorithm>
 #include <cmath>
 #include <ctime>

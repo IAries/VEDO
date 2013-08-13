@@ -12,8 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61998B5B-55B4-4F18-BA33-F512B0E69DF0}</ProjectGuid>
-    <RootNamespace>knight</RootNamespace>
-    <ProjectName>knight</ProjectName>
+    <RootNamespace>Knight</RootNamespace>
+    <ProjectName>Knight</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -50,14 +50,21 @@
       <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libvedo-common-debug.lib;libvedo-framework-debug.lib;libvedo-njr-debug.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libvedo-Common-debug.lib;libvedo-Framework-debug.lib;libvedo-NJR-debug.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\VC11\;C:\usr\xercesc\VC10\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+      <LinkStatus>
+      </LinkStatus>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -71,7 +78,7 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libvedo-common.lib;libvedo-framework.lib;libvedo-njr.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libvedo-Common.lib;libvedo-Framework.lib;libvedo-NJR.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\VC11\;C:\usr\xercesc\VC10\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

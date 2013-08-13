@@ -1,22 +1,27 @@
 ###### User-defind system parameters start ######
 
+# MinGW
 PREFIX           = /d/Code/GitHub/VEDO/
 XERCESC_ROOT     = /c/usr/xercesc/GCC/
-COMPILER_MODE    = mingw
 MAKE             = /bin/make
+COMPILER_MODE    = MinGW
 
+# UNIX-like platform
 #PREFIX           = ${HOME}/usr/local/vedo/
 #XERCESC_ROOT     = ${HOME}/usr/local/xerces-c/
-#COMPILER_MODE    = intel
 #MAKE             = gmake
+#COMPILER_MODE    = Intel
 
 ####### User-defind system parameters end #######
+
+
+
 USR_INC          = /usr/include/
 USR_CXX_FLAG     = -I${USR_INC}
 USR_LIB          = /usr/lib/
 USR_LNK_FLAG     = -L${USR_LIB}
 
-# Xerces-C (Apache XML Parser)
+# Xerces-C (Apache XML Parser), http://xerces.apache.org/xerces-c/
 XERCESC_INC      = ${XERCESC_ROOT}include/
 XERCESC_CXX_FLAG = -I${XERCESC_INC}
 XERCESC_LIB      = ${XERCESC_ROOT}lib/
@@ -30,10 +35,10 @@ VEDO_OBJ_RELEASE = ${PREFIX}obj/${COMPILER_MODE}/release/
 VEDO_SRC         = ${PREFIX}src/
 VEDO_CXX_FLAG    = -I${VEDO_SRC}
 VEDO_LIB         = ${PREFIX}lib/${COMPILER_MODE}/
-VEDO_LNK_FLAG    = -L${VEDO_LIB} -lvedo-common -lvedo-framework -lvedo-njr
-VEDO_LNK_FLAGx   = -L${VEDO_LIB} -lvedo-common -lvedo-framework-x -lvedo-njr
-VEDO_LNK_FLAGd   = -L${VEDO_LIB} -lvedo-common-debug -lvedo-framework-debug -lvedo-njr-debug
-VEDO_LNK_FLAGxd  = -L${VEDO_LIB} -lvedo-common-debug -lvedo-framework-x-debug -lvedo-njr-debug
+VEDO_LNK_FLAG    = -L${VEDO_LIB} -lvedo-Common -lvedo-Framework -lvedo-NJR
+VEDO_LNK_FLAGx   = -L${VEDO_LIB} -lvedo-Common -lvedo-Framework-x -lvedo-NJR
+VEDO_LNK_FLAGd   = -L${VEDO_LIB} -lvedo-Common-debug -lvedo-Framework-debug -lvedo-NJR-debug
+VEDO_LNK_FLAGxd  = -L${VEDO_LIB} -lvedo-Common-debug -lvedo-Framework-x-debug -lvedo-NJR-debug
 IMP              = Implementation/
 INC              = Interfaces/
 
@@ -45,98 +50,89 @@ SHARE_LNK_FLAGx  = ${VEDO_LNK_FLAGx} ${XERCESC_LNK_FLAG} ${USR_LNK_FLAG}
 SHARE_LNK_FLAGd  = ${VEDO_LNK_FLAGd} ${USR_LNK_FLAG}
 SHARE_LNK_FLAGxd = ${VEDO_LNK_FLAGxd} ${XERCESC_LNK_FLAG} ${USR_LNK_FLAG}
 
-ifeq ($(COMPILER_MODE), mingw)
-   MPI_ROOT      = /c/usr/mpich2/32/
-   MPI_INC       = ${MPI_ROOT}include/
-   MPI_CXX_FLAG  = -I${MPI_INC}
-   MPI_LIB       = ${MPI_ROOT}lib/
-   MPI_LNK_FLAG  = -L${MPI_LIB} -lmpi
-   COMPILER_ROOT = /usr/
-   COMPILER_INC  = ${COMPILER_ROOT}include/
-   COMPILER_LIB  = ${COMPILER_ROOT}lib/
-   CXX           = /mingw/bin/g++
-   CXX_FLAG      = ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGx     = ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   mCXX          = ${CXX}
-   #mCXX          = ${MPI_ROOT}bin/mpicxx
-   mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-   mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
-   #mCXX_FLAGg    = ${PARMETIS_INC} ${mCXX_FLAG}
-   #mCXX_FLAGgd   = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAGg}
-   LNK           = ${CXX}
-   LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB}
-   LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB}
-   LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB}
-   LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB}
-   mLNK          = ${mCXX}
-   mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
-   mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
-   #mLNK_FLAGg    = ${PARMETIS_LIB} -lparmetis -lmetis ${MPI_LIB} ${SHARE_LNK_FLAG}
-   #mLNK_FLAGgd   = ${PARMETIS_LIB} -lparmetis -lmetis ${MPI_LIB} ${SHARE_LNK_FLAGd}
-   #mLNK_FLAGpo   = ${MPI_LIB} ${SHARE_LNK_FLAGpo}
-   AR            = /mingw/bin/ar
-   AR_FLAG       = -r
-   AR_FLAGx      = -r
+ifeq ($(COMPILER_MODE), MinGW)
+    MPI_ROOT      = /c/usr/mpich2/32/
+    MPI_INC       = ${MPI_ROOT}include/
+    MPI_CXX_FLAG  = -I${MPI_INC}
+    MPI_LIB       = ${MPI_ROOT}lib/
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lmpi
+    COMPILER_ROOT = /usr/
+    COMPILER_INC  = ${COMPILER_ROOT}include/
+    COMPILER_LIB  = ${COMPILER_ROOT}lib/
+    CXX           = /mingw/bin/g++
+    CXX_FLAG      = ${SHARE_CXX_FLAG} -I${COMPILER_INC}
+    CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
+    CXX_FLAGx     = ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
+    CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
+    mCXX          = ${CXX}
+    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
+    mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
+    LNK           = ${CXX}
+    LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB}
+    LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB}
+    LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB}
+    LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB}
+    mLNK          = ${mCXX}
+    mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
+    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
+    AR            = /mingw/bin/ar
+    AR_FLAG       = -r
 else
-ifeq ($(COMPILER_MODE), gcc)
-   MPI_ROOT      = /opt/platform_mpi/
-   MPI_INC       = ${MPI_ROOT}include/
-   MPI_CXX_FLAG  = -I${MPI_INC}
-   MPI_LIB       = ${MPI_ROOT}lib/linux_amd64/
-   MPI_LNK_FLAG  = -L${MPI_LIB} -lmpiCC
-   COMPILER_ROOT = /usr/
-   COMPILER_INC  = ${COMPILER_ROOT}include/
-   COMPILER_LIB  = ${COMPILER_ROOT}lib/
-   CXX           = /usr/bin/g++
-   CXX_FLAG      = ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGx     = ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   mCXX          = ${MPI_ROOT}bin/mpiCC
-   mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-   mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
-   LNK           = ${CXX}
-   LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB}
-   LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB}
-   LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB}
-   LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB}
-   mLNK          = ${mCXX}
-   mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
-   mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
-   AR            = /usr/bin/ar
-   AR_FLAG       = -r
-   AR_FLAGx      = -r
+ifeq ($(COMPILER_MODE), GCC)
+    MPI_ROOT      = /opt/platform_mpi/
+    MPI_INC       = ${MPI_ROOT}include/
+    MPI_CXX_FLAG  = -I${MPI_INC}
+    MPI_LIB       = ${MPI_ROOT}lib/linux_amd64/
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lmpiCC
+    COMPILER_ROOT = /usr/
+    COMPILER_INC  = ${COMPILER_ROOT}include/
+    COMPILER_LIB  = ${COMPILER_ROOT}lib/
+    CXX           = /usr/bin/g++
+    CXX_FLAG      = ${SHARE_CXX_FLAG} -I${COMPILER_INC}
+    CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
+    CXX_FLAGx     = ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
+    CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
+    mCXX          = ${MPI_ROOT}bin/mpiCC
+    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
+    mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
+    LNK           = ${CXX}
+    LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB}
+    LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB}
+    LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB}
+    LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB}
+    mLNK          = ${mCXX}
+    mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
+    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
+    AR            = /usr/bin/ar
+    AR_FLAG       = -r
 else
-ifeq ($(COMPILER_MODE), intel)
-   MPI_ROOT      = /pkg/mpi/intel/12/mvapich2-1.8/
-   MPI_INC       = ${MPI_ROOT}include/
-   MPI_CXX_FLAG  = -I${MPI_INC}
-   MPI_LIB       = ${MPI_ROOT}lib/
-   MPI_LNK_FLAG  = -L${MPI_LIB}
-   COMPILER_ROOT = /pkg/intel/12/
-   COMPILER_INC  = ${COMPILER_ROOT}include/
-   COMPILER_LIB  = ${COMPILER_ROOT}lib/
-   CXX           = ${COMPILER_ROOT}bin/icpc
-   CXX_FLAG      = ${SHARE_CXX_FLAG} -O2 -I${COMPILER_INC}
-   CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
-   CXX_FLAGx     = ${SHARE_CXX_FLAGx} -O2 -I${COMPILER_INC}
-   CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
-   mCXX          = ${MPI_ROOT}bin/mpicxx
-   mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-   mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
-   LNK           = ${CXX}
-   LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB} -limf
-   LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB} -limf
-   LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB} -limf
-   LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB} -limf
-   mLNK          = ${mCXX}
-   mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG} -lmpichcxx -lmpich -limf
-   mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd} -lmpichcxx -lmpich -limf
-   AR            = /usr/bin/ar
-   AR_FLAG       = -r
-   AR_FLAGx      = -r
+ifeq ($(COMPILER_MODE), Intel)
+    MPI_ROOT      = /pkg/mpi/intel/12/mvapich2-1.8/
+    MPI_INC       = ${MPI_ROOT}include/
+    MPI_CXX_FLAG  = -I${MPI_INC}
+    MPI_LIB       = ${MPI_ROOT}lib/
+    MPI_LNK_FLAG  = -L${MPI_LIB}
+    COMPILER_ROOT = /pkg/intel/12/
+    COMPILER_INC  = ${COMPILER_ROOT}include/
+    COMPILER_LIB  = ${COMPILER_ROOT}lib/
+    CXX           = ${COMPILER_ROOT}bin/icpc
+    CXX_FLAG      = ${SHARE_CXX_FLAG} -O2 -I${COMPILER_INC}
+    CXX_FLAGd     = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAG} -I${COMPILER_INC}
+    CXX_FLAGx     = ${SHARE_CXX_FLAGx} -O2 -I${COMPILER_INC}
+    CXX_FLAGxd    = -D${VEDO_PREDEFINE} -O0 ${SHARE_CXX_FLAGx} -I${COMPILER_INC}
+    mCXX          = ${MPI_ROOT}bin/mpicxx
+    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
+    mCXX_FLAGd    = -D${VEDO_PREDEFINE} -O0 ${mCXX_FLAG}
+    LNK           = ${CXX}
+    LNK_FLAG      = ${SHARE_LNK_FLAG} -L${COMPILER_LIB} -limf
+    LNK_FLAGx     = ${SHARE_LNK_FLAGx} -L${COMPILER_LIB} -limf
+    LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB} -limf
+    LNK_FLAGxd    = ${SHARE_LNK_FLAGxd} -L${COMPILER_LIB} -limf
+    mLNK          = ${mCXX}
+    mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG} -lmpichcxx -lmpich -limf
+    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd} -lmpichcxx -lmpich -limf
+    AR            = /usr/bin/ar
+    AR_FLAG       = -r
 endif
 endif
 endif

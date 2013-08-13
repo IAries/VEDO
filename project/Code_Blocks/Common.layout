@@ -1,44 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
-	<File name="..\..\src\Common\Implementation\DOQuasiPlate.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="537" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Common\Implementation\DOQuasiPlateWithCircularHole.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="954" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Common\Interfaces\CDSphere2QuasiPlateWithCircularHole.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="408" topLine="3" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Common\Interfaces\DOFixedQuasiPlate.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Common\Interfaces\DOQuasiPlate.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="490" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\Common\Interfaces\DOQuasiPlateWithCircularHole.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="324" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="..\..\src\Common\Implementation\NearConsultant.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1978" topLine="73" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\Common\Interfaces\GSRectangle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\Common\Interfaces\CDSphere2QuasiPlateWithCircularHole.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="198" topLine="0" />
+			<Cursor1 position="408" topLine="3" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\Common\Implementation\CDSphere2QuasiPlate.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -51,9 +21,39 @@
 			<Cursor1 position="141" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="..\..\src\Common\Interfaces\DOFixedQuasiPlate.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="6" />
+		</Cursor>
+	</File>
 	<File name="..\..\src\Common\Implementation\DOConstrainedQuasiPlate.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="222" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\Common\Interfaces\DOQuasiPlate.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="490" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\Common\Interfaces\DOQuasiPlateWithCircularHole.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="324" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\Common\Implementation\DOQuasiPlate.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="537" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\Common\Implementation\DOQuasiPlateWithCircularHole.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="954" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\Common\Interfaces\GSRectangle.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="198" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

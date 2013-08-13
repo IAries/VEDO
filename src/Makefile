@@ -5,100 +5,96 @@ include ../Makefile.in
 all: debug release
 
 .PHONY: debug
-debug: knight-debug anne-debug iris-debug
+debug: Knight-debug Anne-debug IrisGM-debug
 
 .PHONY: release
-release: knight anne iris
+release: Knight Anne IrisGM
 
 # Knight (Pre-/Post-processor)
-.PHONY: knight
-Knight: knight
-knight: libs
+.PHONY: Knight
+knight: Knight
+Knight: libs
 	(cd Knight; ${MAKE} release)
 
-.PHONY: knight-debug
-Knight-Debug: knight-debug
-Knight-debug: knight-debug
-knight-debug: libs-debug
+.PHONY: Knight-debug
+knight-debug: Knight-debug
+Knight-debug: libs-debug
 	(cd Knight; ${MAKE} debug)
 
 # Anne (Sequential Analysis Engine)
-.PHONY: anne
-Anne: anne
-anne: libs
+.PHONY: Anne
+anne: Anne
+Anne: libs
 	(cd Anne; ${MAKE} release)
 
-.PHONY: anne-debug
-Anne-Debug: anne-debug
-Anne-debug: anne-debug
-anne-debug: libs-debug
+.PHONY: Anne-debug
+anne-debug: Anne-debug
+Anne-debug: libs-debug
 	(cd Anne; ${MAKE} debug)
 
 # Iris (Parallel Analysis Engine)
-.PHONY: iris
-Iris: iris
-iris: libs
-	(cd Iris; ${MAKE} release)
+.PHONY: IrisGM
+irisGM: IrisGM
+irisgm: IrisGM
+IrisGM: libs
+	(cd IrisGM; ${MAKE} release)
 
-.PHONY: iris-debug
-Iris-Debug: iris-debug
-Iris-debug: iris-debug
-iris-debug: libs-debug
-	(cd Iris; ${MAKE} debug)
+.PHONY: IrisGM-debug
+irisGM-debug: IrisGM-debug
+irisgm-debug: IrisGM-debug
+IrisGM-debug: libs-debug
+	(cd IrisGM; ${MAKE} debug)
 
 # All Static Libraries
 .PHONY: libs
-libs: njr framework common
+libs: NJR Framework Common
 
 .PHONY: libs-debug
-libs-debug: njr-debug framework-debug common-debug
+libs-debug: NJR-debug Framework-debug Common-debug
 
 # NJR (Utility Library)
-.PHONY: njr
-NJR: njr
-njr:
+.PHONY: NJR
+njr: NJR
+NJR:
 	(cd NJR; ${MAKE} release)
 
-.PHONY: njr-debug
-NJR-Debug: njr-debug
-NJR-debug: njr-debug
-njr-debug:
+.PHONY: NJR-debug
+njr-debug: NJR-debug
+NJR-debug:
 	(cd NJR; ${MAKE} debug)
 
 # Abstract Class
-.PHONY: framework
-Framework: framework
-FrameWork: framework
-framework:
+.PHONY: Framework
+framework: Framework
+Framework:
 	(cd Framework; ${MAKE} release)
 
-.PHONY: framework-debug
-FrameWork-Debug: framework-debug
-FrameWork-debug: framework-debug
-Framework-Debug: framework-debug
-Framework-debug: framework-debug
-framework-debug:
+.PHONY: Framework-debug
+framework-debug: Framework-debug
+Framework-debug:
 	(cd Framework; ${MAKE} debug)
 
 # Extended Class
-.PHONY: common
-Common: common
-common:
+.PHONY: Common
+common: Common
+Common:
 	(cd Common; ${MAKE} release)
 
-.PHONY: common-debug
-Common-Debug: common-debug
-Common-debug: common-debug
-common-debug:
+.PHONY: Common-debug
+common-debug: Common-debug
+Common-debug:
 	(cd Common; ${MAKE} debug)
 
 # Make necessary directories for building
 .PHONY: BuildingDir
-BuildingDir: clean
+BuildingDir:
+	mkdir -p ${PREFIX}bin
 	rm -Rf ${VEDO_BIN}
 	mkdir ${VEDO_BIN}
+	mkdir -p ${PREFIX}lib
 	rm -Rf ${VEDO_LIB}
 	mkdir ${VEDO_LIB}
+	mkdir -p ${PREFIX}obj
 	rm -Rf ${VEDO_OBJ}
 	mkdir ${VEDO_OBJ}
 	mkdir ${VEDO_OBJ_DEBUG}
@@ -107,14 +103,14 @@ BuildingDir: clean
 	mkdir ${VEDO_OBJ_DEBUG}Common
 	mkdir ${VEDO_OBJ_DEBUG}Knight
 	mkdir ${VEDO_OBJ_DEBUG}Anne
-	mkdir ${VEDO_OBJ_DEBUG}Iris
+	mkdir ${VEDO_OBJ_DEBUG}IrisGM
 	mkdir ${VEDO_OBJ_RELEASE}
 	mkdir ${VEDO_OBJ_RELEASE}NJR
 	mkdir ${VEDO_OBJ_RELEASE}Framework
 	mkdir ${VEDO_OBJ_RELEASE}Common
 	mkdir ${VEDO_OBJ_RELEASE}Knight
 	mkdir ${VEDO_OBJ_RELEASE}Anne
-	mkdir ${VEDO_OBJ_RELEASE}Iris
+	mkdir ${VEDO_OBJ_RELEASE}IrisGM
 
 # Clean
 .PHONY: clean

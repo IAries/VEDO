@@ -32,10 +32,7 @@
 #include <Common/Interfaces/ISwBSDBF.h>
 #include <Common/Interfaces/ISwBtSDBF.h>
 
-//#include <Iris/Interfaces/DConsultant.h>
-//#include <Iris/Interfaces/NBSGPConsultant.h>
-#include <Iris/Interfaces/NBSParallelConsultant.h>
-//#include <Iris/Interfaces/ParallelConsultant.h>
+#include <IrisGM/Interfaces/NBSParallelConsultant.h>
 #include <cstdio>
 #include <cstring>
 #include <ctime>
@@ -45,10 +42,10 @@
 void usage (int g)
 {
     std::cout
-    	<< "IrisGM X3 build 809" << std::endl
+    	<< "IrisGM " << vedo::sVersion << std::endl
 		<< std::endl
 		<< "\tUsage:" << std::endl
-		<< "\tiris <Mode> <IDO file> <Record> <UpIact>" << std::endl
+		<< "\tirisGM <Mode> <IDO file> <Record> <UpIact>" << std::endl
 		<< std::endl
 		<< "\tMode  : geometric/show/redistribute" << std::endl
 		<< "\tRecord: integer" << std::endl
@@ -83,7 +80,6 @@ int main (int argc, char* argv[])
 	unsigned int RecordStep;
 	unsigned int UpIact;
 
-	//Iris <Mode> <IDO file> <Record> <UpIact>"
 	sscanf(argv[1], "%s", mode);
 	sscanf(argv[3], "%d", &RecordStep);
 	sscanf(argv[4], "%d", &UpIact);
@@ -111,8 +107,6 @@ int main (int argc, char* argv[])
     pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>              (vedo::Sphere, vedo::QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
 	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>                 (vedo::Sphere, vedo::QuasiPlate                , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
 	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlateWithCircularHole> (vedo::Sphere, vedo::QuasiPlateWithCircularHole, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_SphereAT>        (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwLSDAT"));
-    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinderAT> (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwLSDAT"));
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);

@@ -12,8 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8BF8383B-B948-480F-83AF-63965677D3BA}</ProjectGuid>
-    <RootNamespace>anne</RootNamespace>
-    <ProjectName>anne</ProjectName>
+    <RootNamespace>Anne</RootNamespace>
+    <ProjectName>Anne</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -50,7 +50,7 @@
       <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libvedo-common-debug.lib;libvedo-framework-debug.lib;libvedo-njr-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libvedo-Common-debug.lib;libvedo-Framework-debug.lib;libvedo-NJR-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\VC11\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -67,7 +67,7 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libvedo-common.lib;libvedo-framework.lib;libvedo-njr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libvedo-Common.lib;libvedo-Framework.lib;libvedo-NJR.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\VC11\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>

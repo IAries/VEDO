@@ -31,7 +31,7 @@
 void usage()
 {
 	std::cout
-		<< "Knight X3 build 809" << std::endl
+		<< "Knight " << vedo::sVersion << std::endl
 		<< std::endl
 		<< "Usage:" << std::endl
 		<< std::endl

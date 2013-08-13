@@ -46,7 +46,7 @@
 void usage (int g)
 {
 	std::cout
-		<< "Anne X3 build 809" << std::endl
+		<< "Anne " << vedo::sVersion << std::endl
 		<< std::endl
 		<< '\t' << "Usage:" << std::endl
 		<< '\t' << "anne <Mode> <IDO file> <Type I > <Record>" << std::endl
@@ -113,8 +113,6 @@ int main (int argc, char* argv[])
     pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>              (vedo::Sphere, vedo::QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
 	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>                 (vedo::Sphere, vedo::QuasiPlate                , "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
 	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlateWithCircularHole> (vedo::Sphere, vedo::QuasiPlateWithCircularHole, "List- <CT>ISwBSDBF <CT>ISwBtSDBF"));
-    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_SphereAT>        (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwLSDAT"));
-    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinderAT> (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwLSDAT"));
 
 	if ( !strcmp (strlen(argv[2]) - 4 + argv[2], ".ido") )
 	{

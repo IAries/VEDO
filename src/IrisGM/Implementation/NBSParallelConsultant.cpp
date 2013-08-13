@@ -1,5 +1,5 @@
 #include <mpi.h>
-#include <Iris/Interfaces/NBSParallelConsultant.h>
+#include <IrisGM/Interfaces/NBSParallelConsultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
 #include <Framework/Interfaces/Constants.h>
 #include <NJR/Interfaces/Utility.h>

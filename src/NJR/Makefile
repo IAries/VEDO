@@ -1,44 +1,26 @@
 include ../../Makefile.in
 
+TMP_TARGET=${patsubst %/,%,${patsubst ${VEDO_SRC}%,%,${PWD}}}
+
 TMP_DEBUG=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_DEBUG}%,${PWD}}/
 TMP_RELEASE=${patsubst ${VEDO_SRC}%,${VEDO_OBJ_RELEASE}%,${PWD}}/
 
-all: debug release
-debug: ${VEDO_LIB}libvedo-njr-debug.a
-release: ${VEDO_LIB}libvedo-njr.a
+TMP_OBJS_DEBUG=${patsubst ${IMP}%,${TMP_DEBUG}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
+TMP_OBJS_RELEASE=${patsubst ${IMP}%,${TMP_RELEASE}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
 
-${VEDO_LIB}libvedo-njr-debug.a: ${TMP_DEBUG}ACADXF.o            \
-                                ${TMP_DEBUG}ACADXF_Solid.o      \
-                                ${TMP_DEBUG}GeoUtility.o        \
-                                ${TMP_DEBUG}HalfSpace.o         \
-                                ${TMP_DEBUG}LinearProgramming.o \
-                                ${TMP_DEBUG}Matrix.o            \
-                                ${TMP_DEBUG}Polygon.o           \
-                                ${TMP_DEBUG}Polyhedra.o         \
-                                ${TMP_DEBUG}RandomGenerator.o   \
-                                ${TMP_DEBUG}RickyRandom.o       \
-                                ${TMP_DEBUG}Utility.o           \
-                                ${TMP_DEBUG}Vector2d.o          \
-                                ${TMP_DEBUG}Vector3d.o
+all: debug release
+debug: ${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a
+release: ${VEDO_LIB}libvedo-${TMP_TARGET}.a
+
+${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a: ${TMP_OBJS_DEBUG}
 	${AR} ${AR_FLAG} $@ $^
 
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
-${VEDO_LIB}libvedo-njr.a: ${TMP_RELEASE}ACADXF.o            \
-                          ${TMP_RELEASE}ACADXF_Solid.o      \
-                          ${TMP_RELEASE}GeoUtility.o        \
-                          ${TMP_RELEASE}HalfSpace.o         \
-                          ${TMP_RELEASE}LinearProgramming.o \
-                          ${TMP_RELEASE}Matrix.o            \
-                          ${TMP_RELEASE}Polygon.o           \
-                          ${TMP_RELEASE}Polyhedra.o         \
-                          ${TMP_RELEASE}RandomGenerator.o   \
-                          ${TMP_RELEASE}RickyRandom.o       \
-                          ${TMP_RELEASE}Utility.o           \
-                          ${TMP_RELEASE}Vector2d.o          \
-                          ${TMP_RELEASE}Vector3d.o
+${VEDO_LIB}libvedo-${TMP_TARGET}.a: ${TMP_OBJS_RELEASE}
 	${AR} ${AR_FLAG} $@ $^
 
 ${TMP_RELEASE}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAG} -c $<
+
