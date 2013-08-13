@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\src\FrameWork\Interfaces\CDFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\FrameWork\Interfaces\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\FrameWork\Interfaces\Consultant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
