@@ -18,15 +18,15 @@ typedef enum njrdxf::Color DOShapeColor;
 
 enum DOShapeType
 {
-	NoType                     = 0,
-	Sphere                     = 1,
-	Ellipsoid                  = 2,
-	QuasiCylinder              = 3,
-	QuasiPlate                 = 4,
-	QuasiPlateWithCircularHole = 5,
-	Polyhedra                  = 6,
-	DMSphere                   = 7,
-	PolyhedraBRep              = 8
+	NoType,
+	Sphere,
+	Ellipsoid,
+	QuasiCylinder,
+	QuasiPlate,
+	QuasiPlateWithCircularHole,
+	Polyhedra,
+	DMSphere,
+	PolyhedraBRep
 };
 
 

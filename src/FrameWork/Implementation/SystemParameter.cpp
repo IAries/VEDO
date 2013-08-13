@@ -122,8 +122,6 @@ std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 
 std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 {
-    double dTemp;
-
 	njr::ReadString(sPublish, idof);
 	njr::ReadString(sTitle, idof);
 	njr::ReadString(sNote, idof);
@@ -132,10 +130,8 @@ std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 	idof.read((char*) &dTimeCurrent, sizeof(double));
 	idof.read((char*) &dTimeInterval, sizeof(double));
 	idof.read((char*) &vedo::dSafetyFactor, sizeof(double));
-//	idof.read((char*) &vedo::uNumUDDDOStatus, sizeof(unsigned));
-	idof.read((char*) &dTemp, sizeof(unsigned));
-//	idof.read((char*) &vedo::uNumUDDImpactStatus, sizeof(unsigned));
-	idof.read((char*) &dTemp, sizeof(unsigned));
+	idof.read((char*) &vedo::uNumUDDDOStatus, sizeof(unsigned));
+	idof.read((char*) &vedo::uNumUDDImpactStatus, sizeof(unsigned));
 	idof.read((char*) &vFieldAcceleration, sizeof(njr::Vector3d));
 	idof.read((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*3);
 	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(njr::Vector3d));

@@ -20,7 +20,7 @@ public:
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const double& Kn,
-         const njr::Vector3d& ShearForce, const double* UDVp       );
+         const njr::Vector3d& ShearForce, const double* UDVp     );
 
 	ImpactStatus(const ImpactStatus&);
 

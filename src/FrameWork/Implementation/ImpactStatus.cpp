@@ -55,7 +55,10 @@ const ImpactStatus& ImpactStatus::operator = (const ImpactStatus& is)
 
 ImpactStatus::~ImpactStatus()
 {
-    delete dpUDV;
+	if(uNumUDDImpactStatus != 0)
+	{
+		delete dpUDV;
+	}
 };
 
 void ImpactStatus::CleanShearForce()
