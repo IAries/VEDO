@@ -23,7 +23,7 @@ public:
 
 	inline double GetSudoContactRadius()
 	{
-//		return cpDOModel->GetShapeAttributes().quasiplate.height;
+//		return cpDOModel->GetShapeAttributes().quasiplatewithcircularhole.height;
 		return 0.0;
 	};
 

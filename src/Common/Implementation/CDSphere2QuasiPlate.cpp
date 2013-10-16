@@ -58,8 +58,8 @@ void CDSphere_QuasiPlate::CalDistance
      * The distance from vCaps to vCa is the shortest distance between surface
      * of Slave and Master
 	 **************************************************************************/
-	njr::Vector3d vCaps      = (vOx * Dapx) + (vOy * Dapy) + vCb;
-	njr::Vector3d vIm        = vCaps - vCa;
+	njr::Vector3d vCaps    = (vOx * Dapx) + (vOy * Dapy) + vCb;
+	njr::Vector3d vIm      = vCaps - vCa;
 	cInfo.vCenterToCenter  = vIm;
 
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;

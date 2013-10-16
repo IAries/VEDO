@@ -2,11 +2,11 @@
 #include <Common/Interfaces/CDSphere2QuasiPlateWithCircularHole.h>
 #include <Common/Interfaces/DOQuasiPlateWithCircularHole.h>
 #include <Common/Interfaces/DOSphere.h>
+#include <cmath>
 
 namespace vedo
 {
 
-// 幼萱要注意的部份
 void CDSphere_QuasiPlateWithCircularHole::CalDistance
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
@@ -26,27 +26,56 @@ void CDSphere_QuasiPlateWithCircularHole::CalDistance
 
 	// Half height of Master
 	double dHHb
-		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.height;
+		= 0.5
+		* pdoMaster
+			->GetDOModel()
+				->GetShapeAttributes().quasiplatewithcircularhole.height;
 	// Half width of Master
 	double dHWb
-		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.width;
+		= 0.5
+		* pdoMaster
+			->GetDOModel()
+				->GetShapeAttributes().quasiplatewithcircularhole.width;
 	// Half length of Master
 	double dHLb
-		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.length;
+		= 0.5
+		* pdoMaster
+			->GetDOModel()
+				->GetShapeAttributes().quasiplatewithcircularhole.length;
+    // Radius of hole
+	double dHoleRadius
+		= pdoMaster
+			->GetDOModel()
+				->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
 
-	double Dapx = (vCap - vCb) % vOx;
+    // X-offset of hole，搭配 dHWb
+	double dHoleXOffset
+		= pdoMaster
+			->GetDOModel()
+				->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
 
-	if ( Dapx < -dHWb)
+    // Y-offset of hole，搭配 dHLb
+	double dHoleYOffset
+		= pdoMaster
+			->GetDOModel()
+				->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
+
+	// Center of hole
+	njr::Vector3d vCh  = vCb + njr::Vector3d(dHoleXOffset, dHoleYOffset, 0.0);
+    njr::Vector3d vCha = vCa - vCh;
+
+	double Dapx = (vCap - vCb).Dot(vOx);
+	if (Dapx < -dHWb)
 	{
 		Dapx = -dHWb;
 	}
-	else if ( Dapx > dHWb)
+	else if (Dapx > dHWb)
 	{
 		Dapx = dHWb;
 	}
 
-	double Dapy = (vCap - vCb) % vOy;
-	if ( Dapy < -dHLb)
+	double Dapy = (vCap - vCb).Dot(vOy);
+	if (Dapy < -dHLb)
 	{
 		Dapy = -dHLb;
 	}
@@ -54,6 +83,24 @@ void CDSphere_QuasiPlateWithCircularHole::CalDistance
 	{
 		Dapy = dHLb;
 	}
+
+	double Dahx = vCha.Dot(vOx);
+	double Dahy = vCha.Dot(vOy);
+
+	double Dah  = std::sqrt(Dahx * Dahx + Dahy * Dahy);
+    if (Dah < dHoleRadius)
+    {
+        if (Dah == 0.0)
+        {
+            Dapx = dHoleXOffset;
+            Dapy = dHoleYOffset;
+        }
+        else
+        {
+            Dapx = dHoleXOffset + Dahx / Dah * dHoleRadius;
+            Dapy = dHoleYOffset + Dahy / Dah * dHoleRadius;
+        }
+    }
 
 	/**************************************************************************
      * The distance from vCaps to vCa is the shortest distance between surface
@@ -64,26 +111,31 @@ void CDSphere_QuasiPlateWithCircularHole::CalDistance
 	cInfo.vCenterToCenter  = vIm;
 
 	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
-
-    // 重疊量是多少？
-	cInfo.dImpactDepth = dRa + dHHb - vIm.length();
+    if (Dah == 0.0)
+	{
+		cInfo.dImpactDepth
+			= dRa + dHHb
+			- std::sqrt
+				(vIm.length() * vIm.length() + dHoleRadius * dHoleRadius);
+	}
+    else
+    {
+        cInfo.dImpactDepth = dRa + dHHb - vIm.length();
+    }
 
 	if(cInfo.dImpactDepth > 0.0)
 	{
-        // 已經碰到
 		double dS          = dRa - cInfo.dImpactDepth;
 		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * njr::dPI;
 	}
 	else
 	{
-        // 沒碰到
 		cInfo.dOverlapArea = 0.0;
 	}
 
 	cInfo.vImpactDirection = vIm.direction();
 };
 
-// 幼萱要注意的部份
 void CDSphere_QuasiPlateWithCircularHole::Detect
 	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
@@ -91,7 +143,6 @@ void CDSphere_QuasiPlateWithCircularHole::Detect
 
 	if (cInfo.dImpactDepth > 0)
 	{
-	    //碰撞點？
 	    cInfo.vImpactPoint
 			= pdoSlave->GetDOStatus()->GetPosition()
 			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius

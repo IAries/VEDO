@@ -17,6 +17,7 @@
 #include <Common/Interfaces/DOConstrainedQuasiPlate.h>
 #include <Common/Interfaces/DOFixedQuasiCylinder.h>
 #include <Common/Interfaces/DOFixedQuasiPlate.h>
+#include <Common/Interfaces/DOFixedQuasiPlateWithCircularHole.h>
 #include <Common/Interfaces/DOFixedSphere.h>
 #include <Common/Interfaces/DOQuasiCylinder.h>
 #include <Common/Interfaces/DOQuasiPlate.h>
@@ -93,6 +94,7 @@ int main (int argc, char* argv[])
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOConstrainedQuasiPlate>(vedo::QuasiPlate, "constrained"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiCylinder>(vedo::QuasiCylinder, "fixed"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiPlate>(vedo::QuasiPlate, "fixed"));
+	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedQuasiPlateWithCircularHole>(vedo::QuasiPlateWithCircularHole, "fixed"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOFixedSphere>(vedo::Sphere, "fixed"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiCylinder>(vedo::QuasiCylinder, "mobile"));
 	pAssembler->AddDO(new vedo::DOcf<vedo::DOQuasiPlate>(vedo::QuasiPlate, "mobile"));

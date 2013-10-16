@@ -43,6 +43,14 @@ void usage()
 		<< "	Knight -ap <DOName> (source point)<x> <y> <z>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
+		<< "	-ase: add single element"                                                << std::endl
+		<< "	Knight -ase <DOName>"                                                    << std::endl
+		<< "                <position-x> <position-y> <position-z>"                      << std::endl
+		<< "                <velocity-x> <velocity-y> <velocity-z>"                      << std::endl
+		<< "                <orientation-x-x> <orientation-x-y> <orientation-x-z>"       << std::endl
+		<< "                <orientation-z-x> <orientation-z-y> <orientation-z-z>"       << std::endl
+		<< "                <angularvelocity-x> <angularvelocity-y> <angularvelocity-z>" << std::endl
+		<< "                (Original)<.xml | .ido> <.xml | .ido>"                       << std::endl
 		<< "	-av: add velocity" << std::endl
 		<< "	Knight -av <DOName> (velocity)<x> <y> <z>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
@@ -606,7 +614,7 @@ vedo::DOWorld* WriteDOWorld (std::string filename, vedo::DOWorld* pw, vedo::Iact
 	return pw;
 };
 
-vedo::DOWorld* WriteDOWorld (std::string filename, vedo::DOWorld* opw, vedo::DOWorld* cpw)
+vedo::DOWorld* WriteDOWorldVPF (std::string filename, vedo::DOWorld* opw, vedo::DOWorld* cpw)
 {
 	if (njr::CheckSubName(filename, ".vpf"))
 	{
@@ -869,17 +877,16 @@ void AddRandomDOInCartesianSpace
 		njr::ZERO);
 	*LowerBoundary += njr::Vector3d(R, R, R);
 	*UpperBoundary -= njr::Vector3d(R, R, R);
-	double temp_x, temp_y, temp_z;
 	double xRange = (UpperBoundary->x()) - (LowerBoundary->x());
 	double yRange = (UpperBoundary->y()) - (LowerBoundary->y());
 	double zRange = (UpperBoundary->z()) - (LowerBoundary->z());
+	double temp_x, temp_y, temp_z;
 	srand(time(0));
 	for(unsigned long ul=0; ul<(*num); ul++)
 	{
 		temp_x = (double)(rand()) / (double)RAND_MAX * xRange;
 		temp_y = (double)(rand()) / (double)RAND_MAX * yRange;
 		temp_z = (double)(rand()) / (double)RAND_MAX * zRange;
-		std::cout << "Add Element: " << ul+1 << "/" << *num << std::endl;
 		dos.SetPosition(*LowerBoundary + njr::Vector3d(temp_x, temp_y, temp_z));
 		oWorld->AddDOStatus(new vedo::DOStatus(dos));
 	}
@@ -923,10 +930,39 @@ void AddRandomDOInCylindricalSpace
 		if(temp_x * temp_x + temp_y * temp_y <= dSquare_r)
 		{
 			temp_z = dZMin + (double)(rand()) / (double)RAND_MAX * (*h);
-			std::cout << "Add Element: " << ++ul << "/" << *num << std::endl;
 			dos.SetPosition(njr::Vector3d(temp_x, temp_y, temp_z));
 			oWorld->AddDOStatus(new vedo::DOStatus(dos));
+			ul++;
 		}
+	}
+};
+
+void AddRandomDOInSphericalSpace
+	(njr::Vector3d* Center,
+	 double* r,
+	 std::string DOName,
+	 unsigned long* num,
+	 vedo::DOWorld* oWorld     )
+{
+	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
+	vedo::DOStatus dos
+		(DOName, njr::ZERO, njr::ZERO, njr::AXIALX, njr::AXIALZ, njr::ZERO);
+	*r -= R;
+	double temp_x, temp_y, temp_z, temp_radius, temp_angle_1, temp_angle_2;
+	srand(time(0));
+	for(unsigned long ul=0; ul<(*num); ul++)
+	{
+		temp_radius  = (double)(rand()) / (double)RAND_MAX * (*r);
+		temp_angle_1 = (double)(rand()) / (double)RAND_MAX * njr::dDoublePI;
+		temp_angle_2 = (double)(rand()) / (double)RAND_MAX * njr::dDoublePI;
+		temp_x
+			= Center->x() + temp_radius * cos(temp_angle_1) * cos(temp_angle_2);
+		temp_y
+			= Center->y() + temp_radius * cos(temp_angle_1) * sin(temp_angle_2);
+		temp_z
+			= Center->z() + temp_radius * sin(temp_angle_1);
+		dos.SetPosition(njr::Vector3d(temp_x, temp_y, temp_z));
+		oWorld->AddDOStatus(new vedo::DOStatus(dos));
 	}
 };
 
@@ -1004,41 +1040,6 @@ std::map<std::string, double> CalculateGranularTemperature
 	gt["AverageAngularVelocity"]               = AvgAV.length();
 	gt["GranularTemperatureOfAngularVelocity"] = dGranularTemperatureAV;
 	return gt;
-};
-
-void AddRandomDOInSphericalSpace
-	(njr::Vector3d* Center,
-	 double* r,
-	 std::string DOName,
-	 unsigned long* num,
-	 vedo::DOWorld* oWorld     )
-{
-	double R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos
-		(DOName,
-		njr::ZERO,
-		njr::ZERO,
-		njr::AXIALX,
-		njr::AXIALZ,
-		njr::ZERO);
-	*r -= R;
-	double temp_x, temp_y, temp_z, temp_radius, temp_angle_1, temp_angle_2;
-	srand(time(0));
-	for(unsigned long ul=0; ul<(*num); ul++)
-	{
-		temp_radius  = (double)(rand()) / (double)RAND_MAX * (*r);
-		temp_angle_1 = (double)(rand()) / (double)RAND_MAX * njr::dDoublePI;
-		temp_angle_2 = (double)(rand()) / (double)RAND_MAX * njr::dDoublePI;
-		temp_x
-			= Center->x() + temp_radius * cos(temp_angle_1) * cos(temp_angle_2);
-		temp_y
-			= Center->y() + temp_radius * cos(temp_angle_1) * sin(temp_angle_2);
-		temp_z
-			= Center->z() + temp_radius * sin(temp_angle_1);
-		std::cout << "Add Element: " << ul+1 << "/" << *num << std::endl;
-		dos.SetPosition(njr::Vector3d(temp_x, temp_y, temp_z));
-		oWorld->AddDOStatus(new vedo::DOStatus(dos));
-	}
 };
 
 void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld)
@@ -1280,6 +1281,39 @@ int main (int argc, char* argv[])
 		njr::Vector3d SourcePoint(x, y, z);
 		AddPotentialEnergy(&SourcePoint, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-ase") && (arg.size() == 20))
+	{
+		double dPx, dPy, dPz, dVx, dVy, dVz, dAVx, dAVy, dAVz;
+		double dOxx, dOxy, dOxz, dOzx, dOzy, dOzz;
+		std::string sDOName = argv[2];
+		sscanf(argv[3] , "%lg", &dPx);
+		sscanf(argv[4] , "%lg", &dPy);
+		sscanf(argv[5] , "%lg", &dPz);
+		sscanf(argv[6] , "%lg", &dVx);
+		sscanf(argv[7] , "%lg", &dVy);
+		sscanf(argv[8] , "%lg", &dVz);
+		sscanf(argv[9] , "%lg", &dOxx);
+		sscanf(argv[10], "%lg", &dOxy);
+		sscanf(argv[11], "%lg", &dOxz);
+		sscanf(argv[12], "%lg", &dOzx);
+		sscanf(argv[13], "%lg", &dOzy);
+		sscanf(argv[14], "%lg", &dOzz);
+		sscanf(argv[15], "%lg", &dAVx);
+		sscanf(argv[16], "%lg", &dAVy);
+		sscanf(argv[17], "%lg", &dAVz);
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[18], pIactRecordTab);
+		vedo::DOStatus dos
+			(sDOName,
+			njr::Vector3d(dPx , dPy , dPz ),
+			njr::Vector3d(dVx , dVy , dVz ),
+			njr::Vector3d(dOxx, dOxy, dOxz).direction(),
+			njr::Vector3d(dOzx, dOzy, dOzz).direction(),
+			njr::Vector3d(dAVx, dAVy, dAVz) );
+		oWorld->AddDOStatus(new vedo::DOStatus(dos));
+		delete WriteDOWorld (arg[19], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-av") && (arg.size() == 8))
@@ -4004,17 +4038,15 @@ int main (int argc, char* argv[])
 	{
 	    // Aries: We only combine the DOStatus of two DOWorlds.
 	    // In the future, we should also combine their Interactions (IactRecordTab).
-        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* rWorld = ReadDOWorld(arg[2]);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		std::string DOName = argv[4];
 		CombineModels(rWorld, oWorld, DOName);
 		delete WriteDOWorld(arg[5], rWorld);
-		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-cu") && (arg.size() == 5))
 	{
-		delete WriteDOWorld(arg[4], ReadDOWorld(arg[2]), ReadDOWorld(arg[3]));
+		delete WriteDOWorldVPF(arg[4], ReadDOWorld(arg[2]), ReadDOWorld(arg[3]));
 	}
 	else if ((arg[1] == "-b2h") && (arg.size() == 4))
 	{
