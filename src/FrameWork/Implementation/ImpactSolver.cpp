@@ -9,6 +9,7 @@ namespace vedo
 ImpactSolver::ImpactSolver(const IactModel* cpIactml) : ImStatus()
 {
 	cpIactModel = cpIactml;
+	pBC         = 0;
 };
 
 ImpactSolver::~ImpactSolver()
