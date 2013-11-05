@@ -137,20 +137,6 @@ void IactRecordTab::PushRecord
 	mapImStatus.insert(std::make_pair(std::make_pair(master,slave),s));
 }
 
-unsigned long IactRecordTab::ContactNumber() const
-{
-	unsigned long ulContactNumber = 0;
-	for (std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator
-			pmapImStatus=mapImStatus.begin();
-		pmapImStatus!=mapImStatus.end();
-		pmapImStatus++                                                        )
-	{
-		if (pmapImStatus->second.Contact())
-			ulContactNumber++;
-	}
-	return ulContactNumber;
-}
-
 void IactRecordTab::ModifyPair(std::map<unsigned long, long> mNewPairList)
 {
 	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator mmapImStatus;
@@ -177,6 +163,122 @@ void IactRecordTab::ModifyPair(std::map<unsigned long, long> mNewPairList)
 		 mmapImStatus!=mapImStatusExtra.end();
 		 mmapImStatus++                        )
 		mapImStatus[mmapImStatus->first] = mmapImStatus->second;
+};
+
+unsigned long IactRecordTab::ContactNumber() const
+{
+	unsigned long ulContactNumber = 0;
+	for (std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator
+			pmapImStatus=mapImStatus.begin();
+		pmapImStatus!=mapImStatus.end();
+		pmapImStatus++                                                        )
+	{
+		if (pmapImStatus->second.Contact())
+			ulContactNumber++;
+	}
+	return ulContactNumber;
+};
+
+void IactRecordTab::EraseElement(const unsigned long& ulID)
+{
+	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> NewmapImStatus;
+	unsigned long ulNew1, ulNew2;
+	for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator
+		itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++)
+	{
+		if((itr->first.first != ulID) && (itr->first.second != ulID))
+		{
+			if(itr->first.first > ulID)
+			{
+				ulNew1 = itr->first.first - 1;
+			}
+			else
+			{
+				ulNew1 = itr->first.first;
+			}
+
+			if(itr->first.second > ulID)
+			{
+				ulNew2 = itr->first.second - 1;
+			}
+			else
+			{
+				ulNew2 = itr->first.second;
+			}
+
+			NewmapImStatus[std::make_pair(ulNew1, ulNew2)] = itr->second;
+		}
+	}
+	mapImStatus = NewmapImStatus;
+};
+
+void IactRecordTab::EraseElements
+	(const std::vector<unsigned long>& ulIDList, const unsigned long& ulDONum)
+{
+	std::vector<bool> bActived;
+	unsigned long ulIDListSize = ulIDList.size();
+	unsigned long ul, ul2;
+	unsigned long ulID = 0;
+	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator itr;
+	for(itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
+	{
+		bActived.push_back(true);
+		for(ul=0; ul<ulIDListSize; ul++)
+		{
+			if(itr->first.first == ulIDList[ul])
+			{
+				bActived[ulID] = false;
+				break;
+			}
+			else
+			{
+				if(itr->first.second == ulIDList[ul])
+				{
+					bActived[ulID] = false;
+					break;
+				}
+			}
+		}
+	}
+
+	std::vector<unsigned long> ulNewID;
+	bool bActivedMark;
+	ulID = 0;
+	for(ul=0; ul<ulDONum; ul++)
+	{
+		bActivedMark = true;
+		for(ul2=0; ul2<ulIDListSize; ul2++)
+		{
+			if(ul == ulIDList[ul2])
+			{
+				bActivedMark = false;
+				break;
+			}
+		}
+		if(bActivedMark)
+		{
+			ulNewID.push_back(ulID);
+			ulID++;
+		}
+		else
+		{
+			ulNewID.push_back(ulDONum);   // Invalid ID
+		}
+	}
+
+	ulID = 0;
+	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> NewmapImStatus;
+	for(itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
+	{
+		if(bActived[ulID])
+		{
+			NewmapImStatus
+				[std::make_pair
+					(ulNewID[itr->first.first],
+					 ulNewID[itr->first.second])] = itr->second;
+		}
+	}
+	mapImStatus = NewmapImStatus;
 };
 
 void IactRecordTab::print() const

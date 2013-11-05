@@ -2,6 +2,7 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <Framework/Interfaces/Boundary.h>
 #include <Framework/Interfaces/Constants.h>
+#include <Framework/Interfaces/Consultant.h>
 #include <Framework/Interfaces/DOWorld.h>
 #include <Framework/Interfaces/DOWorld_WriteVTK.h>
 #include <Framework/Interfaces/GeometricShape.h>
@@ -43,6 +44,14 @@ void usage()
 		<< "	Knight -ap <DOName> (source point)<x> <y> <z>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
+		<< "	-aecp: add elements in a circular path (X-Y plane)"                      << std::endl
+		<< "	Knight -aecp <DOName>"                                                   << std::endl
+		<< "                <started angle (degree)> <ended angle (degree)>"             << std::endl
+		<< "                <number of elements>"                                        << std::endl
+		<< "                <radius of circular path>"                                   << std::endl
+		<< "                <coordinate Z of the circular path>"                         << std::endl
+		<< "                (Original)<.xml | .ido> <.xml | .ido>"
+		<< std::endl
 		<< "	-ase: add single element"                                                << std::endl
 		<< "	Knight -ase <DOName>"                                                    << std::endl
 		<< "                <position-x> <position-y> <position-z>"                      << std::endl
@@ -50,7 +59,8 @@ void usage()
 		<< "                <orientation-x-x> <orientation-x-y> <orientation-x-z>"       << std::endl
 		<< "                <orientation-z-x> <orientation-z-y> <orientation-z-z>"       << std::endl
 		<< "                <angularvelocity-x> <angularvelocity-y> <angularvelocity-z>" << std::endl
-		<< "                (Original)<.xml | .ido> <.xml | .ido>"                       << std::endl
+		<< "                (Original)<.xml | .ido> <.xml | .ido>"
+		<< std::endl
 		<< "	-av: add velocity" << std::endl
 		<< "	Knight -av <DOName> (velocity)<x> <y> <z>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
@@ -122,7 +132,7 @@ void usage()
 		<< "	-cld: convert std::list (Decimalism)" << std::endl
 		<< "	Knight -cld <filename> <begin num> <the end>" << std::endl
 		<< std::endl
-		<< "	-cm: chang models" << std::endl
+		<< "	-cm: change models" << std::endl
 		<< "	Knight -cm (Reference)<.xml | .ido> <.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
 		<< "	-comb: combine two models" << std::endl
@@ -167,6 +177,12 @@ void usage()
 		<< std::endl
 		<< "	-e: erase elements" << std::endl
 		<< "	Knight -e <DOName> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-erase_single_element: erase single element" << std::endl
+		<< "	Knight -erase_single_element <ID> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< std::endl
+		<< "	-erase_elements: erase element in space ax+by+cz>d \"" << std::endl
+		<< "	Knight -erase_elements <name of element> <a> <b> <c> <d> <.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
 		<< "	-energy: calculate the energy of system" << std::endl
 		<< "	Knight -energy <.ido>" << std::endl
@@ -1281,6 +1297,48 @@ int main (int argc, char* argv[])
 		njr::Vector3d SourcePoint(x, y, z);
 		AddPotentialEnergy(&SourcePoint, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-aecp") && (arg.size() == 10))
+	{
+		std::string sDOName = argv[2];
+		double dAngleStarted, dAngleEnded, dR, dZ;
+		unsigned uElementSize;
+		sscanf(argv[3] , "%lg", &dAngleStarted);
+		sscanf(argv[4] , "%lg", &dAngleEnded);
+		if(dAngleEnded <= dAngleStarted)
+		{
+			std::cerr
+				<< "Error!! Code: Knight.cpp (-aecp)" << std::endl
+				<< "        Note: Started angle is smaller than ended angle" << std::endl;
+			exit(-1);
+		}
+		sscanf(argv[5] , "%d" , &uElementSize);
+		sscanf(argv[6] , "%lg", &dR);
+		sscanf(argv[7] , "%lg", &dZ);
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[8], pIactRecordTab);
+		vedo::DOStatus dos
+			(sDOName,
+			njr::Vector3d(njr::ZERO),
+			njr::Vector3d(njr::ZERO),
+			njr::Vector3d(njr::AXIALZ),
+			njr::Vector3d(njr::AXIALX),
+			njr::Vector3d(njr::ZERO)   );
+		double dAngleRange = (dAngleEnded - dAngleStarted) * njr::dDegree2PI;
+		double dAngleIncremental = dAngleRange / (double)uElementSize;
+		double dAngle = dAngleStarted * njr::dDegree2PI;
+		double dCosineAngle, dSineAngle;
+		for(unsigned u=0; u<uElementSize; u++)
+		{
+			dCosineAngle = cos(dAngle);
+			dSineAngle   = sin(dAngle);
+			dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
+			dos.SetOrientationZ(njr::Vector3d(dCosineAngle, dSineAngle, 0.0));
+			oWorld->AddDOStatus(new vedo::DOStatus(dos));
+			dAngle += dAngleIncremental;
+		}
+		delete WriteDOWorld (arg[9], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-ase") && (arg.size() == 20))
@@ -4251,6 +4309,54 @@ int main (int argc, char* argv[])
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
 		oWorld->EraseDOStatus(oWorld->FindDO(argv[2]));
 		delete WriteDOWorld (arg[4], oWorld);
+	}
+	else if ((arg[1] == "-erase_single_element") && (arg.size() == 5))
+	{
+        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[3], pIactRecordTab);
+		unsigned uID;
+		sscanf(argv[2], "%d", &uID);
+		char* idofilename = argv[3];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		pConsultant->EraseElement(uID);
+		delete WriteDOWorld(arg[4], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-erase_elements") && (arg.size() == 9))
+	{
+		std::string sDOName = argv[2];
+		double da, db, dc, dd;
+		sscanf(argv[3], "%lg", &da);
+		sscanf(argv[4], "%lg", &db);
+		sscanf(argv[5], "%lg", &dc);
+		sscanf(argv[6], "%lg", &dd);
+        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[7], pIactRecordTab);
+		char* idofilename = argv[7];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		std::vector<unsigned long> ulIDList;
+		const vedo::DOStatus* dosp;
+		njr::Vector3d vPosition;
+		for
+			(unsigned long ul=0;
+			 ul<(pWorld->GetSystemParameter()->GetDONumber());
+			 ul++                                           )
+		{
+			dosp = pWorld->GetDOStatus(ul);
+			if(dosp->GetDOName() == sDOName)
+			{
+				vPosition = dosp->GetPosition();
+				if(da*vPosition.x()+db*vPosition.y()+dc*vPosition.z()>dd)
+				{
+					ulIDList.push_back(ul);
+				}
+			}
+		}
+		pConsultant->EraseElements(ulIDList);
+		delete WriteDOWorld(arg[8], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-energy") && (arg.size() == 3))
 	{

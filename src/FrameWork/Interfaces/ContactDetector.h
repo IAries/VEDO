@@ -56,7 +56,9 @@ public:
 	};
 
 protected:
+
 	const Boundary* pBC;
+
 	ContactInfo cInfo;
 };
 

@@ -18,6 +18,7 @@ static const double dHalfPI         = 0.5 * M_PI;     // M_PI/2
 static const double dOneAndHalfPI   = 1.5 * M_PI;     // M_PI*3/2
 static const double dDoublePI       = 2.0 * M_PI;
 static const double dFourthThirdsPI = 4.0 / 3.0 * M_PI;
+static const double dDegree2PI      = 1.0 / 180.0 * M_PI;
 
 // Predefine Praticular Vectors, its activities will be defined in class "Vector2d" & "Vector3d"
 enum ParticularVector {ZERO, ORIGIN, AXIALX, AXIALY, AXIALZ};

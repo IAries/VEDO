@@ -187,15 +187,20 @@ void DOWorld::ClearSeparatedElements()
 	}
 };
 
+void DOWorld::EraseDOStatus(const unsigned long& ulID)
+{
+	cDOStatus.erase(cDOStatus.begin()+ulID);
+	pSystemParameter->SetDONumber(cDOStatus.size());
+};
+
 void DOWorld::EraseDOStatus(const std::vector<unsigned long>& EraseList)
 {
 	if(!EraseList.empty())
 	{
 		const unsigned long numberDO      = cDOStatus.size();
 		const unsigned long ErasenumberDO = EraseList.size();
-		unsigned long ul;
 		unsigned long ulEraseCounter = 0;
-		for(ul=EraseList[0]; ul<numberDO; ul++)
+		for(unsigned long ul=EraseList[0]; ul<numberDO; ul++)
 		{
 			if(ulEraseCounter < ErasenumberDO)
 			{

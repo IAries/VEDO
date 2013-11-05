@@ -86,6 +86,7 @@ public:
 	inline void SetPeriodicBoundaryConditions(const Boundary* pPBC)
 	{
 		pcd->SetPeriodicBoundaryConditions(pPBC);
+		pis->SetPeriodicBoundaryConditions(pPBC);
 	};
 
 private:

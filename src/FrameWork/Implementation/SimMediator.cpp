@@ -50,28 +50,30 @@ void SimMediator::CalculateSystemEnergy()
 	{
 		const SystemParameter* csp
 			= pConsultant->GetDOWorld()->GetSystemParameter();
-		FileLogEnergy
-			<< csp->GetTimeCurrent()         << ", "
-			<< csp->GetDONumber()            << ", "
+		FileLogSystemStatus
+			<< csp->GetTimeCurrent()                            << ", "
+			<< csp->GetDONumber()                               << ", "
+            << pConsultant->GetIactRecordTab()->GetTabSize()    << ", "
+            << pConsultant->GetIactRecordTab()->ContactNumber() << ", "
 			<< csp->GetEnergyPotential()
 			 + csp->GetEnergyTranslation()
-			 + csp->GetEnergyRotation()      << ", "
-			<< csp->GetEnergyPotential()     << ", "
+			 + csp->GetEnergyRotation()                         << ", "
+			<< csp->GetEnergyPotential()                        << ", "
 			<< csp->GetEnergyTranslation()
-			 + csp->GetEnergyRotation()      << ", "
-			<< csp->GetEnergyTranslation()   << ", "
-			<< csp->GetEnergyRotation()      << ", "
-			<< csp->GetVelocityMin()         << ", "
-			<< csp->GetVelocityMax()         << ", "
-			<< csp->GetAngularVelocityMin()  << ", "
-			<< csp->GetAngularVelocityMax()  << ", "
-			<< csp->GetMomentumNorm()        << ", "
+			 + csp->GetEnergyRotation()                         << ", "
+			<< csp->GetEnergyTranslation()                      << ", "
+			<< csp->GetEnergyRotation()                         << ", "
+			<< csp->GetVelocityMin()                            << ", "
+			<< csp->GetVelocityMax()                            << ", "
+			<< csp->GetAngularVelocityMin()                     << ", "
+			<< csp->GetAngularVelocityMax()                     << ", "
+			<< csp->GetMomentumNorm()                           << ", "
 			<< csp->GetAngularMomentumNorm();
 
 		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-			FileLogEnergy << ", " << pConsultant->GetUserDefinedValue(u);
+			FileLogSystemStatus << ", " << pConsultant->GetUserDefinedValue(u);
 
-		FileLogEnergy << std::endl;
+		FileLogSystemStatus << std::endl;
 	};
 };
 
@@ -87,18 +89,18 @@ SimMediator::SimMediator
 		<< "DOContainerSynchronization, Partitioning, Computing, "
 		<< "Communication, Total"
 		<< std::endl;
-	FileLogEnergy.open("energy.csv", std::ios::out);
-	FileLogEnergy
-		<< "SystemTime, ElementNumber, "
+	FileLogSystemStatus.open("SystemStatus.csv", std::ios::out);
+	FileLogSystemStatus
+		<< "SystemTime, ElementNumber, InteractionNumber, ContactNumber, "
 		<< "SystemEnergy, PotentialEnergy, KineticEnergy, "
 		<< "KineticEnergyTranslation, KineticEnergyRotation, MinimalVelocity, "
 		<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
 		<< "NormMomentum, NormAngularMomentum";
 
 	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-		FileLogEnergy << ", User-defined Value " << u+1;
+		FileLogSystemStatus << ", User-defined Value " << u+1;
 
-	FileLogEnergy << std::endl;
+	FileLogSystemStatus << std::endl;
 
 	CalculateSystemEnergy();
 };
@@ -123,18 +125,18 @@ SimMediator::SimMediator
 
 	if (rank == 0)
 	{
-		FileLogEnergy.open("energy.csv", std::ios::out);
-		FileLogEnergy
-			<< "SystemTime, ElementNumber, "
+		FileLogSystemStatus.open("SystemStatus.csv", std::ios::out);
+		FileLogSystemStatus
+			<< "SystemTime, ElementNumber, InteractionNumber, ContactNumber, "
 			<< "SystemEnergy, PotentialEnergy, KineticEnergy, "
 			<< "KineticEnergyTranslation, KineticEnergyRotation, MinimalVelocity, "
 			<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
 			<< "NormMomentum, NormAngularMomentum, ";
 
 		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
-			FileLogEnergy << ", User-defined Value " << u+1;
+			FileLogSystemStatus << ", User-defined Value " << u+1;
 
-		FileLogEnergy << std::endl;
+		FileLogSystemStatus << std::endl;
 	};
 	CalculateSystemEnergy();
 };
@@ -143,7 +145,7 @@ SimMediator::~SimMediator()
 {
 	FileLog.close();
 	if (rank == 0)
-		FileLogEnergy.close();
+		FileLogSystemStatus.close();
 };
 
 void SimMediator::TimeInitiate()

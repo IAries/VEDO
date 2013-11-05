@@ -77,10 +77,10 @@ private:
 	const Assembler* cpAssembler;
 	DOContainer      cDO;
 	IactContainer    cIact;
-	unsigned int     rank;            // Rank of processores
-	unsigned int     NP;              // Number of processores
-	std::ofstream    FileLog;         // Log file
-	std::ofstream    FileLogEnergy;   // Energy log file
+	unsigned int     rank;                  // Rank of processores
+	unsigned int     NP;                    // Number of processores
+	std::ofstream    FileLog;               // Log file
+	std::ofstream    FileLogSystemStatus;   // Log file of system status
 };
 
 };   // namespace vedo

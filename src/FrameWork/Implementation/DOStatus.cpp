@@ -73,10 +73,10 @@ bool DOStatus::operator () (const DOStatus* p) const
 };
 
 void DOStatus::SetOrientation
-	(const njr::Vector3d& orientationX, const njr::Vector3d& orientationZ)
+	(const njr::Vector3d& OrientationX, const njr::Vector3d& OrientationZ)
 {
-	vOrientationX = orientationX;
-	vOrientationZ = orientationZ;
+	vOrientationX = OrientationX;
+	vOrientationZ = OrientationZ;
 };
 
 /*

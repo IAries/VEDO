@@ -81,6 +81,16 @@ public:
 	void SetOrientation
 		(const njr::Vector3d& OrientationX, const njr::Vector3d& OrientationZ);
 
+	inline void SetOrientationX(const njr::Vector3d& OrientationX)
+	{
+		vOrientationX = OrientationX;
+	};
+
+	inline void SetOrientationZ(const njr::Vector3d& OrientationZ)
+	{
+		vOrientationZ = OrientationZ;
+	};
+
 	inline void SetAngularVelocity(const njr::Vector3d& angularvelocity)
 	{
 		vAngularVelocity = angularvelocity;

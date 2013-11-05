@@ -1,6 +1,7 @@
 #ifndef _IMPACT_SOLVER_H
 #define _IMPACT_SOLVER_H
 
+#include <Framework/Interfaces/Boundary.h>
 #include <Framework/Interfaces/ContactDetector.h>
 #include <Framework/Interfaces/DOWorld.h>
 #include <Framework/Interfaces/DiscreteObject.h>
@@ -43,6 +44,11 @@ public:
 		ImStatus = (*status);
 	}
 
+	inline void SetPeriodicBoundaryConditions(const Boundary* bc)
+	{
+		pBC = bc;
+	};
+
 	inline const double* RetrieveUserDefinedValue()
 	{
 		return ImStatus.RetrieveUserDefinedValue();
@@ -54,6 +60,8 @@ public:
 	}
 
 protected:
+
+	const Boundary* pBC;
 
 	const IactModel* cpIactModel;
 

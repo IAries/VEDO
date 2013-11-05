@@ -60,6 +60,10 @@ public:
 
 	unsigned long ContactNumber() const;
 
+	void EraseElement(const unsigned long& ulID);
+
+	void EraseElements(const std::vector<unsigned long>& ulIDList, const unsigned long& ulDONum);
+
 	//binary output
 	std::ofstream& operator >> (std::ofstream& idof) const;
 

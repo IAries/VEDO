@@ -119,5 +119,5 @@ void CalcCoordinateNum::outputCoordinateNumVTK
 	vedo::DataFieldVTKWriter* coordVTKField = vedo::DataFieldVTKWriter::Instance();
 	coordVTKField->clearAll();
 	coordVTKField->addArray("CoordinateNumber", 1, coordNumArr);
-//	pWorld->WriteVTK<DataFieldVTKWriter>(filename.c_str());
+//	pWorld->WriteVTK<vedo::DataFieldVTKWriter>(filename.c_str());
 }

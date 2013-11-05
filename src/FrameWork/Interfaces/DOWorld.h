@@ -53,6 +53,8 @@ public:
 
 	void EraseDOStatus(const std::vector<unsigned long>&);
 
+	void EraseDOStatus(const unsigned long&);
+
 	inline void AddDOStatus (DOStatus* dosp)
 	{
 		cDOStatus.push_back(dosp);

@@ -211,6 +211,11 @@ void Consultant::SyncDOContainer(DOContainer& cDO)
 {
 };
 
+bool Consultant::ISReset()
+{
+	return true;
+};
+
 void Consultant::RecordIDO()
 {
 	char ltoa[256];
@@ -237,6 +242,11 @@ bool Consultant::NextStep(DOContainer &cDO, IactContainer& cIact)
 		RecordIDO();
 	}
 	return true;
+};
+
+bool Consultant::Reset()
+{
+		return true;
 };
 
 const ImpactStatus* Consultant::RetrieveImpactStatus
@@ -308,12 +318,40 @@ void Consultant::SyncWorld(DOContainer& vDO)
 {
 };
 
+void Consultant::RebuildIactRecordTab(IactContainer& cIact)
+{
+};
+
 void Consultant::BuildIactTab(std::vector<DOMap>& v1, std::vector<DOMap>& v2)
 {
 };
 
 void Consultant::BuildIactTab(std::vector<DOMap>& v)
 {
+};
+
+bool Consultant::EraseElement(const unsigned long& ulID)
+{
+	if (ulID < pDOWorld->GetSystemParameter()->GetDONumber())
+	{
+		pDOWorld->EraseDOStatus(ulID);
+		pIRTbl->EraseElement(ulID);
+		return true;
+	}
+	else
+	{
+		std::cout
+			<< "Error!! Code: Consultant::EraseElement"     << std::endl
+			<< "        Note: The ID of element is wrong!"  << std::endl;
+		return false;
+	}
+};
+
+bool Consultant::EraseElements(const std::vector<unsigned long>& ulIDList)
+{
+	pIRTbl->EraseElements(ulIDList, pDOWorld->GetSystemParameter()->GetDONumber());
+	pDOWorld->EraseDOStatus(ulIDList);
+	return true;
 };
 
 void Consultant::CollectUserDefinedData(IactContainer& cIact)

@@ -76,8 +76,15 @@ njr::Vector3d ISwBtSDBF::NextStep
 		// Normal bond inactive
 		//ImStatus.stage = 2;
 		vImpPoint     = CInfo->GetContactInfo()->vImpactPoint;
+
 		vDepthRadiusA = vImpPoint - dosA->GetPosition();
 		vDepthRadiusB = vImpPoint - dosB->GetPosition();
+		if(this->pBC)
+		{
+			this->pBC->DifferenceBoundaryConditions(&vDepthRadiusA);
+			this->pBC->DifferenceBoundaryConditions(&vDepthRadiusB);
+		}
+
 		vRelativeV
 			= vVa - vVb + vAVa.Cross(vDepthRadiusA) - vAVb.Cross(vDepthRadiusB);
 		vRelativeVn   = (vRelativeV % vImpDirection) * vImpDirection;

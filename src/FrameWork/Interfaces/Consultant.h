@@ -127,7 +127,7 @@ public:
 	virtual void SyncDOContainer(DOContainer& cDO);
 
 	// DO all kernel instances need to be rebuilt?
-	virtual bool ISReset() = 0;
+	virtual bool ISReset();
 
 	// Do all kernel need to record the data?
 	inline bool ISRecord()
@@ -141,7 +141,7 @@ public:
 	 **************************************************************************/
 	virtual bool NextStep(DOContainer& cDO, IactContainer& cIact);
 
-	virtual bool Reset() = 0;
+	virtual bool Reset();
 
 	virtual void RecordIDO();
 
@@ -167,7 +167,7 @@ public:
 
 	virtual void SyncWorld(DOContainer& vDO);
 
-	virtual void RebuildIactRecordTab(IactContainer& cIact) = 0;
+	virtual void RebuildIactRecordTab(IactContainer& cIact);
 
 	std::time_t starttime;          // Starting time
 	std::time_t endtime;            // Endind time
@@ -177,6 +177,10 @@ public:
 	{
 		pDOWorld->FreezeAllElements();
 	};
+
+	bool EraseElement(const unsigned long& ulID);
+
+	bool EraseElements(const std::vector<unsigned long>& ulIDList);
 
 	inline void CalculateSystemEnergy()
 	{

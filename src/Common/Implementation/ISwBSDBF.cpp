@@ -40,7 +40,7 @@ njr::Vector3d ISwBSDBF::NextStep
 	 * CInfo->GetContactInfo() -> vImpactDirection
 	 * represents direction of (Position B - Position A)
 	 **********************************************************************/
-	const double      dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
+	const double        dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
 	const njr::Vector3d vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
 
 	if (   (!(CInfo->GetContactInfo()->bActive))
@@ -76,8 +76,15 @@ njr::Vector3d ISwBSDBF::NextStep
 		// Normal bond inactive
 		//ImStatus.stage = 2;
 		vImpPoint     = CInfo->GetContactInfo()->vImpactPoint;
+
 		vDepthRadiusA = vImpPoint - dosA->GetPosition();
 		vDepthRadiusB = vImpPoint - dosB->GetPosition();
+		if(this->pBC)
+		{
+			this->pBC->DifferenceBoundaryConditions(&vDepthRadiusA);
+			this->pBC->DifferenceBoundaryConditions(&vDepthRadiusB);
+		}
+
 		vRelativeV
 			= vVa - vVb + vAVa.Cross(vDepthRadiusA) - vAVb.Cross(vDepthRadiusB);
 		vRelativeVn   = (vRelativeV % vImpDirection) * vImpDirection;
