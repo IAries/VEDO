@@ -51,6 +51,7 @@
 		<Unit filename="../../src/Common/Implementation/DOConstrainedQuasiPlate.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOFixedQuasiCylinder.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOFixedQuasiPlate.cpp" />
+		<Unit filename="../../src/Common/Implementation/DOFixedQuasiPlateWithCircularHole.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOFixedSphere.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOQuasiCylinder.cpp" />
 		<Unit filename="../../src/Common/Implementation/DOQuasiPlate.cpp" />
@@ -77,6 +78,7 @@
 		<Unit filename="../../src/Common/Interfaces/DOConstrainedQuasiPlate.h" />
 		<Unit filename="../../src/Common/Interfaces/DOFixedQuasiCylinder.h" />
 		<Unit filename="../../src/Common/Interfaces/DOFixedQuasiPlate.h" />
+		<Unit filename="../../src/Common/Interfaces/DOFixedQuasiPlateWithCircularHole.h" />
 		<Unit filename="../../src/Common/Interfaces/DOFixedSphere.h" />
 		<Unit filename="../../src/Common/Interfaces/DOQuasiCylinder.h" />
 		<Unit filename="../../src/Common/Interfaces/DOQuasiPlate.h" />
