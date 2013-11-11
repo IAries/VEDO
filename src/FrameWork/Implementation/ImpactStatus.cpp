@@ -13,6 +13,10 @@ ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearFor
         for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
             *(dpUDV+u) = 0.0;
 	}
+	else
+	{
+		dpUDV = 0;
+	}
 };
 
 ImpactStatus::ImpactStatus
@@ -25,6 +29,10 @@ ImpactStatus::ImpactStatus
 	    dpUDV = new double[4*uNumUDDImpactStatus];
         memcpy(dpUDV, UDVp, 4*uNumUDDImpactStatus*sizeof(double));
 	}
+	else
+	{
+		dpUDV = 0;
+	}
 };
 
 ImpactStatus::ImpactStatus
@@ -32,6 +40,7 @@ ImpactStatus::ImpactStatus
      const njr::Vector3d& ShearForce                         ):
     bContact(Contact), bBond(Bond),dKn(Kn), vShearForce(ShearForce)
 {
+	dpUDV = 0;
 };
 
 ImpactStatus::ImpactStatus(const ImpactStatus& is)
@@ -49,6 +58,10 @@ const ImpactStatus& ImpactStatus::operator = (const ImpactStatus& is)
 	{
 	    dpUDV = new double[uNumUDDImpactStatus*4];
         memcpy(dpUDV, is.dpUDV, 4*uNumUDDImpactStatus*sizeof(double));
+	}
+	else
+	{
+		dpUDV = 0;
 	}
 	return *this;
 };

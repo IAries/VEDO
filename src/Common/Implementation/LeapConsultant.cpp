@@ -46,7 +46,6 @@ void LeapConsultant::SyncWorld(DOContainer& vDO)
 	      DOStatus* TargetDOStatus = 0;
 	for (unsigned long i=0; i<vDO.size(); ++i)
     {
-
 		SourceDOStatus = vDO[i]->GetDOStatus();
 		TargetDOStatus = (pDOWorld->GetDOStatus())[i];
 		TargetDOStatus->SetPosition(SourceDOStatus->GetPosition());

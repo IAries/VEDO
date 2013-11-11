@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
+	<File name="..\..\src\NJR\Interfaces\Array3d.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1797" topLine="91" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\NJR\Interfaces\Constants.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="178" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\NJR\Interfaces\Vector3d.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4632" topLine="139" />
+		</Cursor>
+	</File>
 	<File name="..\..\src\NJR\Implementation\LinearProgramming.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="11369" topLine="615" />
@@ -11,24 +26,9 @@
 			<Cursor1 position="12128" topLine="500" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\NJR\Interfaces\Vector3d.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4632" topLine="139" />
-		</Cursor>
-	</File>
 	<File name="..\..\src\NJR\Interfaces\ACADXF_Solid.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="3290" topLine="212" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\NJR\Interfaces\Array3d.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1797" topLine="91" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\NJR\Interfaces\Constants.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="178" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

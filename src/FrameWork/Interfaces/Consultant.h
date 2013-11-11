@@ -163,7 +163,7 @@ public:
 
 	bool InBoundary(unsigned long) const;
 
-	virtual void CleanUp(DOContainer& cDO, IactContainer& cIact);
+	virtual bool CleanUp(DOContainer& cDO, IactContainer& cIact);
 
 	virtual void SyncWorld(DOContainer& vDO);
 

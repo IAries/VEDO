@@ -264,53 +264,65 @@ bool Consultant::InBoundary(unsigned long i) const
 			->GetZoneOfInterest().InBoundary(p);
 }
 
-void Consultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
+bool Consultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 {
-	std::vector<unsigned long> RedundantElement;
-	std::map<unsigned long, long> ElementMappingJump;
-
 	SystemParameter* csp   = pDOWorld->GetSystemParameter();
-	unsigned long numberDO = csp->GetDONumber();
-
-	const DOStatus* pdos  = 0;
-	const DOModel*  pdoml = 0;
-	unsigned long ul;
-	long ulDead;
-
-	for(ul=0, ulDead=0; ul<numberDO; ul++)
+	if (csp->GetZoneOfInterest().Active())
 	{
-		pdos     = pDOWorld->GetDOStatus(ul);
-		pdoml    = pDOWorld->GetDOModel(pdos->GetDOName());
-		DOMap pm = (DOMap(ul, pdos, pdoml, 0.0));
-		if (DOMap::ISMobile(pm))
+		std::vector<unsigned long> RedundantElement;
+		std::map<unsigned long, long> ElementMappingJump;
+
+		unsigned long numberDO = csp->GetDONumber();
+
+		const DOStatus* pdos  = 0;
+		const DOModel*  pdoml = 0;
+		unsigned long ul;
+		long ulDead;
+
+		for(ul=0, ulDead=0; ul<numberDO; ul++)
 		{
-			if (! (InBoundary(ul)) )
+			pdos     = pDOWorld->GetDOStatus(ul);
+			pdoml    = pDOWorld->GetDOModel(pdos->GetDOName());
+			DOMap pm = (DOMap(ul, pdos, pdoml, 0.0));
+			if (DOMap::ISMobile(pm))
 			{
-				RedundantElement.push_back(ul);
-				ulDead--;
+				if (! (InBoundary(ul)) )
+				{
+					RedundantElement.push_back(ul);
+					ulDead--;
+				}
 			}
+			ElementMappingJump[ul] = ulDead;
 		}
-		ElementMappingJump[ul] = ulDead;
+
+		if (!RedundantElement.empty())
+		{
+			#ifdef _VEDO_DEBUG
+				std::cout
+					<< "Number of redundant elements = "
+					<< RedundantElement.size()
+					<< " / "
+					<< numberDO
+					<< std::endl;
+			#endif   // _VEDO_DEBUG
+
+			cDO.Erase(RedundantElement);
+			pIRTbl->ModifyPair(ElementMappingJump);
+			pDOWorld->EraseDOStatus(RedundantElement);
+			vcIactMaster.clear();
+			vcIactSlave.clear();
+			IactPairTab.clear();
+			cIact.Clear();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-
-	if (!RedundantElement.empty())
+	else
 	{
-        #ifdef _VEDO_DEBUG
-            std::cout
-                << "Number of redundant elements = "
-                << RedundantElement.size()
-                << " / "
-                << numberDO
-                << std::endl;
-        #endif   // _VEDO_DEBUG
-
-		cDO.Erase(RedundantElement);
-		pIRTbl->ModifyPair(ElementMappingJump);
-		pDOWorld->EraseDOStatus(RedundantElement);
-		vcIactMaster.clear();
-		vcIactSlave.clear();
-		IactPairTab.clear();
-		cIact.Clear();
+		return false;
 	}
 };
 

@@ -837,86 +837,99 @@ bool NBSParallelConsultant::Reset()
 	return true;
 };
 
-void NBSParallelConsultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
+bool NBSParallelConsultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 {
-	std::vector<unsigned long> RedundantElementGlobal;
-	std::vector<unsigned long> RedundantElementLocal;
-	std::map<unsigned long, long> ElementMappingJumpGlobal;
-
-	unsigned long numberDOGlobal = pDOWorld->GetSystemParameter()->GetDONumber();
-	unsigned long numberDOLocal  = DOTab.size();
-
-	const DOStatus* pdos  = 0;
-	const DOModel*  pdoml = 0;
-	unsigned long ul;
-	long ulDead;
-	for(ul=0; ul<numberDOLocal; ul++)
+	SystemParameter* csp   = pDOWorld->GetSystemParameter();
+	if (csp->GetZoneOfInterest().Active())
 	{
-		pdos     = pDOWorld->GetDOStatus(GetDO(ul));
-		pdoml    = pDOWorld->GetDOModel(pdos->GetDOName());
-		DOMap pm = (DOMap(ul, pdos, pdoml, 0.0));
-		if (DOMap::ISMobile(pm))
+		std::vector<unsigned long> RedundantElementGlobal;
+		std::vector<unsigned long> RedundantElementLocal;
+		std::map<unsigned long, long> ElementMappingJumpGlobal;
+
+		unsigned long numberDOGlobal = csp->GetDONumber();
+		unsigned long numberDOLocal  = DOTab.size();
+
+		const DOStatus* pdos  = 0;
+		const DOModel*  pdoml = 0;
+		unsigned long ul;
+		long ulDead;
+		for(ul=0; ul<numberDOLocal; ul++)
 		{
-			if (! (InBoundary(GetDO(ul))) )
+			pdos     = pDOWorld->GetDOStatus(GetDO(ul));
+			pdoml    = pDOWorld->GetDOModel(pdos->GetDOName());
+			DOMap pm = (DOMap(ul, pdos, pdoml, 0.0));
+			if (DOMap::ISMobile(pm))
 			{
-				RedundantElementLocal.push_back(GetDO(ul));
+				if (! (InBoundary(GetDO(ul))) )
+				{
+					RedundantElementLocal.push_back(GetDO(ul));
+				}
 			}
 		}
-	}
 
-	for(ul=0, ulDead=0; ul<numberDOGlobal; ul++)
-	{
-		pdos     = pDOWorld->GetDOStatus(ul);
-		pdoml    = pDOWorld->GetDOModel(pdos->GetDOName());
-		DOMap pm = (DOMap(ul, pdos, pdoml, 0.0));
-		if (DOMap::ISMobile(pm))
+		for(ul=0, ulDead=0; ul<numberDOGlobal; ul++)
 		{
-			if (! (InBoundary(ul)) )
+			pdos     = pDOWorld->GetDOStatus(ul);
+			pdoml    = pDOWorld->GetDOModel(pdos->GetDOName());
+			DOMap pm = (DOMap(ul, pdos, pdoml, 0.0));
+			if (DOMap::ISMobile(pm))
 			{
-				RedundantElementGlobal.push_back(ul);
-				ulDead--;
+				if (! (InBoundary(ul)) )
+				{
+					RedundantElementGlobal.push_back(ul);
+					ulDead--;
+				}
 			}
+			ElementMappingJumpGlobal[ul] = ulDead;
 		}
-		ElementMappingJumpGlobal[ul] = ulDead;
-	}
 
-	if (!RedundantElementGlobal.empty())
-	{
-		#ifdef _VEDO_DEBUG
-			if (rank == 0)
-				std::cout
-					<< '['
-					<< rank
-					<< "] Global Redundant elements = "
-					<< RedundantElementGlobal.size()
-					<< " / "
-					<< numberDOGlobal
-					<< std::endl;
-		#endif   // _VEDO_DEBUG
-
-		if (!RedundantElementLocal.empty())
+		if (!RedundantElementGlobal.empty())
 		{
 			#ifdef _VEDO_DEBUG
-				std::cout
-					<< '['
-					<< rank
-					<< "] Local Redundant elements = "
-					<< RedundantElementLocal.size()
-					<< " / "
-					<< numberDOLocal
-					<< std::endl;
+				if (rank == 0)
+					std::cout
+						<< '['
+						<< rank
+						<< "] Global Redundant elements = "
+						<< RedundantElementGlobal.size()
+						<< " / "
+						<< numberDOGlobal
+						<< std::endl;
 			#endif   // _VEDO_DEBUG
 
-			cDO.Erase(RedundantElementLocal);
-		}
+			if (!RedundantElementLocal.empty())
+			{
+				#ifdef _VEDO_DEBUG
+					std::cout
+						<< '['
+						<< rank
+						<< "] Local Redundant elements = "
+						<< RedundantElementLocal.size()
+						<< " / "
+						<< numberDOLocal
+						<< std::endl;
+				#endif   // _VEDO_DEBUG
 
-		pIRTbl->ModifyPair(ElementMappingJumpGlobal);
-		pDOWorld->EraseDOStatus(RedundantElementGlobal);
-		G2LTab.clear();
-		G2LTab.resize(pDOWorld->GetSystemParameter()->GetDONumber());
-		vcIactMaster.clear();
-		vcIactSlave.clear();
-		cIact.Clear();
+				cDO.Erase(RedundantElementLocal);
+			}
+
+			pIRTbl->ModifyPair(ElementMappingJumpGlobal);
+			pDOWorld->EraseDOStatus(RedundantElementGlobal);
+			G2LTab.clear();
+			G2LTab.resize(pDOWorld->GetSystemParameter()->GetDONumber());
+			vcIactMaster.clear();
+			vcIactSlave.clear();
+			cIact.Clear();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
 	}
 };
 

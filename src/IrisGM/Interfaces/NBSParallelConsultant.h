@@ -58,7 +58,7 @@ public:
 
 	virtual bool Reset();
 
-	virtual void CleanUp(DOContainer& cDO, IactContainer& cIact);
+	virtual bool CleanUp(DOContainer& cDO, IactContainer& cIact);
 
 	virtual bool NextStep(DOContainer& cDO, IactContainer& cIact);
 

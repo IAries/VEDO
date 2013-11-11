@@ -513,8 +513,8 @@ void DOWorld::CalculateSystemEnergy()
 	double          dEnergyKinetic;
 	double          dEnergyTranslation;
 	double          dEnergyRotation;
-	njr::Vector3d     vMomentumAvg;
-	njr::Vector3d     vAngularMomentumAvg;
+	njr::Vector3d   vMomentumAvg;
+	njr::Vector3d   vAngularMomentumAvg;
 	double          dMomentumNorm        = 0.0;
 	double          dAngularMomentumNorm = 0.0;
 	double          dVelocityMax;
@@ -522,9 +522,9 @@ void DOWorld::CalculateSystemEnergy()
 	double          dAngularVelocityMax;
 	double          dAngularVelocityMin;
 	double          m;
-	njr::Vector3d     mmi;
+	njr::Vector3d   mmi;
 	double          v;
-	njr::Vector3d     av;
+	njr::Vector3d   av;
 	double          dav;
 	bool            StartPoint       = true;
 	bool            NoMobileElements = false;
@@ -686,6 +686,7 @@ void DOWorld::CalculateSystemEnergy()
 	pSystemParameter->SetAngularVelocityMin(dAngularVelocityMin);
 };
 
+/*
 const std::pair<njr::Vector3d, njr::Vector3d>
 	DOWorld::Distribution(double& dMeshLength) const
 {
@@ -775,6 +776,7 @@ const std::pair<njr::Vector3d, njr::Vector3d>
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
 };
+*/
 
 void DOWorld::Shift(const njr::Vector3d& shift)
 {

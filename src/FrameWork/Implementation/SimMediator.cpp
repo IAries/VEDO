@@ -103,6 +103,20 @@ SimMediator::SimMediator
 	FileLogSystemStatus << std::endl;
 
 	CalculateSystemEnergy();
+	Initiate();
+//	pConsultant->SyncWorld(cDO);
+//	pConsultant->RebuildIactRecordTab(cIact);
+	unsigned long ulDOSizeOld = cDO.size();
+	if (pConsultant->CleanUp(cDO, cIact))
+	{
+		pConsultant->Reset();
+		unsigned long ulDOSizeNew = cDO.size();
+		if(ulDOSizeOld != ulDOSizeNew)
+		{
+			CalculateSystemEnergy();
+			Initiate();
+		}
+	}
 };
 
 SimMediator::SimMediator
@@ -138,7 +152,22 @@ SimMediator::SimMediator
 
 		FileLogSystemStatus << std::endl;
 	};
+
 	CalculateSystemEnergy();
+	Initiate();
+//	pConsultant->SyncWorld(cDO);
+//	pConsultant->RebuildIactRecordTab(cIact);
+	unsigned long ulDOSizeOld = cDO.size();
+	if (pConsultant->CleanUp(cDO, cIact))
+	{
+		pConsultant->Reset();
+		unsigned long ulDOSizeNew = cDO.size();
+		if(ulDOSizeOld != ulDOSizeNew)
+		{
+			CalculateSystemEnergy();
+			Initiate();
+		}
+	}
 };
 
 SimMediator::~SimMediator()
@@ -165,7 +194,7 @@ void SimMediator::TimeInitiate()
 
 void SimMediator::ShowInteraction()
 {
-	std::ofstream FileInteraction;
+	std::ofstream          FileInteraction;
 	const DOWorld*         cpDOWorld = pConsultant->GetDOWorld();
 	const SystemParameter* csp       = cpDOWorld->GetSystemParameter();
 
@@ -249,7 +278,14 @@ void SimMediator::ShowInteraction()
 					<< cip->vImpactPoint.y()          << ", "
 					<< cip->vImpactPoint.z()          << ", ";
 
-				isp = iap->GetSolver()->GetImpactStatus();
+				isp
+					= pConsultant
+						->RetrieveImpactStatus
+							(pConsultant->GetIactMaster(ul),
+							 pConsultant->GetIactSlave(ul)  );
+//				isp = iap->GetSolver()->GetImpactStatus();
+				if(!isp)
+					continue;
 				cdpudv = isp->RetrieveAllUserDefinedValue();
 
 				if (isp->Bond())
@@ -325,7 +361,14 @@ void SimMediator::ShowInteraction()
 					<< cip->vImpactPoint.y()     << ", "
 					<< cip->vImpactPoint.z()     << ", ";
 
-				isp = iap->GetSolver()->GetImpactStatus();
+				isp
+					= pConsultant
+						->RetrieveImpactStatus
+							(pConsultant->GetIactMaster(ul),
+							 pConsultant->GetIactSlave(ul)  );
+//				isp = iap->GetSolver()->GetImpactStatus();
+				if(!isp)
+					continue;
 				cdpudv = isp->RetrieveAllUserDefinedValue();
 
 				if (isp->Bond())

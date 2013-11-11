@@ -31,271 +31,431 @@
 
 void usage()
 {
+	std::ofstream ofMessageFile("Knight.txt", std::ios::out);
+
 	std::cout
+		<< "Knight " << vedo::sVersion << std::endl << std::endl
+		<< "Unknown command, please read file \"Knight.txt\" for more information."
+		<< std::endl;
+
+	ofMessageFile
 		<< "Knight " << vedo::sVersion << std::endl
 		<< std::endl
 		<< "Usage:" << std::endl
 		<< std::endl
-		<< "	-a: add elements in defined domain" << std::endl
-		<< "	Knight -a <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_elements_in_simple_cube_style"             << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-ap: add potential energy from a \"source point\"" << std::endl
-		<< "	Knight -ap <DOName> (source point)<x> <y> <z>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_pontential_energy_from_sorce_point"        << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <source x> <source y> <source z>"               << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-aecp: add elements in a circular path (X-Y plane)"                      << std::endl
-		<< "	Knight -aecp <DOName>"                                                   << std::endl
-		<< "                <started angle (degree)> <ended angle (degree)>"             << std::endl
-		<< "                <number of elements>"                                        << std::endl
-		<< "                <radius of circular path>"                                   << std::endl
-		<< "                <coordinate Z of the circular path>"                         << std::endl
-		<< "                (Original)<.xml | .ido> <.xml | .ido>"
+		<< "* Knight -add_elements_in_circular_path"                 << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <started angle (in degree)>"                    << std::endl
+		<< "         <ended angle (in degree)>"                      << std::endl
+		<< "         <number of elements>"                           << std::endl
+		<< "         <radius of circular path> <Z of circular path>" << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-ase: add single element"                                                << std::endl
-		<< "	Knight -ase <DOName>"                                                    << std::endl
-		<< "                <position-x> <position-y> <position-z>"                      << std::endl
-		<< "                <velocity-x> <velocity-y> <velocity-z>"                      << std::endl
-		<< "                <orientation-x-x> <orientation-x-y> <orientation-x-z>"       << std::endl
-		<< "                <orientation-z-x> <orientation-z-y> <orientation-z-z>"       << std::endl
-		<< "                <angularvelocity-x> <angularvelocity-y> <angularvelocity-z>" << std::endl
-		<< "                (Original)<.xml | .ido> <.xml | .ido>"
+		<< "* Knight -add_elements_in_circular_path"                 << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <started angle (in degree)>"                    << std::endl
+		<< "         <ended angle (in degree)>"                      << std::endl
+        << "         <inclined angle (in degree)>"                   << std::endl
+		<< "         <number of elements>"                           << std::endl
+		<< "         <radius of circular path> <Z of circular path>" << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-av: add velocity" << std::endl
-		<< "	Knight -av <DOName> (velocity)<x> <y> <z>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_single_element"                            << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <position-x> <position-y> <position-z>"         << std::endl
+		<< "         <velocity-x> <velocity-y> <velocity-z>"         << std::endl
+		<< "         <orientation-x-x>"                              << std::endl
+		<< "         <orientation-x-y>"                              << std::endl
+		<< "         <orientation-x-z>"                              << std::endl
+		<< "         <orientation-z-x>"                              << std::endl
+		<< "         <orientation-z-y>"                              << std::endl
+		<< "         <orientation-z-z>"                              << std::endl
+		<< "         <angularvelocity-x>"                            << std::endl
+		<< "         <angularvelocity-y>"                            << std::endl
+		<< "         <angularvelocity-z>"                            << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-aav: add angular velocity" << std::endl
-		<< "	Knight -av <DOName> (angular velocity)<x> <y> <z>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_velocity"                                  << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <velocity-x> <velocity-y> <velocity-z>"         << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-ar_cartesian: add elements (random distribution) in defined domain (cartesian coordinate)" << std::endl
-		<< "	Knight -ar_cartesian <DOName> <number of elements> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_angular_velocity"                          << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <angular velocity-x>"                           << std::endl
+		<< "         <angular velocity-y>"                           << std::endl
+		<< "         <angular velocity-z>"                           << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-ar_cylindrical: add elements (random distribution) in defined domain (cylindrical coordinate)" << std::endl
-		<< "	Knight -ar_cylindrical <DOName> <number of elements> <x> <y> <z> <r> <h>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_elements_randomly_in_Cartesian_coordinate" << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <number of elements>"                           << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-ar_spherical: add elements (random distribution) in defined domain (spherical coordinate)" << std::endl
-		<< "	Knight -ar_spherical <DOName> <number of elements> <x> <y> <z> <r>" << std::endl
-		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -add_elements_randomly_in_cylindrical_coordinate" << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <number of elements>"                           << std::endl
+		<< "         <center of bottom-x>"                           << std::endl
+		<< "         <center of bottom-y>"                           << std::endl
+		<< "         <center of bottom-z>"                           << std::endl
+		<< "         <radius of celinder>"                           << std::endl
+		<< "         <height of celinder>"                           << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-//		<< "	-assm: assemble xml file (-al)" << std::endl
-//		<< "	Knight -assm <f1.xml> <f2.xml> <des.xml>" << std::endl
-//		<< std::endl
-		<< "	-avg_info: calculate the average information in defined space" << std::endl
-		<< "	Knight -avg_info <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -add_elements_randomly_in_spherical_coordinate" << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <number of elements>"                           << std::endl
+		<< "         <center of sphere-x>"                           << std::endl
+		<< "         <center of sphere-y>"                           << std::endl
+		<< "         <center of sphere-z>"                           << std::endl
+		<< "         <radius of sphere>"                             << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-avg_info: calculate the average information in defined space (velocity is estimated by positions in different step)" << std::endl
-		<< "	Knight -avg_info (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+/*
+		<< "* Knight -assemble_xml(-al)"                             << std::endl
+		<< "         <reference1 .xml> <refreence2 .xml>"            << std::endl
+		<< "         <destination .xml>"                             << std::endl
 		<< std::endl
-		<< "	-avg_info_xy: calculate the average information in defined x-y plane" << std::endl
-		<< "	Knight -avg_info_xy <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+*/
+		<< "* Knight -average_information"                           << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-avg_info_xy: calculate the average information in defined x-y plane (velocity is estimated by positions in different step)" << std::endl
-		<< "	Knight -avg_info_xy (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -average_information"                           << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "	-avg_info_yz: calculate the average information in defined y-z plane" << std::endl
-		<< "	Knight -avg_info_yz <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -average_information_projected_in_XY_plane"     << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-avg_info_yz: calculate the average information in defined y-z plane (velocity is estimated by positions in different step)" << std::endl
-		<< "	Knight -avg_info_yz (current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -average_information_projected_in_XY_plane"     << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "	-avg_info_xz: calculate the average information in defined x-z plane" << std::endl
-		<< "	Knight -avg_info_xz <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -average_information_projected_in_YZ_plane"     << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-avg_info_xz: calculate the average information in defined x-z plane (velocity is estimated by positions in different step)" << std::endl
-		<< "	Knight -avg_info_xz(current step)<.xml | .ido> (next step)<.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -average_information_projected_in_YZ_plane"     << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "	-avg_rd_ntume: calculate the average information for NTUME experiment of rotating drum" << std::endl
-		<< "	Knight -avg_rd_ntume <.xml | .ido> <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax> <Mesh size>" << std::endl
+		<< "* Knight -average_information_projected_in_XZ_plane"     << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-c: convert" << std::endl
-		<< "	Knight -c <.xml | .ido> <.xml | .ido | .csv | .vpf | .dxf | .vtu>" << std::endl
+		<< "* Knight -average_information_projected_in_XZ_plane"     << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <mesh size>"                                    << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "	-ca2s: calaulate area of cross section to surface, ax+by+cz=d" << std::endl
-		<< "	Knight -ca2s <DOName> <a> <b> <c> <d> <.xml | .ido>" << std::endl
+		<< "* Knight -convert"                                       << std::endl
+		<< "         <source .xml | .ido>"                           << std::endl
+		<< "         <destination .xml | .ido | .csv | .vpf | .dxf | .vtu>" << std::endl
 		<< std::endl
-		<< "	-cf2s: calaulate flux of cross section to surface, ax+by+cz=d" << std::endl
-		<< "	Knight -cf2s <DOName> <a> <b> <c> <d> <.xml | .ido>" << std::endl
+		<< "* Knight -cross_section_area_on_surface"                 << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "	     <a> <b> <c> <d> "                               << std::endl
+		<< "             (Surface function: ax+by+cz=d)"             << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
+		<< "* Knight -cross_section_flux_on_surface"                 << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <a> <b> <c> <d> "                               << std::endl
+		<< "             (Surface function: ax+by+cz=d)"             << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< std::endl
+/*
 		<< "	-cal: calculate average density and coordinate number" << std::endl
-		<< "	Knight -cal <filename> <xmin,xmax,ymin,ymax,zmin,zmax>" << std::endl
+		<< "* Knight -cal <filename> <xmin,xmax,ymin,ymax,zmin,zmax>" << std::endl
 		<< std::endl
 		<< "	-cl: convert std::list (Hexadecimal)" << std::endl
-		<< "	Knight -cl <filename> <begin num> <the end>" << std::endl
+		<< "* Knight -cl <filename> <begin num> <the end>" << std::endl
+*/
 		<< std::endl
- 		<< "	-clean_udv: clean the user-defined value in ido file" << std::endl
-		<< "	Knight -clean_udv (Original)<.ido> (New)<.ido>" << std::endl
+		<< "* Knight -clean_user_defined_value"                      << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
+/*
 		<< "	-cld: convert std::list (Decimalism)" << std::endl
-		<< "	Knight -cld <filename> <begin num> <the end>" << std::endl
+		<< "* Knight -cld <filename> <begin num> <the end>" << std::endl
 		<< std::endl
-		<< "	-cm: change models" << std::endl
-		<< "	Knight -cm (Reference)<.xml | .ido> <.xml | .ido> <.xml | .ido>" << std::endl
+*/
+		<< "* Knight -change_models"                                 << std::endl
+		<< "         <new models .xml | .ido>"                       << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-comb: combine two models" << std::endl
-		<< "	Knight -comb (Reference)<.xml | .ido> (with Mobile Elements)<.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -combine"                                       << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "             (provide mobile elements)"                  << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-comb: combine two models" << std::endl
-		<< "	Knight -comb (Reference)<.xml | .ido> (with Added Elements)<.xml | .ido> <DOName> <.xml | .ido>" << std::endl
+		<< "* Knight -combine"                                       << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "             (provide assigned elements)"                << std::endl
+		<< "         <name of assigned elements>"                    << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
+/*
 		<< "	-coord_num: calculate coordinate number for spheres and output to VTK file" << std::endl
-		<< "	Knight -coord_num <.xml | .ido>  <.vtu>" << std::endl
+		<< "* Knight -coord_num <.xml | .ido>  <.vtu>" << std::endl
 		<< std::endl
-		<< "	-cu: convert to sudo vpf file" << std::endl
-		<< "	Knight -cu (Original)<.xml | .ido> (Current)<.xml | .ido> <.vpf>" << std::endl
+*/
+		<< "* Knight -convert_sudo_vpf"                              << std::endl
+		<< "         <reference1 .xml | .ido>"                       << std::endl
+		<< "             (control the number of elements)"           << std::endl
+		<< "         <reference2 .xml | .ido>"                       << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
+/*
 		<< "	-b2h: convert DOS text file to HEX" << std::endl
-		<< "	Knight -b2h <origin> <destination>" << std::endl
+		<< "* Knight -b2h <origin> <destination>" << std::endl
 		<< std::endl
 		<< "	-d2u: convert DOS text file to UNIX text" << std::endl
-		<< "	Knight -d2u <origin> <destination>" << std::endl
+		<< "* Knight -d2u <origin> <destination>" << std::endl
 		<< std::endl
-		<< "	-distance: calculate the distance of objects from certain point" << std::endl
-		<< "	Knight -distance <.xml | .ido> <X> <Y> <Z>" << std::endl
+*/
+		<< "* Knight -distance_to_point"                             << std::endl
+		<< "         <source x> <source y> <source z>"               << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-distance_xy: calculate the distance of objects from certain line" << std::endl
-		<< "	Knight -distance <.xml | .ido> <X> <ZY>" << std::endl
+		<< "* Knight -distance_to_xy_plane"                          << std::endl
+		<< "         <source x> <source y>"                          << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-distance_yz: calculate the distance of objects from certain line" << std::endl
-		<< "	Knight -distance <.xml | .ido> <Y> <Z>" << std::endl
+		<< "* Knight -distance_to_yz_plane"                          << std::endl
+		<< "         <source y> <source z>"                          << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-distance_zx: calculate the distance of objects from certain line" << std::endl
-		<< "	Knight -distance <.xml | .ido> <Z> <X>" << std::endl
+		<< "* Knight -distance_to_xz_plane"                          << std::endl
+		<< "         <source x> <source z>"                          << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
+/*
 		<< "	-u2d: convert UNIX text file to DOS text" << std::endl
-		<< "	Knight -u2d <origin> <destination>" << std::endl
+		<< "* Knight -u2d <origin> <destination>" << std::endl
 		<< std::endl
+*/
+/*
 		<< "	-cse: clear separated elements" << std::endl
-		<< "	Knight -cs <.ido> <.ido>" << std::endl
+		<< "* Knight -cs <.ido> <.ido>" << std::endl
 		<< std::endl
 		<< "	-distribution: determine the distribution of certain elements" << std::endl
-		<< "	Knight -distribution <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "* Knight -distribution <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
 		<< "			<Mesh size> <.xml | .ido>" << std::endl
+*/
 		<< std::endl
-		<< "	-e: erase elements" << std::endl
-		<< "	Knight -e <DOName> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -erase_single_element"                          << std::endl
+		<< "         <element ID>"                                   << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-erase_single_element: erase single element" << std::endl
-		<< "	Knight -erase_single_element <ID> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -erase_elements"                                << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-erase_elements: erase element in space ax+by+cz>d \"" << std::endl
-		<< "	Knight -erase_elements <name of element> <a> <b> <c> <d> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -erase_elements"                                << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "	     <a> <b> <c> <d> "                               << std::endl
+		<< "             (Elements in ax+by+cz>d will be erased)"    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-energy: calculate the energy of system" << std::endl
-		<< "	Knight -energy <.ido>" << std::endl
+		<< "* Knight -energy"                                        << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-freeze: freeze all \"Elements\"" << std::endl
-		<< "	Knight -freeze <.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -freeze_all_elements"                           << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-freeze: freeze \"Elements\"" << std::endl
-		<< "	Knight -freeze <DOName> <.xml | .ido> <.xml | .ido>" << std::endl
+		<< "* Knight -freeze_elements"                               << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-gt_auto: calculate the granular temperature in defined domain (auto/rectangle shape)" << std::endl
-		<< "	Knight -gt_auto <.xml | .ido> <DOName> <CutNumberX> <CutNumberY> <CutNumberZ>" << std::endl
+		<< "* Knight -gt_auto <.xml | .ido> <DOName> <CutNumberX> <CutNumberY> <CutNumberZ>" << std::endl
 		<< "			<Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << std::endl
 		<< std::endl
-		<< "	-gt_rectangle: calculate the granular temperature in defined domain (rectangle shape)" << std::endl
-		<< "	Knight -gt_rectangle <.xml | .ido> <DOName> <width> <length> <height> <X> <Y> <Z>" << std::endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< "* Knight -granular_temperature_in_box"                   << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <box center-x> <box center-y> <box center-z>"   << std::endl
+		<< "         <box width> <box length> <box height>"          << std::endl
+		<< "         <box Xx> <box Xy> <box Xz>"                     << std::endl
+		<< "         <box Zx> <box Zy> <box Zz>"                     << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-gt_cylinder: calculate the granular temperature in defined domain (culinder shape)" << std::endl
-		<< "	Knight -gt_cylinder <.xml | .ido> <DOName> <radius> <height> <X> <Y> <Z>" << std::endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< "* Knight -granular_temperature_in_cylinder"              << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <cylinder center-x>"                            << std::endl
+		<< "         <cylinder center-y>"                            << std::endl
+		<< "         <cylinder center-z>"                            << std::endl
+		<< "         <cylinder radius> <cylinder height>"            << std::endl
+		<< "         <cylinder Xx> <cylinder Xy> <cylinder Xz>"      << std::endl
+		<< "         <cylinder Zx> <cylinder Zy> <cylinder Zz>"      << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-gt_sphere: calculate the granular temperature in defined domain (sphere shape)" << std::endl
-		<< "	Knight -gt_sphere <.xml | .ido> <DOName> <radius> <X> <Y> <Z>" << std::endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< "* Knight -granular_temperature_in_sphere"                << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <sphere center-x>"                              << std::endl
+		<< "         <sphere center-y>"                              << std::endl
+		<< "         <sphere center-z>"                              << std::endl
+		<< "         <sphere radius>"                                << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-gt_ellipsoid: calculate the granular temperature in defined domain (ellipsoid shape)" << std::endl
-		<< "	Knight -gt_ellipsoid <.xml | .ido> <DOName> <XLength> <YLength> <ZLength> <X> <Y> <Z>" << std::endl
-		<< "			<Xx> <Xy> <Xz> <Zx> <Zy> <Zz>" << std::endl
+		<< "* Knight -granular_temperature_in_ellipsoid"             << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <ellipsoid center-x>"                           << std::endl
+		<< "         <ellipsoid center-y>"                           << std::endl
+		<< "         <ellipsoid center-z>"                           << std::endl
+		<< "         <ellipsoid length-x>"                           << std::endl
+		<< "         <ellipsoid length-y>"                           << std::endl
+		<< "         <ellipsoid length-z>"                           << std::endl
+		<< "         <ellipsoid Xx> <ellipsoid Xy> <ellipsoid Xz>"   << std::endl
+		<< "         <ellipsoid Zx> <ellipsoid Zy> <ellipsoid Zz>"   << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "	-i: print infomation of data file" << std::endl
-		<< "	Knight -i  <.xml | .ido>" << std::endl
+		<< "* Knight -information"                                   << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
+/*
 		<< "	-inside: check what elements are inside" << std::endl
-		<< "	Knight -inside <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax>" << std::endl
+		<< "* Knight -inside <.xml | .ido> <XMin> <XMax> <YMin> <YMax> <ZMin> <ZMax>" << std::endl
 		<< std::endl
+*/
+/*
 		<< "	-lattice_bcc: rectangular element initialization on the basis of BCC Lattice" << std::endl
-		<< "	Knight -lattice_bcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "* Knight -lattice_bcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
 		<< "	-lattice_fcc: rectangular element initialization on the basis of FCC Lattice" << std::endl
-		<< "	Knight -lattice_fcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "* Knight -lattice_fcc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
 		<< "	-lattice_scc: rectangular element initialization on the basis of Simple Cubic Lattice" << std::endl
-		<< "	Knight -lattice_scc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
+		<< "* Knight -lattice_scc <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
 		<< "			(Original)<.xml | .ido> <.xml | .ido>" << std::endl
 		<< std::endl
+*/
+/*
 		<< "	-profile_Info2Y: calculate the profile \"Information-Y\" in defined space" << std::endl
-		<< "	Knight -profile_Info2Y <.xml | .ido> <Xmin> <XMax> <Zmin> <Zmax>" << std::endl
+		<< "* Knight -profile_Info2Y <.xml | .ido> <Xmin> <XMax> <Zmin> <Zmax>" << std::endl
 		<< std::endl
 		<< "	-projected_area_x: calculate the projected area in Y-Z domain" << std::endl
-		<< "	Knight -projected_area_x <mesh length> <.ido>" << std::endl
+		<< "* Knight -projected_area_x <mesh length> <.ido>" << std::endl
 		<< std::endl
 		<< "	-projected_area_y: calculate the projected area in Z-X domain" << std::endl
-		<< "	Knight -projected_area_y <mesh length> <.ido>" << std::endl
+		<< "* Knight -projected_area_y <mesh length> <.ido>" << std::endl
 		<< std::endl
 		<< "	-projected_area_z: calculate the projected area in X-Y domain" << std::endl
-		<< "	Knight -projected_area_z <mesh length> <.ido>" << std::endl
+		<< "* Knight -projected_area_z <mesh length> <.ido>" << std::endl
 		<< std::endl
-		<< "	-rotate: rotate elements" << std::endl
-		<< "	Knight -rotate <Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << std::endl
-		<< "			(Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+*/
+		<< "* Knight -rotate_all_elements"                           << std::endl
+		<< "         <angle to axis x (in degree)>"                  << std::endl
+		<< "         <angle to axis y (in degree)>"                  << std::endl
+		<< "         <angle to axis z (in degree)>"                  << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-sccBm1: calculate the flowability index of SCC mortar" << std::endl
-		<< "	Knight -sccBm1 <.ido>" << std::endl
+		<< "* Knight -shift_elements"                                << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <x> <y> <z>"                                    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-sccBm2: calculate the flowability index of SCC" << std::endl
-		<< "	Knight -sccBm2 <.ido>" << std::endl
+		<< "* Knight -shift_all_elements"                            << std::endl
+		<< "         <x> <y> <z>"                                    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-sccRm: calculate the viscosity index of SCC mortar" << std::endl
-		<< "	Knight -sccRm <.ido>" << std::endl
-		<< std::endl
-		<< "	-shift: shift elements" << std::endl
-		<< "	Knight -shift <DOName> <x> <y> <z>" << std::endl
-		<< "			(Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
-		<< std::endl
-		<< "	-shift_all: shift all elements" << std::endl
-		<< "	Knight -shift_all <x> <y> <z> (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
-		<< std::endl
+/*
 		<< "	-sort: sort elements" << std::endl
-		<< "	Knight -sort (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+		<< "* Knight -sort (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
 		<< std::endl
 		<< "	-sort_distance: sort elements by the distance to a reference point" << std::endl
-		<< "	Knight -sort_distance <Px> <Py> <Pz> <.xml | .ido>" << std::endl
+		<< "* Knight -sort_distance <Px> <Py> <Pz> <.xml | .ido>" << std::endl
 		<< std::endl
-		<< "	-set_time: set simulated time" << std::endl
-		<< "	Knight -set_time <start time> <stop time> <time interval> <current time> (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
+*/
+		<< "* Knight -set_time"                                      << std::endl
+		<< "         <start time> <stop time>"                       << std::endl
+		<< "         <time interval> <current time>"                 << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-		<< "	-show: show the motion status of certain object" << std::endl
-		<< "	Knight -show <.xml | .ido> <ObjectID>" << std::endl
+		<< "* Knight -show_elements_motion_status"                   << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
- 		<< "	-u11: update ido file & irt file (2011) to new version" << std::endl
-		<< "	Knight -u11 (Original)<.ido> (Original)<.irt> (New)<.ido>" << std::endl
+		<< "* Knight -update_vedo_2011_to_current"                   << std::endl
+		<< "         <reference .xml | .ido>   (VEDO 2011)"          << std::endl
+		<< "         <reference .irt>          (VEDO 2011)"          << std::endl
+		<< "         <destination .xml | .ido> (VEDO 2013)"          << std::endl
 		<< std::endl
- 		<< "	-u10: update ido file & irt file (2010) to new version" << std::endl
-		<< "	Knight -u10 (Original)<.ido> (Original)<.irt> (New)<.ido>" << std::endl
+		<< "* Knight -update_vedo_2010_to_current"                   << std::endl
+		<< "         <reference .xml | .ido>   (VEDO 2010)"          << std::endl
+		<< "         <reference .irt>          (VEDO 2010)"          << std::endl
+		<< "         <destination .xml | .ido> (VEDO 2013)"          << std::endl
 		<< std::endl
- 		<< "	-u9: update ido file (2009) to new version" << std::endl
-		<< "	Knight -u9 (Original)<.ido> (New)<.ido>" << std::endl
+		<< "* Knight -update_vedo_2009_to_2010"                      << std::endl
+		<< "         <reference .xml | .ido>   (VEDO 2009)"          << std::endl
+		<< "         <destination .xml | .ido> (VEDO 2010)"          << std::endl
 		<< std::endl
- 		<< "	-u8: update ido file (2008) to new version" << std::endl
-		<< "	Knight -u8 (Original)<.ido> (New)<.ido>" << std::endl
+		<< "* Knight -update_vedo_2008_to_2009"                      << std::endl
+		<< "         <reference .xml | .ido>   (VEDO 2008)"          << std::endl
+		<< "         <destination .xml | .ido> (VEDO 2009)"          << std::endl
 		<< std::endl
- 		<< "	-u7: update ido file (2007) to new version" << std::endl
-		<< "	Knight -u7 (Original)<.ido> (New)<.ido>" << std::endl
+		<< "* Knight -update_vedo_2007_to_2008"                      << std::endl
+		<< "         <reference .xml | .ido>   (VEDO 2007)"          << std::endl
+		<< "         <destination .xml | .ido> (VEDO 2008)"          << std::endl
 		<< std::endl
-		<< "	-u6: update ido file (2006) to new version" << std::endl
-		<< "	Knight -u6 (Original)<.ido> (New)<.ido>" << std::endl
-		<< std::endl
-		<< "	-volume: calculate the volume in 'Zone of Interest'" << std::endl
-		<< "	Knight -volume <mesh length> <.ido>" << std::endl
+		<< "* Knight -update_vedo_2006_to_2007"                      << std::endl
+		<< "         <reference .xml | .ido>   (VEDO 2006)"          << std::endl
+		<< "         <destination .xml | .ido> (VEDO 2007)"          << std::endl
 		<< std::endl;
+
+	ofMessageFile.close();
 
 	exit(0);
 }
@@ -1121,139 +1281,6 @@ void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld, const std::stri
 	}
 };
 
-double SCCFlowabilityIndex
-	(vedo::DOWorld* oWorld,
-	double StartPoint,
-	double EndPoint)
-{
-	unsigned long         DOnum  = oWorld->GetSystemParameter()->GetDONumber();
-	double                DOsize =  0.0;
-	const vedo::DOStatus* dos    =  0;
-	const vedo::DOModel*  dom    =  0;
-	njr::Vector3d         DOpos;
-	double                H1     =  0.0;
-	double                H2     =  0.0;
-	double                L1     =  0.0;
-	double                L      = EndPoint - StartPoint;
-	for(unsigned long i=0; i<DOnum; i++)
-	{
-		dos = oWorld->GetDOStatus(i);
-		dom = oWorld->GetDOModel(dos->GetDOName());
-		if (dom->GetBehavior() == "mobile")
-		{
-			DOsize = dom->GetShapeAttributes().sphere.radius;
-			DOpos  = dos->GetPosition();
-			if (   (DOpos.x() >= (StartPoint-DOsize))
-				&& (DOpos.x() <= (StartPoint+DOsize)) )
-			{
-				if ((DOpos.y()+DOsize) >= H1)
-				{
-					H1 = DOpos.y() + DOsize;
-				}
-			}
-			else
-			{
-				if (DOpos.x() >= (EndPoint-DOsize))
-				{
-					if ((DOpos.y()+DOsize) >= H2)
-					{
-						H2 = DOpos.y() + DOsize;
-					}
-				}
-			}
-			if (DOpos.x() >= (StartPoint+DOsize))
-			{
-				if ((DOpos.x()+DOsize-StartPoint) >= L1)
-				{
-					L1 = DOpos.x() + DOsize - StartPoint;
-				}
-			}
-		}
-	}
-
-	std::cout << "H1 = " << H1 << std::endl;
-	std::cout << "H2 = " << H2 << std::endl;
-	std::cout << "L1 = " << L1 << std::endl;
-	double Bm1 = (L1 - L) / L;
-	double Bm2 = 0.0;
-	if (H1 == 0.0)
-	{
-		std::cout << "Error!! Code: Knight.cpp - SCCFlowabilityIndex(vedo::DOWorld*, double, double)" << std::endl;
-		exit(-1);
-	}
-	else
-	{
-		Bm2 = H2 / H1;
-	}
-
-	if (Bm1 >= 0.0)
-	{
-		return Bm2;
-	}
-	else
-	{
-		return Bm1;
-	}
-};
-
-bool SCCViscosityIndex(vedo::DOWorld* oWorld)
-{
-	unsigned long   DOnum
-		= oWorld->GetSystemParameter()->GetDONumber();
-	const vedo::DOStatus* dos                = 0;
-	const vedo::DOModel*  dom                = 0;
-	unsigned long   NumElements        = 0;
-	unsigned long   NumElementsInside  = 0;
-	unsigned long   NumElementsOutside = 0;
-	double          DOsize             = 0.0;
-	njr::Vector3d   DOpos;
-	for(unsigned long i=0; i<DOnum; i++)
-	{
-		dos = oWorld->GetDOStatus(i);
-		dom = oWorld->GetDOModel(dos->GetDOName());
-		if (dom->GetBehavior() == "mobile")
-		{
-			DOsize = dom->GetShapeAttributes().sphere.radius;
-			DOpos  = dos->GetPosition();
-			if ((DOpos.y()+DOsize) >= -0.5)
-			{
-				NumElementsInside++;
-			}
-			else
-			{
-				NumElementsOutside++;
-			}
-		}
-	}
-	NumElements = NumElementsInside + NumElementsOutside;
-
-	std::cout
-		<< "Number of Mobile Elements = "
-		<< NumElements
-		<< std::endl
-		<< "Inside elements           = "
-		<< NumElementsInside
-		<< "\t("
-		<< (double)NumElementsInside / (double)NumElements * 100.0
-		<< " %)"
-		<< std::endl
-		<< "Outside elements          = "
-		<< NumElementsOutside
-		<< "\t("
-		<< (double)NumElementsOutside / (double)NumElements * 100.0
-		<< " %)"
-		<< std::endl;
-
-	if (NumElementsInside == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-};
-
 int main (int argc, char* argv[])
 {
 	//njr::RunTime("Anne's Knight Start");
@@ -1267,7 +1294,7 @@ int main (int argc, char* argv[])
 	{
 		usage();
 	}
-	else if ((arg[1] == "-a") && (arg.size() == 11))
+	else if ((arg[1] == "-add_elements_in_simple_cube_style") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
 		std::string DOName = argv[2];
@@ -1285,7 +1312,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-ap") && (arg.size() == 8))
+	else if ((arg[1] == "-add_pontential_energy_from_sorce_point") && (arg.size() == 8))
 	{
 		double x, y, z;
 		std::string DOName = argv[2];
@@ -1299,11 +1326,11 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-aecp") && (arg.size() == 10))
+	else if ((arg[1] == "-add_elements_in_circular_path") && (arg.size() == 10))
 	{
 		std::string sDOName = argv[2];
 		double dAngleStarted, dAngleEnded, dR, dZ;
-		unsigned uElementSize;
+		unsigned uElementNumber;
 		sscanf(argv[3] , "%lg", &dAngleStarted);
 		sscanf(argv[4] , "%lg", &dAngleEnded);
 		if(dAngleEnded <= dAngleStarted)
@@ -1313,7 +1340,7 @@ int main (int argc, char* argv[])
 				<< "        Note: Started angle is smaller than ended angle" << std::endl;
 			exit(-1);
 		}
-		sscanf(argv[5] , "%d" , &uElementSize);
+		sscanf(argv[5] , "%d" , &uElementNumber);
 		sscanf(argv[6] , "%lg", &dR);
 		sscanf(argv[7] , "%lg", &dZ);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
@@ -1326,10 +1353,10 @@ int main (int argc, char* argv[])
 			njr::Vector3d(njr::AXIALX),
 			njr::Vector3d(njr::ZERO)   );
 		double dAngleRange = (dAngleEnded - dAngleStarted) * njr::dDegree2PI;
-		double dAngleIncremental = dAngleRange / (double)uElementSize;
+		double dAngleIncremental = dAngleRange / (double)uElementNumber;
 		double dAngle = dAngleStarted * njr::dDegree2PI;
 		double dCosineAngle, dSineAngle;
-		for(unsigned u=0; u<uElementSize; u++)
+		for(unsigned u=0; u<uElementNumber; u++)
 		{
 			dCosineAngle = cos(dAngle);
 			dSineAngle   = sin(dAngle);
@@ -1341,7 +1368,64 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[9], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-ase") && (arg.size() == 20))
+	else if ((arg[1] == "-add_elements_in_circular_path") && (arg.size() == 11))
+	{
+		std::string sDOName = argv[2];
+		double dAngleStarted, dAngleEnded, dInclinedAngle, dR, dZ;
+		unsigned uElementNumber;
+		sscanf(argv[3] , "%lg", &dAngleStarted);
+		sscanf(argv[4] , "%lg", &dAngleEnded);
+		if(dAngleEnded <= dAngleStarted)
+		{
+			std::cerr
+				<< "Error!! Code: Knight.cpp (-aecp)" << std::endl
+				<< "        Note: Started angle is smaller than ended angle" << std::endl;
+			exit(-1);
+		}
+		sscanf(argv[5] , "%lg", &dInclinedAngle);
+		dInclinedAngle *= njr::dDegree2PI;
+		double dInclinedCosineAngle = cos(dInclinedAngle);
+		double dInclinedSineAngle   = sin(dInclinedAngle);
+		sscanf(argv[6] , "%d" , &uElementNumber);
+		sscanf(argv[7] , "%lg", &dR);
+		sscanf(argv[8] , "%lg", &dZ);
+		dR += dR * dInclinedSineAngle;
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
+		vedo::DOStatus dos
+			(sDOName,
+			njr::Vector3d(njr::ZERO),
+			njr::Vector3d(njr::ZERO),
+			njr::Vector3d(njr::AXIALX),
+			njr::Vector3d(njr::AXIALZ),
+			njr::Vector3d(njr::ZERO)   );
+		double dAngleRange = (dAngleEnded - dAngleStarted) * njr::dDegree2PI;
+		double dAngleIncremental = dAngleRange / (double)uElementNumber;
+		double dAngle = dAngleStarted * njr::dDegree2PI;
+		double dCosineAngle, dSineAngle;
+		njr::Vector3d vLocalX, vLocalZ, vRotatedLocalX, vRotatedLocalZ;
+		for(unsigned u=0; u<uElementNumber; u++)
+		{
+			dCosineAngle = cos(dAngle);
+			dSineAngle   = sin(dAngle);
+			dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
+            vLocalX.Set
+                (dInclinedSineAngle   * dCosineAngle,
+                 dInclinedSineAngle   * dSineAngle  ,
+                 dInclinedCosineAngle                );
+			vLocalZ.Set
+                ( dInclinedCosineAngle * dCosineAngle,
+                  dInclinedCosineAngle * dSineAngle  ,
+                 -dInclinedSineAngle                  );
+            dos.SetOrientationX(vLocalX);
+            dos.SetOrientationZ(vLocalZ);
+			oWorld->AddDOStatus(new vedo::DOStatus(dos));
+			dAngle += dAngleIncremental;
+		}
+		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-add_single_element") && (arg.size() == 20))
 	{
 		double dPx, dPy, dPz, dVx, dVy, dVz, dAVx, dAVy, dAVz;
 		double dOxx, dOxy, dOxz, dOzx, dOzy, dOzz;
@@ -1374,7 +1458,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[19], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-av") && (arg.size() == 8))
+	else if ((arg[1] == "-add_velocity") && (arg.size() == 8))
 	{
 		double dVx, dVy, dVz;
 		std::string DOName = argv[2];
@@ -1388,7 +1472,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-aav") && (arg.size() == 8))
+	else if ((arg[1] == "-add_angular_velocity") && (arg.size() == 8))
 	{
 		double dAVx, dAVy, dAVz;
 		std::string DOName = argv[2];
@@ -1402,7 +1486,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-ar_cartesian") && (arg.size() == 12))
+	else if ((arg[1] == "-add_elements_randomly_in_Cartesian_coordinate") && (arg.size() == 12))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
 		unsigned long num = 0;
@@ -1423,7 +1507,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[11], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-ar_cylindrical") && (arg.size() == 11))
+	else if ((arg[1] == "-add_elements_randomly_in_cylindrical_coordinate") && (arg.size() == 11))
 	{
 		double x, y, z, r, h;
 		unsigned long num = 0;
@@ -1441,7 +1525,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-ar_spherical") && (arg.size() == 10))
+	else if ((arg[1] == "-add_elements_randomly_in_spherical_coordinate") && (arg.size() == 10))
 	{
 		double x, y, z, r;
 		unsigned long num = 0;
@@ -1458,28 +1542,30 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[9], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
+/*
 	else if (arg[1] == "-al")
 	{
 		AssmListHEX();
 	}
-//	else if ((arg[1] == "-assm") && (arg.size() >= 5))
-//	{
-//		assm (arg[2], arg[3], arg[4]);
-//	}
-	else if ((arg[1] == "-avg_info") && (arg.size() == 10))
+	else if ((arg[1] == "-assemble_xml") && (arg.size() == 5))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
+		assm(arg[2], arg[3], arg[4]);
+	}
+*/
+	else if ((arg[1] == "-average_information") && (arg.size() == 10))
+	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[3], "%lg", &dXMin);
-		sscanf(argv[4], "%lg", &dXMax);
-		sscanf(argv[5], "%lg", &dYMin);
-		sscanf(argv[6], "%lg", &dYMax);
-		sscanf(argv[7], "%lg", &dZMin);
-		sscanf(argv[8], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[9], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		const vedo::DOStatus* pDOS;
 
 		// Fix boundary (stage 1: find first data)
@@ -1764,21 +1850,21 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information") && (arg.size() == 11))
 	{
-		vedo::DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[4], "%lg", &dXMin);
-		sscanf(argv[5], "%lg", &dXMax);
-		sscanf(argv[6], "%lg", &dYMin);
-		sscanf(argv[7], "%lg", &dYMax);
-		sscanf(argv[8], "%lg", &dZMin);
-		sscanf(argv[9], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[10], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
+		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
 		const vedo::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
 			= oWorldNextStep->GetSystemParameter()->GetTimeCurrent()
@@ -2075,20 +2161,20 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info_xy") && (arg.size() == 10))
+	else if ((arg[1] == "-average_information_projected_in_XY_plane") && (arg.size() == 10))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[3], "%lg", &dXMin);
-		sscanf(argv[4], "%lg", &dXMax);
-		sscanf(argv[5], "%lg", &dYMin);
-		sscanf(argv[6], "%lg", &dYMax);
-		sscanf(argv[7], "%lg", &dZMin);
-		sscanf(argv[8], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[9], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 
 		const vedo::DOStatus* pDOS;
 
@@ -2345,21 +2431,21 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info_xy") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information_projected_in_XY_plane") && (arg.size() == 11))
 	{
-		vedo::DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[4], "%lg", &dXMin);
-		sscanf(argv[5], "%lg", &dXMax);
-		sscanf(argv[6], "%lg", &dYMin);
-		sscanf(argv[7], "%lg", &dYMax);
-		sscanf(argv[8], "%lg", &dZMin);
-		sscanf(argv[9], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[10], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
+		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
 
 		const vedo::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
@@ -2629,20 +2715,20 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info_yz") && (arg.size() == 10))
+	else if ((arg[1] == "-average_information_projected_in_YZ_plane") && (arg.size() == 10))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[3], "%lg", &dXMin);
-		sscanf(argv[4], "%lg", &dXMax);
-		sscanf(argv[5], "%lg", &dYMin);
-		sscanf(argv[6], "%lg", &dYMax);
-		sscanf(argv[7], "%lg", &dZMin);
-		sscanf(argv[8], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[9], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 
 		const vedo::DOStatus* pDOS;
 
@@ -2897,21 +2983,21 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info_yz") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information_projected_in_YZ_plane") && (arg.size() == 11))
 	{
-		vedo::DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[4], "%lg", &dXMin);
-		sscanf(argv[5], "%lg", &dXMax);
-		sscanf(argv[6], "%lg", &dYMin);
-		sscanf(argv[7], "%lg", &dYMax);
-		sscanf(argv[8], "%lg", &dZMin);
-		sscanf(argv[9], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[10], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
+		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
 
 		const vedo::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
@@ -3172,20 +3258,20 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info_xz") && (arg.size() == 10))
+	else if ((arg[1] == "-average_information_projected_in_XZ_plane") && (arg.size() == 10))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[3], "%lg", &dXMin);
-		sscanf(argv[4], "%lg", &dXMax);
-		sscanf(argv[5], "%lg", &dYMin);
-		sscanf(argv[6], "%lg", &dYMax);
-		sscanf(argv[7], "%lg", &dZMin);
-		sscanf(argv[8], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[9], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 
 		const vedo::DOStatus* pDOS;
 
@@ -3440,21 +3526,21 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_info_xz") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information_projected_in_XZ_plane") && (arg.size() == 11))
 	{
-		vedo::DOWorld* oWorld         = ReadDOWorld(arg[2]);
-		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[3]);
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[4], "%lg", &dXMin);
-		sscanf(argv[5], "%lg", &dXMax);
-		sscanf(argv[6], "%lg", &dYMin);
-		sscanf(argv[7], "%lg", &dYMax);
-		sscanf(argv[8], "%lg", &dZMin);
-		sscanf(argv[9], "%lg", &dZMax);
+		sscanf(argv[2], "%lg", &dXMin);
+		sscanf(argv[3], "%lg", &dXMax);
+		sscanf(argv[4], "%lg", &dYMin);
+		sscanf(argv[5], "%lg", &dYMax);
+		sscanf(argv[6], "%lg", &dZMin);
+		sscanf(argv[7], "%lg", &dZMax);
 		vedo::Boundary OriginalBC
 			(njr::Vector3d(dXMin, dYMin, dZMin),
 			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[10], "%lg", &dMeshSize);
+		sscanf(argv[8], "%lg", &dMeshSize);
+		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
+		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
 
 		const vedo::DOStatus *pDOS, *pDOSNextStep;
 		const double dTimeStep
@@ -3715,194 +3801,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-avg_rd_ntume") && (arg.size() == 11))
-	{
-		vedo::DOWorld* oWorld_1 = ReadDOWorld(arg[2]);
-		vedo::DOWorld* oWorld_2 = ReadDOWorld(arg[3]);
-		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
-		sscanf(argv[4], "%lg", &dXMin);
-		sscanf(argv[5], "%lg", &dXMax);
-		sscanf(argv[6], "%lg", &dYMin);
-		sscanf(argv[7], "%lg", &dYMax);
-		sscanf(argv[8], "%lg", &dZMin);
-		sscanf(argv[9], "%lg", &dZMax);
-		vedo::Boundary OriginalBC
-			(njr::Vector3d(dXMin, dYMin, dZMin),
-			 njr::Vector3d(dXMax, dYMax, dZMax) );
-		sscanf(argv[10], "%lg", &dMeshSize);
-
-		const vedo::DOStatus* pDOS_1;
-		const vedo::DOStatus* pDOS_2;
-
-		// Fix boundary (stage 1: find first data)
-		double
-			dNewXMin, dNewXMax, dNewYMin, dNewYMax, dNewZMin, dNewZMax, dRadius;
-		bool   bHasFindThe1stSphere = false;
-		unsigned long ul = 0;
-		do
-		{
-			if(ul < oWorld_1->GetSystemParameter()->GetDONumber())
-			{
-				pDOS_1 = oWorld_1->GetDOStatus(ul);
-				if
-					(oWorld_1->GetDOModel(pDOS_1->GetDOName())->GetShapeType()
-					 == vedo::Sphere                                                )
-				{
-					dRadius
-						= oWorld_1
-						->GetDOModel(pDOS_1->GetDOName())
-						->GetShapeAttributes().sphere.radius;
-					dNewXMin = pDOS_1->GetPosition().x() - dRadius;
-					dNewXMax = pDOS_1->GetPosition().x() + dRadius;
-					dNewYMin = pDOS_1->GetPosition().y() - dRadius;
-					dNewYMax = pDOS_1->GetPosition().y() + dRadius;
-					dNewZMin = pDOS_1->GetPosition().z() - dRadius;
-					dNewZMax = pDOS_1->GetPosition().z() + dRadius;
-					bHasFindThe1stSphere = true;
-				}
-				ul++;
-			}
-			else
-			{
-				bHasFindThe1stSphere = true;
-			}
-		} while(!bHasFindThe1stSphere);
-
-		// Fix boundary (stage 2: fixed boundary)
-		for(ul++;
-			ul<oWorld_1->GetSystemParameter()->GetDONumber();
-			ul++                                           )
-		{
-			pDOS_1 = oWorld_1->GetDOStatus(ul);
-			if(oWorld_1->GetDOModel(pDOS_1->GetDOName())->GetShapeType() == vedo::Sphere)
-			{
-				dRadius
-					= oWorld_1
-					->GetDOModel(pDOS_1->GetDOName())
-					->GetShapeAttributes().sphere.radius;
-				dNewXMin = std::min(pDOS_1->GetPosition().x() - dRadius, dNewXMin);
-				dNewXMax = std::max(pDOS_1->GetPosition().x() + dRadius, dNewXMax);
-				dNewYMin = std::min(pDOS_1->GetPosition().y() - dRadius, dNewYMin);
-				dNewYMax = std::max(pDOS_1->GetPosition().y() + dRadius, dNewYMax);
-				dNewZMin = std::min(pDOS_1->GetPosition().z() - dRadius, dNewZMin);
-				dNewZMax = std::max(pDOS_1->GetPosition().z() + dRadius, dNewZMax);
-			}
-		};
-		if(dXMin < dNewXMin) dXMin = dNewXMin;
-		if(dXMax > dNewXMax) dXMax = dNewXMax;
-		if(dYMin < dNewYMin) dYMin = dNewYMin;
-		if(dYMax > dNewYMax) dYMax = dNewYMax;
-		if(dZMin < dNewZMin) dZMin = dNewZMin;
-		if(dZMax > dNewZMax) dZMax = dNewZMax;
-		vedo::Boundary BC
-			(njr::Vector3d(dXMin, dYMin, dZMin),
-			 njr::Vector3d(dXMax, dYMax, dZMax) );
-
-		// Calculate the projected information
-		double dProjectedArea = 0.0;
-		std::vector<double> vProjectedArea;
-		njr::Vector3d vCentroid, vAverageVelocity, vAverageAngularVelocity;
-
-		const  vedo::DOModel* dom = 0;
-		double dWeighting;
-		double dTotalWeighting = 0.0;
-		std::vector<njr::Vector3d> vvAverageVelocity;
-
-		njr::Vector3d vTempVelocity;
-
-		double dTimeFrequency
-			= oWorld_2->GetSystemParameter()->GetTimeCurrent()
-			- oWorld_1->GetSystemParameter()->GetTimeCurrent();
-		if (dTimeFrequency <= 0.0)
-		{
-			std::cout
-				<< "Error!! Code: Knight -avg_rd_ntume" << std::endl
-				<< "        Note: The order of <.xml | .ido> file error" << std::endl;
-			exit(0);
-		}
-		dTimeFrequency = 1.0 / dTimeFrequency;
-
-		for
-			(unsigned long ul=0;
-			 ul<oWorld_1->GetSystemParameter()->GetDONumber();
-			 ul++                                           )
-		{
-			pDOS_1 = oWorld_1->GetDOStatus(ul);
-			pDOS_2 = oWorld_2->GetDOStatus(ul);
-			dom    = oWorld_1->GetDOModel(pDOS_1->GetDOName());
-
-			std::pair<double, njr::Vector3d> pdvProjectedArea
-				 = dom
-				 	->ProjectedAreaOnXYPlane
-				 		(pDOS_1->GetPosition(), &BC, dMeshSize);
-
-			dWeighting    = dom->GetDensity() * dom->GetDensityFactor();
-			vTempVelocity = dTimeFrequency * (pDOS_2->GetPosition() - pDOS_1->GetPosition());
-			vvAverageVelocity.push_back(vTempVelocity);
-			if(pdvProjectedArea.first != 0.0)
-			{
-				vProjectedArea.push_back(pdvProjectedArea.first);
-				dProjectedArea   += pdvProjectedArea.first;
-				dTotalWeighting  += pdvProjectedArea.first * dWeighting;
-				vCentroid        += pdvProjectedArea.first * dWeighting * pdvProjectedArea.second;
-				vAverageVelocity += pdvProjectedArea.first * vTempVelocity;
-			}
-		}
-
-		if(dProjectedArea != 0.0)
-		{
-			vAverageVelocity = 1.0 / dProjectedArea * vAverageVelocity;
-		}
-		else
-		{
-			vAverageVelocity.Set(0.0, 0.0, 0.0);
-		}
-
-		if(dTotalWeighting != 0.0)
-		{
-			vCentroid.Set
-				(vCentroid.x() / dTotalWeighting,
-				 vCentroid.y() / dTotalWeighting,
-				 OriginalBC.GetCenter().z()      );
-		}
-		else
-		{
-			vCentroid = OriginalBC.GetCenter();
-		};
-
-		std::ofstream FileAverageInformation;
-		FileAverageInformation.open("AverageInformation.csv", std::ios::app);
-		FileAverageInformation
-			<< "Time_1, Time_2, "
-			<< "BoxCenterX, "
-			<< "BoxCenterY, "
-			<< "BoxSizeX, "
-			<< "BoxSizeY, "
-			<< "CentroidX, "
-			<< "CentroidY, "
-			<< "ElementNumber, "
-			<< "ProjectedArea, "
-			<< "AverageVelocityX, "
-			<< "AverageVelocityY, "
-			<< "AverageVelocityZ" << std::endl
-			<< oWorld_1->GetSystemParameter()->GetTimeCurrent() << ", "
-			<< oWorld_2->GetSystemParameter()->GetTimeCurrent() << ", "
-			<< OriginalBC.GetCenter().x()                       << ", "
-			<< OriginalBC.GetCenter().y()                       << ", "
-			<< OriginalBC.GetRange().x()                        << ", "
-			<< OriginalBC.GetRange().y()                        << ", "
-			<< vCentroid.x()                                    << ", "
-			<< vCentroid.y()                                    << ", "
-			<< vProjectedArea.size()                            << ", "
-			<< dProjectedArea                                   << ", "
-			<< vAverageVelocity.x()                             << ", "
-			<< vAverageVelocity.y()                             << ", "
-			<< vAverageVelocity.z()                             << std::endl;
-		FileAverageInformation.close();
-
-		delete oWorld_1, oWorld_2;
-	}
-	else if ((arg[1] == "-c") && (arg.size() == 4))
+	else if ((arg[1] == "-convert") && (arg.size() == 4))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 
@@ -3918,7 +3817,7 @@ int main (int argc, char* argv[])
 
         delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-ca2s") && (arg.size() == 8))
+	else if ((arg[1] == "-cross_section_area_on_surface") && (arg.size() == 8))
 	{
 		std::string DOName = argv[2];
 		double a, b, c, d;
@@ -3926,7 +3825,7 @@ int main (int argc, char* argv[])
 		sscanf(argv[4], "%lg", &b);
 		sscanf(argv[5], "%lg", &c);
 		sscanf(argv[6], "%lg", &d);
-		vedo::DOWorld* oWorld    = ReadDOWorld(arg[7]);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[7]);
 		unsigned counter   = 0;
 		double   dArea     = 0.0;
 		double   dAreaTemp;
@@ -3956,7 +3855,7 @@ int main (int argc, char* argv[])
 			<< "Cross area        : " << dArea
 			<< '(' << counter << " elements)"           << std::endl;
 	}
-	else if ((arg[1] == "-cf2s") && (arg.size() == 8))
+	else if ((arg[1] == "-cross_section_flux_on_surface") && (arg.size() == 8))
 	{
 		std::string DOName = argv[2];
 		double a, b, c, d;
@@ -4028,6 +3927,7 @@ int main (int argc, char* argv[])
 			<< vFluxAngularVelocity.z()                       << std::endl;
 		FileFlux.close();
 	}
+/*
 	else if ((arg[1] == "-cal") && (arg.size() == 9))
 	{
 		vedo::DOWorld *oWorld = ReadDOWorld(arg[2]);
@@ -4055,11 +3955,14 @@ int main (int argc, char* argv[])
 		CalcCoordinateNum CCN;
 		CCN.outputCoordinateNumVTK(oWorld, arg[3]);
 	}
+*/
+/*
 	else if ((arg[1] == "-cl") && (arg.size() == 5))
 	{
 		ConListHEX(arg[2], atol(arg[3].c_str()), atol(arg[4].c_str()));
 	}
-	else if ((arg[1] == "-clean_udv") && (arg.size() == 4))
+*/
+	else if ((arg[1] == "-clean_user_defined_value") && (arg.size() == 4))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
         vedo::DOWorld* oWorld = ReadDOWorld(arg[2], pIactRecordTab);
@@ -4068,11 +3971,13 @@ int main (int argc, char* argv[])
         delete oWorld;
         delete pIactRecordTab;
 	}
+/*
 	else if ((arg[1] == "-cld") && (arg.size() == 5))
 	{
 		ConList(arg[2], atol(arg[3].c_str()), atol(arg[4].c_str()));
 	}
-	else if ((arg[1] == "-cm") && (arg.size() == 5))
+*/
+	else if ((arg[1] == "-change_models") && (arg.size() == 5))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* rWorld = ReadDOWorld(arg[2]);
@@ -4081,7 +3986,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld(arg[4], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-comb") && (arg.size() == 5))
+	else if ((arg[1] == "-combine") && (arg.size() == 5))
 	{
 	    // Aries: We only combine the DOStatus of two DOWorlds.
 	    // In the future, we should also combine their Interactions (IactRecordTab).
@@ -4092,7 +3997,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld(arg[4], rWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-comb") && (arg.size() == 6))
+	else if ((arg[1] == "-combine") && (arg.size() == 6))
 	{
 	    // Aries: We only combine the DOStatus of two DOWorlds.
 	    // In the future, we should also combine their Interactions (IactRecordTab).
@@ -4102,10 +4007,11 @@ int main (int argc, char* argv[])
 		CombineModels(rWorld, oWorld, DOName);
 		delete WriteDOWorld(arg[5], rWorld);
 	}
-	else if ((arg[1] == "-cu") && (arg.size() == 5))
+	else if ((arg[1] == "-convert_sudo_vpf") && (arg.size() == 5))
 	{
 		delete WriteDOWorldVPF(arg[4], ReadDOWorld(arg[2]), ReadDOWorld(arg[3]));
 	}
+/*
 	else if ((arg[1] == "-b2h") && (arg.size() == 4))
 	{
 		njr::bin2hex(arg[2], arg[3]);
@@ -4114,21 +4020,22 @@ int main (int argc, char* argv[])
 	{
 		njr::dos2unix(arg[2], arg[3]);
 	}
-	else if ((arg[1] == "-distance") && (arg.size() == 6))
+*/
+	else if ((arg[1] == "-distance_to_point") && (arg.size() == 6))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dX, dY, dZ;
-		sscanf(argv[3], "%lg", &dX);
-		sscanf(argv[4], "%lg", &dY);
-		sscanf(argv[5], "%lg", &dZ);
+		sscanf(argv[2], "%lg", &dX);
+		sscanf(argv[3], "%lg", &dY);
+		sscanf(argv[4], "%lg", &dZ);
 		njr::Vector3d vP(dX, dY, dZ);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[5]);
 		std::map<double, unsigned> mduDistance;
 
 		for(unsigned u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
 			mduDistance[(oWorld->GetDOStatus(u)->GetPosition() - vP).length()] = u;
 
 		std::ofstream ofDistance("Distance.csv", std::ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
+		ofDistance << "Rank, ElementID, ElementName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
 		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
@@ -4147,13 +4054,13 @@ int main (int argc, char* argv[])
 		ofDistance.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-distance_xy") && (arg.size() == 5))
+	else if ((arg[1] == "-distance_to_xy_plane") && (arg.size() == 5))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dX, dY;
-		sscanf(argv[3], "%lg", &dX);
-		sscanf(argv[4], "%lg", &dY);
+		sscanf(argv[2], "%lg", &dX);
+		sscanf(argv[3], "%lg", &dY);
 		njr::Vector3d vP(dX, dY, 0.0);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[4]);
 		njr::Vector3d vD;
 		std::map<double, unsigned> mduDistance;
 
@@ -4165,7 +4072,7 @@ int main (int argc, char* argv[])
 		}
 
 		std::ofstream ofDistance("Distance.csv", std::ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
+		ofDistance << "Rank, ElementID, ElementName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
 		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
@@ -4184,13 +4091,13 @@ int main (int argc, char* argv[])
 		ofDistance.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-distance_yz") && (arg.size() == 5))
+	else if ((arg[1] == "-distance_to_yz_plane") && (arg.size() == 5))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dY, dZ;
-		sscanf(argv[3], "%lg", &dY);
-		sscanf(argv[4], "%lg", &dZ);
+		sscanf(argv[2], "%lg", &dY);
+		sscanf(argv[3], "%lg", &dZ);
 		njr::Vector3d vP(0.0, dY, dZ);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[4]);
 		njr::Vector3d vD;
 		std::map<double, unsigned> mduDistance;
 
@@ -4202,7 +4109,7 @@ int main (int argc, char* argv[])
 		}
 
 		std::ofstream ofDistance("Distance.csv", std::ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
+		ofDistance << "Rank, ElementID, ElementName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
 		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
@@ -4221,13 +4128,13 @@ int main (int argc, char* argv[])
 		ofDistance.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-distance_zx") && (arg.size() == 5))
+	else if ((arg[1] == "-distance_to_xz_plane") && (arg.size() == 5))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
 		double dX, dZ;
+		sscanf(argv[2], "%lg", &dX);
 		sscanf(argv[3], "%lg", &dZ);
-		sscanf(argv[4], "%lg", &dX);
 		njr::Vector3d vP(dX, 0.0, dZ);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[4]);
 		njr::Vector3d vD;
 		std::map<double, unsigned> mduDistance;
 
@@ -4239,7 +4146,7 @@ int main (int argc, char* argv[])
 		}
 
 		std::ofstream ofDistance("Distance.csv", std::ios::out);
-		ofDistance << "Rank, ObjectID, ObjectName, Distance, X, Y, Z" << std::endl;
+		ofDistance << "Rank, ElementID, ElementName, Distance, X, Y, Z" << std::endl;
 		unsigned uRank = 1;
 		for (std::map<double, unsigned>::iterator mduiDistance  = mduDistance.begin();
 			                                 mduiDistance != mduDistance.end();
@@ -4258,10 +4165,13 @@ int main (int argc, char* argv[])
 		ofDistance.close();
 		delete oWorld;
 	}
+/*
 	else if ((arg[1] == "-u2d") && (arg.size() == 4))
 	{
 		njr::unix2dos(arg[2], arg[3]);
 	}
+*/
+/*
 	else if ((arg[1] == "-cse") && (arg.size() == 4))
 	{
         // Aries: We have not deal with the interactions. At here, we clear all of them.
@@ -4269,6 +4179,8 @@ int main (int argc, char* argv[])
 		oWorld->ClearSeparatedElements();
 		delete WriteDOWorld (arg[3], oWorld);
 	}
+*/
+/*
 	else if ((arg[1] == "-distribution") && (arg.size() >= 11))
 	{
 		std::string DOName = argv[2];
@@ -4303,13 +4215,7 @@ int main (int argc, char* argv[])
 			<< pDistribution.second.z()                      << std::endl;
 		FileDistribution.close();
 	}
-	else if ((arg[1] == "-e") && (arg.size() == 5))
-	{
-	    // We have not deal with the interactions. At here, we clear all of them.
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
-		oWorld->EraseDOStatus(oWorld->FindDO(argv[2]));
-		delete WriteDOWorld (arg[4], oWorld);
-	}
+*/
 	else if ((arg[1] == "-erase_single_element") && (arg.size() == 5))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
@@ -4320,6 +4226,32 @@ int main (int argc, char* argv[])
 		vedo::Consultant* pConsultant
 			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
 		pConsultant->EraseElement(uID);
+		delete WriteDOWorld(arg[4], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-erase_elements") && (arg.size() == 5))
+	{
+		std::string sDOName = argv[2];
+        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[3], pIactRecordTab);
+		char* idofilename = argv[3];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		std::vector<unsigned long> ulIDList;
+		const vedo::DOStatus* dosp;
+		njr::Vector3d vPosition;
+		for
+			(unsigned long ul=0;
+			 ul<(pWorld->GetSystemParameter()->GetDONumber());
+			 ul++                                           )
+		{
+			dosp = pWorld->GetDOStatus(ul);
+			if(dosp->GetDOName() == sDOName)
+			{
+				ulIDList.push_back(ul);
+			}
+		}
+		pConsultant->EraseElements(ulIDList);
 		delete WriteDOWorld(arg[4], pWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
@@ -4400,7 +4332,7 @@ int main (int argc, char* argv[])
 			<< sp->GetAngularMomentumNorm()  << std::endl;
 		FileEnergy.close();
 	}
-	else if ((arg[1] == "-freeze") && (arg.size() == 4))
+	else if ((arg[1] == "-freeze_all_elements") && (arg.size() == 4))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[2], pIactRecordTab);
@@ -4408,7 +4340,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[3], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-freeze") && (arg.size() == 5))
+	else if ((arg[1] == "-freeze_elements") && (arg.size() == 5))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[3], pIactRecordTab);
@@ -4561,24 +4493,24 @@ int main (int argc, char* argv[])
 		};
 		delete oWorld;
 	}
-	else if ((arg[1] == "-gt_rectangle") && (arg.size() == 16))
+	else if ((arg[1] == "-granular_temperature_in_box") && (arg.size() == 16))
 	{
+		std::string DOName = argv[2];
 		double width, length, height, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		std::string DOName = argv[3];
-		sscanf(argv[4], "%lg", &width);
-		sscanf(argv[5], "%lg", &length);
-		sscanf(argv[6], "%lg", &height);
-		sscanf(argv[7], "%lg", &x);
-		sscanf(argv[8], "%lg", &y);
-		sscanf(argv[9], "%lg", &z);
-		sscanf(argv[10], "%lg", &Xx);
-		sscanf(argv[11], "%lg", &Xy);
-		sscanf(argv[12], "%lg", &Xz);
-		sscanf(argv[13], "%lg", &Zx);
-		sscanf(argv[14], "%lg", &Zy);
-		sscanf(argv[15], "%lg", &Zz);
-		vedo::GSRectangle space("Granular Temperature Space", width, length, height);
+		sscanf(argv[ 3], "%lg", &x);
+		sscanf(argv[ 4], "%lg", &y);
+		sscanf(argv[ 5], "%lg", &z);
+		sscanf(argv[ 6], "%lg", &width);
+		sscanf(argv[ 7], "%lg", &length);
+		sscanf(argv[ 8], "%lg", &height);
+		sscanf(argv[ 9], "%lg", &Xx);
+		sscanf(argv[10], "%lg", &Xy);
+		sscanf(argv[11], "%lg", &Xz);
+		sscanf(argv[12], "%lg", &Zx);
+		sscanf(argv[13], "%lg", &Zy);
+		sscanf(argv[14], "%lg", &Zz);
+		vedo::GSRectangle
+			space("Granular Temperature Space", width, length, height);
 		space.SetStatus
 			(new vedo::DOStatus
 				("No Name",
@@ -4586,7 +4518,8 @@ int main (int argc, char* argv[])
 				 njr::ZERO,
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::ZERO       ));
+				 njr::ZERO                 ));
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[15]);
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4607,22 +4540,21 @@ int main (int argc, char* argv[])
 		FileGT.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-gt_cylinder") && (arg.size() == 15))
+	else if ((arg[1] == "-granular_temperature_in_cylinder") && (arg.size() == 15))
 	{
+		std::string DOName = argv[2];
 		double radius, height, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		std::string DOName = argv[3];
-		sscanf(argv[4], "%lg", &radius);
-		sscanf(argv[5], "%lg", &height);
-		sscanf(argv[6], "%lg", &x);
-		sscanf(argv[7], "%lg", &y);
-		sscanf(argv[8], "%lg", &z);
-		sscanf(argv[9], "%lg", &Xx);
-		sscanf(argv[10], "%lg", &Xy);
-		sscanf(argv[11], "%lg", &Xz);
-		sscanf(argv[12], "%lg", &Zx);
-		sscanf(argv[13], "%lg", &Zy);
-		sscanf(argv[14], "%lg", &Zz);
+		sscanf(argv[ 3], "%lg", &x);
+		sscanf(argv[ 4], "%lg", &y);
+		sscanf(argv[ 5], "%lg", &z);
+		sscanf(argv[ 6], "%lg", &radius);
+		sscanf(argv[ 7], "%lg", &height);
+		sscanf(argv[ 8], "%lg", &Xx);
+		sscanf(argv[ 9], "%lg", &Xy);
+		sscanf(argv[10], "%lg", &Xz);
+		sscanf(argv[11], "%lg", &Zx);
+		sscanf(argv[12], "%lg", &Zy);
+		sscanf(argv[13], "%lg", &Zz);
 		vedo::GSCylinder space("Granular Temperature Space", radius, height);
 		space.SetStatus
 			(new vedo::DOStatus
@@ -4632,6 +4564,7 @@ int main (int argc, char* argv[])
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
 				 njr::ZERO       ));
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[14]);
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4652,30 +4585,24 @@ int main (int argc, char* argv[])
 		FileGT.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-gt_sphere") && (arg.size() == 14))
+	else if ((arg[1] == "-granular_temperature_in_sphere") && (arg.size() == 8))
 	{
-		double radius, height, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		std::string DOName = argv[3];
-		sscanf(argv[4], "%lg", &radius);
-		sscanf(argv[5], "%lg", &x);
-		sscanf(argv[6], "%lg", &y);
-		sscanf(argv[7], "%lg", &z);
-		sscanf(argv[8], "%lg", &Xx);
-		sscanf(argv[9], "%lg", &Xy);
-		sscanf(argv[10], "%lg", &Xz);
-		sscanf(argv[11], "%lg", &Zx);
-		sscanf(argv[12], "%lg", &Zy);
-		sscanf(argv[13], "%lg", &Zz);
+		double radius, x, y, z;
+		std::string DOName = argv[2];
+		sscanf(argv[3], "%lg", &x);
+		sscanf(argv[4], "%lg", &y);
+		sscanf(argv[5], "%lg", &z);
+		sscanf(argv[6], "%lg", &radius);
 		vedo::GSSphere space("Granular Temperature Space", radius);
 		space.SetStatus
 			(new vedo::DOStatus
 				("No Name",
 				 njr::Vector3d(x, y, z),
 				 njr::ZERO,
-				 njr::Vector3d(Xx, Xy, Xz),
-				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::ZERO       ));
+				 njr::AXIALX,
+				 njr::AXIALZ,
+				 njr::ZERO              ));
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[7]);
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4696,23 +4623,22 @@ int main (int argc, char* argv[])
 		FileGT.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-gt_ellipsoid") && (arg.size() == 16))
+	else if ((arg[1] == "-granular_temperature_in_ellipsoid") && (arg.size() == 16))
 	{
+		std::string DOName = argv[2];
 		double XLength, YLength, ZLength, x, y, z, Xx, Xy, Xz, Zx, Zy, Zz;
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		std::string DOName = argv[3];
-		sscanf(argv[4], "%lg", &XLength);
-		sscanf(argv[5], "%lg", &YLength);
-		sscanf(argv[6], "%lg", &ZLength);
-		sscanf(argv[7], "%lg", &x);
-		sscanf(argv[8], "%lg", &y);
-		sscanf(argv[9], "%lg", &z);
-		sscanf(argv[10], "%lg", &Xx);
-		sscanf(argv[11], "%lg", &Xy);
-		sscanf(argv[12], "%lg", &Xz);
-		sscanf(argv[13], "%lg", &Zx);
-		sscanf(argv[14], "%lg", &Zy);
-		sscanf(argv[15], "%lg", &Zz);
+		sscanf(argv[ 3], "%lg", &x);
+		sscanf(argv[ 4], "%lg", &y);
+		sscanf(argv[ 5], "%lg", &z);
+		sscanf(argv[ 6], "%lg", &XLength);
+		sscanf(argv[ 7], "%lg", &YLength);
+		sscanf(argv[ 8], "%lg", &ZLength);
+		sscanf(argv[ 9], "%lg", &Xx);
+		sscanf(argv[10], "%lg", &Xy);
+		sscanf(argv[11], "%lg", &Xz);
+		sscanf(argv[12], "%lg", &Zx);
+		sscanf(argv[13], "%lg", &Zy);
+		sscanf(argv[14], "%lg", &Zz);
 		vedo::GSEllipsoid space
 			("Granular Temperature Space", XLength, YLength, ZLength);
 		space.SetStatus
@@ -4722,7 +4648,8 @@ int main (int argc, char* argv[])
 				 njr::ZERO,
 				 njr::Vector3d(Xx, Xy, Xz),
 				 njr::Vector3d(Zx, Zy, Zz),
-				 njr::ZERO       ));
+				 njr::ZERO                 ));
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[15]);
 		std::map<std::string, double> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
 		std::ofstream FileGT;
@@ -4743,12 +4670,13 @@ int main (int argc, char* argv[])
 		FileGT.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-i") && (arg.size() == 3))
+	else if ((arg[1] == "-information") && (arg.size() == 3))
 	{
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		delete info(ReadDOWorld(arg[2], pIactRecordTab));
         delete pIactRecordTab;
 	}
+/*
 	else if ((arg[1] == "-inside") && (arg.size() == 9))
 	{
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
@@ -4797,6 +4725,8 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
+*/
+/*
 	else if ((arg[1] == "-lattice_bcc") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
@@ -4884,6 +4814,8 @@ int main (int argc, char* argv[])
 					 rectCenter[2]-0.5*d), DOName);
 		delete WriteDOWorld (arg[10], oWorld);
 	}
+*/
+/*
 	else if ((arg[1] == "-profile_Info2Y") && (arg.size() == 7))
 	{
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
@@ -4978,7 +4910,8 @@ int main (int argc, char* argv[])
 			<< oWorld->ProjectedAreaZ(dMeshSize)
 			<< std::endl;
 	}
-	else if ((arg[1] == "-rotate") && (arg.size() == 7))
+*/
+	else if ((arg[1] == "-rotate_all_elements") && (arg.size() == 7))
 	{
 		double dAngle2XAxis = 0.0;
 		double dAngle2YAxis = 0.0;
@@ -4995,36 +4928,7 @@ int main (int argc, char* argv[])
 			 dAngle2ZAxis*0.0174532925199433 );
 		delete WriteDOWorld (arg[6], oWorld);
 	}
-	else if ((arg[1] == "-sccBm1") && (arg.size() == 3))
-	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		double Bm = SCCFlowabilityIndex(oWorld, 2.0, 28.0);
-		std::cout << std::endl << "Bm = " << Bm << std::endl << std::endl;
-	}
-	else if ((arg[1] == "-sccBm2") && (arg.size() == 3))
-	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		double Bm = SCCFlowabilityIndex(oWorld, 8.0, 65.0);
-		std::cout << std::endl << "Bm = " << Bm << std::endl << std::endl;
-	}
-	else if ((arg[1] == "-sccRm") && (arg.size() == 3))
-	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		bool Rm = SCCViscosityIndex(oWorld);
-		if (Rm)
-		{
-			std::cout
-				<< std::endl
-				<< "All of the elements have passed the gate!!"
-				<< std::endl
-				<< std::endl;
-		}
-		else
-		{
-			std::cout << std::endl << "Not yet..." << std::endl << std::endl;
-		}
-	}
-	else if ((arg[1] == "-shift") && (arg.size() == 8))
+	else if ((arg[1] == "-shift_elements") && (arg.size() == 8))
 	{
 		double x, y, z;
 		std::string DOName = argv[2];
@@ -5036,7 +4940,7 @@ int main (int argc, char* argv[])
 		oWorld->Shift(njr::Vector3d(x, y, z), DOName);
 		delete WriteDOWorld (arg[7], oWorld);
 	}
-	else if ((arg[1] == "-shift_all") && (arg.size() == 7))
+	else if ((arg[1] == "-shift_all_elements") && (arg.size() == 7))
 	{
 		double x, y, z;
 		sscanf(argv[2], "%lg", &x);
@@ -5048,6 +4952,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[6], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
+/*
 	else if ((arg[1] == "-sort") && (arg.size() == 4))
 	{
 	    // We have not deal with the interactions. At here, we clear all of them.
@@ -5097,6 +5002,7 @@ int main (int argc, char* argv[])
 		FileSortDistance.close();
 		delete oWorld;
 	}
+*/
 	else if ((arg[1] == "-set_time") && (arg.size() == 8))
 	{
 		double dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent;
@@ -5112,42 +5018,50 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-show") && (arg.size() == 4))
+	else if ((arg[1] == "-show_elements_motion_status") && (arg.size() == 4))
 	{
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
-		unsigned uID;
-		sscanf(argv[3], "%d", &uID);
-		if(uID < oWorld->GetSystemParameter()->GetDONumber())
+		std::string DOName = argv[2];
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
+		std::ofstream ofInformation("ElementInformation.csv", std::ios::out);
+		ofInformation
+			<< "ID, Px, Py, Pz, Xx, Xy, Xz, Zx, Zy, Zz, Vx, Vy, Vz, AVx, AVy, AVz"
+			<< std::endl;
+		const vedo::DOStatus* dosp;
+		njr::Vector3d
+			vPosition, vOrientationX, vOrientationZ, vVelocity, vAngularVelocity;
+		for(unsigned uID=0; uID<oWorld->GetSystemParameter()->GetDONumber(); uID++)
 		{
-			std::ofstream ofInformation("ObjectInformation.csv", std::ios::out);
-			const vedo::DOStatus* dosp = oWorld->GetDOStatus(uID);
-			njr::Vector3d vV;
-			ofInformation << "Item, X, Y, Z" << std::endl;
-			vV = dosp->GetOrientationX();
-			ofInformation
-				<< "OrientationX, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
-			vV = dosp->GetOrientationZ();
-			ofInformation
-				<< "OrientationZ, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
-			vV = dosp->GetPosition();
-			ofInformation
-				<< "Position, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
-			vV = dosp->GetVelocity();
-			ofInformation
-				<< "Velocity, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
-			vV = dosp->GetAngularVelocity();
-			ofInformation
-				<< "AngularVelocity, "
-				<< vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
-			ofInformation.close();
+			dosp             = oWorld->GetDOStatus(uID);
+			if(dosp->GetDOName() == DOName)
+			{
+				vPosition        = dosp->GetPosition();
+				vOrientationX    = dosp->GetOrientationX();
+				vOrientationZ    = dosp->GetOrientationZ();
+				vVelocity        = dosp->GetVelocity();
+				vAngularVelocity = dosp->GetAngularVelocity();
+				ofInformation
+					<< uID                  << ", "
+					<< vPosition.x()        << ", "
+					<< vPosition.y()        << ", "
+					<< vPosition.z()        << ", "
+					<< vOrientationX.x()    << ", "
+					<< vOrientationX.y()    << ", "
+					<< vOrientationX.z()    << ", "
+					<< vOrientationZ.x()    << ", "
+					<< vOrientationZ.y()    << ", "
+					<< vOrientationZ.z()    << ", "
+					<< vVelocity.x()        << ", "
+					<< vVelocity.y()        << ", "
+					<< vVelocity.z()        << ", "
+					<< vAngularVelocity.x() << ", "
+					<< vAngularVelocity.y() << ", "
+					<< vAngularVelocity.z() << std::endl;
+			}
 		}
+		ofInformation.close();
 		delete oWorld;
 	}
-	else if ((arg[1] == "-u11") && (arg.size() == 5))
+	else if ((arg[1] == "-update_vedo_2011_to_current") && (arg.size() == 5))
 	{
 		vedo::DOWorld* oWorld = ReadDOWorld2011(arg[2]);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab;
@@ -5155,7 +5069,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld(arg[4], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-u10") && (arg.size() == 5))
+	else if ((arg[1] == "-update_vedo_2010_to_current") && (arg.size() == 5))
 	{
 		vedo::DOWorld* oWorld = ReadDOWorld2009(arg[2]);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab;
@@ -5163,34 +5077,21 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld(arg[4], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-u9") && (arg.size() == 4))
+	else if ((arg[1] == "-update_vedo_2009_to_2010") && (arg.size() == 4))
 	{
 		delete WriteDOWorld(arg[3], ReadDOWorld2009(arg[2]));
 	}
-	else if ((arg[1] == "-u8") && (arg.size() == 4))
+	else if ((arg[1] == "-update_vedo_2008_to_2009") && (arg.size() == 4))
 	{
 		delete WriteDOWorld(arg[3], ReadDOWorld2008(arg[2]));
 	}
-	else if ((arg[1] == "-u7") && (arg.size() == 4))
+	else if ((arg[1] == "-update_vedo_2007_to_2008") && (arg.size() == 4))
 	{
 		delete WriteDOWorld(arg[3], ReadDOWorld2007(arg[2]));
 	}
-	else if ((arg[1] == "-u6") && (arg.size() == 4))
+	else if ((arg[1] == "-update_vedo_2006_to_2007") && (arg.size() == 4))
 	{
 		delete WriteDOWorld(arg[3], ReadDOWorld2006(arg[2]));
-	}
-	else if ((arg[1] == "-volume") && (arg.size() == 4))
-	{
-		double dMeshSize;
-		sscanf(argv[2], "%lg", &dMeshSize);
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[3]);
-		std::cout
-			<< "Time = "
-			<< oWorld->GetSystemParameter()->GetTimeCurrent()
-			<< ", "
-			<< "Volume = "
-			<< oWorld->Volume(dMeshSize)
-			<< std::endl;
 	}
 	else
 	{

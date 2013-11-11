@@ -188,8 +188,10 @@ public:
 //	void CalculateSystemEnergy(const IactRecordTab*);
 	void CalculateSystemEnergy();
 
+/*
 	const std::pair<njr::Vector3d, njr::Vector3d>
 		Distribution(double& dMeshLength) const;
+*/
 
 	void Shift(const njr::Vector3d& shift);
 
