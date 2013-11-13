@@ -166,10 +166,10 @@ Consultant::Consultant
 
 Consultant::~Consultant()
 {
-	if(uNumUDDImpactStatus != 0)
-	{
+	if(dpUDVIS)
 		delete dpUDVIS;
-	}
+//	if(uNumUDDImpactStatus != 0)
+//		delete dpUDVIS;
 };
 
 unsigned long Consultant::GetDONum() const

@@ -27,10 +27,6 @@ public:
 		unsigned long ulwrite ,
 		unsigned long ulupdate        );
 
-	~LeapConsultant()
-	{
-	};
-
 	virtual unsigned long GetIactNum() const;
 
 	virtual unsigned long GetIactMaster (unsigned long i) const;

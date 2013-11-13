@@ -35,7 +35,7 @@ public:
 		unsigned long ulwrite ,
 		unsigned long ulupdate        );
 
-	~NBSParallelConsultant();
+	virtual ~NBSParallelConsultant();
 
 	virtual unsigned long GetDONum() const;
 

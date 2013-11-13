@@ -15,7 +15,7 @@ class IactRecordTab
 public:
 
 	IactRecordTab();
-
+	
 	IactRecordTab
 		(const std::map<std::pair<unsigned long, unsigned long>,
 		ImpactStatus>& m);

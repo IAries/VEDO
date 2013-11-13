@@ -23,7 +23,7 @@ LeapConsultant::LeapConsultant
 	NP = 1;
 	rank = 0;
 	Reset();
-}
+};
 
 unsigned long LeapConsultant::GetIactNum() const
 {
@@ -323,7 +323,7 @@ void LeapConsultant::RebuildIactRecordTab(IactContainer& cIact)
 
 	pIRTbl->Clear();
 	for (unsigned long ul=0; ul<cIact.size(); ++ul)
-    {
+	{
 		const Interaction* pInt = cIact.GetInteraction(ul);
 
 		if (pInt->IsActive())

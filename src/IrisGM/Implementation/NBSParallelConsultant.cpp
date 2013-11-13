@@ -173,17 +173,17 @@ NBSParallelConsultant::NBSParallelConsultant
 NBSParallelConsultant::~NBSParallelConsultant()
 {
 	for (unsigned int i=0; i<NP; ++i)
-    {
+	{
 		delete sendBufVec[i].second;
 		delete recvBufVec[i].second;
 	}
 	for (unsigned int i=0;i<syncSendBufVec.size();++i)
-    {
+	{
 		delete syncSendBufVec[i].second.first;
 		delete syncSendBufVec[i].second.second;
 	}
 	for (unsigned int i=0;i<syncRecvBufVec.size();++i)
-    {
+	{
 		delete syncRecvBufVec[i].second.first;
 		delete syncRecvBufVec[i].second.second;
 	}

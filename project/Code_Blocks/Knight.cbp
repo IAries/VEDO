@@ -16,10 +16,10 @@
 					<Add option="-D_VEDO_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add library="../../lib/Code_Blocks/libvedo-Common-debug.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-Framework-debug.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-NJR-debug.a" />
-					<Add library="C:/usr/xercesc/GCC/lib/libxerces-c.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Common-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Framework-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-NJR-debug.a" />
+					<Add library="C:\usr\xercesc\GCC\lib\libxerces-c.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -32,10 +32,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="../../lib/Code_Blocks/libvedo-Common.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-Framework.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-NJR.a" />
-					<Add library="C:/usr/xercesc/GCC/lib/libxerces-c.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Common.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Framework.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-NJR.a" />
+					<Add library="C:\usr\xercesc\GCC\lib\libxerces-c.a" />
 				</Linker>
 			</Target>
 		</Build>
@@ -70,6 +70,15 @@
 			<code_completion />
 			<envvars />
 			<debugger />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

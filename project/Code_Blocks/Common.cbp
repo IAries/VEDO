@@ -92,6 +92,7 @@
 		<Unit filename="../../src/Common/Interfaces/ISwBSDBF.h" />
 		<Unit filename="../../src/Common/Interfaces/ISwBtSDBF.h" />
 		<Unit filename="../../src/Common/Interfaces/LeapConsultant.h" />
+		<Unit filename="../../src/Common/Interfaces/ModuleList.h" />
 		<Unit filename="../../src/Common/Interfaces/NBSConsultant.h" />
 		<Unit filename="../../src/Common/Interfaces/NearConsultant.h" />
 		<Unit filename="../../src/Common/Interfaces/SafeConsultant.h" />
