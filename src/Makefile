@@ -5,10 +5,10 @@ include ../Makefile.in
 all: debug release
 
 .PHONY: debug
-debug: Knight-debug Anne-debug IrisGM-debug Test-debug
+debug: Knight-debug Anne-debug IrisGM-debug
 
 .PHONY: release
-release: Knight Anne IrisGM Test
+release: Knight Anne IrisGM
 
 # Knight (Pre-/Post-processor)
 .PHONY: Knight
@@ -44,17 +44,6 @@ irisGM-debug: IrisGM-debug
 irisgm-debug: IrisGM-debug
 IrisGM-debug: libs-debug
 	(cd IrisGM; ${MAKE} debug)
-
-# Test
-.PHONY: Test
-test: Test
-Test:
-	(cd Test; ${MAKE} release)
-
-.PHONY: Test-debug
-test-debug: Test-debug
-Test-debug:
-	(cd Test; ${MAKE} debug)
 
 # All Static Libraries
 .PHONY: libs
@@ -113,7 +102,6 @@ BuildingDir:
 	mkdir ${VEDO_OBJ_DEBUG}Framework
 	mkdir ${VEDO_OBJ_DEBUG}Common
 	mkdir ${VEDO_OBJ_DEBUG}Knight
-	mkdir ${VEDO_OBJ_DEBUG}Test
 	mkdir ${VEDO_OBJ_DEBUG}Anne
 	mkdir ${VEDO_OBJ_DEBUG}IrisGM
 	mkdir ${VEDO_OBJ_RELEASE}
@@ -121,7 +109,6 @@ BuildingDir:
 	mkdir ${VEDO_OBJ_RELEASE}Framework
 	mkdir ${VEDO_OBJ_RELEASE}Common
 	mkdir ${VEDO_OBJ_RELEASE}Knight
-	mkdir ${VEDO_OBJ_RELEASE}Test
 	mkdir ${VEDO_OBJ_RELEASE}Anne
 	mkdir ${VEDO_OBJ_RELEASE}IrisGM
 

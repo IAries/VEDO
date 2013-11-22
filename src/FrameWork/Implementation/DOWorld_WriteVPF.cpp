@@ -357,18 +357,6 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 	// "opw" is the "DOWorld" status of original system
 	std::vector<unsigned long> OriginalDataStructure = GetObjectTypeNumber(opw);
 	std::vector<unsigned long> CurrentDataStructure  = GetObjectTypeNumber(this);
-/*
-	for (unsigned long i=0; i!=OriginalDataStructure.size(); i++)
-	{
-		std::cout << OriginalDataStructure[i] << '\t';
-	}
-	std::cout << std::endl;
-	for (unsigned long i=0; i!=CurrentDataStructure.size(); i++)
-	{
-		std::cout << CurrentDataStructure[i] << '\t';
-	}
-	std::cout << std::endl;
-*/
 
 	FILE *fpvpf;
     double Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;

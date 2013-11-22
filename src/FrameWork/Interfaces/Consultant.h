@@ -178,7 +178,7 @@ public:
 		pDOWorld->FreezeAllElements();
 	};
 
-	bool EraseElement(const unsigned long& ulID);
+	bool EraseSingleElement(const unsigned long& ulID);
 
 	bool EraseElements(const std::vector<unsigned long>& ulIDList);
 

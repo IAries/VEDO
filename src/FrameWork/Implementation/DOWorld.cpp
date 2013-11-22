@@ -70,6 +70,21 @@ DOWorld::~DOWorld()
 	DOWorld::Clear();
 };
 
+std::string DOWorld::GetDOName(const unsigned long& odo) const
+{
+	if(odo < pSystemParameter->GetDONumber())
+	{
+		return cDOStatus[odo]->GetDOName();
+	}
+	else
+	{
+		std::cerr
+			<< "Error!! Code: DOWorld::GetDOName(const unsigned long&) const" << std::endl
+			<< "        Note: Element's ID wrong" << std::endl;
+		exit(-1);
+	}
+};
+
 const DOStatus* DOWorld::GetDOStatus(const unsigned long& odo) const
 {
 	return(odo < pSystemParameter->GetDONumber()) ? cDOStatus[odo] : 0;
@@ -80,6 +95,32 @@ void DOWorld::SetDOStatus(const unsigned long& odo, const DOStatus& dos)
 	if(odo < pSystemParameter->GetDONumber())
 	{
 		*(cDOStatus[odo]) = dos;
+	}
+	else
+	{
+		std::cerr
+			<< "Error!! Code: DOWorld::SetDOStatus(const unsigned long&, const DOStatus&)" << std::endl
+			<< "        Note: Element's ID wrong" << std::endl;
+		exit(-1);
+	}
+};
+
+void DOWorld::SetDOStatusVelocityAndAngularVelocity
+	(const unsigned long& odo,
+	 const njr::Vector3d& vVelocity,
+	 const njr::Vector3d& vAngularVelocity         )
+{
+	if(odo < pSystemParameter->GetDONumber())
+	{
+		cDOStatus[odo]->SetVelocity(vVelocity);
+		cDOStatus[odo]->SetAngularVelocity(vAngularVelocity);
+	}
+	else
+	{
+		std::cerr
+			<< "Error!! Code: DOWorld::SetDOStatusVelocityAndAngularVelocity(const unsigned long&, const DOStatus&)" << std::endl
+			<< "        Note: Element's ID wrong" << std::endl;
+		exit(-1);
 	}
 };
 

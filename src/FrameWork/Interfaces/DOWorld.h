@@ -51,6 +51,11 @@ public:
 
 	void SetDOStatus(const unsigned long&, const DOStatus&);
 
+	void SetDOStatusVelocityAndAngularVelocity
+		(const unsigned long& ulID,
+		 const njr::Vector3d& vVelocity,
+		 const njr::Vector3d& vAngularVelocity);
+
 	void EraseDOStatus(const std::vector<unsigned long>&);
 
 	void EraseDOStatus(const unsigned long&);
@@ -85,6 +90,8 @@ public:
 	{
 		return cDOStatus;
 	};
+
+	std::string GetDOName(const unsigned long&) const;
 
 	// Operations for altering simulation information
 	inline void NextStep()

@@ -342,7 +342,7 @@ void Consultant::BuildIactTab(std::vector<DOMap>& v)
 {
 };
 
-bool Consultant::EraseElement(const unsigned long& ulID)
+bool Consultant::EraseSingleElement(const unsigned long& ulID)
 {
 	if (ulID < pDOWorld->GetSystemParameter()->GetDONumber())
 	{
@@ -353,7 +353,7 @@ bool Consultant::EraseElement(const unsigned long& ulID)
 	else
 	{
 		std::cout
-			<< "Error!! Code: Consultant::EraseElement"     << std::endl
+			<< "Error!! Code: Consultant::EraseSingleElement"     << std::endl
 			<< "        Note: The ID of element is wrong!"  << std::endl;
 		return false;
 	}

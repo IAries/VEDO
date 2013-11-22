@@ -208,8 +208,8 @@ void usage()
 		<< std::endl
 		<< "	-cl: convert std::list (Hexadecimal)" << std::endl
 		<< "* Knight -cl <filename> <begin num> <the end>" << std::endl
-*/
 		<< std::endl
+*/
 		<< "* Knight -clean_user_defined_value"                      << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
@@ -276,18 +276,22 @@ void usage()
 		<< "	-u2d: convert UNIX text file to DOS text" << std::endl
 		<< "* Knight -u2d <origin> <destination>" << std::endl
 		<< std::endl
-*/
-/*
 		<< "	-cse: clear separated elements" << std::endl
 		<< "* Knight -cs <.ido> <.ido>" << std::endl
 		<< std::endl
 		<< "	-distribution: determine the distribution of certain elements" << std::endl
 		<< "* Knight -distribution <DOName> <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>" << std::endl
 		<< "			<Mesh size> <.xml | .ido>" << std::endl
-*/
 		<< std::endl
+*/
 		<< "* Knight -erase_single_element"                          << std::endl
 		<< "         <element ID>"                                   << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
+		<< "* Knight -erase_elements"                                << std::endl
+		<< "         <element ID (started)>"                         << std::endl
+		<< "         <element ID (ended)>"                           << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
@@ -303,6 +307,12 @@ void usage()
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
+		<< "* Knight -erase_spherical_elements"                      << std::endl
+		<< "	     <a> <b> <c> <d> "                               << std::endl
+		<< "             (Spherical elements in ax+by+cz>d will be erased)" << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
 		<< "* Knight -energy"                                        << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
@@ -315,9 +325,11 @@ void usage()
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
+/*
 		<< "* Knight -gt_auto <.xml | .ido> <DOName> <CutNumberX> <CutNumberY> <CutNumberZ>" << std::endl
 		<< "			<Angle2XAxis> <Angle2YAxis> <Angle2ZAxis>" << std::endl
 		<< std::endl
+*/
 		<< "* Knight -granular_temperature_in_box"                   << std::endl
 		<< "         <element name>"                                 << std::endl
 		<< "         <box center-x> <box center-y> <box center-z>"   << std::endl
@@ -392,6 +404,31 @@ void usage()
 		<< "* Knight -projected_area_z <mesh length> <.ido>" << std::endl
 		<< std::endl
 */
+		<< "* Knight -modify_element_status"                         << std::endl
+		<< "         <element ID>"                                   << std::endl
+		<< "         <position-x> <position-y> <position-z>"         << std::endl
+		<< "         <velocity-x> <velocity-y> <velocity-z>"         << std::endl
+		<< "         <orientation-x-x>"                              << std::endl
+		<< "         <orientation-x-y>"                              << std::endl
+		<< "         <orientation-x-z>"                              << std::endl
+		<< "         <orientation-z-x>"                              << std::endl
+		<< "         <orientation-z-y>"                              << std::endl
+		<< "         <orientation-z-z>"                              << std::endl
+		<< "         <angularvelocity-x>"                            << std::endl
+		<< "         <angularvelocity-y>"                            << std::endl
+		<< "         <angularvelocity-z>"                            << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
+		<< "* Knight -modify_element_velocity_and_angular_velocity"  << std::endl
+		<< "         <element ID>"                                   << std::endl
+		<< "         <velocity-x> <velocity-y> <velocity-z>"         << std::endl
+		<< "         <angularvelocity-x>"                            << std::endl
+		<< "         <angularvelocity-y>"                            << std::endl
+		<< "         <angularvelocity-z>"                            << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
 		<< "* Knight -rotate_all_elements"                           << std::endl
 		<< "         <angle to axis x (in degree)>"                  << std::endl
 		<< "         <angle to axis y (in degree)>"                  << std::endl
@@ -4225,8 +4262,27 @@ int main (int argc, char* argv[])
 		char* idofilename = argv[3];
 		vedo::Consultant* pConsultant
 			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
-		pConsultant->EraseElement(uID);
+		pConsultant->EraseSingleElement(uID);
 		delete WriteDOWorld(arg[4], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-erase_elements") && (arg.size() == 6))
+	{
+        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[4], pIactRecordTab);
+		unsigned uIDStarted, uIDEnded;
+		sscanf(argv[2], "%d", &uIDStarted);
+		sscanf(argv[3], "%d", &uIDEnded);
+		char* idofilename = argv[4];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		std::vector<unsigned long> ulIDList;
+		for(unsigned uID=uIDStarted; uID<=uIDEnded; uID++)
+		{
+			ulIDList.push_back(uID);
+		}
+		pConsultant->EraseElements(ulIDList);
+		delete WriteDOWorld(arg[5], pWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-erase_elements") && (arg.size() == 5))
@@ -4290,6 +4346,41 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld(arg[8], pWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
+	else if ((arg[1] == "-erase_spherical_elements") && (arg.size() == 8))
+	{
+		double da, db, dc, dd;
+		sscanf(argv[2], "%lg", &da);
+		sscanf(argv[3], "%lg", &db);
+		sscanf(argv[4], "%lg", &dc);
+		sscanf(argv[5], "%lg", &dd);
+        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[6], pIactRecordTab);
+		char* idofilename = argv[6];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		std::vector<unsigned long> ulIDList;
+		const vedo::DOStatus* dosp;
+		njr::Vector3d vPosition;
+		for
+			(unsigned long ul=0;
+			 ul<(pWorld->GetSystemParameter()->GetDONumber());
+			 ul++                                           )
+		{
+			dosp = pWorld->GetDOStatus(ul);
+			if(   pWorld->GetDOModel(dosp->GetDOName())->GetShapeType()
+			   == vedo::Sphere                                         )
+			{
+				vPosition = dosp->GetPosition();
+				if(da*vPosition.x()+db*vPosition.y()+dc*vPosition.z()>dd)
+				{
+					ulIDList.push_back(ul);
+				}
+			}
+		}
+		pConsultant->EraseElements(ulIDList);
+		delete WriteDOWorld(arg[7], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
 	else if ((arg[1] == "-energy") && (arg.size() == 3))
 	{
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[2]);
@@ -4348,6 +4439,7 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[4], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
+/*
 	else if ((arg[1] == "-gt_auto") && (arg.size() == 10))
 	{
 		unsigned long CutNumX      = 0;
@@ -4493,6 +4585,7 @@ int main (int argc, char* argv[])
 		};
 		delete oWorld;
 	}
+*/
 	else if ((arg[1] == "-granular_temperature_in_box") && (arg.size() == 16))
 	{
 		std::string DOName = argv[2];
@@ -4911,6 +5004,62 @@ int main (int argc, char* argv[])
 			<< std::endl;
 	}
 */
+	else if ((arg[1] == "-modify_element_status") && (arg.size() == 20))
+	{
+		unsigned uID;
+		sscanf(argv[2], "%d", &uID);
+		double dPx, dPy, dPz, dVx, dVy, dVz, dAVx, dAVy, dAVz;
+		double dOxx, dOxy, dOxz, dOzx, dOzy, dOzz;
+		sscanf(argv[3] , "%lg", &dPx);
+		sscanf(argv[4] , "%lg", &dPy);
+		sscanf(argv[5] , "%lg", &dPz);
+		sscanf(argv[6] , "%lg", &dVx);
+		sscanf(argv[7] , "%lg", &dVy);
+		sscanf(argv[8] , "%lg", &dVz);
+		sscanf(argv[9] , "%lg", &dOxx);
+		sscanf(argv[10], "%lg", &dOxy);
+		sscanf(argv[11], "%lg", &dOxz);
+		sscanf(argv[12], "%lg", &dOzx);
+		sscanf(argv[13], "%lg", &dOzy);
+		sscanf(argv[14], "%lg", &dOzz);
+		sscanf(argv[15], "%lg", &dAVx);
+		sscanf(argv[16], "%lg", &dAVy);
+		sscanf(argv[17], "%lg", &dAVz);
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[18], pIactRecordTab);
+		vedo::DOStatus dos
+			(oWorld->GetDOName(uID),
+			njr::Vector3d(dPx , dPy , dPz ),
+			njr::Vector3d(dVx , dVy , dVz ),
+			njr::Vector3d(dOxx, dOxy, dOxz).direction(),
+			njr::Vector3d(dOzx, dOzy, dOzz).direction(),
+			njr::Vector3d(dAVx, dAVy, dAVz) );
+		oWorld->SetDOStatus(uID, dos);
+		delete WriteDOWorld(arg[19], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if (   (arg[1] == "-modify_element_velocity_and_angular_velocity")
+			 && (arg.size() == 11)                                         )
+	{
+		unsigned uID;
+		sscanf(argv[2], "%d", &uID);
+		double dVx, dVy, dVz, dAVx, dAVy, dAVz;
+		sscanf(argv[3], "%lg", &dVx);
+		sscanf(argv[4], "%lg", &dVy);
+		sscanf(argv[5], "%lg", &dVz);
+		sscanf(argv[6], "%lg", &dAVx);
+		sscanf(argv[7], "%lg", &dAVy);
+		sscanf(argv[8], "%lg", &dAVz);
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
+		oWorld
+			->SetDOStatusVelocityAndAngularVelocity
+				(uID,
+				 njr::Vector3d(dVx , dVy , dVz),
+				 njr::Vector3d(dAVx , dAVy , dAVz));
+		delete WriteDOWorld(arg[10], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
 	else if ((arg[1] == "-rotate_all_elements") && (arg.size() == 7))
 	{
 		double dAngle2XAxis = 0.0;
