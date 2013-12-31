@@ -198,15 +198,6 @@ void SimMediator::ShowInteraction()
 	const DOWorld*         cpDOWorld = pConsultant->GetDOWorld();
 	const SystemParameter* csp       = cpDOWorld->GetSystemParameter();
 
-	//cIact.CheckContactStatus();
-	//cIact.CalculateImpact(csp->GetTimeInterval());
-
-	const Interaction*  iap = 0;
-	const ContactInfo*  cip = 0;
-	const ImpactStatus* isp = 0;
-	njr::Vector3d
-		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
-
 	if (NP == 1)
 	{
 		FileInteraction.open("interaction.csv", std::ios::out);
@@ -235,7 +226,13 @@ void SimMediator::ShowInteraction()
 
 	FileInteraction << std::endl;
 
+	const Interaction*  iap = 0;
+	const ContactInfo*  cip = 0;
+	const ImpactStatus* isp = 0;
+	njr::Vector3d
+		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
 	const double* cdpudv;
+
 	if (NP == 1)
 	{
 		for(unsigned long ul=0; ul<cIact.size(); ul++)
@@ -246,15 +243,20 @@ void SimMediator::ShowInteraction()
 
 			if (cip->bActive)
 			{
+				// Retrieve existed impace force & angular impact force in DiscreteObjects
 				vImpactMaster        = iap->GetMaster()->GetImpact();
 				vImpactSlave         = iap->GetSlave()->GetImpact();
 				vAngularImpactMaster = iap->GetMaster()->GetAngularImpact();
 				vAngularImpactSlave  = iap->GetSlave()->GetAngularImpact();
+
 				cIact.CalculateImpact(csp->GetTimeInterval(), ul);
+
+				// Calculate impace force & angular impact caused by this interaction
 				vImpactMaster        = iap->GetMaster()->GetImpact()        - vImpactMaster;
 				vImpactSlave         = iap->GetSlave()->GetImpact()         - vImpactSlave;
 				vAngularImpactMaster = iap->GetMaster()->GetAngularImpact() - vAngularImpactMaster;
 				vAngularImpactSlave  = iap->GetSlave()->GetAngularImpact()  - vAngularImpactSlave;
+
 				FileInteraction
 					<< pConsultant->GetIactMaster(ul) << ", "
 					<< pConsultant->GetIactSlave(ul)  << ", "
@@ -286,6 +288,7 @@ void SimMediator::ShowInteraction()
 //				isp = iap->GetSolver()->GetImpactStatus();
 				if(!isp)
 					continue;
+
 				cdpudv = isp->RetrieveAllUserDefinedValue();
 
 				if (isp->Bond())
@@ -329,15 +332,20 @@ void SimMediator::ShowInteraction()
 
 			if (cip->bActive)
 			{
+				// Retrieve existed impace force & angular impact force in DiscreteObjects
 				vImpactMaster        = iap->GetMaster()->GetImpact();
 				vImpactSlave         = iap->GetSlave()->GetImpact();
 				vAngularImpactMaster = iap->GetMaster()->GetAngularImpact();
 				vAngularImpactSlave  = iap->GetSlave()->GetAngularImpact();
+
 				cIact.CalculateImpact(csp->GetTimeInterval(), ul);
+
+				// Calculate impace force & angular impact caused by this interaction
 				vImpactMaster        = iap->GetMaster()->GetImpact()        - vImpactMaster;
 				vImpactSlave         = iap->GetSlave()->GetImpact()         - vImpactSlave;
 				vAngularImpactMaster = iap->GetMaster()->GetAngularImpact() - vAngularImpactMaster;
 				vAngularImpactSlave  = iap->GetSlave()->GetAngularImpact()  - vAngularImpactSlave;
+
 				FileInteraction
 					<< pConsultant->GetDO(pConsultant->GetIactMaster(ul)) << ", "
 					<< pConsultant->GetDO(pConsultant->GetIactSlave(ul))  << ", "
@@ -369,6 +377,7 @@ void SimMediator::ShowInteraction()
 //				isp = iap->GetSolver()->GetImpactStatus();
 				if(!isp)
 					continue;
+
 				cdpudv = isp->RetrieveAllUserDefinedValue();
 
 				if (isp->Bond())

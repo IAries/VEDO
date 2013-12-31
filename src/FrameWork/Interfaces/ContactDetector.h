@@ -14,11 +14,11 @@ struct ContactInfo
 	njr::Vector3d vSlideDirection;
 	njr::Vector3d vCenterToCenter;
 	njr::Vector3d vImpactPoint;
-	double      dImpactDepth;
-	double      dDistance;
-	double      dOverlapArea;
-	bool        bActive;
-	bool        bUnBalance;
+	double        dImpactDepth;
+	double        dDistance;
+	double        dOverlapArea;
+	bool          bActive;
+	bool          bUnBalance;
 };
 
 

@@ -147,8 +147,8 @@ Consultant::Consultant
 {
 	pDOWorld                      = DOWorld;
 	pIRTbl                        = pIactRecordTab;
-	ulRecordCount                 = 1;
-	ulRoundCount                  = 1;
+	ulRecordCount                 = 0;
+	ulRoundCount                  = 0;
 	sfilename                     = filename;
 	sfilename[strlen(filename)-4] = 0;
 	timePartitioning              = 0.0;
@@ -223,9 +223,9 @@ void Consultant::RecordIDO()
 	std::string file = sfilename.c_str();
 	file.append("_");
 
-	sprintf(ltoa, "%d.ido\0", 10000000 + ulRecordCount);
-//	file.append((ulRecordCount<10010000) ? ltoa + 4 : ltoa);
-	file.append((ulRecordCount<11000000) ? ltoa + 2 : ltoa);
+	sprintf(ltoa, "%d.ido\0", 10000001 + ulRecordCount);
+//	file.append((ulRecordCount<10010001) ? ltoa + 4 : ltoa);
+	file.append((ulRecordCount<11000001) ? ltoa + 2 : ltoa);
 
 	pDOWorld->WriteIDO(file.c_str(), pIRTbl);
 	ulRecordCount++;

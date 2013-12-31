@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1B7567B7-1C61-4BBC-8E64-8F96766EEF5C}</ProjectGuid>
+    <RootNamespace>framework</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\lib\VC.Net\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\obj\VC.Net\lib\ParMetis\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\lib\VC11\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\obj\VC11\ParMetis\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\ParMetis;..\..\..\..\ParMetis\ParMETISLib;..\..\..\..\ParMetis\METISLib;C:\Program Files\MPICH2\include;..\..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\usr\mpich2\32\include\;..\..\..\..\;..\..\..\..\ParMetis;..\..\..\..\ParMetis\ParMETISLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\adrivers.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\akwayfm.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\ametis.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\backcompat.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\balancemylink.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\coarsen.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\comm.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\csrmatch.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\debug.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\diffutil.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\fpqueue.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\frename.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\gkmetis.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\grsetup.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\iidxsort.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\iintsort.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\ikeysort.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\ikeyvalsort.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\initbalance.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\initmsection.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\initpart.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\kmetis.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\kwaybalance.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\kwayfm.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\kwayrefine.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\lmatch.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\match.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\mdiffusion.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\mdrivers.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\memory.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\mesh.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\mmetis.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\move.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\node_refine.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\ometis.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\order.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\pspases.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\redomylink.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\remap.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\rmetis.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\selectq.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\serial.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\setup.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\stat.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\timer.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\util.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\wave.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\weird.c" />
+    <ClCompile Include="..\..\..\..\ParMetis\ParMETISLib\xyzpart.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\defs.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\macros.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\parmetis.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\parmetislib.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\proto.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\rename.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\stdheaders.h" />
+    <ClInclude Include="..\..\..\..\ParMetis\ParMETISLib\struct.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Metis\Metis.vcxproj">
+      <Project>{2c694b0f-3c86-4efc-a75c-02e9392579ba}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

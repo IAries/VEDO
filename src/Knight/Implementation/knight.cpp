@@ -43,7 +43,7 @@ void usage()
 		<< std::endl
 		<< "Usage:" << std::endl
 		<< std::endl
-		<< "* Knight -add_elements_in_simple_cube_style"             << std::endl
+		<< "* Knight -add_elements_in_simple_cubic_style"             << std::endl
 		<< "         <element name>"                                 << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
@@ -150,36 +150,36 @@ void usage()
 		<< "         <reference2 .xml | .ido>"                       << std::endl
 		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "* Knight -average_information_projected_in_XY_plane"     << std::endl
+		<< "* Knight -average_information_projected_in_xy_plane"     << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <mesh size>"                                    << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "* Knight -average_information_projected_in_XY_plane"     << std::endl
+		<< "* Knight -average_information_projected_in_xy_plane"     << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <mesh size>"                                    << std::endl
 		<< "         <reference1 .xml | .ido>"                       << std::endl
 		<< "         <reference2 .xml | .ido>"                       << std::endl
 		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "* Knight -average_information_projected_in_YZ_plane"     << std::endl
+		<< "* Knight -average_information_projected_in_yz_plane"     << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <mesh size>"                                    << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "* Knight -average_information_projected_in_YZ_plane"     << std::endl
+		<< "* Knight -average_information_projected_in_yz_plane"     << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <mesh size>"                                    << std::endl
 		<< "         <reference1 .xml | .ido>"                       << std::endl
 		<< "         <reference2 .xml | .ido>"                       << std::endl
 		<< "         (velocity is estimated by positions between reference files)" << std::endl
 		<< std::endl
-		<< "* Knight -average_information_projected_in_XZ_plane"     << std::endl
+		<< "* Knight -average_information_projected_in_xz_plane"     << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <mesh size>"                                    << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< std::endl
-		<< "* Knight -average_information_projected_in_XZ_plane"     << std::endl
+		<< "* Knight -average_information_projected_in_xz_plane"     << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
 		<< "         <mesh size>"                                    << std::endl
 		<< "         <reference1 .xml | .ido>"                       << std::endl
@@ -1331,7 +1331,7 @@ int main (int argc, char* argv[])
 	{
 		usage();
 	}
-	else if ((arg[1] == "-add_elements_in_simple_cube_style") && (arg.size() == 11))
+	else if ((arg[1] == "-add_elements_in_simple_cubic_style") && (arg.size() == 11))
 	{
 		double xmin, xmax, ymin, ymax, zmin, zmax;
 		std::string DOName = argv[2];
@@ -2198,7 +2198,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-average_information_projected_in_XY_plane") && (arg.size() == 10))
+	else if ((arg[1] == "-average_information_projected_in_xy_plane") && (arg.size() == 10))
 	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[2], "%lg", &dXMin);
@@ -2468,7 +2468,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-average_information_projected_in_XY_plane") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information_projected_in_xy_plane") && (arg.size() == 11))
 	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[2], "%lg", &dXMin);
@@ -2752,7 +2752,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-average_information_projected_in_YZ_plane") && (arg.size() == 10))
+	else if ((arg[1] == "-average_information_projected_in_yz_plane") && (arg.size() == 10))
 	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[2], "%lg", &dXMin);
@@ -3020,7 +3020,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-average_information_projected_in_YZ_plane") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information_projected_in_yz_plane") && (arg.size() == 11))
 	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[2], "%lg", &dXMin);
@@ -3295,7 +3295,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-average_information_projected_in_XZ_plane") && (arg.size() == 10))
+	else if ((arg[1] == "-average_information_projected_in_xz_plane") && (arg.size() == 10))
 	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[2], "%lg", &dXMin);
@@ -3563,7 +3563,7 @@ int main (int argc, char* argv[])
 
 		delete oWorld;
 	}
-	else if ((arg[1] == "-average_information_projected_in_XZ_plane") && (arg.size() == 11))
+	else if ((arg[1] == "-average_information_projected_in_xz_plane") && (arg.size() == 11))
 	{
 		double dXMin, dXMax, dYMin, dYMax, dZMin, dZMax, dMeshSize;
 		sscanf(argv[2], "%lg", &dXMin);
