@@ -27,8 +27,6 @@
 
 #include <Common/Interfaces/ISwBSDBF.h>
 #include <Common/Interfaces/ISwBtSDBF.h>
-#include <Common/Interfaces/ISwH.h>
-#include <Common/Interfaces/ISwHWS.h>
 
 #include <Common/Interfaces/LeapConsultant.h>
 #include <Common/Interfaces/NBSConsultant.h>
