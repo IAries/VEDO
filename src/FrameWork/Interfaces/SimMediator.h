@@ -81,6 +81,7 @@ private:
 	unsigned int     NP;                    // Number of processores
 	std::ofstream    FileLog;               // Log file
 	std::ofstream    FileLogSystemStatus;   // Log file of system status
+	bool             bFirstRun;
 };
 
 };   // namespace vedo

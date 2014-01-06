@@ -79,7 +79,7 @@ void SimMediator::CalculateSystemEnergy()
 
 SimMediator::SimMediator
 	(Consultant* Consultant, const Assembler* Assembler)
-	: pConsultant(Consultant), cpAssembler(Assembler), rank(0), NP(1)
+	: pConsultant(Consultant), cpAssembler(Assembler), rank(0), NP(1), bFirstRun(true)
 {
 	TimeInitiate();
 	FileLog.open("time_0.csv", std::ios::out);
@@ -124,7 +124,7 @@ SimMediator::SimMediator
 	const Assembler* Assembler,
 	const unsigned int r,
 	const unsigned int np)
-	: pConsultant(Consultant), cpAssembler(Assembler), rank(r), NP(np)
+	: pConsultant(Consultant), cpAssembler(Assembler), rank(r), NP(np), bFirstRun(true)
 {
 	pConsultant->SetRankNP(r, np);
 	TimeInitiate();
@@ -964,9 +964,12 @@ bool SimMediator::ReDistribute()
 			FileContactNumber.close();
 			if (ulContactPairNumber == 0)
 			{
-//				pConsultant->GetDOWorld()->WriteXML("terminate.xml");
-				pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
-				return false;
+				if (!bFirstRun)
+				{
+					pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
+//					pConsultant->GetDOWorld()->WriteXML("terminate.xml", pConsultant->GetIactRecordTab());
+					return false;
+				}
 			}
 		}
 		// Clean all interactions
@@ -974,6 +977,8 @@ bool SimMediator::ReDistribute()
 		{
 			cIact.CleanSolverStatus(ul);
 		}
+
+		bFirstRun = false;
 	}
 
 	// Clean all interactions
