@@ -4,6 +4,8 @@
 #include <NJR/Interfaces/Vector3d.h>
 #include <fstream>
 
+#include <stdint.h>
+
 enum Sense
 {
 	E =  0,
@@ -49,7 +51,18 @@ public:
 
 	inline Sense sense() const
 	{
-		return _sense;
+        if(_sense > 0)
+        {
+            return L;
+        }
+        else if(_sense < 0)
+        {
+            return G;
+        }
+        else
+        {
+            return E;
+        }
 	};
 
 	const HalfSpace& operator = (const HalfSpace &);
@@ -64,6 +77,8 @@ public:
 
 	void Set(double a, double b, double c, Sense sense, double d);
 
+	void Set(double a, double b, double c, int sense, double d);
+
 	inline void SetSense2E()
 	{
 		_sense = E;
@@ -71,11 +86,11 @@ public:
 
 private:
 
-	double _a ;
-	double _b ;
-	double _c ;
-	double _d ;
-	Sense _sense;
+	double _a;
+	double _b;
+	double _c;
+	double _d;
+	int8_t _sense;
 
 };
 

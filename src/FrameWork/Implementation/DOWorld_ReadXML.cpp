@@ -463,15 +463,16 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> n
 {
 	unsigned long     ulMaster, ulSlave;
 	bool              bContact, bBond;
-	double            dKn;
+	double            dKn, dInitialVelocity;
 	njr::Vector3d     vShearForce;
 	const DOMElement* element = (DOMElement*) node;
-	node2data(ulMaster   , element->getAttributeNode(XMLtrans("MasterDOStatusID")));
-	node2data(ulSlave    , element->getAttributeNode(XMLtrans("SlaveDOStatusID")));
-	node2data(bContact   , element->getAttributeNode(XMLtrans("Contact")));
-	node2data(bBond      , element->getAttributeNode(XMLtrans("Bond")));
-	node2data(dKn        , element->getAttributeNode(XMLtrans("NormalStiffness")));
-	node2data(vShearForce, element->getElementsByTagName(XMLtrans("ShearForce"))->item(0));
+	node2data(ulMaster        , element->getAttributeNode(XMLtrans("MasterDOStatusID")));
+	node2data(ulSlave         , element->getAttributeNode(XMLtrans("SlaveDOStatusID")));
+	node2data(bContact        , element->getAttributeNode(XMLtrans("Contact")));
+	node2data(bBond           , element->getAttributeNode(XMLtrans("Bond")));
+	node2data(dKn             , element->getAttributeNode(XMLtrans("NormalStiffness")));
+	node2data(dInitialVelocity, element->getAttributeNode(XMLtrans("InitialVelocity")));
+	node2data(vShearForce     , element->getElementsByTagName(XMLtrans("ShearForce"))->item(0));
 
 	if(vedo::uNumUDDImpactStatus != 0)
 	{
@@ -495,14 +496,16 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> n
 		return
 			std::make_pair
 				(std::make_pair(ulMaster, ulSlave),
-				 new vedo::ImpactStatus(bContact, bBond, dKn, vShearForce, dpudv));
+				 new vedo::ImpactStatus
+					(bContact, bBond, dKn, dInitialVelocity, vShearForce, dpudv));
 	}
 	else
 	{
 		return
 			std::make_pair
 				(std::make_pair(ulMaster, ulSlave),
-				 new vedo::ImpactStatus(bContact, bBond, dKn, vShearForce));
+				 new vedo::ImpactStatus
+					(bContact, bBond, dKn, dInitialVelocity, vShearForce));
 	}
 };
 

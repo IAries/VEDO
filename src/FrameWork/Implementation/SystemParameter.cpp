@@ -2,6 +2,8 @@
 #include <Framework/Interfaces/Constants.h>
 #include <Framework/Interfaces/SystemParameter.h>
 
+#include <stdint.h>
+
 namespace vedo
 {
 
@@ -67,7 +69,7 @@ SystemParameter::SystemParameter(std::ifstream& idof, unsigned int version)
 
 	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(njr::Vector3d));
 	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(njr::Vector3d));
-	idof.read((char*) &ulDONumber, sizeof(unsigned long));
+	idof.read((char*) &ulDONumber, sizeof(unsigned __int64));
 };
 
 const SystemParameter& SystemParameter::operator = (const SystemParameter& sp)
@@ -107,8 +109,8 @@ std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 	idof.write((char*) &dTimeCurrent, sizeof(double));
 	idof.write((char*) &dTimeInterval, sizeof(double));
 	idof.write((char*) &vedo::dSafetyFactor, sizeof(double));
-	idof.write((char*) &vedo::uNumUDDDOStatus, sizeof(unsigned));
-	idof.write((char*) &vedo::uNumUDDImpactStatus, sizeof(unsigned));
+	idof.write((char*) &vedo::uNumUDDDOStatus, sizeof(unsigned __int32));
+	idof.write((char*) &vedo::uNumUDDImpactStatus, sizeof(unsigned __int32));
 	idof.write((char*) &vFieldAcceleration, sizeof(njr::Vector3d));
 	idof.write((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*3);
 	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(njr::Vector3d));
@@ -116,7 +118,7 @@ std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 	idof.write((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*3);
 	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(njr::Vector3d));
 	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(njr::Vector3d));
-	idof.write((char*) &ulDONumber, sizeof(unsigned long));
+	idof.write((char*) &ulDONumber, sizeof(unsigned __int64));
 	return idof;
 };
 
@@ -130,8 +132,8 @@ std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 	idof.read((char*) &dTimeCurrent, sizeof(double));
 	idof.read((char*) &dTimeInterval, sizeof(double));
 	idof.read((char*) &vedo::dSafetyFactor, sizeof(double));
-	idof.read((char*) &vedo::uNumUDDDOStatus, sizeof(unsigned));
-	idof.read((char*) &vedo::uNumUDDImpactStatus, sizeof(unsigned));
+	idof.read((char*) &vedo::uNumUDDDOStatus, sizeof(unsigned __int32));
+	idof.read((char*) &vedo::uNumUDDImpactStatus, sizeof(unsigned __int32));
 	idof.read((char*) &vFieldAcceleration, sizeof(njr::Vector3d));
 	idof.read((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*3);
 	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(njr::Vector3d));
@@ -141,7 +143,7 @@ std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(njr::Vector3d));
 	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(njr::Vector3d));
 	PeriodicBoundaryConditions.Correct();
-	idof.read((char*) &ulDONumber, sizeof(unsigned long));
+	idof.read((char*) &ulDONumber, sizeof(unsigned __int64));
 
 	return idof;
 };

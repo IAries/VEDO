@@ -12,9 +12,11 @@ class ISwModels
 
 public:
 
-	double CriticalTimeStep(const double& dMeff, const double& dK);
+	double CriticalTimeStep
+        (const double& dMeff, const double& dK);
 
-	double CriticalTimeStep(const double& dMeff, const double& dKn,  const double& dKt);
+	double CriticalTimeStep
+        (const double& dMeff, const double& dKn,  const double& dKt);
 
 	std::pair<double, double> CriticalDamping
 		(const double& dMa, const double& dMb,
@@ -83,8 +85,12 @@ public:
 		 const double& dRelativeShearVelocity,
 		 const double& dNormalForce                );
 
-	njr::Vector3d ShearForceRotation(const njr::Vector3d&, const njr::Vector3d&);
+	njr::Vector3d ShearForceRotation
+        (const njr::Vector3d&, const njr::Vector3d&);
 
+	double WetDampingRatioLegendre2006
+		(double dDryRestitutionCoefficient, double dBinaryStokesNumber);
+/*
 private:
 
 	inline ISwModels()
@@ -98,6 +104,7 @@ private:
 	inline ISwModels(const ISwModels&)
 	{
 	};
+*/
 };
 
 };   // namespace vedo

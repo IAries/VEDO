@@ -1,6 +1,8 @@
 #include <Framework/Interfaces/DOWorld.h>
 #include <Framework/Interfaces/IactRecordTab.h>
 
+#include <stdint.h>
+
 namespace vedo
 {
 
@@ -27,9 +29,9 @@ bool DOWorld::ReadIDO(const char* filename, IactRecordTab* irtp)
 
 	pSystemParameter = new SystemParameter(idof);
 
-	idof.read( (char*) &lnum_doml  , sizeof(unsigned long) );
-	idof.read( (char*) &lnum_iactml, sizeof(unsigned long) );
-	idof.read( (char*) &lnum_dos   , sizeof(unsigned long) );
+	idof.read( (char*) &lnum_doml  , sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_iactml, sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_dos   , sizeof(unsigned __int64) );
 
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof));
@@ -70,9 +72,9 @@ bool DOWorld::ReadIDO(const char* filename)
 
 	pSystemParameter = new SystemParameter(idof);
 
-	idof.read( (char*) &lnum_doml  , sizeof(unsigned long) );
-	idof.read( (char*) &lnum_iactml, sizeof(unsigned long) );
-	idof.read( (char*) &lnum_dos   , sizeof(unsigned long) );
+	idof.read( (char*) &lnum_doml  , sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_iactml, sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_dos   , sizeof(unsigned __int64) );
 
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof));
@@ -114,9 +116,9 @@ bool DOWorld::ReadIDO(const char* filename, unsigned int version)
     else
         pSystemParameter = new SystemParameter(idof);
 
-	idof.read((char*) &lnum_doml  , sizeof(unsigned long));
-	idof.read((char*) &lnum_iactml, sizeof(unsigned long));
-	idof.read((char*) &lnum_dos   , sizeof(unsigned long));
+	idof.read((char*) &lnum_doml  , sizeof(unsigned __int64));
+	idof.read((char*) &lnum_iactml, sizeof(unsigned __int64));
+	idof.read((char*) &lnum_dos   , sizeof(unsigned __int64));
 
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof, version));
@@ -155,9 +157,9 @@ bool DOWorld::ReadIDO2011(const char* filename)
 
     pSystemParameter = new SystemParameter(idof, 2011);
 
-	idof.read((char*) &lnum_doml  , sizeof(unsigned long));
-	idof.read((char*) &lnum_iactml, sizeof(unsigned long));
-	idof.read((char*) &lnum_dos   , sizeof(unsigned long));
+	idof.read((char*) &lnum_doml  , sizeof(unsigned __int64));
+	idof.read((char*) &lnum_iactml, sizeof(unsigned __int64));
+	idof.read((char*) &lnum_dos   , sizeof(unsigned __int64));
 
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof, 2011));
@@ -196,9 +198,9 @@ bool DOWorld::ReadIDO2009(const char* filename)
 
     pSystemParameter = new SystemParameter(idof, 2009);
 
-	idof.read( (char*) &lnum_doml  , sizeof(unsigned long) );
-	idof.read( (char*) &lnum_iactml, sizeof(unsigned long) );
-	idof.read( (char*) &lnum_dos   , sizeof(unsigned long) );
+	idof.read( (char*) &lnum_doml  , sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_iactml, sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_dos   , sizeof(unsigned __int64) );
 
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof, 2009));
@@ -237,9 +239,9 @@ bool DOWorld::ReadIDO2008(const char* filename)
 
 	pSystemParameter = new SystemParameter(idof, 2008);
 
-	idof.read( (char*) &lnum_doml  , sizeof(unsigned long) );
-	idof.read( (char*) &lnum_iactml, sizeof(unsigned long) );
-	idof.read( (char*) &lnum_dos   , sizeof(unsigned long) );
+	idof.read( (char*) &lnum_doml  , sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_iactml, sizeof(unsigned __int64) );
+	idof.read( (char*) &lnum_dos   , sizeof(unsigned __int64) );
 
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof));
@@ -278,9 +280,9 @@ void DOWorld::WriteIDO(const char* filename) const
 
 	*pSystemParameter >> idof;
 
-	idof.write((char*) &lnum_doml  , sizeof(unsigned long));
-	idof.write((char*) &lnum_iactml, sizeof(unsigned long));
-	idof.write((char*) &lnum_dos   , sizeof(unsigned long));
+	idof.write((char*) &lnum_doml  , sizeof(unsigned __int64));
+	idof.write((char*) &lnum_iactml, sizeof(unsigned __int64));
+	idof.write((char*) &lnum_dos   , sizeof(unsigned __int64));
 
 	for(idoml=cDOModel.begin(); idoml!=cDOModel.end(); ++idoml)
 		**idoml >> idof;
@@ -292,7 +294,7 @@ void DOWorld::WriteIDO(const char* filename) const
 		**idos >> idof;
 
     unsigned long lnum_is = 0;
-	idof.write((char*) &lnum_is, sizeof(unsigned long));
+	idof.write((char*) &lnum_is, sizeof(unsigned __int64));
 
 	idof.close();
 };
@@ -320,9 +322,9 @@ void DOWorld::WriteIDO(const char* filename, const IactRecordTab* irtp) const
 
 	*pSystemParameter >> idof;
 
-	idof.write((char*) &lnum_doml  , sizeof(unsigned long));
-	idof.write((char*) &lnum_iactml, sizeof(unsigned long));
-	idof.write((char*) &lnum_dos   , sizeof(unsigned long));
+	idof.write((char*) &lnum_doml  , sizeof(unsigned __int64));
+	idof.write((char*) &lnum_iactml, sizeof(unsigned __int64));
+	idof.write((char*) &lnum_dos   , sizeof(unsigned __int64));
 
 	for(idoml=cDOModel.begin(); idoml!=cDOModel.end(); ++idoml)
 		**idoml >> idof;

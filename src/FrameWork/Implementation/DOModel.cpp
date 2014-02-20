@@ -6,6 +6,8 @@
 #include <cmath>
 #include <cstdlib>
 
+#include <stdint.h>
+
 namespace vedo
 {
 
@@ -187,7 +189,7 @@ DOModel::DOModel(std::ifstream& idof)
 
 DOModel::DOModel(std::ifstream& idof, unsigned int _version)
 {
-	int MatOptSize, i;
+	unsigned MatOptSize, i;
 	DOMaterialAttribute DMO;
 
 	njr::ReadString(sDOName  , idof);
@@ -217,11 +219,11 @@ DOModel::DOModel(std::ifstream& idof, unsigned int _version)
 	else
 		vExternalForce.Set(0.0, 0.0, 0.0);
 
-	idof.read((char*) &shColor     , sizeof(DOShapeColor)     );
-	idof.read((char*) &shType      , sizeof(DOShapeType)      );
+	idof.read((char*) &shColor     , sizeof(int16_t)          );
+	idof.read((char*) &shType      , sizeof(int8_t)           );
 	idof.read((char*) &shAttributes, sizeof(DOShapeAttributes));
 
-	idof.read((char*) &MatOptSize  , sizeof (int));
+	idof.read((char*) &MatOptSize  , sizeof(unsigned __int32));
 	for (i=0; i<MatOptSize; i++)
 	{
 		njr::ReadString(DMO.Name, idof);
@@ -231,11 +233,11 @@ DOModel::DOModel(std::ifstream& idof, unsigned int _version)
 
 	if (shType == Polyhedra)
 	{
-		int numhf;
+		unsigned numhf;
 		njr::HalfSpace hf;
 		polyhedra.Clear();
 
-		idof.read((char*) &numhf, sizeof (int));
+		idof.read((char*) &numhf, sizeof (unsigned __int32));
 
 		for (i=0; i<numhf; i++)
 		{
@@ -390,13 +392,13 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 	njr::WriteString(sScope   , idof);
 	idof.write((const char*) &dDensity,       sizeof(double)           );
 	idof.write((const char*) &dDensityFactor, sizeof(double)           );
-	idof.write((const char*) &vExternalForce, sizeof(njr::Vector3d)      );
-	idof.write((const char*) &shColor,        sizeof(DOShapeColor)     );
-	idof.write((const char*) &shType,         sizeof(DOShapeType)      );
+	idof.write((const char*) &vExternalForce, sizeof(njr::Vector3d)    );
+	idof.write((const char*) &shColor,        sizeof(int16_t)          );
+	idof.write((const char*) &shType,         sizeof(int8_t)           );
 	idof.write((const char*) &shAttributes,   sizeof(DOShapeAttributes));
 
 	MatOptSize = (unsigned int) matAttributes.size();
-	idof.write((const char*) &MatOptSize, sizeof(int));
+	idof.write((const char*) &MatOptSize, sizeof(unsigned __int32));
 	for (i=0; i<MatOptSize; i++)
 	{
 		DMO=matAttributes[i];
@@ -406,10 +408,10 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 
 	if (shType == Polyhedra)
 	{
-		unsigned int numhf = (unsigned int)(polyhedra.constrains().size());
+		unsigned numhf = (unsigned int)(polyhedra.constrains().size());
 		std::vector<njr::HalfSpace> constrains = polyhedra.constrains();
 
-		idof.write ((char*) &numhf, sizeof(int));
+		idof.write ((char*) &numhf, sizeof(unsigned __int32));
 
 		for (i=0; i<numhf; i++)
 		{
@@ -422,7 +424,7 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 
 std::ifstream& DOModel::operator << (std::ifstream &idof)
 {
-	int MatOptSize, i;
+	unsigned MatOptSize, i;
 	DOMaterialAttribute DMO;
 
 	njr::ReadString(sDOName  , idof);
@@ -431,12 +433,12 @@ std::ifstream& DOModel::operator << (std::ifstream &idof)
 	njr::ReadString(sScope   , idof);
 	idof.read((char*) &dDensity      , sizeof(double)           );
 	idof.read((char*) &dDensityFactor, sizeof(double)           );
-	idof.read((char*) &vExternalForce, sizeof(njr::Vector3d)      );
- 	idof.read((char*) &shColor       , sizeof(DOShapeColor)     );
-	idof.read((char*) &shType        , sizeof(DOShapeType)      );
+	idof.read((char*) &vExternalForce, sizeof(njr::Vector3d)    );
+ 	idof.read((char*) &shColor       , sizeof(int16_t)          );
+	idof.read((char*) &shType        , sizeof(int8_t)           );
 	idof.read((char*) &shAttributes  , sizeof(DOShapeAttributes));
 
-	idof.read((char*) &MatOptSize    , sizeof (int));
+	idof.read((char*) &MatOptSize    , sizeof(unsigned __int32));
 	for (i=0; i<MatOptSize; i++)
 	{
 		njr::ReadString(DMO.Name, idof);
@@ -446,11 +448,11 @@ std::ifstream& DOModel::operator << (std::ifstream &idof)
 
 	if (shType == Polyhedra)
 	{
-		int numhf;
+		unsigned numhf;
 		njr::HalfSpace hf;
 		polyhedra.Clear();
 
-		idof.read((char*) &numhf, sizeof (int));
+		idof.read((char*) &numhf, sizeof (unsigned __int32));
 
 		for (i=0; i<numhf; i++)
 		{

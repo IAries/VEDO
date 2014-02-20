@@ -29,7 +29,7 @@ void DOSphere::Response(double dt)
 		njr::Vector3d Oz     = pDOStatus->GetOrientationZ();
 		double      Radius = cpDOModel->GetShapeAttributes().sphere.radius;
 
-        njr::Vector3d dv     = 1.0 / dSudoMass * vImpact;
+		njr::Vector3d dv     = 1.0 / dSudoMass * vImpact;
 //		njr::Vector3d dav    = (1.0/(0.4*dSudoMass*Radius*Radius)) * vAngularImpact;
 		njr::Vector3d dav    = 2.5 / dSudoMass / Radius / Radius * vAngularImpact;
 		njr::Vector3d dp     = dt * (V  + (0.5 * dv ));

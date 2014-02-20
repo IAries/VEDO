@@ -712,10 +712,13 @@ bool NBSParallelConsultant::Reset()
 		}
 	}
 
-	//if(vecxloc.size() == 0)
-	//{
-	//	return false;
-	//}
+	if(vecxloc.size() == 0)
+	{
+		std::cerr
+			<< "Error!! Code: bool NBSParallelConsultant::Reset()" << std::endl
+			<< "        Note: vecxloc.size() == 0" << std::endl;
+		exit(-1);
+	}
 
 	// Determine the longest direction - "Cutting Direction"
 	sort(vecxloc.begin(), vecxloc.end());
@@ -1012,18 +1015,30 @@ void NBSParallelConsultant::BuildIactTab(std::vector<DOMap>& v)
 void NBSParallelConsultant::DistributeIactPair()
 {
 	unsigned long avgIact = IactPairTab.size() / NP;
+
 	std::vector< std::pair<unsigned long, unsigned long> > tmpIactVec;
 	tmpIactVec.reserve(avgIact + NP);
-	if (rank != (NP-1))
-    {
-	    tmpIactVec.assign
-	    	(IactPairTab.begin() +  rank      * avgIact,
-			 IactPairTab.begin() + (rank + 1) * avgIact - 1);
+
+	if(avgIact == 0)  // Condition: IactPairTab.size() < NP
+	{
+		if (rank == (NP-1))
+		{
+			tmpIactVec.assign(IactPairTab.begin(), IactPairTab.end());
+		}
 	}
 	else
-    {
-		tmpIactVec.assign
-			(IactPairTab.begin() + rank * avgIact, IactPairTab.end());
+	{
+		if (rank != (NP-1))  // Processor 0~NP-1
+		{
+			tmpIactVec.assign
+				(IactPairTab.begin() +  rank      * avgIact,
+				 IactPairTab.begin() + (rank + 1) * avgIact - 1);
+		}
+		else  // Processor NP
+		{
+			tmpIactVec.assign
+				(IactPairTab.begin() + rank * avgIact, IactPairTab.end());
+		}
 	}
 
 	IactPairTab.swap(tmpIactVec);   // For higher efficiency, instead of "IactPairTab = tmpIactVec;"
@@ -1098,47 +1113,47 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 
 	MPI_Allgather(&tblSize, 1, MPI_INT, numRecords, 1, MPI_INT, MPI_COMM_WORLD);
 
-	int *offPair    = new int[NP];
-	int *offC_Bond  = new int[NP];
-	int *offKn_SF   = new int[NP];
-	int *offUDV     = new int[NP];
+	int *offPair     = new int[NP];
+	int *offC_Bond   = new int[NP];
+	int *offKn_V_SF  = new int[NP];
+	int *offUDV      = new int[NP];
 
-	int *recvPair   = new int[NP];
-	int *recvC_Bond = new int[NP];
-	int *recvKn_SF  = new int[NP];
-	int *recvUDV    = new int[NP];
+	int *recvPair    = new int[NP];
+	int *recvC_Bond  = new int[NP];
+	int *recvKn_V_SF = new int[NP];
+	int *recvUDV     = new int[NP];
 
 	int totalSize = 0;
 	for (unsigned u=0; u<NP; ++u)
 	{
-		totalSize     +=                           numRecords[u];
-		recvPair  [u]  = 2                       * numRecords[u];
-		recvC_Bond[u]  = 2                       * numRecords[u];
-		recvKn_SF [u]  = 4                       * numRecords[u];
-		recvUDV   [u]  = 4 * uNumUDDImpactStatus * numRecords[u];
+		totalSize      +=                           numRecords[u];
+		recvPair   [u]  = 2                       * numRecords[u];
+		recvC_Bond [u]  = 2                       * numRecords[u];
+		recvKn_V_SF[u]  = 5                       * numRecords[u];
+		recvUDV    [u]  = 4 * uNumUDDImpactStatus * numRecords[u];
 	}
 
-	offPair  [0] = 0;
-	offC_Bond[0] = 0;
-	offKn_SF [0] = 0;
-	offUDV   [0] = 0;
+	offPair   [0] = 0;
+	offC_Bond [0] = 0;
+	offKn_V_SF[0] = 0;
+	offUDV    [0] = 0;
 	for(unsigned int u2=1; u2<NP; ++u2)
     {
-		offPair  [u2] = offPair  [u2-1] + 2                       * numRecords[u2-1];
-		offC_Bond[u2] = offC_Bond[u2-1] + 2                       * numRecords[u2-1];
-		offKn_SF [u2] = offKn_SF [u2-1] + 4                       * numRecords[u2-1];
-		offUDV   [u2] = offUDV   [u2-1] + 4 * uNumUDDImpactStatus * numRecords[u2-1];
+		offPair   [u2] = offPair   [u2-1] + 2                       * numRecords[u2-1];
+		offC_Bond [u2] = offC_Bond [u2-1] + 2                       * numRecords[u2-1];
+		offKn_V_SF[u2] = offKn_V_SF[u2-1] + 5                       * numRecords[u2-1];
+		offUDV    [u2] = offUDV    [u2-1] + 4 * uNumUDDImpactStatus * numRecords[u2-1];
 	}
 
-	unsigned long* p       = new unsigned long [2                       * totalSize];
-	unsigned*      c_bond  = new unsigned      [2                       * totalSize];
-	double*        kn_sf   = new double        [4                       * totalSize];
-	double*        udv     = new double        [4 * uNumUDDImpactStatus * totalSize];
+	unsigned long* p        = new unsigned long [2                       * totalSize];
+	unsigned*      c_bond   = new unsigned      [2                       * totalSize];
+	double*        kn_v_sf  = new double        [5                       * totalSize];
+	double*        udv      = new double        [4 * uNumUDDImpactStatus * totalSize];
 
-	unsigned long* lp      = new unsigned long [2                       * tblSize];
-	unsigned*      lc_bond = new unsigned      [2                       * tblSize];
-	double*        lkn_sf  = new double        [4                       * tblSize];
-	double*        ludv    = new double        [4 * uNumUDDImpactStatus * tblSize];
+	unsigned long* lp       = new unsigned long [2                       * tblSize];
+	unsigned*      lc_bond  = new unsigned      [2                       * tblSize];
+	double*        lkn_v_sf = new double        [5                       * tblSize];
+	double*        ludv     = new double        [4 * uNumUDDImpactStatus * tblSize];
 
 	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
 
@@ -1163,11 +1178,12 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		else
 			lc_bond[2*u+1] = 0;
 
-		lkn_sf[4*u  ] = iter->second.Kn();
-		vTemp         = iter->second.ShearForce();
-		lkn_sf[4*u+1] = vTemp.x();
-		lkn_sf[4*u+2] = vTemp.y();
-		lkn_sf[4*u+3] = vTemp.z();
+		lkn_v_sf[5*u  ] = iter->second.Kn();
+		lkn_v_sf[5*u+1] = iter->second.InitialVelocity();
+		vTemp           = iter->second.ShearForce();
+		lkn_v_sf[5*u+2] = vTemp.x();
+		lkn_v_sf[5*u+3] = vTemp.y();
+		lkn_v_sf[5*u+4] = vTemp.z();
 
 		cdpudv = iter->second.RetrieveAllUserDefinedValue();
 		for(unsigned u2=0; u2<4*uNumUDDImpactStatus; u2++)
@@ -1197,12 +1213,12 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 		MPI_COMM_WORLD);
 
 	MPI_Allgatherv
-		(lkn_sf,
-		4*tblSize,
+		(lkn_v_sf,
+		5*tblSize,
 		MPI_DOUBLE,
-		kn_sf,
-		recvKn_SF,
-		offKn_SF,
+		kn_v_sf,
+		recvKn_V_SF,
+		offKn_V_SF,
 		MPI_DOUBLE,
 		MPI_COMM_WORLD);
 
@@ -1227,10 +1243,10 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 
 		for (int i=0; i<numRecords[u]; ++i)
 		{
-			int offsetPair   = offPair[u];
-			int offsetC_Bond = offC_Bond[u];
-			int offsetKn_SF  = offKn_SF[u];
-			int offsetUDV    = offUDV[u];
+			int offsetPair    = offPair[u];
+			int offsetC_Bond  = offC_Bond[u];
+			int offsetKn_V_SF = offKn_V_SF[u];
+			int offsetUDV     = offUDV[u];
 
 			bool bContact = true;
 			if(c_bond[offsetC_Bond+2*i] == 0)
@@ -1243,8 +1259,9 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 				bBond = false;
 
 			s.SetBond(bBond);
-			s.SetKn(kn_sf[offsetKn_SF+4*i]);
-			NewShearForce.Set(kn_sf[offsetKn_SF+4*i+1], kn_sf[offsetKn_SF+4*i+2], kn_sf[offsetKn_SF+4*i+3]);
+			s.SetKn(kn_v_sf[offsetKn_V_SF+5*i]);
+			s.SetInitialVelocity(kn_v_sf[offsetKn_V_SF+5*i+1]);
+			NewShearForce.Set(kn_v_sf[offsetKn_V_SF+5*i+2], kn_v_sf[offsetKn_V_SF+5*i+3], kn_v_sf[offsetKn_V_SF+5*i+4]);
 			s.SetShearForce(NewShearForce);
 			s.SetAllUserDefinedValue(&udv[offsetUDV+4*uNumUDDImpactStatus*i]);
 
@@ -1263,19 +1280,19 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	delete[] numRecords;
 	delete[] p;
 	delete[] c_bond;
-	delete[] kn_sf;
+	delete[] kn_v_sf;
 	delete[] udv;
 	delete[] lp;
 	delete[] lc_bond;
-	delete[] lkn_sf;
+	delete[] lkn_v_sf;
 	delete[] ludv;
 	delete[] offPair;
 	delete[] offC_Bond;
-	delete[] offKn_SF;
+	delete[] offKn_V_SF;
 	delete[] offUDV;
 	delete[] recvPair;
 	delete[] recvC_Bond;
-	delete[] recvKn_SF;
+	delete[] recvKn_V_SF;
 	delete[] recvUDV;
 };
 

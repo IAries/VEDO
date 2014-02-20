@@ -642,10 +642,11 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 		vShearForce = isp->ShearForce();
 		fprintf (fpxml,
 			"\t\t<IactStatus MasterDOStatusID=\"%d\" SlaveDOStatusID=\"%d\"\n"
-			"\t\t\tContact=\"%d\" Bond=\"%d\" NormalStiffness=\"%g\">\n"
+			"\t\t\tContact=\"%d\" Bond=\"%d\" NormalStiffness=\"%g\" InitialVelocity=\"%g\">\n"
 			"\t\t\t<ShearForce x=\"%g\" y=\"%g\" z=\"%g\"/>\n",
-			ulMaster, ulSlave, isp->Contact(), isp->Bond(), isp->Kn(),
-			vShearForce.x(), vShearForce.y(), vShearForce.z()         );
+			ulMaster, ulSlave, isp->Contact(), isp->Bond(),
+			isp->Kn(), isp->InitialVelocity(),
+			vShearForce.x(), vShearForce.y(), vShearForce.z());
 
         for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
             fprintf (fpxml,

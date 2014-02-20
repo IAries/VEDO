@@ -209,16 +209,13 @@ void NBSParallelConsultant::subReset
         * (2.0 * SphereRMax + dt * SphereVMax + 0.5 * dt * dt * vFieldAcceleration.length());
 
 	// Determine how many "safety region" per direction
-	int ncelx = std::ceil((SphereXMax - SphereXMin) / ZoneRange);
-	ncelx = std::max(ncelx, 1);
-	int ncely = std::ceil((SphereYMax - SphereYMin) / ZoneRange);
-	ncely = std::max(ncely, 1);
-	int ncelz = std::ceil((SphereZMax - SphereZMin) / ZoneRange);
-	ncelz = std::max(ncelz, 1);
+	int ncelx = std::max((int)(std::ceil((SphereXMax - SphereXMin) / ZoneRange)), 1);
+	int ncely = std::max((int)(std::ceil((SphereYMax - SphereYMin) / ZoneRange)), 1);
+	int ncelz = std::max((int)(std::ceil((SphereZMax - SphereZMin) / ZoneRange)), 1);
 
 	const Boundary* pbc = &(csp->GetPeriodicBoundaryConditions());
 	bool pbc_x
-		=    pbc->GetSwitch(0)
+		= pbc->GetSwitch(0)
 		  && ((SphereXMax - SphereXMin) >= 0.5 * pbc->GetLength().x());
 	bool pbc_y
 		= pbc->GetSwitch(1)
@@ -702,7 +699,6 @@ void NBSParallelConsultant::subReset
 
 		std::cout << ")" << std::endl;
 	#endif   // _VEDO_DEBUG
-
 
 	delete[] pNumIactPair;
 	delete[] pAllIactPair;

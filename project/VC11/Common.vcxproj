@@ -40,10 +40,6 @@
     <ClCompile Include="..\..\src\Common\Implementation\SafeConsultant.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\Common\Implementation\LeapConsultant.cpp.bak" />
-    <None Include="..\..\src\Common\Interfaces\LeapConsultant.h.bak" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinder.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinderAT.h" />
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiPlate.h" />

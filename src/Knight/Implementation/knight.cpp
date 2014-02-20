@@ -59,18 +59,10 @@ void usage()
 		<< "         <element name>"                                 << std::endl
 		<< "         <started angle (in degree)>"                    << std::endl
 		<< "         <ended angle (in degree)>"                      << std::endl
+		<< "         <inclined angle (in degree)>"                   << std::endl
 		<< "         <number of elements>"                           << std::endl
 		<< "         <radius of circular path> <Z of circular path>" << std::endl
-		<< "         <reference .xml | .ido>"                        << std::endl
-		<< "         <destination .xml | .ido>"                      << std::endl
-		<< std::endl
-		<< "* Knight -add_elements_in_circular_path"                 << std::endl
-		<< "         <element name>"                                 << std::endl
-		<< "         <started angle (in degree)>"                    << std::endl
-		<< "         <ended angle (in degree)>"                      << std::endl
-        << "         <inclined angle (in degree)>"                   << std::endl
-		<< "         <number of elements>"                           << std::endl
-		<< "         <radius of circular path> <Z of circular path>" << std::endl
+		<< "         <Revolutions per time unit>"                    << std::endl
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
@@ -1363,10 +1355,12 @@ int main (int argc, char* argv[])
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
-	else if ((arg[1] == "-add_elements_in_circular_path") && (arg.size() == 10))
+	else if ((arg[1] == "-add_elements_in_circular_path") && (arg.size() == 12))
 	{
 		std::string sDOName = argv[2];
-		double dAngleStarted, dAngleEnded, dR, dZ;
+		double
+			dAngleStarted, dAngleEnded, dInclinedAngle,
+			dRevolutionsPerTimeUnit, dEdgeVelocity, dR, dZ;
 		unsigned uElementNumber;
 		sscanf(argv[3] , "%lg", &dAngleStarted);
 		sscanf(argv[4] , "%lg", &dAngleEnded);
@@ -1377,89 +1371,107 @@ int main (int argc, char* argv[])
 				<< "        Note: Started angle is smaller than ended angle" << std::endl;
 			exit(-1);
 		}
-		sscanf(argv[5] , "%d" , &uElementNumber);
-		sscanf(argv[6] , "%lg", &dR);
-		sscanf(argv[7] , "%lg", &dZ);
-		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[8], pIactRecordTab);
-		vedo::DOStatus dos
-			(sDOName,
-			njr::Vector3d(njr::ZERO),
-			njr::Vector3d(njr::ZERO),
-			njr::Vector3d(njr::AXIALZ),
-			njr::Vector3d(njr::AXIALX),
-			njr::Vector3d(njr::ZERO)   );
-		double dAngleRange = (dAngleEnded - dAngleStarted) * njr::dDegree2PI;
-		double dAngleIncremental = dAngleRange / (double)uElementNumber;
-		double dAngle = dAngleStarted * njr::dDegree2PI;
-		double dCosineAngle, dSineAngle;
-		for(unsigned u=0; u<uElementNumber; u++)
-		{
-			dCosineAngle = cos(dAngle);
-			dSineAngle   = sin(dAngle);
-			dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
-			dos.SetOrientationZ(njr::Vector3d(dCosineAngle, dSineAngle, 0.0));
-			oWorld->AddDOStatus(new vedo::DOStatus(dos));
-			dAngle += dAngleIncremental;
-		}
-		delete WriteDOWorld (arg[9], oWorld, pIactRecordTab);
-		delete pIactRecordTab;
-	}
-	else if ((arg[1] == "-add_elements_in_circular_path") && (arg.size() == 11))
-	{
-		std::string sDOName = argv[2];
-		double dAngleStarted, dAngleEnded, dInclinedAngle, dR, dZ;
-		unsigned uElementNumber;
-		sscanf(argv[3] , "%lg", &dAngleStarted);
-		sscanf(argv[4] , "%lg", &dAngleEnded);
-		if(dAngleEnded <= dAngleStarted)
-		{
-			std::cerr
-				<< "Error!! Code: Knight.cpp (-aecp)" << std::endl
-				<< "        Note: Started angle is smaller than ended angle" << std::endl;
-			exit(-1);
-		}
-		sscanf(argv[5] , "%lg", &dInclinedAngle);
-		dInclinedAngle *= njr::dDegree2PI;
-		double dInclinedCosineAngle = cos(dInclinedAngle);
-		double dInclinedSineAngle   = sin(dInclinedAngle);
 		sscanf(argv[6] , "%d" , &uElementNumber);
 		sscanf(argv[7] , "%lg", &dR);
 		sscanf(argv[8] , "%lg", &dZ);
-		dR += dR * dInclinedSineAngle;
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
-		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[10], pIactRecordTab);
 		vedo::DOStatus dos
 			(sDOName,
 			njr::Vector3d(njr::ZERO),
 			njr::Vector3d(njr::ZERO),
-			njr::Vector3d(njr::AXIALX),
 			njr::Vector3d(njr::AXIALZ),
+			njr::Vector3d(njr::AXIALX),
 			njr::Vector3d(njr::ZERO)   );
 		double dAngleRange = (dAngleEnded - dAngleStarted) * njr::dDegree2PI;
 		double dAngleIncremental = dAngleRange / (double)uElementNumber;
 		double dAngle = dAngleStarted * njr::dDegree2PI;
 		double dCosineAngle, dSineAngle;
 		njr::Vector3d vLocalX, vLocalZ, vRotatedLocalX, vRotatedLocalZ;
-		for(unsigned u=0; u<uElementNumber; u++)
+
+		sscanf(argv[5] , "%lg", &dInclinedAngle);
+		sscanf(argv[9] , "%lg", &dRevolutionsPerTimeUnit);
+		if(dInclinedAngle == 0.0)
 		{
-			dCosineAngle = cos(dAngle);
-			dSineAngle   = sin(dAngle);
-			dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
-            vLocalX.Set
-                (dInclinedSineAngle   * dCosineAngle,
-                 dInclinedSineAngle   * dSineAngle  ,
-                 dInclinedCosineAngle                );
-			vLocalZ.Set
-                ( dInclinedCosineAngle * dCosineAngle,
-                  dInclinedCosineAngle * dSineAngle  ,
-                 -dInclinedSineAngle                  );
-            dos.SetOrientationX(vLocalX);
-            dos.SetOrientationZ(vLocalZ);
-			oWorld->AddDOStatus(new vedo::DOStatus(dos));
-			dAngle += dAngleIncremental;
+			if(dRevolutionsPerTimeUnit == 0)
+			{
+				for(unsigned u=0; u<uElementNumber; u++)
+				{
+					dCosineAngle = cos(dAngle);
+					dSineAngle   = sin(dAngle);
+					dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
+					dos.SetOrientationZ(njr::Vector3d(dCosineAngle, dSineAngle, 0.0));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+					dAngle += dAngleIncremental;
+				}
+			}
+			else
+			{
+				dEdgeVelocity = dR * dRevolutionsPerTimeUnit;
+				for(unsigned u=0; u<uElementNumber; u++)
+				{
+					dCosineAngle = cos(dAngle);
+					dSineAngle   = sin(dAngle);
+					dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
+					dos.SetOrientationZ(njr::Vector3d(dCosineAngle, dSineAngle, 0.0));
+					dos.SetVelocity(-dEdgeVelocity * dos.GetOrientationZ().Cross(njr::AXIALZ));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+					dAngle += dAngleIncremental;
+				}
+			}
 		}
-		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
+		else
+		{
+			dInclinedAngle *= njr::dDegree2PI;
+			double dInclinedCosineAngle = cos(dInclinedAngle);
+			double dInclinedSineAngle   = sin(dInclinedAngle);
+			dR += dR * dInclinedSineAngle;
+			if(dRevolutionsPerTimeUnit == 0)
+			{
+				for(unsigned u=0; u<uElementNumber; u++)
+				{
+					dCosineAngle = cos(dAngle);
+					dSineAngle   = sin(dAngle);
+					dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
+					vLocalX.Set
+						(dInclinedSineAngle   * dCosineAngle,
+						 dInclinedSineAngle   * dSineAngle  ,
+						 dInclinedCosineAngle                );
+					vLocalZ.Set
+						( dInclinedCosineAngle * dCosineAngle,
+						  dInclinedCosineAngle * dSineAngle  ,
+						 -dInclinedSineAngle                  );
+					dos.SetOrientationX(vLocalX);
+					dos.SetOrientationZ(vLocalZ);
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+					dAngle += dAngleIncremental;
+				}
+			}
+			else
+			{
+				dEdgeVelocity = dR * dRevolutionsPerTimeUnit;
+				for(unsigned u=0; u<uElementNumber; u++)
+				{
+					dCosineAngle = cos(dAngle);
+					dSineAngle   = sin(dAngle);
+					dos.SetPosition(njr::Vector3d(dR*dCosineAngle, dR*dSineAngle, dZ));
+					vLocalX.Set
+						(dInclinedSineAngle   * dCosineAngle,
+						 dInclinedSineAngle   * dSineAngle  ,
+						 dInclinedCosineAngle                );
+					vLocalZ.Set
+						( dInclinedCosineAngle * dCosineAngle,
+						  dInclinedCosineAngle * dSineAngle  ,
+						 -dInclinedSineAngle                  );
+					dos.SetVelocity(-dEdgeVelocity * vLocalZ.Cross(vLocalX));
+					dos.SetOrientationX(vLocalX);
+					dos.SetOrientationZ(vLocalZ);
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+					dAngle += dAngleIncremental;
+				}
+			}
+		}
+		delete WriteDOWorld (arg[11], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
 	else if ((arg[1] == "-add_single_element") && (arg.size() == 20))
@@ -4268,7 +4280,7 @@ int main (int argc, char* argv[])
 	}
 	else if ((arg[1] == "-erase_elements") && (arg.size() == 6))
 	{
-        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* pWorld = ReadDOWorld(arg[4], pIactRecordTab);
 		unsigned uIDStarted, uIDEnded;
 		sscanf(argv[2], "%d", &uIDStarted);
@@ -4288,7 +4300,7 @@ int main (int argc, char* argv[])
 	else if ((arg[1] == "-erase_elements") && (arg.size() == 5))
 	{
 		std::string sDOName = argv[2];
-        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* pWorld = ReadDOWorld(arg[3], pIactRecordTab);
 		char* idofilename = argv[3];
 		vedo::Consultant* pConsultant
@@ -4319,7 +4331,7 @@ int main (int argc, char* argv[])
 		sscanf(argv[4], "%lg", &db);
 		sscanf(argv[5], "%lg", &dc);
 		sscanf(argv[6], "%lg", &dd);
-        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* pWorld = ReadDOWorld(arg[7], pIactRecordTab);
 		char* idofilename = argv[7];
 		vedo::Consultant* pConsultant
@@ -4353,7 +4365,7 @@ int main (int argc, char* argv[])
 		sscanf(argv[3], "%lg", &db);
 		sscanf(argv[4], "%lg", &dc);
 		sscanf(argv[5], "%lg", &dd);
-        vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* pWorld = ReadDOWorld(arg[6], pIactRecordTab);
 		char* idofilename = argv[6];
 		vedo::Consultant* pConsultant

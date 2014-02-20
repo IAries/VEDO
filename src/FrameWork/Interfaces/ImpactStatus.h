@@ -15,12 +15,19 @@ public:
 	ImpactStatus();
 
 	ImpactStatus
-        (const bool& Contact, const bool& Bond, const double& Kn,
-         const njr::Vector3d& ShearForce                         );
+        (const bool& Contact,
+		 const bool& Bond,
+		 const double& Kn,
+		 const double& InitialVelocity,
+         const njr::Vector3d& ShearForce,
+         const double* UDVp              );
 
 	ImpactStatus
-        (const bool& Contact, const bool& Bond, const double& Kn,
-         const njr::Vector3d& ShearForce, const double* UDVp     );
+        (const bool& Contact,
+		 const bool& Bond,
+		 const double& Kn,
+		 const double& InitialVelocity,
+		 const njr::Vector3d& ShearForce);
 
 	ImpactStatus(const ImpactStatus&);
 
@@ -58,6 +65,16 @@ public:
 		dKn = dK;
 	};
 
+	inline double InitialVelocity() const
+	{
+		return dInitialVelocity;
+	};
+
+	inline void SetInitialVelocity(double& dV)
+	{
+		dInitialVelocity = dV;
+	};
+
 	inline njr::Vector3d ShearForce() const
 	{
 		return vShearForce;
@@ -92,11 +109,12 @@ public:
 
 private:
 
-	bool          bContact;      // Contacted or not
-	bool          bBond;         // Bond exists or not
-	double        dKn;           // Stiffness of normal spring
-	njr::Vector3d vShearForce;   // Shear force
-	double*       dpUDV;         // User-defined value
+	bool          bContact;           // Contacted or not
+	bool          bBond;              // Bond exists or not
+	double        dKn;                // Stiffness of normal spring
+	double        dInitialVelocity;   // Initial velocity
+	njr::Vector3d vShearForce;        // Shear force
+	double*       dpUDV;              // User-defined value
 //	double        dUDV[uNumUDDImpactStatus*4];   // User-defined value
                                                  // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value
                                                  // uNumUDDImpactStatus ~ 2*uNumUDDImpactStatus-1: Unsynchronized part of Accumulative user-defined value

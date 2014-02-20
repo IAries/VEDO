@@ -5,7 +5,12 @@
 namespace vedo
 {
 
-ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearForce()
+ImpactStatus::ImpactStatus():
+	bContact(false),
+	bBond(false),
+	dKn(0.0),
+	dInitialVelocity(0.0),
+	vShearForce()
 {
 	if(uNumUDDImpactStatus != 0)
 	{
@@ -20,9 +25,17 @@ ImpactStatus::ImpactStatus(): bContact(false), bBond(false), dKn(0.0), vShearFor
 };
 
 ImpactStatus::ImpactStatus
-    (const bool& Contact, const bool& Bond, const double& Kn,
-     const njr::Vector3d& ShearForce, const double* UDVp       ):
-    bContact(Contact), bBond(Bond),dKn(Kn), vShearForce(ShearForce)
+    (const bool& Contact,
+	 const bool& Bond,
+	 const double& Kn,
+	 const double& InitialVelocity,
+	 const njr::Vector3d& ShearForce,
+	 const double* UDVp              ):
+    bContact(Contact),
+    bBond(Bond),
+    dKn(Kn),
+    dInitialVelocity(InitialVelocity),
+    vShearForce(ShearForce)
 {
 	if(uNumUDDImpactStatus != 0)
 	{
@@ -36,9 +49,16 @@ ImpactStatus::ImpactStatus
 };
 
 ImpactStatus::ImpactStatus
-    (const bool& Contact, const bool& Bond, const double& Kn,
-     const njr::Vector3d& ShearForce                         ):
-    bContact(Contact), bBond(Bond),dKn(Kn), vShearForce(ShearForce)
+    (const bool& Contact,
+	 const bool& Bond,
+	 const double& Kn,
+	 const double& InitialVelocity,
+     const njr::Vector3d& ShearForce):
+    bContact(Contact),
+    bBond(Bond),
+    dKn(Kn),
+    dInitialVelocity(InitialVelocity),
+    vShearForce(ShearForce)
 {
 	dpUDV = 0;
 };
@@ -50,10 +70,11 @@ ImpactStatus::ImpactStatus(const ImpactStatus& is)
 
 const ImpactStatus& ImpactStatus::operator = (const ImpactStatus& is)
 {
-	bContact    = is.bContact;
-	bBond       = is.bBond;
-	dKn         = is.dKn;
-	vShearForce = is.vShearForce;
+	bContact         = is.bContact;
+	bBond            = is.bBond;
+	dKn              = is.dKn;
+	dInitialVelocity = is.dInitialVelocity;
+	vShearForce      = is.vShearForce;
 	if(uNumUDDImpactStatus != 0)
 	{
 	    dpUDV = new double[uNumUDDImpactStatus*4];
@@ -164,9 +185,10 @@ void ImpactStatus::CleanAccumulativeUserDefinedValue()
 
 void ImpactStatus::Clean()
 {
-	bContact = false;
-	bBond    = false;
-	dKn      = 0.0;
+	bContact         = false;
+	bBond            = false;
+	dKn              = 0.0;
+	dInitialVelocity = 0.0;
 	CleanShearForce();
     CleanAllUserDefinedValue();
 };

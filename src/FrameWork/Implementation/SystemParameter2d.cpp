@@ -2,6 +2,8 @@
 #include <Framework/Interfaces/Constants.h>
 #include <Framework/Interfaces/SystemParameter2d.h>
 
+#include <stdint.h>
+
 namespace vedo
 {
 
@@ -61,7 +63,7 @@ SystemParameter2d::SystemParameter2d(std::ifstream& idof, unsigned int version)
 	PeriodicBoundaryConditions.SetLowerPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.SetUpperPoint(&vPBC_Point);
 	PeriodicBoundaryConditions.Correct();
-	idof.read((char*) &ulDONumber, sizeof(unsigned long));
+	idof.read((char*) &ulDONumber, sizeof(unsigned __int64));
 };
 
 const SystemParameter2d& SystemParameter2d::operator = (const SystemParameter2d& sp)
@@ -110,7 +112,7 @@ std::ofstream& SystemParameter2d::operator >> (std::ofstream& idof) const
 	idof.write((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*2);
 	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(njr::Vector2d));
 	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(njr::Vector2d));
-	idof.write((char*) &ulDONumber, sizeof(unsigned long));
+	idof.write((char*) &ulDONumber, sizeof(unsigned __int64));
 	return idof;
 };
 
@@ -135,7 +137,7 @@ std::ifstream& SystemParameter2d::operator << (std::ifstream& idof)
 	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(njr::Vector2d));
 	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(njr::Vector2d));
 	PeriodicBoundaryConditions.Correct();
-	idof.read((char*) &ulDONumber, sizeof(unsigned long));
+	idof.read((char*) &ulDONumber, sizeof(unsigned __int64));
 	return idof;
 };
 

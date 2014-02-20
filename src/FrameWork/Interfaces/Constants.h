@@ -7,8 +7,8 @@
 
 namespace vedo
 {
-static const std::string sVersion            = "X4 build 106";
-static const std::string sPublish            = "2014-01-06";
+static const std::string sVersion            = "X4 build 220";
+static const std::string sPublish            = "2014-02-20";
 static       double      dSafetyFactor       = 1.1;
 static const unsigned    uImpactBufferSize   = 65535;   // Consultant
 // uImpactBufferSize ~= 18,000 for 60,000 elements / 4 processors

@@ -84,12 +84,6 @@
     <ClCompile Include="..\..\src\Common\Implementation\ISwBtSDBF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Common\Implementation\ISwH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Common\Implementation\ISwHWS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Common\Implementation\LeapConsultant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,14 +96,6 @@
     <ClCompile Include="..\..\src\Common\Implementation\SafeConsultant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\src\Common\Implementation\LeapConsultant.cpp.bak">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\..\src\Common\Interfaces\LeapConsultant.h.bak">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Common\Interfaces\CDSphere2QuasiCylinder.h">
@@ -179,12 +165,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Common\Interfaces\ISwBtSDBF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Common\Interfaces\ISwH.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Common\Interfaces\ISwHWS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Common\Interfaces\LeapConsultant.h">

@@ -260,4 +260,20 @@ njr::Vector3d ISwModels::ShearForceRotation
 	}
 };
 
+double ISwModels::WetDampingRatioLegendre2006
+	(double dDryRestitutionCoefficient, double dBinaryStokesNumber)
+{
+	if((dBinaryStokesNumber == 0.0) || (dDryRestitutionCoefficient == 0.0))
+		return 1.0;
+
+	double dWetRestitutionCoefficient
+		= dDryRestitutionCoefficient * exp(-35.0/dBinaryStokesNumber);
+
+	if (dWetRestitutionCoefficient == 0.0)
+		return 1.0;
+
+	double beta_c = log(dWetRestitutionCoefficient) / njr::dPI;
+	return (-beta_c / sqrt(1.0 + beta_c * beta_c));
+};
+
 };   // namespace vedo

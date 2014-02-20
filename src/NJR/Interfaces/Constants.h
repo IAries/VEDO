@@ -29,12 +29,12 @@ enum ParticularVector {ZERO, ORIGIN, AXIALX, AXIALY, AXIALZ};
 namespace njrdxf
 {
 
-enum Color
+enum Color   // size: int16_t (-32768~32767)
 {
-	bylayer	= 256,
-	byblock	=   0,
+	bylayer = 256,
+	byblock =   0,
 	red	    =   1,
-	yellow	=   2,
+	yellow  =   2,
 	green   =   3,
 	cyan    =   4,
 	blue    =   5,

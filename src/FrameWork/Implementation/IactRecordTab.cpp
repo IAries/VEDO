@@ -4,6 +4,8 @@
 #include <cstring>
 #include <fstream>
 
+#include <stdint.h>
+
 namespace vedo
 {
 
@@ -31,27 +33,28 @@ bool IactRecordTab::ReadIRT2010(const char* filename)
 	}
 
 	unsigned long ulInteractionNumber;
-	std::pair<unsigned long,unsigned long> pElements;
+	std::pair<unsigned long, unsigned long> pElements;
 	bool          bContact, bBond;
 	double        dKn;
 	int           iStage;
 	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
-	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
+	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned __int64) );
+	double dZero = 0.0;
 	for(unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 	{
-        irtif.read((char*) &pElements  , 2*sizeof(unsigned long));
+        irtif.read((char*) &pElements  , 2*sizeof(unsigned __int64));
 
 		bContact = true;
 		is.SetContact(bContact);
-		dKn = 0.0;
-		is.SetKn(dKn);
+		is.SetKn(dZero);
+		is.SetInitialVelocity(dZero);
 
 		irtif.read((char*) &vShearForce, 3*sizeof(double));
 		is.SetShearForce(vShearForce);
 
-		irtif.read((char*) &iStage, sizeof(int));
+		irtif.read((char*) &iStage, sizeof(int8_t));
 		if (iStage == 1)
 		{
 			bBond = true;
@@ -87,14 +90,15 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 	std::pair<unsigned long,unsigned long> pElements;
 	bool          bContact, bBond;
 	double        dKn;
+	double        dZero = 0.0;
 	int           iStage;
 	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
-	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
+	irtif.read( (char*) &ulInteractionNumber, sizeof(unsigned __int64) );
 	for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 	{
-        irtif.read((char*) &pElements  , 2*sizeof(unsigned long));
+        irtif.read((char*) &pElements  , 2*sizeof(unsigned __int64));
 
 		irtif.read((char*) &bContact   , sizeof(bool));
 		is.SetContact(bContact);
@@ -104,6 +108,8 @@ bool IactRecordTab::ReadIRT2011(const char* filename)
 
 		irtif.read((char*) &dKn        , sizeof(double));
 		is.SetKn(dKn);
+
+		is.SetInitialVelocity(dZero);
 
 		irtif.read((char*) &vShearForce, 3*sizeof(double));
 		is.SetShearForce(vShearForce);
@@ -220,6 +226,7 @@ void IactRecordTab::EraseElements
 	unsigned long ul, ul2;
 	unsigned long ulID = 0;
 	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator itr;
+
 	for(itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
 	{
 		bActived.push_back(true);
@@ -297,6 +304,8 @@ void IactRecordTab::print() const
 			<< iter->second.Bond()
 			<< " "
 			<< iter->second.Kn()
+			<< " "
+			<< iter->second.InitialVelocity()
 			<< " "
 			<< iter->second.ShearForce()
 			<< std::endl;
@@ -378,10 +387,10 @@ void IactRecordTab::WriteCSV(std::string filename) const
 
 	std::map< std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator iter;
 	unsigned long ulInteractionNumber = mapImStatus.size();
-	//irtof.write( (char*) (&tabSize) , sizeof(unsigned long) );
+	//irtof.write( (char*) (&tabSize) , sizeof(unsigned __int64) );
 	irtof
 		<< "Master discrete object ID, Slave discrete object ID, "
-		<< "Contact, Bond, Normal Stiffness, "
+		<< "Contact, Bond, Normal Stiffness, Initial Velocity, "
 		<< "Shear force (x), Shear force (y), Shear force (z)";
 
 	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
@@ -398,6 +407,7 @@ void IactRecordTab::WriteCSV(std::string filename) const
 			<< ", " << iter->second.Contact()
 			<< ", " << iter->second.Bond()
 			<< ", " << iter->second.Kn()
+			<< ", " << iter->second.InitialVelocity()
 			<< ", " << iter->second.ShearForce().x()
 			<< ", " << iter->second.ShearForce().y()
 			<< ", " << iter->second.ShearForce().z();
@@ -414,7 +424,9 @@ void IactRecordTab::WriteCSV(std::string filename) const
 std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 {
     unsigned long ulSize = mapImStatus.size();
-	idof.write((char*) &ulSize, sizeof(unsigned long));
+	idof.write((char*) &ulSize, sizeof(unsigned __int64));
+	if(ulSize == 0)
+		return idof;
 
 	const ImpactStatus* isp;
 	bool                bTemp;
@@ -423,12 +435,12 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 
 	if(uNumUDDImpactStatus != 0)
 	{
-		const double*       dpUDV;
+		const double* dpUDV;
 		for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator mapImStatusP = mapImStatus.begin();
 			mapImStatusP != mapImStatus.end();
 			mapImStatusP++                                                                                              )
 		{
-			idof.write((char*) &(mapImStatusP->first)             , 2*sizeof(unsigned long));
+			idof.write((char*) &(mapImStatusP->first)             , 2*sizeof(unsigned __int64));
 
 			isp   = &(mapImStatusP->second);
 			bTemp = isp->Contact();
@@ -436,6 +448,8 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 			bTemp = isp->Bond();
 			idof.write((char*) &bTemp                             , sizeof(bool));
 			dTemp =isp->Kn();
+			idof.write((char*) &dTemp                             , sizeof(double));
+			dTemp =isp->InitialVelocity();
 			idof.write((char*) &dTemp                             , sizeof(double));
 			vTemp = isp->ShearForce();
 			idof.write((char*) &vTemp                             , 3*sizeof(double));
@@ -450,14 +464,15 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 			mapImStatusP != mapImStatus.end();
 			mapImStatusP++                                                                                              )
 		{
-			idof.write((char*) &(mapImStatusP->first)             , 2*sizeof(unsigned long));
-
+			idof.write((char*) &(mapImStatusP->first)             , 2*sizeof(unsigned __int64));
 			isp   = &(mapImStatusP->second);
 			bTemp = isp->Contact();
 			idof.write((char*) &bTemp                             , sizeof(bool));
 			bTemp = isp->Bond();
 			idof.write((char*) &bTemp                             , sizeof(bool));
 			dTemp =isp->Kn();
+			idof.write((char*) &dTemp                             , sizeof(double));
+			dTemp =isp->InitialVelocity();
 			idof.write((char*) &dTemp                             , sizeof(double));
 			vTemp = isp->ShearForce();
 			idof.write((char*) &vTemp                             , 3*sizeof(double));
@@ -471,11 +486,13 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 {
 	mapImStatus.clear();
 	unsigned long ulInteractionNumber;
-	idof.read( (char*) &ulInteractionNumber, sizeof(unsigned long) );
+	idof.read( (char*) &ulInteractionNumber, sizeof(unsigned __int64) );
+	if(ulInteractionNumber == 0)
+		return idof;
 
 	std::pair<unsigned long, unsigned long> pElements;
 	bool          bContact, bBond;
-	double        dKn;
+	double        dKn, dInitialVelocity;
 	njr::Vector3d vShearForce;
 	ImpactStatus  is;
 
@@ -485,7 +502,7 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 		memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
 		for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 		{
-			idof.read((char*) &pElements                 , 2*sizeof(unsigned long));
+			idof.read((char*) &pElements                 , 2*sizeof(unsigned __int64));
 
 			idof.read((char*) &bContact                  , sizeof(bool));
 			is.SetContact(bContact);
@@ -495,6 +512,9 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 
 			idof.read((char*) &dKn                       , sizeof(double));
 			is.SetKn(dKn);
+
+			idof.read((char*) &dInitialVelocity          , sizeof(double));
+			is.SetInitialVelocity(dInitialVelocity);
 
 			idof.read((char*) &vShearForce               , 3*sizeof(double));
 			is.SetShearForce(vShearForce);
@@ -509,7 +529,7 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 	{
 		for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 		{
-			idof.read((char*) &pElements                 , 2*sizeof(unsigned long));
+			idof.read((char*) &pElements                 , 2*sizeof(unsigned __int64));
 
 			idof.read((char*) &bContact                  , sizeof(bool));
 			is.SetContact(bContact);
@@ -519,6 +539,10 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 
 			idof.read((char*) &dKn                       , sizeof(double));
 			is.SetKn(dKn);
+
+			idof.read((char*) &dInitialVelocity          , sizeof(double));
+			is.SetInitialVelocity(dInitialVelocity);
+
 
 			idof.read((char*) &vShearForce               , 3*sizeof(double));
 			is.SetShearForce(vShearForce);

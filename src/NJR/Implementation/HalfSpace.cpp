@@ -8,16 +8,15 @@ namespace njr
 
 HalfSpace::HalfSpace()
 {
-	HalfSpace::Set(0.0, 0.0, 1.0, E, 1.0);
+	HalfSpace::Set(0.0, 0.0, 1.0, 0, 1.0);
 };
 
 HalfSpace::HalfSpace(const HalfSpace &hf)
 {
-	HalfSpace::Set(hf._a, hf._b, hf._c ,hf._sense, hf._d);
+	HalfSpace::Set(hf._a, hf._b, hf._c, hf._sense, hf._d);
 };
 
-HalfSpace::HalfSpace
-	(double a, double b, double c, Sense sense, double d)
+HalfSpace::HalfSpace(double a, double b, double c, Sense sense, double d)
 {
 	HalfSpace::Set(a, b, c, sense, d);
 };
@@ -34,9 +33,28 @@ void HalfSpace::Set(double a, double b, double c, Sense sense, double d)
 	_b = b;
 	_c = c;
 	_d = d;
-	_sense = sense;
+	switch (sense)
+	{
+		case G:
+			_sense = -1;
+			break;
+		case E:
+			_sense = 0;
+			break;
+		case L:
+			_sense = 1;
+			break;
+	}
 };
 
+void HalfSpace::Set(double a, double b, double c, int sense, double d)
+{
+	_a     = a;
+	_b     = b;
+	_c     = c;
+	_d     = d;
+	_sense = sense;
+};
 
 void HalfSpace::Normalize()
 {

@@ -1,6 +1,8 @@
 #include <NJR/Interfaces/Utility.h>
 #include <Framework/Interfaces/IactModel.h>
 
+#include <stdint.h>
+
 namespace vedo
 {
 
@@ -102,7 +104,7 @@ std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 	njr::WriteString(sEquationType,  idof);
 
 	unsigned int ims = (unsigned int) svIactMechanisms.size();
-	idof.write((const char*) &ims, sizeof(int));
+	idof.write((const char*) &ims, sizeof(unsigned __int32));
 	IactMechanism im;
 	for (unsigned int i=0; i<ims; i++)
 	{
@@ -120,7 +122,7 @@ std::ifstream& IactModel::operator << (std::ifstream& idof)
 	njr::ReadString(sEquationType,  idof);
 
     unsigned int ims;
-	idof.read((char*) &ims, sizeof (int));
+	idof.read((char*) &ims, sizeof (unsigned __int32));
 	IactMechanism im;
 	for (unsigned int i=0; i<ims; i++)
 	{
@@ -160,8 +162,8 @@ IactModel::IactModel(std::ifstream& idof, unsigned int _version)
        		svIactMechanisms.push_back(im);
             // Start to read the extend information
             njr::ReadString(im.Name, idof);
-        	idof.read((char*) &imExtendSize, sizeof (int));
-        	for (int i=0; i<imExtendSize; i++)
+        	idof.read((char*) &imExtendSize, sizeof (unsigned __int32));
+        	for (unsigned i=0; i<imExtendSize; i++)
 	        {
                 njr::ReadString(im.Name, idof);
                 idof.read((char*) &(im.Value), sizeof(double));
@@ -196,8 +198,8 @@ IactModel::IactModel(std::ifstream& idof, unsigned int _version)
        		svIactMechanisms.push_back(im);
             njr::ReadString(im.Name, idof);
             // Start to read the extend information
-        	idof.read((char*) &imExtendSize, sizeof (int));
-        	for (int i=0; i<imExtendSize; i++)
+        	idof.read((char*) &imExtendSize, sizeof (unsigned __int32));
+        	for (unsigned i=0; i<imExtendSize; i++)
 	        {
                 njr::ReadString(im.Name, idof);
                 idof.read((char*) &(im.Value), sizeof(double));

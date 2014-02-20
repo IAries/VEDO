@@ -218,7 +218,7 @@ void SimMediator::ShowInteraction()
 		<< "Overlap, "
 		<< "ImpactDirectionX, ImpactDirectionY, ImpactDirectionZ, "
 		<< "ImpactPointX, ImpactPointY, ImpactPointZ, "
-		<< "Bond, Contacted, RememberedNormalStiffness, "
+		<< "Bond, Contacted, RememberedNormalStiffness, RememberedInitialVelocity, "
 		<< "RememberedShearForceX, RememberedShearForceY, RememberedShearForceZ";
 
 	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
@@ -310,9 +310,10 @@ void SimMediator::ShowInteraction()
 				}
 
 				FileInteraction
-					<< isp->Kn()             << ", "
-					<< isp->ShearForce().x() << ", "
-					<< isp->ShearForce().y() << ", "
+					<< isp->Kn()              << ", "
+					<< isp->InitialVelocity() << ", "
+					<< isp->ShearForce().x()  << ", "
+					<< isp->ShearForce().y()  << ", "
 					<< isp->ShearForce().z();
 
 				for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
@@ -399,9 +400,10 @@ void SimMediator::ShowInteraction()
 				}
 
 				FileInteraction
-					<< isp->Kn()             << ", "
-					<< isp->ShearForce().x() << ", "
-					<< isp->ShearForce().y() << ", "
+					<< isp->Kn()              << ", "
+					<< isp->InitialVelocity() << ", "
+					<< isp->ShearForce().x()  << ", "
+					<< isp->ShearForce().y()  << ", "
 					<< isp->ShearForce().z();
 
 				for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
