@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\src\Knight\Interfaces\CalcDensity.h" />
     <ClInclude Include="..\..\src\Knight\Interfaces\ClusterInitializer.h" />
     <ClInclude Include="..\..\src\Knight\Interfaces\RectangularClusterInitializer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61998B5B-55B4-4F18-BA33-F512B0E69DF0}</ProjectGuid>

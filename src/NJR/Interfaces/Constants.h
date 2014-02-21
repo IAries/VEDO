@@ -1,24 +1,26 @@
 #ifndef _NJR_CONSTANTS_H
 #define _NJR_CONSTANTS_H
 
-#define _USE_MATH_DEFINES
-#include <math.h>
+//#define _USE_MATH_DEFINES
+//#include <math.h>
+#include <cmath>
 #include <string>
 
 namespace njr
 {
 // Common math constants
-static const double dPI             = M_PI;
-static const double dOneTwelfthPI   = M_PI / 12.0;
-static const double dOneEighthPI    = 0.125 * M_PI;   // M_PI/8
-static const double dOneSixthPI     = M_PI / 6.0;
-static const double dQuarterPI      = 0.25 * M_PI;    // M_PI/4
-static const double dOneThirdPI     = M_PI / 3.0;
-static const double dHalfPI         = 0.5 * M_PI;     // M_PI/2
-static const double dOneAndHalfPI   = 1.5 * M_PI;     // M_PI*3/2
-static const double dDoublePI       = 2.0 * M_PI;
-static const double dFourthThirdsPI = 4.0 / 3.0 * M_PI;
-static const double dDegree2PI      = 1.0 / 180.0 * M_PI;
+//static const double dPI             = M_PI;
+static const double dPI             = 4.0 * std::atan(1.0);
+static const double dOneTwelfthPI   = dPI / 12.0;
+static const double dOneEighthPI    = 0.125 * dPI;   // dPI/8
+static const double dOneSixthPI     = dPI / 6.0;
+static const double dQuarterPI      = 0.25 * dPI;    // dPI/4
+static const double dOneThirdPI     = dPI / 3.0;
+static const double dHalfPI         = 0.5 * dPI;     // dPI/2
+static const double dOneAndHalfPI   = 1.5 * dPI;     // dPI*3/2
+static const double dDoublePI       = 2.0 * dPI;
+static const double dFourthThirdsPI = 4.0 / 3.0 * dPI;
+static const double dDegree2PI      = 1.0 / 180.0 * dPI;
 
 // Predefine Praticular Vectors, its activities will be defined in class "Vector2d" & "Vector3d"
 enum ParticularVector {ZERO, ORIGIN, AXIALX, AXIALY, AXIALZ};
@@ -29,7 +31,7 @@ enum ParticularVector {ZERO, ORIGIN, AXIALX, AXIALY, AXIALZ};
 namespace njrdxf
 {
 
-enum Color   // size: int16_t (-32768~32767)
+enum Color   // size: unsigned __int32
 {
 	bylayer = 256,
 	byblock =   0,

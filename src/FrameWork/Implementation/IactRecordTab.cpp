@@ -54,7 +54,7 @@ bool IactRecordTab::ReadIRT2010(const char* filename)
 		irtif.read((char*) &vShearForce, 3*sizeof(double));
 		is.SetShearForce(vShearForce);
 
-		irtif.read((char*) &iStage, sizeof(int8_t));
+		irtif.read((char*) &iStage, sizeof(unsigned __int32));
 		if (iStage == 1)
 		{
 			bBond = true;

@@ -159,8 +159,10 @@ public:
 
 	void WriteVPF (const char *filename, const DOWorld* pw) const;
 
-//	template<typename ExtFieldWriterT=NullExternalFieldVTKWriter>
-//	void WriteVTK (const char *filename) const;
+    #ifdef _STD_CPP_11
+        template<typename ExtFieldWriterT=NullExternalFieldVTKWriter>
+        void WriteVTK (const char *filename) const;
+    #endif   // _STD_CPP_11
 
 	inline void SetBoundary(const Boundary pBC)
 	{

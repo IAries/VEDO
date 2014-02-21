@@ -15,9 +15,9 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="../../lib/Code_Blocks/libvedo-Common-debug.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-Framework-debug.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-NJR-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Common-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Framework-debug.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-NJR-debug.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -30,9 +30,9 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="../../lib/Code_Blocks/libvedo-Common.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-Framework.a" />
-					<Add library="../../lib/Code_Blocks/libvedo-NJR.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Common.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-Framework.a" />
+					<Add library="..\..\lib\Code_Blocks\libvedo-NJR.a" />
 				</Linker>
 			</Target>
 		</Build>
@@ -40,8 +40,10 @@
 			<Add alias="All" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-D_STD_CPP_11" />
 			<Add directory="../../src/" />
 		</Compiler>
 		<Linker>

@@ -80,98 +80,98 @@ private:
 
 };
 
-/*
-template<typename ExtFieldWriterT>
-void DOWorld::WriteVTK (const char* filename) const
-{
-	std::FILE *fpvpf;
-	if ((fpvpf = std::fopen(filename, "w"))== NULL )
-	{
-		std::cout << "Error!! Code: DOWorld::WriteVTK (const char*)" << std::endl;
-		exit(-1);
-	};
+#ifdef _STD_CPP_11
+    template<typename ExtFieldWriterT>
+    void DOWorld::WriteVTK (const char* filename) const
+    {
+        std::FILE *fpvpf;
+        if ((fpvpf = std::fopen(filename, "w"))== NULL )
+        {
+            std::cout << "Error!! Code: DOWorld::WriteVTK (const char*)" << std::endl;
+            exit(-1);
+        };
 
-	/// raw data arrays
-	std::vector<double> sphere_Positions, sphere_Velocitys, sphere_AngularVelocity;
-	std::vector<double> sphere_Radius, sphere_GranularTempV, sphere_GranularTempAV;
+        /// raw data arrays
+        std::vector<double> sphere_Positions, sphere_Velocitys, sphere_AngularVelocity;
+        std::vector<double> sphere_Radius, sphere_GranularTempV, sphere_GranularTempAV;
 
-	/// read data to arrays
-	std::vector<DOStatus *>::const_iterator idos;
-	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
-	{
-		double Radius;
-		switch(GetDOModel((*idos)->GetDOName())->GetShapeType())
-		{
-			case Sphere:
-				Radius
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().sphere.radius;
-				sphere_Radius.push_back(Radius);
-				sphere_Positions.push_back((*idos)->GetPosition().x());
-				sphere_Positions.push_back((*idos)->GetPosition().y());
-				sphere_Positions.push_back((*idos)->GetPosition().z());
-				sphere_Velocitys.push_back((*idos)->GetVelocity().x());
-				sphere_Velocitys.push_back((*idos)->GetVelocity().y());
-				sphere_Velocitys.push_back((*idos)->GetVelocity().z());
-				sphere_AngularVelocity.push_back((*idos)->GetAngularVelocity().x());
-				sphere_AngularVelocity.push_back((*idos)->GetAngularVelocity().y());
-				sphere_AngularVelocity.push_back((*idos)->GetAngularVelocity().z());
-				sphere_GranularTempV.push_back((*idos)->GetGranularTemperatureV());
-				sphere_GranularTempAV.push_back((*idos)->GetGranularTemperatureAV());
-				break;
-			case Polyhedra:
-				// TODO:
-				break;
-			case QuasiPlate:
-				// TODO:
-				break;
-			case QuasiPlateWithCircularHole:
-				// TODO:
-				break;
-			case QuasiCylinder:
-				// TODO:
-				break;
-			default:
-				std::cerr
-					<< "Error!! Code: DOWorld_WriteVTK.h" << std::endl
-					<< "        Note: Unknown VTK shape" << std::endl;
-				std::exit(-1);
-		}
-	}
+        /// read data to arrays
+        std::vector<DOStatus *>::const_iterator idos;
+        for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
+        {
+            double Radius;
+            switch(GetDOModel((*idos)->GetDOName())->GetShapeType())
+            {
+                case Sphere:
+                    Radius
+                        = DOWorld::GetDOModel
+                            ((*idos)->GetDOName())
+                                ->GetShapeAttributes().sphere.radius;
+                    sphere_Radius.push_back(Radius);
+                    sphere_Positions.push_back((*idos)->GetPosition().x());
+                    sphere_Positions.push_back((*idos)->GetPosition().y());
+                    sphere_Positions.push_back((*idos)->GetPosition().z());
+                    sphere_Velocitys.push_back((*idos)->GetVelocity().x());
+                    sphere_Velocitys.push_back((*idos)->GetVelocity().y());
+                    sphere_Velocitys.push_back((*idos)->GetVelocity().z());
+                    sphere_AngularVelocity.push_back((*idos)->GetAngularVelocity().x());
+                    sphere_AngularVelocity.push_back((*idos)->GetAngularVelocity().y());
+                    sphere_AngularVelocity.push_back((*idos)->GetAngularVelocity().z());
+                    sphere_GranularTempV.push_back((*idos)->GetGranularTemperatureV());
+                    sphere_GranularTempAV.push_back((*idos)->GetGranularTemperatureAV());
+                    break;
+                case Polyhedra:
+                    // TODO:
+                    break;
+                case QuasiPlate:
+                    // TODO:
+                    break;
+                case QuasiPlateWithCircularHole:
+                    // TODO:
+                    break;
+                case QuasiCylinder:
+                    // TODO:
+                    break;
+                default:
+                    std::cerr
+                        << "Error!! Code: DOWorld_WriteVTK.h" << std::endl
+                        << "        Note: Unknown VTK shape" << std::endl;
+                    std::exit(-1);
+            }
+        }
 
-	// write VTK file
-	fprintf(fpvpf,"<?xml version=\"1.0\"?>\n");
-	fprintf(fpvpf,"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n");
-	fprintf(fpvpf,"  <UnstructuredGrid>\n");
-	fprintf(fpvpf,"    <Piece NumberOfPoints=\"%d\" NumberOfCells=\"0\">\n", sphere_Radius.size());
-	fprintf(fpvpf,"      <PointData Scalars=\"Radius\">\n");
-	DataFieldVTKWriter::writeVTKDataArray(fpvpf, "Position", sphere_Positions, 3);
-	DataFieldVTKWriter::writeVTKDataArray(fpvpf, "Velocity", sphere_Velocitys, 3);
-	DataFieldVTKWriter::writeVTKDataArray(fpvpf, "AngularVelocity", sphere_AngularVelocity, 3);
-	DataFieldVTKWriter::writeVTKDataArray(fpvpf, "Radius", sphere_Radius, 1);
-	DataFieldVTKWriter::writeVTKDataArray(fpvpf, "GranularTemperatureV", sphere_GranularTempV, 1);
-	DataFieldVTKWriter::writeVTKDataArray(fpvpf, "GranularTemperatureAV", sphere_GranularTempAV, 1);
-	ExtFieldWriterT::writeExternalFields(fpvpf);
+        // write VTK file
+        fprintf(fpvpf,"<?xml version=\"1.0\"?>\n");
+        fprintf(fpvpf,"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n");
+        fprintf(fpvpf,"  <UnstructuredGrid>\n");
+        fprintf(fpvpf,"    <Piece NumberOfPoints=\"%d\" NumberOfCells=\"0\">\n", sphere_Radius.size());
+        fprintf(fpvpf,"      <PointData Scalars=\"Radius\">\n");
+        DataFieldVTKWriter::writeVTKDataArray(fpvpf, "Position", sphere_Positions, 3);
+        DataFieldVTKWriter::writeVTKDataArray(fpvpf, "Velocity", sphere_Velocitys, 3);
+        DataFieldVTKWriter::writeVTKDataArray(fpvpf, "AngularVelocity", sphere_AngularVelocity, 3);
+        DataFieldVTKWriter::writeVTKDataArray(fpvpf, "Radius", sphere_Radius, 1);
+        DataFieldVTKWriter::writeVTKDataArray(fpvpf, "GranularTemperatureV", sphere_GranularTempV, 1);
+        DataFieldVTKWriter::writeVTKDataArray(fpvpf, "GranularTemperatureAV", sphere_GranularTempAV, 1);
+        ExtFieldWriterT::writeExternalFields(fpvpf);
 
-	fprintf(fpvpf,"      </PointData>\n");
- 	fprintf(fpvpf,"      <Points>\n");
-	fprintf(fpvpf,"        <DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">\n");
-	for(int i=0; i<sphere_Positions.size(); i++)
-		fprintf(fpvpf,"%g ", sphere_Positions[i]);
-	fprintf(fpvpf,"\n");
-	fprintf(fpvpf,"        </DataArray>\n");
-	fprintf(fpvpf,"      </Points>\n");
-    fprintf(fpvpf,"      <Cells>\n");
-	fprintf(fpvpf,"        <DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n");
-	fprintf(fpvpf,"        </DataArray>\n");
-	fprintf(fpvpf,"      </Cells>\n");
-	fprintf(fpvpf,"    </Piece>\n");
-	fprintf(fpvpf,"  </UnstructuredGrid>\n");
-	fprintf(fpvpf,"</VTKFile>\n");
-	fclose (fpvpf);
-};
-*/
+        fprintf(fpvpf,"      </PointData>\n");
+        fprintf(fpvpf,"      <Points>\n");
+        fprintf(fpvpf,"        <DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">\n");
+        for(int i=0; i<sphere_Positions.size(); i++)
+            fprintf(fpvpf,"%g ", sphere_Positions[i]);
+        fprintf(fpvpf,"\n");
+        fprintf(fpvpf,"        </DataArray>\n");
+        fprintf(fpvpf,"      </Points>\n");
+        fprintf(fpvpf,"      <Cells>\n");
+        fprintf(fpvpf,"        <DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n");
+        fprintf(fpvpf,"        </DataArray>\n");
+        fprintf(fpvpf,"      </Cells>\n");
+        fprintf(fpvpf,"    </Piece>\n");
+        fprintf(fpvpf,"  </UnstructuredGrid>\n");
+        fprintf(fpvpf,"</VTKFile>\n");
+        fclose (fpvpf);
+    };
+#endif   // _STD_CPP_11
 
 };   // namespace vedo
 

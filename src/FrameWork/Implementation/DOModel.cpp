@@ -219,8 +219,8 @@ DOModel::DOModel(std::ifstream& idof, unsigned int _version)
 	else
 		vExternalForce.Set(0.0, 0.0, 0.0);
 
-	idof.read((char*) &shColor     , sizeof(int16_t)          );
-	idof.read((char*) &shType      , sizeof(int8_t)           );
+	idof.read((char*) &shColor     , sizeof(unsigned __int32) );
+	idof.read((char*) &shType      , sizeof(unsigned __int32) );
 	idof.read((char*) &shAttributes, sizeof(DOShapeAttributes));
 
 	idof.read((char*) &MatOptSize  , sizeof(unsigned __int32));
@@ -393,8 +393,8 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 	idof.write((const char*) &dDensity,       sizeof(double)           );
 	idof.write((const char*) &dDensityFactor, sizeof(double)           );
 	idof.write((const char*) &vExternalForce, sizeof(njr::Vector3d)    );
-	idof.write((const char*) &shColor,        sizeof(int16_t)          );
-	idof.write((const char*) &shType,         sizeof(int8_t)           );
+	idof.write((const char*) &shColor,        sizeof(unsigned __int32) );
+	idof.write((const char*) &shType,         sizeof(unsigned __int32) );
 	idof.write((const char*) &shAttributes,   sizeof(DOShapeAttributes));
 
 	MatOptSize = (unsigned int) matAttributes.size();
@@ -434,8 +434,8 @@ std::ifstream& DOModel::operator << (std::ifstream &idof)
 	idof.read((char*) &dDensity      , sizeof(double)           );
 	idof.read((char*) &dDensityFactor, sizeof(double)           );
 	idof.read((char*) &vExternalForce, sizeof(njr::Vector3d)    );
- 	idof.read((char*) &shColor       , sizeof(int16_t)          );
-	idof.read((char*) &shType        , sizeof(int8_t)           );
+ 	idof.read((char*) &shColor       , sizeof(unsigned __int32) );
+	idof.read((char*) &shType        , sizeof(unsigned __int32) );
 	idof.read((char*) &shAttributes  , sizeof(DOShapeAttributes));
 
 	idof.read((char*) &MatOptSize    , sizeof(unsigned __int32));

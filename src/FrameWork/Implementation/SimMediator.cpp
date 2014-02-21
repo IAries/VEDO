@@ -573,18 +573,18 @@ void SimMediator::WriteInteractionForce
 		extForce_vec.push_back(extForce.z());
 	}
 
-/*
-	if (rank == 0)
-	{
-		DataFieldVTKWriter* wrapArr = DataFieldVTKWriter::Instance();
-		wrapArr->clearAll();
-		wrapArr->addArray("InteractionForce", 3, iactForce_vec);
-		wrapArr->addArray("FieldAcceleration", 3, fieldForce_vec);
-		wrapArr->addArray("ExternalForce", 3, extForce_vec);
-		wrapArr->addArray("TotalForce", 3, totalForce_vec);
-		pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
-	}
-*/
+    #ifdef _STD_CPP_11
+        if (rank == 0)
+        {
+            DataFieldVTKWriter* wrapArr = DataFieldVTKWriter::Instance();
+            wrapArr->clearAll();
+            wrapArr->addArray("InteractionForce", 3, iactForce_vec);
+            wrapArr->addArray("FieldAcceleration", 3, fieldForce_vec);
+            wrapArr->addArray("ExternalForce", 3, extForce_vec);
+            wrapArr->addArray("TotalForce", 3, totalForce_vec);
+            pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
+        }
+    #endif   // _STD_CPP_11
 };
 
 void SimMediator::Initiate()

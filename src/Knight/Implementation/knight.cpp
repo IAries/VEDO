@@ -767,10 +767,12 @@ vedo::DOWorld* WriteDOWorld (std::string filename, vedo::DOWorld* pw)
 	{
 		pw->WriteVPF(filename.c_str());
 	}
-//	else if (njr::CheckSubName(filename, ".vtu"))
-//	{
-//		pw->WriteVTK<NullExternalFieldVTKWriter>(filename.c_str());
-//	}
+	else if (njr::CheckSubName(filename, ".vtu"))
+	{
+		#ifdef _STD_CPP_11
+			pw->WriteVTK<vedo::NullExternalFieldVTKWriter>(filename.c_str());
+		#endif   // _STD_CPP_11
+	}
 	else if (njr::CheckSubName(filename, "_h.dxf"))
 	{
 		pw->HighDraw(filename.c_str());
@@ -800,10 +802,12 @@ vedo::DOWorld* WriteDOWorld (std::string filename, vedo::DOWorld* pw, vedo::Iact
 	{
 		pw->WriteVPF(filename.c_str());
 	}
-//	else if (njr::CheckSubName(filename, ".vtu"))
-//	{
-//		pw->WriteVTK<NullExternalFieldVTKWriter>(filename.c_str());
-//	}
+	else if (njr::CheckSubName(filename, ".vtu"))
+	{
+		#ifdef _STD_CPP_11
+			pw->WriteVTK<vedo::NullExternalFieldVTKWriter>(filename.c_str());
+		#endif   // _STD_CPP_11
+	}
 	else if (njr::CheckSubName(filename, "_h.dxf"))
 	{
 		pw->HighDraw(filename.c_str());

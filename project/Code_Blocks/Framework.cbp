@@ -40,6 +40,8 @@
 			<Add alias="All" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-D_STD_CPP_11" />
 			<Add directory="../../src/" />
 			<Add directory="C:/usr/xercesc/GCC/include/" />
 		</Compiler>

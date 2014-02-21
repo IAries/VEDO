@@ -86,11 +86,11 @@ public:
 
 private:
 
-	double _a;
-	double _b;
-	double _c;
-	double _d;
-	int8_t _sense;
+	double           _a;
+	double           _b;
+	double           _c;
+	double           _d;
+	unsigned __int32 _sense;
 
 };
 

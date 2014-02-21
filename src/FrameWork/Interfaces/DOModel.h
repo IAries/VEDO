@@ -16,7 +16,7 @@ namespace vedo
 // __DXFColor declared in <Utiltity/acadxf.h>
 typedef enum njrdxf::Color DOShapeColor;
 
-enum DOShapeType   // size: int8_t (-128~127)
+enum DOShapeType   // size: unsigned __int32
 {
 	NoType,
 	Sphere,
