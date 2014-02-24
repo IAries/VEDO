@@ -84,18 +84,29 @@ SimMediator::SimMediator
 	TimeInitiate();
 	FileLog.open("time_0.csv", std::ios::out);
 	FileLog
-		<< "Rank, SimulatedTime, System, ImpactSolving, FieldForceAdding, "
-		<< "ResponseUpdating, ContactDetection, NextStep, "
-		<< "DOContainerSynchronization, Partitioning, Computing, "
-		<< "Communication, Total"
+		<< "Rank, Simulated time, System, Impact solving, Field force adding, "
+		<< "Response updating, Contact detection, Next step, "
+		<< "DOContainer synchronization, Partitioning, Computing, "
+		<< "Communication, Total, "
+		<< "Ratio of System, Ratio of Impact solving, "
+		<< "Ratio of field force adding, Ratio of response updating, "
+		<< "ratio of contact detection, ratio of next step, "
+		<< "ratio of DOContainer synchronization, Ratio of partitioning, "
+		<< "Ratio of computing, Ratio of communication"
+		<< std::endl
+		<< 0 << ", "
+		<< pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent() << ", "
+		<< "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
 		<< std::endl;
 	FileLogSystemStatus.open("SystemStatus.csv", std::ios::out);
 	FileLogSystemStatus
-		<< "SystemTime, ElementNumber, InteractionNumber, ContactNumber, "
-		<< "SystemEnergy, PotentialEnergy, KineticEnergy, "
-		<< "KineticEnergyTranslation, KineticEnergyRotation, MinimalVelocity, "
-		<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
-		<< "NormMomentum, NormAngularMomentum";
+		<< "Simulated time, number of elements, number of interactions, "
+		<< "Number of contacts, "
+		<< "System energy, Potential energy, Kinetic energy, "
+		<< "Kinetic energy (translation), Kinetic energy (rotation), "
+		<< "Minimal velocity, Maximal velocity, "
+		<< "Minimal angular velocity, Maximal angular velocity, "
+		<< "Norm of momentum, Norm of angular momentum";
 
 	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 		FileLogSystemStatus << ", User-defined Value " << u+1;
@@ -132,20 +143,32 @@ SimMediator::SimMediator
 	name += ".csv";
 	FileLog.open(name.c_str(), std::ios::out);
 	FileLog
-		<< "Rank, SimulatedTime, System, ImpactSolving, FieldForceAdding, "
-		<< "ResponseUpdating, ContactDetection, NextStep, "
-		<< "DOContainerSynchronization, Partitioning, Computing, Communication, Total"
+		<< "Rank, Simulated time, System, Impact solving, Field force adding, "
+		<< "Response updating, Contact detection, Next step, "
+		<< "DOContainer synchronization, Partitioning, Computing, "
+		<< "Communication, Total, "
+		<< "Ratio of System, Ratio of Impact solving, "
+		<< "Ratio of field force adding, Ratio of response updating, "
+		<< "ratio of contact detection, ratio of next step, "
+		<< "ratio of DOContainer synchronization, Ratio of partitioning, "
+		<< "Ratio of computing, Ratio of communication"
+		<< std::endl
+		<< rank << ", "
+		<< pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent() << ", "
+		<< "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
 		<< std::endl;
 
 	if (rank == 0)
 	{
 		FileLogSystemStatus.open("SystemStatus.csv", std::ios::out);
-		FileLogSystemStatus
-			<< "SystemTime, ElementNumber, InteractionNumber, ContactNumber, "
-			<< "SystemEnergy, PotentialEnergy, KineticEnergy, "
-			<< "KineticEnergyTranslation, KineticEnergyRotation, MinimalVelocity, "
-			<< "MaximalVelocity, MinimalAngularVelocity, MaximalAngularVelocity, "
-			<< "NormMomentum, NormAngularMomentum, ";
+        FileLogSystemStatus
+            << "Simulated time, number of elements, number of interactions, "
+            << "Number of contacts, "
+            << "System energy, Potential energy, Kinetic energy, "
+            << "Kinetic energy (translation), Kinetic energy (rotation), "
+            << "Minimal velocity, Maximal velocity, "
+            << "Minimal angular velocity, Maximal angular velocity, "
+            << "Norm of momentum, Norm of angular momentum";
 
 		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
 			FileLogSystemStatus << ", User-defined Value " << u+1;
@@ -776,7 +799,26 @@ bool SimMediator::Run()
 			<< timePartitioning                                                  << ", "
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
-			<< timeTotal                                                         << std::endl;
+			<< timeTotal                                                         << ", ";
+        if(timeTotal != 0.0)
+        {
+            FileLog
+			<< timeSystem/timeTotal                                              << ", "
+			<< timeImpactSolving/timeTotal                                       << ", "
+			<< timeFieldForceAdding/timeTotal                                    << ", "
+			<< timeResponseUpdating/timeTotal                                    << ", "
+			<< timeContactDetection/timeTotal                                    << ", "
+			<< timeNextStep/timeTotal                                            << ", "
+			<< timeSyncDOContainer/timeTotal                                     << ", "
+			<< timePartitioning/timeTotal                                        << ", "
+			<< timeComputing/timeTotal                                           << ", "
+			<< timeCommunication/timeTotal                                       << std::endl;
+        }
+        else
+        {
+            FileLog
+			<< "0, 0, 0, 0, 0, 0, 0, 0, 0, 0"                                    << std::endl;
+        }
 	}
 
 	if (!bContinue)
@@ -893,7 +935,26 @@ bool SimMediator::Run
 			<< timePartitioning                                                  << ", "
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
-			<< timeTotal                                                         << std::endl;
+			<< timeTotal                                                         << ", ";
+        if(timeTotal != 0.0)
+        {
+            FileLog
+			<< timeSystem/timeTotal                                              << ", "
+			<< timeImpactSolving/timeTotal                                       << ", "
+			<< timeFieldForceAdding/timeTotal                                    << ", "
+			<< timeResponseUpdating/timeTotal                                    << ", "
+			<< timeContactDetection/timeTotal                                    << ", "
+			<< timeNextStep/timeTotal                                            << ", "
+			<< timeSyncDOContainer/timeTotal                                     << ", "
+			<< timePartitioning/timeTotal                                        << ", "
+			<< timeComputing/timeTotal                                           << ", "
+			<< timeCommunication/timeTotal                                       << std::endl;
+        }
+        else
+        {
+            FileLog
+			<< "0, 0, 0, 0, 0, 0, 0, 0, 0, 0"                                    << std::endl;
+        }
 	}
 
 	if (!bContinue)
@@ -1051,7 +1112,26 @@ bool SimMediator::ReDistribute()
 			<< timePartitioning                                                  << ", "
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
-			<< timeTotal                                                         << std::endl;
+			<< timeTotal                                                         << ", ";
+        if(timeTotal != 0.0)
+        {
+            FileLog
+			<< timeSystem/timeTotal                                              << ", "
+			<< timeImpactSolving/timeTotal                                       << ", "
+			<< timeFieldForceAdding/timeTotal                                    << ", "
+			<< timeResponseUpdating/timeTotal                                    << ", "
+			<< timeContactDetection/timeTotal                                    << ", "
+			<< timeNextStep/timeTotal                                            << ", "
+			<< timeSyncDOContainer/timeTotal                                     << ", "
+			<< timePartitioning/timeTotal                                        << ", "
+			<< timeComputing/timeTotal                                           << ", "
+			<< timeCommunication/timeTotal                                       << std::endl;
+        }
+        else
+        {
+            FileLog
+			<< "0, 0, 0, 0, 0, 0, 0, 0, 0, 0"                                    << std::endl;
+        }
 	}
 
 	if (!bContinue)
