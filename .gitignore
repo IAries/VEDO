@@ -68,6 +68,11 @@ local.properties
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
 
+# Code::Blocks cache files
+*.cbTemp
+*.depend
+*.layout
+
 # Visual C++ cache files
 ipch/
 *.aps

@@ -1,0 +1,1 @@
+For unknown reason, Knight.exe compiled by Microsoft VisualStudio 11 still cannot read 64-bit .IDO file.

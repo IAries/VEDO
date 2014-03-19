@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiCylinderAT.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiPlate.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiPlateWithCircularHole.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2Sphere.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2SphereAT.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOConstrainedQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOConstrainedQuasiPlate.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOFixedQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOFixedQuasiPlate.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOFixedQuasiPlateWithCircularHole.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOFixedSphere.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOOrbitalQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOOrbitalQuasiPlate.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOQuasiCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOQuasiPlate.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOQuasiPlateWithCircularHole.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\DOSphere.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\GSComplexShape.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\GSCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\GSEllipsoid.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\GSRectangle.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\GSSphere.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\ISwBSDBF.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\ISwBtSDBF.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\LeapConsultant.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\NBSConsultant.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\NearConsultant.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\SafeConsultant.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiCylinder.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiCylinderAT.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiPlate.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiPlateWithCircularHole.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2Sphere.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2SphereAT.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOConstrainedQuasiCylinder.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOConstrainedQuasiPlate.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOFixedQuasiCylinder.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOFixedQuasiPlate.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOFixedQuasiPlateWithCircularHole.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOFixedSphere.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOOrbitalQuasiCylinder.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOOrbitalQuasiPlate.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOQuasiCylinder.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOQuasiPlate.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOQuasiPlateWithCircularHole.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\DOSphere.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\GSComplexShape.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\GSCylinder.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\GSEllipsoid.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\GSRectangle.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\GSSphere.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\ISwBSDBF.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\ISwBtSDBF.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\LeapConsultant.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\ModuleList.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\NBSConsultant.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\NearConsultant.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\SafeConsultant.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{21F378B0-A1D0-4B65-A1DF-A692F11E6560}</ProjectGuid>
+    <RootNamespace>common</RootNamespace>
+    <ProjectName>common</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\lib\vedo\VisualStudio11-32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\obj\vedo\VisualStudio11-32\debug\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\lib\vedo\VisualStudio11-32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\obj\vedo\VisualStudio11-32\release\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)-debug$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libvedo-$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

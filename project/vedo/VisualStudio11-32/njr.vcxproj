@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8EE79D93-E8C1-465D-909A-F2D47DAD53FB}</ProjectGuid>
+    <RootNamespace>njr</RootNamespace>
+    <ProjectName>njr</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\lib\vedo\VisualStudio11-32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\obj\vedo\VisualStudio11-32\debug\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\lib\vedo\VisualStudio11-32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\obj\vedo\VisualStudio11-32\release\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)-debug$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libvedo-$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\ACADXF.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\ACADXF_Solid.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Array3d.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Constants.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\EFPathDependent.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\EFScatter.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\EFSExtrapolation.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\EFSTimeHistory.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\ExplicitFunction.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\GeoUtility.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\HalfSpace.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\LinearProgramming.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Matrix.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\ParameterSet.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\ParticularVector.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Polygon.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Polyhedra.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\RandomGenerator.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\RickyRandom.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\TimeControlVariable.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\TimeHistory.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Utility.h" />
+    <ClInclude Include="..\..\..\src\vedo\njr\interfaces\Vector3d.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\ACADXF.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\ACADXF_Solid.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\EFPathDependent.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\GeoUtility.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\HalfSpace.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\LinearProgramming.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\Matrix.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\Polygon.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\Polyhedra.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\RandomGenerator.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\RickyRandom.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\Utility.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\njr\implementation\Vector3d.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
