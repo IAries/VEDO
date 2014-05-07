@@ -57,6 +57,10 @@ union DOShapeAttributes
 {
 	struct
 	{
+	} notype;
+
+	struct
+	{
 		double radius;
 	} sphere;
 
@@ -89,6 +93,14 @@ union DOShapeAttributes
 		double ylength;
 		double zlength;
 	} ellipsoid;
+
+	struct
+	{
+	} polyhedra;
+
+	struct
+	{
+	} dmsphere;
 
 	struct
 	{

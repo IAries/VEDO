@@ -28,7 +28,7 @@ public:
 
 	const EFSTimeHistory& operator = (const EFSTimeHistory& ef)
 	{
-		(this->_sFileName)  = ef._sFileName;
+		(this->_sFileName) = ef._sFileName;
 		(this->_KeyPoints) = ef._KeyPoints;
 		return *this;
 	};
@@ -111,7 +111,7 @@ public:
 		}
 	};
 
-	virtual TValue operator () (const double& dTime)
+	virtual TValue operator () (const double& dTime) const
 	{
 		unsigned long ulSize = (this->_KeyPoints).size();
 		if (ulSize == 0)

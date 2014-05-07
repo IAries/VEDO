@@ -36,6 +36,7 @@
     <ClCompile Include="..\..\..\src\vedo\common\implementation\GSSphere.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\ISwBSDBF.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\ISwBtSDBF.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\ISwHertz.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\LeapConsultant.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\NBSConsultant.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\NearConsultant.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\GSSphere.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\ISwBSDBF.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\ISwBtSDBF.h" />
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\ISwHertz.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\LeapConsultant.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\ModuleList.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\NBSConsultant.h" />

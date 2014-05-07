@@ -45,7 +45,7 @@ public:
 	{
 	};
 
-	virtual TY operator () (const TX& tX) = 0;
+	virtual TY operator () (const TX& tX) const = 0;
 };
 
 };   // namespace njr

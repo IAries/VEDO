@@ -240,12 +240,12 @@ void IactRecordTab::print() const
 	}
 };
 
-void IactRecordTab::DumpIactStatus(const char* filename) const
+void IactRecordTab::DumpIactStatus(const double& time, const char* filename) const
 {
     std::ofstream oCSVFile(filename, std::ios::out);
 
 	oCSVFile
-		<< "MasterDOStatusSN, SlaveDOStatusSN, "
+		<< "Time, MasterDOStatusSN, SlaveDOStatusSN, "
 		<< "Contact, Bond, "
 		<< "RememberedNormalStiffness, RememberedInitialVelocity, Overlap, "
 		<< "RememberedShearForce-X, "
@@ -274,7 +274,10 @@ void IactRecordTab::DumpIactStatus(const char* filename) const
         ppulul = &(pmapImStatus->first);
         pis    = &(pmapImStatus->second);
 
-        oCSVFile << ppulul->first << ", " << ppulul->second << ", ";
+        oCSVFile
+			<< time           << ", "
+			<< ppulul->first  << ", "
+			<< ppulul->second << ", ";
 
         if(pis->Contact())
         {

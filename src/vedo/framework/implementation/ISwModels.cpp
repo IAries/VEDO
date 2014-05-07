@@ -111,7 +111,7 @@ njr::Vector3d ISwModels::NormalForceHertzSpring
 {
 	return njr::Vector3d
 		(- dKn * pow(dImpactDepth, 1.5) * vImpactDirection
-		 - dCn * vRelativeNormalVelocity                       );
+		 - dCn * vRelativeNormalVelocity                  );
 };
 
 njr::Vector3d ISwModels::NormalForce

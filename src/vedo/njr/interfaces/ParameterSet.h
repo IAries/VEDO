@@ -1,11 +1,15 @@
 #ifndef _NJR_PARAMETER_SET_H
 #define _NJR_PARAMETER_SET_H
 
+#include <vedo/njr/interfaces/Utility.h>
+
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <map>
+#include <functional>
 #include <iostream>
+#include <map>
 
 namespace njr
 {
@@ -45,34 +49,24 @@ public:
 
 	bool Erase(const TNAME& tName)
 	{
-		bool bHasDeleted = false;
+		typename std::map<TNAME, TVALUE>::iterator
+			it = _mttParameter.find(tName);
 
-		if(!_mttParameter.empty())
+		if(it != _mttParameter.end())
 		{
-			typename std::map<TNAME, TVALUE>::iterator _mIterator = _mttParameter.begin();
-			bool bContinued = true;
-			while(bContinued)
-			{
-				if(_mIterator->first == tName)
-				{
-					_mttParameter.erase(_mIterator);
-					bContinued  = false;
-					bHasDeleted = true;
-				}
-				else
-				{
-					_mIterator++;
-					if (_mIterator == _mttParameter.end())
-						bContinued = false;
-				}
-			}
+			_mttParameter.erase(it);
+			return true;
 		}
-
-		return bHasDeleted;
+		else
+		{
+			return false;
+		}
 	};
 
 	const TVALUE& operator () (const TNAME& tName) const
 	{
+		return _mttParameter.at(tName);
+/*
 		for(typename std::map<TNAME, TVALUE>::const_iterator
 			_mIterator  = _mttParameter.begin();
 			_mIterator != _mttParameter.end()  ;
@@ -83,11 +77,12 @@ public:
 		}
 
 		std::cerr
-			<< "The Keyword "
+			<< "The parameter "
 			<< tName
 			<< " doesn't exist!!"
 			<< std::endl;
 		std::exit(-1);
+*/
 	};
 
 	TVALUE& operator[] (const TNAME& tName)
@@ -105,11 +100,15 @@ public:
 		for(typename std::map<TNAME, TVALUE>::const_iterator
 			_mIterator  = _mttParameter.begin();
 			_mIterator != _mttParameter.end()  ;
-			_mIterator++                         )
+			_mIterator++                        )
 		{
 			if(pstTarget.Defined(_mIterator->first))
+			{
 				if (abs(_mIterator->second) < abs(pstTarget(_mIterator->first)))
+				{
 					return false;
+				}
+			}
 		}
 
 		return true;
@@ -120,11 +119,15 @@ public:
 		for(typename std::map<TNAME, TVALUE>::const_iterator
 			_mIterator  = _mttParameter.begin();
 			_mIterator != _mttParameter.end()  ;
-			_mIterator++                         )
+			_mIterator++                        )
 		{
 			if(pstTarget.Defined(_mIterator->first))
+			{
 				if (abs(_mIterator->second) > abs(pstTarget(_mIterator->first)))
+				{
 					return false;
+				}
+			}
 		}
 
 		return true;
@@ -138,7 +141,9 @@ public:
 				_mIterator = _mttParameter.begin();
 
 			for(unsigned uCounter=0; uCounter<u; uCounter++)
+			{
 				_mIterator++;
+			}
 
 			return _mIterator->first;
 		}
@@ -148,32 +153,60 @@ public:
 		}
 	};
 
-	bool Defined(const TNAME& tName) const
+	const std::pair<TNAME, TVALUE> GetNameAndData(const unsigned& u) const
 	{
-		for(typename std::map<TNAME, TVALUE>::const_iterator
-			_mIterator  = _mttParameter.begin();
-			_mIterator != _mttParameter.end()  ;
-			_mIterator++                         )
+		if (u < _mttParameter.size())
 		{
-			if(_mIterator->first == tName)
-				return true;
+			typename std::map<TNAME, TVALUE>::const_iterator
+				_mIterator = _mttParameter.begin();
+
+			for(unsigned uCounter=0; uCounter<u; uCounter++)
+			{
+				_mIterator++;
+			}
+
+			return std::make_pair(_mIterator->first, _mIterator->second);
 		}
-		return false;
+		else
+		{
+			return std::make_pair(TNAME(), TVALUE());
+		}
 	};
 
-	void Print(std::ostream& os) const
+	bool Defined(const TNAME& tName) const
 	{
-		for(typename std::map<TNAME, TVALUE>::const_iterator
+		typename std::map<TNAME, TVALUE>::const_iterator
+			it = _mttParameter.find(tName);
+
+		if(it != _mttParameter.end())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	};
+
+	const std::map<TNAME, TVALUE>* GetData() const
+	{
+		return &_mttParameter;
+	};
+
+	template <typename TVariable>
+	void CallFunctionInTVALUE(const TVariable& tv)
+	{
+		// Aries: We have not make the function "TVALUE::Update" as a template function
+		typedef std::mem_fun1_t<void, TVALUE, const TVariable&> Func_Type;
+		Func_Type func_obj(&TVALUE::Update);
+		njr::binder2nd_refArg<Func_Type> binded_func(func_obj, tv);
+
+		for(typename std::map<TNAME, TVALUE>::iterator
 			_mIterator  = _mttParameter.begin();
 			_mIterator != _mttParameter.end()  ;
 			_mIterator++                         )
 		{
-			os
-				<< '['
-				<< _mIterator->first
-				<< "]: "
-				<< _mIterator->second
-				<< std::endl;
+			_mIterator->second.Update(tv);
 		}
 	};
 
@@ -187,7 +220,20 @@ private:
 template <typename TNAME, typename TVALUE>
 std::ostream& operator << (std::ostream& os, const njr::ParameterSet<TNAME, TVALUE>& ps)
 {
-	ps.Print(os);
+	const std::map<TNAME, TVALUE>* _Data = ps.GetData();
+	for(typename std::map<TNAME, TVALUE>::const_iterator
+		_mIterator  = _Data->begin();
+		_mIterator != _Data->end()  ;
+		_mIterator++                                    )
+	{
+		os
+			<< "["
+			<< _mIterator->first
+			<< "]: "
+			<< _mIterator->second
+			<< std::endl;
+	}
+
 	return os;
 };
 

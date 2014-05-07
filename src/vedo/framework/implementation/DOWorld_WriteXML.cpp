@@ -279,14 +279,21 @@ void DOWorld::WriteXML(const char* filename) const
 		const std::vector<DOMaterialAttribute>&
 			cMatOpt = (*idoml)->GetMaterialAttributes();
 
-		for (unsigned int i=0; i<cMatOpt.size(); i++)
+		if(cMatOpt.size() != 0)
 		{
-			fprintf
-				(fpxml,
-				"<MaterialOption Name=\"%s\" Value=\"%g\" />\n",
-				cMatOpt[i].Name.c_str(),
-				cMatOpt[i].Value        );
+			fprintf(fpxml, "\t\t\t<MaterialOption>\n");
+			for (unsigned int i=0; i<cMatOpt.size(); i++)
+			{
+				fprintf
+					(fpxml,
+					 "\t\t\t\t<Option Name=\"%s\" Value=\"%g\" />\n",
+					 cMatOpt[i].Name.c_str(),
+					 cMatOpt[i].Value                        );
+			}
+
+			fprintf(fpxml, "\t\t\t</MaterialOption>\n");
 		}
+
 		fprintf(fpxml,"\t\t</DOModel>\n");
 	}
 	fprintf(fpxml, "\t</DOModelTab>\n");
@@ -624,14 +631,21 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 		const std::vector<DOMaterialAttribute>&
 			cMatOpt = (*idoml)->GetMaterialAttributes();
 
-		for (unsigned int i=0; i<cMatOpt.size(); i++)
+		if(cMatOpt.size() != 0)
 		{
-			fprintf
-				(fpxml,
-				"<MaterialOption Name=\"%s\" Value=\"%g\" />\n",
-				cMatOpt[i].Name.c_str(),
-				cMatOpt[i].Value        );
+			fprintf(fpxml, "\t\t\t<MaterialOption>\n");
+			for (unsigned int i=0; i<cMatOpt.size(); i++)
+			{
+				fprintf
+					(fpxml,
+					 "\t\t\t\t<Option Name=\"%s\" Value=\"%g\" />\n",
+					 cMatOpt[i].Name.c_str(),
+					 cMatOpt[i].Value                        );
+			}
+
+			fprintf(fpxml, "\t\t\t</MaterialOption>\n");
 		}
+
 		fprintf(fpxml,"\t\t</DOModel>\n");
 	}
 	fprintf(fpxml, "\t</DOModelTab>\n");
@@ -740,15 +754,29 @@ void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
 				vAngularImpactToMaster.y(),
 				vAngularImpactToMaster.z() );
 
-			for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
-				fprintf (fpxml,
-					"\t\t\t<AccumulativeUserDefinedValue SN=\"%d\" Value=\"%g\"/>\n",
-					u, *(dpUDV+u)                                        );
+			if(vedo::uNumUDDImpactStatus != 0)
+			{
+				fprintf(fpxml, "\t\t\t<AccumulativeUserDefinedValue>\n");
+				for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
+				{
+					fprintf
+						(fpxml,
+						 "\t\t\t\t<AUDV SN=\"%d\" Value=\"%g\" />\n",
+						 u, *(dpUDV+u)                               );
+				}
+				fprintf(fpxml, "\t\t\t</AccumulativeUserDefinedValue>\n");
 
-			for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
-				fprintf (fpxml,
-					"\t\t\t<UserDefinedValue SN=\"%d\" Value=\"%g\"/>\n",
-					u, *(dpUDV+3*vedo::uNumUDDImpactStatus+u)                                        );
+				fprintf(fpxml, "\t\t\t<UserDefinedValue>\n");
+				for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
+				{
+					fprintf
+						(fpxml,
+						 "\t\t\t\t<UDV SN=\"%d\" Value=\"%g\" />\n",
+						 u, *(dpUDV+3*vedo::uNumUDDImpactStatus+u)  );
+				}
+				fprintf(fpxml, "\t\t\t</UserDefinedValue>\n");
+
+			}
 
 			fprintf (fpxml, "\t\t</IactStatus>\n");
 		}

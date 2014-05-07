@@ -141,6 +141,10 @@ public:
 
 	bool ReadXML(const char* xmlFile);
 
+	bool ReadXMLBoost(const char* xmlFile, IactRecordTab*);
+
+	bool ReadXMLBoost(const char* xmlFile);
+
 	void WriteXML(const char* filename) const;
 
 	void WriteXML(const char* filename, const IactRecordTab*) const;

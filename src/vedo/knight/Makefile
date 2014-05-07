@@ -13,13 +13,13 @@ debug: ${VEDO_BIN}${TMP_TARGET}-debug
 release: ${VEDO_BIN}${TMP_TARGET}
 
 ${VEDO_BIN}${TMP_TARGET}-debug: ${TMP_OBJS_DEBUG}
-	${LNK} -o $@ $^ ${LNK_FLAGxd}
+	${LNK} -o $@ $^ ${LNK_FLAGd}
 
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
 ${VEDO_BIN}${TMP_TARGET}: ${TMP_OBJS_RELEASE}
-	${LNK} -o $@ $^ ${LNK_FLAGx}
+	${LNK} -o $@ $^ ${LNK_FLAG}
 
 ${TMP_RELEASE}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAG} -c $<

@@ -1,477 +1,267 @@
 #include <vedo/Constants.h>
 #include <vedo/framework/interfaces/DOModel.h>
+#include <vedo/framework/interfaces/DOWorld.h>
 #include <vedo/framework/interfaces/IactRecordTab.h>
 #include <vedo/framework/interfaces/ImpactStatus.h>
-#include <xercesc/dom/DOMAttr.hpp>
-//#include <xercesc/dom/DOMBuilder.hpp>
-#include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMElement.hpp>
-#include <xercesc/dom/DOMError.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
-#include <xercesc/dom/DOMException.hpp>
-#include <xercesc/dom/DOMImplementation.hpp>
-#include <xercesc/dom/DOMImplementationLS.hpp>
-#include <xercesc/dom/DOMImplementationRegistry.hpp>
-#include <xercesc/dom/DOMLSParser.hpp>
-#include <xercesc/dom/DOMLocator.hpp>
-#include <xercesc/dom/DOMNamedNodeMap.hpp>
-#include <xercesc/dom/DOMNodeList.hpp>
-#include <xercesc/parsers/AbstractDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/util/XMLString.hpp>
+
+#include <boost/foreach.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <cstdlib>
 
-XERCES_CPP_NAMESPACE_USE
-
-static const char* trans (const XMLCh* const toTranscode);
-static const XMLCh* XMLtrans (const char* toTranscode);
-
-class DOMCountErrorHandler : public DOMErrorHandler
+njr::Vector3d Node2Vector3d(boost::property_tree::ptree* pt)
 {
-
-public:
-
-	DOMCountErrorHandler():fSawErrors(false)
-	{
-	};
-
-	~DOMCountErrorHandler()
-	{
-	};
-
-	// Getter methods
-	bool getSawErrors() const
-	{
-		return fSawErrors;
-	};
-
-	// Implementation of the DOM ErrorHandler interface
-
-	bool handleError(const DOMError& domError)
-	{
-		fSawErrors = true;
-		if (domError.getSeverity() == DOMError::DOM_SEVERITY_WARNING)
-		{
-			std::cout << std::endl << "Warning at file ";
-		}
-		else if (domError.getSeverity() == DOMError::DOM_SEVERITY_ERROR)
-		{
-			std::cout << std::endl << "Error at file ";
-		}
-		else
-		{
-			std::cout << std::endl << "Fatal Error at file ";
-		}
-
-		std::cout
-			<< trans (domError.getLocation()->getURI() )
-			<< ", line "
-			<< domError.getLocation()->getLineNumber()
-			<< ", char "
-			<< domError.getLocation()->getColumnNumber()
-			<< std::endl
-			<< "  Message: "
-			<< trans(domError.getMessage())
-			<< std::endl;
-		return true;
-	};
-
-	void resetErrors()
-	{
-		fSawErrors = false;
-	};
-
-private :
-
-	// Unimplemented constructors and operators
-	DOMCountErrorHandler(const DOMCountErrorHandler&);
-	void operator=(const DOMCountErrorHandler&);
-
-	/**************************************************************************
-	 * Private data members
-	 *
-	 * fSawErrors
-	 * This is set if we get any errors, and is queryable via a getter method.
-	 * Its used by the main code to suppress output if there are errors.
-	 **************************************************************************/
-	bool fSawErrors;
+	boost::property_tree::ptree* pt2 = &(pt->get_child("<xmlattr>"));
+	return
+		njr::Vector3d
+			(pt2->get<double>("x"),
+			 pt2->get<double>("y"),
+			 pt2->get<double>("z") );
 };
 
-#include <vedo/framework/interfaces/DOWorld.h>
-
-static const char* trans(const XMLCh* const toTranscode)
+njr::HalfSpace Node2HalfSpace(boost::property_tree::ptree* pt)
 {
-	static char tempStr[256];
-	char *g;
-	g = XMLString::transcode(toTranscode);
-	strncpy (tempStr, g, 255);
-	XMLString::release(&g);
-	return tempStr;
-};
-
-static const XMLCh* XMLtrans(const char* toTranscode)
-{
-	static XMLCh tempStr[256];
-	XMLString::transcode(toTranscode, tempStr, 255);
-	return tempStr;
-};
-
-static bool node2data(std::string& des, const DOMNode* node)
-{
-	if (node == 0)
-	{
-		return false;
-	}
-	des = trans(node->getFirstChild()->getNodeValue());
-	return true;
-};
-
-static bool node2data(double& des, const DOMNode* node)
-{
-	if (node == 0)
-	{
-		return false;
-	}
-	des = atof(trans(node->getFirstChild()->getNodeValue()));
-	return true;
-};
-
-static bool node2data(unsigned& des, const DOMNode* node)
-{
-	if (node == 0)
-	{
-		return false;
-	}
-	des = atoi(trans(node->getFirstChild()->getNodeValue()));
-	return true;
-};
-
-static bool node2data(unsigned long& des, const DOMNode* node)
-{
-	if (node == 0)
-	{
-		return false;
-	}
-	des = atoi(trans(node->getFirstChild()->getNodeValue()));
-	return true;
-};
-
-static bool node2data(bool& des, const DOMNode* node)
-{
-	if (node == 0)
-	{
-		return false;
-	}
-	des = atoi(trans(node->getFirstChild()->getNodeValue()));
-	return true;
-};
-
-static bool node2data(vedo::DOShapeColor& des, const DOMNode* node)
-{
-	std::string sTmp;
-	if (node == 0)
-	{
-		des = njrdxf::bylayer;
-		return false;
-	}
-
-	sTmp = trans (node->getFirstChild()->getNodeValue()) ;
-
-	if (sTmp =="red")
-	{
-		des = njrdxf::red;
-	}
-	else if (sTmp =="yellow")
-	{
-		des = njrdxf::yellow;
-	}
-	else if (sTmp =="green")
-	{
-		des = njrdxf::green;
-	}
-	else if (sTmp =="cyan")
-	{
-		des = njrdxf::cyan;
-	}
-	else if (sTmp =="blue")
-	{
-		des = njrdxf::blue;
-	}
-	else if (sTmp =="magenta")
-	{
-		des = njrdxf::magenta;
-	}
-	else if (sTmp =="bylayer")
-	{
-		des = njrdxf::bylayer;
-	}
-	else
-	{
-		des = njrdxf::bylayer;
-	}
-	return true;
-};
-
-static bool node2data
-	(vedo::DOShapeType& st, vedo::DOShapeAttributes& sa, const DOMNode* node)
-{
-	const DOMElement* element = (DOMElement*) node;
-	const DOMElement* shape;
-
-	shape = (DOMElement*) element
-		->getElementsByTagName(XMLtrans("Sphere"))->item(0);
-	if (shape != 0)
-	{
-		st = vedo::Sphere;
-		node2data
-			(sa.sphere.radius, shape->getAttributeNode(XMLtrans("Radius")));
-		return true;
-	}
-
-	shape = (DOMElement*) element
-		->getElementsByTagName(XMLtrans("QuasiPlate"))->item(0);
-	if (shape != 0)
-	{
-		st = vedo::QuasiPlate;
-		node2data(sa.quasiplate.width , shape->getAttributeNode(XMLtrans("Width" )));
-		node2data(sa.quasiplate.length, shape->getAttributeNode(XMLtrans("Length")));
-		node2data(sa.quasiplate.height, shape->getAttributeNode(XMLtrans("Height")));
-		return true;
-	}
-
-	shape = (DOMElement*) element
-		->getElementsByTagName(XMLtrans("QuasiPlateWithCircularHole"))->item(0);
-	if (shape != 0)
-	{
-		st = vedo::QuasiPlateWithCircularHole;
-		node2data(sa.quasiplatewithcircularhole.width      , shape->getAttributeNode(XMLtrans("Width"      )));
-		node2data(sa.quasiplatewithcircularhole.length     , shape->getAttributeNode(XMLtrans("Length"     )));
-		node2data(sa.quasiplatewithcircularhole.height     , shape->getAttributeNode(XMLtrans("Height"     )));
-		node2data(sa.quasiplatewithcircularhole.holeradius , shape->getAttributeNode(XMLtrans("HoleRadius" )));
-		node2data(sa.quasiplatewithcircularhole.holexoffset, shape->getAttributeNode(XMLtrans("HoleXOffset")));
-		node2data(sa.quasiplatewithcircularhole.holeyoffset, shape->getAttributeNode(XMLtrans("HoleYOffset")));
-		return true;
-	}
-
-	shape = (DOMElement*) element
-		->getElementsByTagName(XMLtrans("QuasiCylinder"))->item(0);
-	if (shape != 0)
-	{
-		st = vedo::QuasiCylinder;
-		node2data(sa.quasicylinder.radius, shape->getAttributeNode(XMLtrans("Radius")));
-		node2data(sa.quasicylinder.height, shape->getAttributeNode(XMLtrans("Height")));
-		return true;
-	}
-
-	shape = (DOMElement*) element
-		->getElementsByTagName(XMLtrans ("Ellipsoid"))->item(0);
-	if (shape != 0)
-	{
-		st = vedo::Ellipsoid;
-		node2data(sa.ellipsoid.xlength, shape->getAttributeNode(XMLtrans("XLength")));
-		node2data(sa.ellipsoid.ylength, shape->getAttributeNode(XMLtrans("YLength")));
-		node2data(sa.ellipsoid.zlength, shape->getAttributeNode(XMLtrans("ZLength")));
-		return true;
-	}
-
-	shape = (DOMElement*) element
-		->getElementsByTagName(XMLtrans ("Polyhedra"))->item(0);
-	if (shape != 0)
-	{
-		st = vedo::Polyhedra;
-		return true;
-	}
-
-	st = vedo::NoType;
-	return false;
-};
-
-static bool node2data(njr::Vector3d& des, const DOMNode *node)
-{
-	double x, y, z;
-	if (node == 0)
-	{
-		return false;
-	}
-
-	const DOMElement* vector = (DOMElement*) node;
-	node2data(x, vector->getAttributeNode(XMLtrans("x")));
-	node2data(y, vector->getAttributeNode(XMLtrans("y")));
-	node2data(z, vector->getAttributeNode(XMLtrans("z")));
-
-	des.Set(x, y, z) ;
-	return true;
-};
-
-static bool node2data(njr::HalfSpace& des, const DOMNode *node)
-{
-	double a, b, c, d;
-	std::string sense;
+	boost::property_tree::ptree* pt2 = &(pt->get_child("<xmlattr>"));
+	std::string sense = pt2->get<std::string>("sense");
 	Sense s;
-
-	if (node == 0)
-	{
-		return false;
-	}
-
-	const DOMElement* halfspace = (DOMElement*) node;
-	node2data(a, halfspace->getAttributeNode(XMLtrans("a")));
-	node2data(b, halfspace->getAttributeNode(XMLtrans("b")));
-	node2data(c, halfspace->getAttributeNode(XMLtrans("c")));
-	node2data(d, halfspace->getAttributeNode(XMLtrans("d")));
-	node2data(sense, halfspace->getAttributeNode(XMLtrans("sense")));
-
-	if (sense =="E")
+	if (sense == "E")
 	{
 		s = E;
 	}
-	else if (sense =="L")
+	else if (sense == "L")
 	{
 		s = L;
 	}
-	else if (sense =="G")
+	else if (sense == "G")
 	{
 		s = G;
 	}
+	else
+	{
+		s = E;
+	}
 
-	des.Set(a, b, c, s, d);
-
-	return true;
+	return
+		njr::HalfSpace
+			(pt2->get<double>("a"),
+			 pt2->get<double>("b"),
+			 pt2->get<double>("c"),
+			 s,
+			 pt2->get<double>("d") );
 };
 
-static vedo::SystemParameter* node2sp(const DOMDocument* doc)
+std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
+	Node2DOShapeTypeAndAttributes(boost::property_tree::ptree* pt)
 {
-	double        dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent;
+	vedo::DOShapeType       st;
+	vedo::DOShapeAttributes sa;
+
+	boost::property_tree::ptree *pt2, *pt3;
+
+	if(pt->get_child_optional("Sphere"))
+	{
+		pt2 = &(pt->get_child("Sphere"));
+		st = vedo::Sphere;
+		sa.sphere.radius = pt2->get<double>("<xmlattr>.Radius", 0.0);
+		if(sa.sphere.radius <= 0.0)
+		{
+			std::cout
+				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "        Note: parameter of \"sphere\" is wrong!!" << std::endl;
+			exit(0);
+		}
+	}
+	else if(pt->get_child_optional("QuasiPlate"))
+	{
+		pt2 = &(pt->get_child("QuasiPlate"));
+		st = vedo::QuasiPlate;
+		sa.quasiplate.width  = pt2->get<double>("<xmlattr>.Width" , 0.0);
+		sa.quasiplate.length = pt2->get<double>("<xmlattr>.Length", 0.0);
+		sa.quasiplate.height = pt2->get<double>("<xmlattr>.Height", 0.0);
+		if(   (sa.quasiplate.width  <= 0.0)
+		   || (sa.quasiplate.length <= 0.0)
+		   || (sa.quasiplate.height <= 0.0))
+		{
+			std::cout
+				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "        Note: parameter of \"QuasiPlate\" is wrong!!" << std::endl;
+			exit(0);
+		}
+	}
+	else if(pt->get_child_optional("QuasiPlateWithCircularHole"))
+	{
+		pt2 = &(pt->get_child("QuasiPlateWithCircularHole"));
+		st = vedo::QuasiPlateWithCircularHole;
+		sa.quasiplatewithcircularhole.width       = pt2->get<double>("<xmlattr>.Width"      , 0.0);
+		sa.quasiplatewithcircularhole.length      = pt2->get<double>("<xmlattr>.Length"     , 0.0);
+		sa.quasiplatewithcircularhole.height      = pt2->get<double>("<xmlattr>.Height"     , 0.0);
+		sa.quasiplatewithcircularhole.holeradius  = pt2->get<double>("<xmlattr>.HoleRadius" , 0.0);
+		sa.quasiplatewithcircularhole.holexoffset = pt2->get<double>("<xmlattr>.HoleXOffset", 0.0);
+		sa.quasiplatewithcircularhole.holeyoffset = pt2->get<double>("<xmlattr>.HoleYOffset", 0.0);
+		if(   (sa.quasiplatewithcircularhole.width      <= 0.0)
+		   || (sa.quasiplatewithcircularhole.length     <= 0.0)
+		   || (sa.quasiplatewithcircularhole.height     <= 0.0)
+		   || (sa.quasiplatewithcircularhole.holeradius <= 0.0))
+		{
+			std::cout
+				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "        Note: parameter of \"QuasiPlateWithCircularHole\" is wrong!!" << std::endl;
+			exit(0);
+		}
+	}
+	else if(pt->get_child_optional("QuasiCylinder"))
+	{
+		pt2 = &(pt->get_child("QuasiCylinder"));
+		st = vedo::QuasiCylinder;
+		sa.quasicylinder.radius = pt2->get<double>("<xmlattr>.Radius", 0.0);
+		sa.quasicylinder.height = pt2->get<double>("<xmlattr>.Height", 0.0);
+		if(   (sa.quasicylinder.radius <= 0.0)
+		   || (sa.quasicylinder.height <= 0.0))
+		{
+			std::cout
+				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "        Note: parameter of \"QuasiCylinder\" is wrong!!" << std::endl;
+			exit(0);
+		}
+	}
+	else if(pt->get_child_optional("Ellipsoid"))
+	{
+		pt2 = &(pt->get_child("Ellipsoid"));
+		st = vedo::Ellipsoid;
+		sa.ellipsoid.xlength = pt2->get<double>("<xmlattr>.XLength", 0.0);
+		sa.ellipsoid.ylength = pt2->get<double>("<xmlattr>.YLength", 0.0);
+		sa.ellipsoid.zlength = pt2->get<double>("<xmlattr>.ZLength", 0.0);
+		if(   (sa.ellipsoid.xlength <= 0.0)
+		   || (sa.ellipsoid.ylength <= 0.0)
+		   || (sa.ellipsoid.zlength <= 0.0))
+		{
+			std::cout
+				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "        Note: parameter of \"Ellipsoid\" is wrong!!" << std::endl;
+			exit(0);
+		}
+	}
+	else if(pt->get_child_optional("Polyhedra"))
+	{
+		pt2 = &(pt->get_child("Polyhedra"));
+		st = vedo::Polyhedra;
+	}
+	else if(pt->get_child_optional("DMSphere"))
+	{
+		pt2 = &(pt->get_child("DMSphere"));
+		st = vedo::DMSphere;
+	}
+	else if(pt->get_child_optional("polyhedrabrep"))
+	{
+		pt2 = &(pt->get_child("polyhedrabrep"));
+		st = vedo::PolyhedraBRep;
+	}
+	else
+	{
+		st = vedo::NoType;
+	}
+
+	return std::make_pair(st, sa);
+};
+
+static vedo::SystemParameter*
+	Node2SystemParameter(boost::property_tree::ptree* pt)
+{
+	std::string sName;
+	boost::property_tree::ptree* pt2;
+	double dValue;
+	double dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent;
 	njr::Vector3d
 		vFieldAcceleration,
 		vLowerBoundaryZOI, vUpperBoundaryZOI,
 		vLowerBoundaryPBC, vUpperBoundaryPBC;
 
-	const DOMElement* element
-		= (DOMElement *)doc
-			->getElementsByTagName(XMLtrans("SimConstant"))->item(0);
-	const DOMElement* element2;
-
-	DOMNodeList* nl_Constant;
-	std::string sName;
-    if(element)
-    {
-		nl_Constant = element->getElementsByTagName(XMLtrans("Constant"));
-		for(unsigned long ul=0; ul<nl_Constant->getLength(); ul++)
+	if (pt->get_child_optional("SimConstant"))
+	{
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("SimConstant")               )
 		{
-			element2 = (DOMElement*)(nl_Constant->item(ul));
-			node2data(sName, element2->getAttributeNode(XMLtrans("Name")));
-
+			sName = v.second.get<std::string>("<xmlattr>.Name");
 			if(sName == "ContactDetectSafetyFactor")
 			{
-				node2data
-					(vedo::dSafetyFactor,
-					 element2->getAttributeNode(XMLtrans("Value")));
+				vedo::dSafetyFactor
+					= std::max(1.0, v.second.get<double>("<xmlattr>.Value"));
 			}
 			else if(sName == "NumUDDDOStatus")
 			{
 				// Aries: We have not finished it.
-				/*
-				node2data
-					(vedo::uNumUDDDOStatus,
-					 element2->getAttributeNode(XMLtrans("Value")));
-				*/
+				//vedo::uNumUDDDOStatus
+				//	= v.second.get<double>("<xmlattr>.Value");
 			}
 			else if(sName == "NumUDDIactStatus")
 			{
 				// Aries: We have not finished it.
-				/*
-				node2data
-					(vedo::uNumUDDImpactStatus,
-					 element2->getAttributeNode(XMLtrans("Value")));
-				*/
+				//vedo::uNumUDDImpactStatus
+				//	= v.second.get<double>("<xmlattr>.Value");
+			}
+			else if(sName == "MaxIDofDOStatus")
+			{
+				// Aries: We have not finished it.
 			}
 			else
 			{
 				#ifdef _VEDO_DEBUG
-					std::cout << "SimConstant in <SimConstant> not used!!" << std::endl;
+					std::cout << "SimConstant \"" << sName << "\"in <SimConstant> not used!!" << std::endl;
 				#endif   // _VEDO_DEBUG
 			}
 		}
-    }
+	}
 
-	node2data
-		(vFieldAcceleration,
-		 doc->getElementsByTagName(XMLtrans("FieldAcceleration"))->item(0));
+	vFieldAcceleration = Node2Vector3d(&(pt->get_child("FieldAcceleration")));
 
-	element
-		= (DOMElement *)doc
-			->getElementsByTagName(XMLtrans("TimeControl"))->item(0);
-	node2data(dTimeStart   , element->getAttributeNode(XMLtrans("Start"   )));
-	node2data(dTimeStop    , element->getAttributeNode(XMLtrans("Stop"    )));
-	node2data(dTimeInterval, element->getAttributeNode(XMLtrans("Interval")));
-	node2data(dTimeCurrent , element->getAttributeNode(XMLtrans("Current" )));
+	pt2 = &(pt->get_child("TimeControl.<xmlattr>"));
+	dTimeStart    = pt2->get<double>("Start"   );
+	dTimeStop     = pt2->get<double>("Stop"    );
+	dTimeInterval = pt2->get<double>("Interval");
+	dTimeCurrent  = pt2->get<double>("Current" );
 
-	double dBV[3];
-
-	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("ZOI"))->item(0);
-	if(element)
-    {
-        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
-            dBV[0] = 0.0;
-
-        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
-            dBV[1] = 0.0;
-
-        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
-            dBV[2] = 0.0;
-
-        vLowerBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
-
-        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
-            dBV[0] = 0.0;
-
-        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
-            dBV[1] = 0.0;
-
-        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
-            dBV[2] = 0.0;
-
-        vUpperBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
-    }
-    else
-    {
+	if (pt->get_child_optional("ZOI"))
+	{
+		pt2 = &(pt->get_child("ZOI.<xmlattr>"));
+		double dBV[3];
+		dBV[0] = pt2->get<double>("XMin", 0.0);
+		dBV[1] = pt2->get<double>("YMin", 0.0);
+		dBV[2] = pt2->get<double>("ZMin", 0.0);
+		vLowerBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
+		dBV[0] = pt2->get<double>("XMax", 0.0);
+		dBV[1] = pt2->get<double>("YMax", 0.0);
+		dBV[2] = pt2->get<double>("ZMax", 0.0);
+		vUpperBoundaryZOI.Set(dBV[0], dBV[1], dBV[2]);
+	}
+	else
+	{
         vLowerBoundaryZOI.Set(0.0, 0.0, 0.0);
         vUpperBoundaryZOI.Set(0.0, 0.0, 0.0);
-    }
+	}
 
-	element = (DOMElement *)doc->getElementsByTagName(XMLtrans("PBC"))->item(0);
-	if(element)
-    {
-        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMin")))))
-            dBV[0] = 0.0;
-
-        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMin")))))
-            dBV[1] = 0.0;
-
-        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMin")))))
-            dBV[2] = 0.0;
-
-        vLowerBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
-
-        if(!(node2data(dBV[0], element->getAttributeNode(XMLtrans("XMax")))))
-            dBV[0] = 0.0;
-
-        if(!(node2data(dBV[1], element->getAttributeNode(XMLtrans("YMax")))))
-            dBV[1] = 0.0;
-
-        if(!(node2data(dBV[2], element->getAttributeNode(XMLtrans("ZMax")))))
-            dBV[2] = 0.0;
-
-        vUpperBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
-    }
-    else
-    {
+	if (pt->get_child_optional("PBC"))
+	{
+		pt2 = &(pt->get_child("PBC.<xmlattr>"));
+		double dBV[3];
+		dBV[0] = pt2->get<double>("XMin", 0.0);
+		dBV[1] = pt2->get<double>("YMin", 0.0);
+		dBV[2] = pt2->get<double>("ZMin", 0.0);
+		vLowerBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+		dBV[0] = pt2->get<double>("XMax", 0.0);
+		dBV[1] = pt2->get<double>("YMax", 0.0);
+		dBV[2] = pt2->get<double>("ZMax", 0.0);
+		vUpperBoundaryPBC.Set(dBV[0], dBV[1], dBV[2]);
+	}
+	else
+	{
         vLowerBoundaryPBC.Set(0.0, 0.0, 0.0);
         vUpperBoundaryPBC.Set(0.0, 0.0, 0.0);
-    }
+	}
 
 	return
 		new vedo::SystemParameter
@@ -481,230 +271,297 @@ static vedo::SystemParameter* node2sp(const DOMDocument* doc)
 			 vedo::Boundary(vLowerBoundaryPBC, vUpperBoundaryPBC) );
 };
 
-static vedo::DOModel* node2doml(const DOMNode* node)
+vedo::DOBehaviorType String2DOBehaviorType(const std::string& s)
 {
-	std::string               sDOName;
-	std::string               sDOGroup;
-	vedo::DOShapeColor        cColor;
-	std::string               sBehavior;
-	vedo::DOBehaviorType      eBehavior;
-	std::string               sScope;
-	vedo::DOScopeType         eScope;
-	double                    dDensity;
-	double                    dDensityFactor;
-	njr::Vector3d             vExternalForce;
-
-	vedo::DOShapeType         st;
-	vedo::DOShapeAttributes   sa;
-
-	std::vector<vedo::DOMaterialAttribute> cMatOpt(0);
-
-	vedo::DOMaterialAttribute DOMatOpt;
-	DOMNodeList*              nl_MatOpt;
-
-	unsigned long int i;
-
-	const DOMElement* element = (DOMElement*) node;
-
-	node2data(sDOName  , element->getAttributeNode(XMLtrans("DOName"  )));
-	node2data(sDOGroup , element->getAttributeNode(XMLtrans("DOGroup" )));
-	node2data(sBehavior, element->getAttributeNode(XMLtrans("Behavior")));
-	if(sBehavior == "constrained")
+	if(s == "constrained")
 	{
-		eBehavior = vedo::constrained;
+		return vedo::constrained;
 	}
-	else if(sBehavior == "fixed")
+	else if(s == "fixed")
 	{
-		eBehavior = vedo::fixed;
+		return vedo::fixed;
 	}
-	else if(sBehavior == "mobile")
+	else if(s == "mobile")
 	{
-		eBehavior = vedo::mobile;
+		return vedo::mobile;
 	}
-	else if(sBehavior == "orbital")
+	else if(s == "orbital")
 	{
-		eBehavior = vedo::orbital;
+		return vedo::orbital;
 	}
 	else
 	{
 		std::cout
-			<< "Error!! Code: DOWorld_ReadXML.cpp: vedo::DOModel* node2doml(const DOMNode*)" << std::endl
-			<< "        Note: Type of \"Behavior\" in DOModel illegal!!" << std::endl;
+			<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: vedo::DOBehaviorType String2DOBehavior(const std::string&)" << std::endl
+			<< "        Note: Type of \"Behavior\" is illegal!!" << std::endl;
 		exit(0);
 	}
-	node2data(dDensity , element->getAttributeNode(XMLtrans("Density" )));
-	node2data(cColor   , element->getAttributeNode(XMLtrans("Color"   )));
+};
 
-	if(node2data(sScope, element->getAttributeNode(XMLtrans("Scope"))))
+vedo::DOShapeColor String2DOShapeColor(const std::string& s)
+{
+	if (s =="red")
 	{
-		if(sScope == "local")
+		return njrdxf::red;
+	}
+	else if (s == "yellow")
+	{
+		return njrdxf::yellow;
+	}
+	else if (s == "green")
+	{
+		return njrdxf::green;
+	}
+	else if (s == "cyan")
+	{
+		return njrdxf::cyan;
+	}
+	else if (s == "blue")
+	{
+		return njrdxf::blue;
+	}
+	else if (s == "magenta")
+	{
+		return njrdxf::magenta;
+	}
+	else if (s == "bylayer")
+	{
+		return njrdxf::bylayer;
+	}
+	else
+	{
+		return njrdxf::bylayer;
+	}
+};
+
+vedo::DOScopeType String2ScopeType
+	(const std::string& s, const vedo::DOBehaviorType& b)
+{
+	if(s == "local")
+	{
+		return vedo::local;
+	}
+	else if(s == "global")
+	{
+		return vedo::global;
+	}
+	else if(s == "undefined")
+	{
+		if(e == vedo::mobile)
 		{
-			eScope = vedo::local;
-		}
-		else if(sScope == "global")
-		{
-			eScope = vedo::global;
+			return vedo::local;
 		}
 		else
 		{
-			std::cout
-				<< "Error!! Code: DOWorld_ReadXML.cpp: vedo::DOModel* node2doml(const DOMNode*)" << std::endl
-				<< "        Note: Type of \"Scope\" in DOModel illegal!!" << std::endl;
-			exit(0);
+			return vedo::global;
 		}
 	}
 	else
 	{
-		if(eBehavior == vedo::mobile)
-			eScope = vedo::local;
-		else
-			eScope = vedo::global;
+		std::cout
+			<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: vedo::DOScopeType String2ScopeType(const std::string&, vedo::DOBehaviorType&)" << std::endl
+			<< "        Note: Type of \"Scope\" is illegal!!" << std::endl;
+		exit(0);
+	}
+};
+
+static vedo::DOModel* Node2DOModel(boost::property_tree::ptree* pt)
+{
+	boost::property_tree::ptree* pt2 = &pt->get_child("<xmlattr>");
+
+	std::string          sDOName        = pt2->get<std::string>("DOName");
+	std::string          sDOGroup       = pt2->get<std::string>("DOGroup");
+	double               dDensity       = pt2->get<double>("Density");
+	double               dDensityFactor = pt2->get<double>("DensityFactor", 1.0);
+	vedo::DOBehaviorType eBehavior      = String2DOBehaviorType(pt2->get<std::string>("Behavior"));
+	vedo::DOShapeColor   cColor         = String2DOShapeColor(pt2->get<std::string>("Color", "bylayer"));
+	vedo::DOScopeType    eScope         = String2ScopeType(pt2->get<std::string>("Scope", "undefined"), eBehavior);
+
+	njr::Vector3d vExternalForce;
+	if(pt->get_child_optional("ExternalForce"))
+	{
+		vExternalForce = Node2Vector3d(&pt->get_child("ExternalForce"));
 	}
 
-	if(!node2data(dDensityFactor, element->getAttributeNode(XMLtrans("DensityFactor"))))
+	vedo::DOShapeType       st;
+	vedo::DOShapeAttributes sa;
+	if(pt->get_child_optional("Shape"))
 	{
-		dDensityFactor = 1.0;
+		std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
+			psa = Node2DOShapeTypeAndAttributes(&pt->get_child("Shape"));
+		st = psa.first;
+		sa = psa.second;
+	}
+	else
+	{
+		std::cout
+			<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: void Node2DOModel(boost::property_tree::ptree*)" << std::endl
+			<< "        Note: Cannot find tag \"Shape\" in DOModel!!" << std::endl;
+		exit(0);
 	}
 
-	if(!node2data(vExternalForce, element->getElementsByTagName(XMLtrans("ExternalForce"))->item(0)))
+	std::vector<vedo::DOMaterialAttribute> cMatOpt(0);
+	if (pt->get_child_optional("MaterialOption"))
 	{
-		vExternalForce.Set(0.0, 0.0, 0.0);
-	};
-
-	node2data(st, sa, element->getElementsByTagName(XMLtrans("Shape"))->item(0));
-
-	nl_MatOpt = element->getElementsByTagName(XMLtrans("MaterialOption"));
-	unsigned long ulMaterialOptionSize = nl_MatOpt->getLength();
-	for (i=0; i<ulMaterialOptionSize; ++i)
-	{
-		node2data
-			(DOMatOpt.Name,
-			 ((DOMElement*) nl_MatOpt->item(i))->getAttributeNode(XMLtrans("Name")));
-		node2data
-			(DOMatOpt.Value,
-			 ((DOMElement*) nl_MatOpt->item(i))->getAttributeNode(XMLtrans("Value")));
-		cMatOpt.push_back(DOMatOpt);
-	}
-
-	if (st == vedo::Polyhedra)
-	{
-		DOMNodeList* nl_hf = element->getElementsByTagName(XMLtrans("HalfSpace"));
-		njr::NJRpolyhedra polyhedra;
-		njr::HalfSpace hf;
-
-		unsigned long ulHalfSpaceSize = nl_hf->getLength();
-		for (i=0; i<ulHalfSpaceSize; ++i)
+		vedo::DOMaterialAttribute DOMatOpt;
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("MaterialOption")            )
 		{
-			node2data (hf, nl_hf->item(i));
-			polyhedra.AddConstrain(hf);
+			DOMatOpt.Name  = v.second.get<std::string>("<xmlattr>.Name");
+			DOMatOpt.Value = v.second.get<double>("<xmlattr>.Value");
+			cMatOpt.push_back(DOMatOpt);
 		}
+	}
 
+	if(st == vedo::Polyhedra)
+	{
+		njr::NJRpolyhedra polyhedra;
+		if (pt->get_child_optional("Shape.Polyhedra"))
+		{
+			BOOST_FOREACH
+				(boost::property_tree::ptree::value_type &v,
+				 pt->get_child("Shape.Polyhedra")           )
+			{
+				polyhedra.AddConstrain(Node2HalfSpace(&v.second));
+			}
+		}
 		return new vedo::DOModel
-			(sDOName,
-			 sDOGroup,
-			 eBehavior,
-			 eScope,
-			 dDensity,
-			 dDensityFactor,
-			 vExternalForce,
-			 polyhedra,
-			 cColor,
-			 cMatOpt        );
+			(sDOName, sDOGroup, eBehavior, eScope, dDensity, dDensityFactor,
+			 vExternalForce, polyhedra, cColor, cMatOpt                     );
 	}
 
 	return new vedo::DOModel
-		(sDOName,
-		 sDOGroup,
-		 eBehavior,
-		 eScope,
-		 dDensity,
-		 dDensityFactor,
-		 vExternalForce,
-		 st,
-		 sa,
-		 cColor,
-		 cMatOpt        );
+		(sDOName, sDOGroup, eBehavior, eScope, dDensity, dDensityFactor,
+		 vExternalForce, st, sa, cColor, cMatOpt                        );
 };
 
-static vedo::DOStatus* node2dos (const DOMNode* node)
+static vedo::IactModel* Node2IactModel(boost::property_tree::ptree* pt)
 {
-	std::string sDOName;
-	njr::Vector3d vPosition;
-	njr::Vector3d vVelocity;
-	njr::Vector3d vOrientationX;
-	njr::Vector3d vOrientationZ;
-	njr::Vector3d vAngularVelocity;
+	boost::property_tree::ptree* pt2 = &pt->get_child("<xmlattr>");
+
+	std::string sMasterGroup  = pt2->get<std::string>("MasterGroup");
+	std::string sSlaveGroup   = pt2->get<std::string>("SlaveGroup");
+	std::string sEquationType = pt2->get<std::string>("EquationType");
+
+	std::vector<vedo::IactMechanism> svIactMechanisms(0);
+	vedo::IactMechanism              iactmechanism;
+
+	bool bFirstData = true;
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, *pt)
+	{
+		if(bFirstData)
+		{
+			bFirstData = false;
+		}
+		else
+		{
+			iactmechanism.Name  = v.second.get<std::string>("<xmlattr>.Name");
+			iactmechanism.Value = v.second.get<double>("<xmlattr>.Value");
+			svIactMechanisms.push_back(iactmechanism);
+		}
+	}
+
+	return new vedo::IactModel
+		(sMasterGroup, sSlaveGroup, sEquationType, svIactMechanisms);
+};
+
+static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree* pt)
+{
+	std::string sDOName = pt->get<std::string>("<xmlattr>.DOName");
+	njr::Vector3d vPosition        = Node2Vector3d(&pt->get_child("Position"       ));
+	njr::Vector3d vVelocity        = Node2Vector3d(&pt->get_child("Velocity"       ));
+	njr::Vector3d vOrientationX    = Node2Vector3d(&pt->get_child("OrientationX"   ));
+	njr::Vector3d vOrientationZ    = Node2Vector3d(&pt->get_child("OrientationZ"   ));
+	njr::Vector3d vAngularVelocity = Node2Vector3d(&pt->get_child("AngularVelocity"));
+
 	njr::Vector3d vImpact;
+	if(pt->get_child_optional("Impact"))
+	{
+		vImpact = Node2Vector3d(&pt->get_child("Impact"));
+	}
+
 	njr::Vector3d vAngularImpact;
-
-	const DOMElement* element = (DOMElement*) node;
-
-	node2data(sDOName         , element->getAttributeNode(XMLtrans("DOName")));
-	node2data(vPosition       , element->getElementsByTagName(XMLtrans("Position"))->item(0));
-	node2data(vVelocity       , element->getElementsByTagName(XMLtrans("Velocity"))->item(0));
-	node2data(vOrientationX   , element->getElementsByTagName(XMLtrans("OrientationX"))->item(0));
-	node2data(vOrientationZ   , element->getElementsByTagName(XMLtrans("OrientationZ"))->item(0));
-	node2data(vAngularVelocity, element->getElementsByTagName(XMLtrans("AngularVelocity"))->item(0));
-	node2data(vImpact         , element->getElementsByTagName(XMLtrans("Impact"))->item(0));
-	node2data(vAngularImpact  , element->getElementsByTagName(XMLtrans("AngularImpact"))->item(0));
+	if(pt->get_child_optional("AngularImpact"))
+	{
+		vAngularImpact = Node2Vector3d(&pt->get_child("AngularImpact"));
+	}
 
 	return new vedo::DOStatus
-		(sDOName,
-		 vPosition,
-		 vVelocity,
-		 vOrientationX,
-		 vOrientationZ,
-		 vAngularVelocity,
-		 vImpact,
-		 vAngularImpact   );
+		(sDOName, vPosition, vVelocity, vOrientationX, vOrientationZ,
+		 vAngularVelocity, vImpact, vAngularImpact                   );
 };
 
-static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> node2is(const DOMNode* node)
+static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*>
+	Node2IactStatus(boost::property_tree::ptree* pt)
 {
-	unsigned long ulMaster, ulSlave;
-	bool          bContact, bBond;
-	double        dKn, dInitialVelocity, dOverlap;
-	njr::Vector3d
-        vShearForce,
-        vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
-	const DOMElement* element = (DOMElement*) node;
-	node2data(ulMaster              , element->getAttributeNode(XMLtrans("MasterDOStatusSN")));
-	node2data(ulSlave               , element->getAttributeNode(XMLtrans("SlaveDOStatusSN")));
-	node2data(bContact              , element->getAttributeNode(XMLtrans("Contact")));
-	node2data(bBond                 , element->getAttributeNode(XMLtrans("Bond")));
-	node2data(dKn                   , element->getAttributeNode(XMLtrans("NormalStiffness")));
-	node2data(dInitialVelocity      , element->getAttributeNode(XMLtrans("InitialVelocity")));
-	node2data(vShearForce           , element->getElementsByTagName(XMLtrans("ShearForce"))->item(0));
-	node2data(vImpactPoint          , element->getElementsByTagName(XMLtrans("ImpactPoint"))->item(0));
-	node2data(vImpactDirection      , element->getElementsByTagName(XMLtrans("ImpactDirection"))->item(0));
-	node2data(vImpactToMaster       , element->getElementsByTagName(XMLtrans("ImpactToMaster"))->item(0));
-	node2data(vAngularImpactToMaster, element->getElementsByTagName(XMLtrans("AngularImpactToMaster"))->item(0));
-	node2data(dOverlap              , element->getAttributeNode(XMLtrans("Overlap")));
+	boost::property_tree::ptree* pt2 = &(pt->get_child("<xmlattr>"));
+
+	unsigned long ulMaster = pt2->get<unsigned long>("MasterDOStatusSN");
+	unsigned long ulSlave  = pt2->get<unsigned long>("SlaveDOStatusSN" );
+
+	unsigned uContact = pt2->get<unsigned>("Contact");
+	bool bContact(true);
+	if(uContact == 0)
+	{
+		bContact = false;
+	}
+
+	unsigned uBond = pt2->get<unsigned>("Bond");
+	bool bBond(true);
+	if(uBond == 0)
+	{
+		bBond = false;
+	}
+
+	double dNormalStiffness = pt2->get<double>("NormalStiffness");
+	double dInitialVelocity = pt2->get<double>("InitialVelocity");
+	double dOverlap         = pt2->get<double>("Overlap"        );
+
+	njr::Vector3d vShearForce            = Node2Vector3d(&pt->get_child("ShearForce"           ));
+	njr::Vector3d vImpactPoint           = Node2Vector3d(&pt->get_child("ImpactPoint"          ));
+	njr::Vector3d vImpactDirection       = Node2Vector3d(&pt->get_child("ImpactDirection"      ));
+	njr::Vector3d vImpactToMaster        = Node2Vector3d(&pt->get_child("ImpactToMaster"       ));
+	njr::Vector3d vAngularImpactToMaster = Node2Vector3d(&pt->get_child("AngularImpactToMaster"));
 
 	if(vedo::uNumUDDImpactStatus != 0)
 	{
 		double* dpudv = new double[4*vedo::uNumUDDImpactStatus];
 		for(unsigned u=vedo::uNumUDDImpactStatus; u<3*vedo::uNumUDDImpactStatus; u++)
+		{
 			*(dpudv+u) = 0.0;
+		}
 
-		DOMNodeList* nl_IactUDV = element->getElementsByTagName(XMLtrans("AccumulativeUserDefinedValue"));
-		for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
-			node2data
-				(*dpudv,
-				 ((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+		if(pt->get_child_optional("AccumulativeUserDefinedValue"))
+		{
+			unsigned uLocation = 0;
+			BOOST_FOREACH
+				(boost::property_tree::ptree::value_type &v,
+				 pt->get_child("AccumulativeUserDefinedValue"))
+			{
+				*(dpudv+uLocation) = v.second.get<double>("<xmlattr>.Value");
+				uLocation++;
+			}
+		}
 
-		nl_IactUDV = element->getElementsByTagName(XMLtrans("UserDefinedValue"));
-		dpudv += 2*vedo::uNumUDDImpactStatus;
-		for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++, dpudv++)
-			node2data
-				(*dpudv,
-				 ((DOMElement*) nl_IactUDV->item(u))->getAttributeNode(XMLtrans("Value")));
+		if(pt->get_child_optional("UserDefinedValue"))
+		{
+			dpudv += 2*vedo::uNumUDDImpactStatus;
+			unsigned uLocation = 0;
+			BOOST_FOREACH
+				(boost::property_tree::ptree::value_type &v,
+				 pt->get_child("UserDefinedValue"))
+			{
+				*(dpudv+uLocation) = v.second.get<double>("<xmlattr>.Value");
+				uLocation++;
+			}
+		}
 
 		return
 			std::make_pair
 				(std::make_pair(ulMaster, ulSlave),
 				 new vedo::ImpactStatus
-					(bContact, bBond, dKn, dInitialVelocity,
+					(bContact, bBond, dNormalStiffness, dInitialVelocity,
                      vShearForce, vImpactPoint, vImpactDirection,
                      vImpactToMaster, vAngularImpactToMaster, dOverlap, dpudv));
 	}
@@ -714,43 +571,10 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> n
 			std::make_pair
 				(std::make_pair(ulMaster, ulSlave),
 				 new vedo::ImpactStatus
-					(bContact, bBond, dKn, dInitialVelocity,
+					(bContact, bBond, dNormalStiffness, dInitialVelocity,
                      vShearForce, vImpactPoint, vImpactDirection,
-                     vImpactToMaster, vAngularImpactToMaster, dOverlap));
+                     vImpactToMaster, vAngularImpactToMaster, dOverlap   ));
 	}
-};
-
-static vedo::IactModel* node2iactml (const DOMNode* node)
-{
-	std::string                      sMasterGroup;
-	std::string                      sSlaveGroup;
-	std::string                      sEquationType;
-	std::vector<vedo::IactMechanism> svIactMechanisms(0);
-
-	vedo::IactMechanism              im;
-	DOMNodeList*                     nl_IactM;
-
-	const DOMElement* element = (DOMElement*)node;
-
-	node2data(sMasterGroup , element->getAttributeNode(XMLtrans("MasterGroup" )));
-	node2data(sSlaveGroup  , element->getAttributeNode(XMLtrans("SlaveGroup"  )));
-	node2data(sEquationType, element->getAttributeNode(XMLtrans("EquationType")));
-
-	nl_IactM = element->getElementsByTagName(XMLtrans("Mechanism"));
-	unsigned long ulMechanismSize = nl_IactM->getLength();
-	for (unsigned long i=0; i<ulMechanismSize; ++i)
-	{
-		node2data
-			(im.Name,
-			((DOMElement*) nl_IactM->item(i))->getAttributeNode(XMLtrans("Name" )));
-		node2data
-			(im.Value,
-			((DOMElement*) nl_IactM->item(i))->getAttributeNode(XMLtrans("Value")));
-		svIactMechanisms.push_back(im);
-	}
-
-	return new vedo::IactModel
-		(sMasterGroup, sSlaveGroup, sEquationType, svIactMechanisms);
 };
 
 
@@ -762,143 +586,82 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 {
 	DOWorld::Clear();
 
-	register unsigned int i;
+	boost::property_tree::ptree bPTree;//, *pt;
+	boost::property_tree::xml_parser::read_xml(xmlFile, bPTree);
+	boost::property_tree::ptree* pt = &bPTree.get_child("DOWorld");
 
-	XMLPlatformUtils::Initialize();
+	pSystemParameter
+		= Node2SystemParameter(&pt->get_child("SimParameter"));
 
-	DOMNodeList* nl_sp;
-	DOMNodeList* nl_iactml;
-	DOMNodeList* nl_doml;
-	DOMNodeList* nl_dos;
-	DOMNodeList* nl_is;
-	DOMElement*  element;
-
-	static const XMLCh gLS[] = { chLatin_L, chLatin_S, chNull };
-
-	DOMImplementation* impl
-		= DOMImplementationRegistry::getDOMImplementation(gLS);
-/*
-	// Xerces-C++ 2.x
-	DOMBuilder* parser
-		= ((createDOMBuilder*)impl)
-			->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
-	parser->setFeature(XMLUni::fgDOMNamespaces           , true);
-	parser->setFeature(XMLUni::fgXercesSchema            , true);
-	parser->setFeature(XMLUni::fgXercesSchemaFullChecking, true);
-	parser->setFeature(XMLUni::fgDOMValidation           , true);
-	parser->setFeature(XMLUni::fgDOMDatatypeNormalization, true);
-
-	DOMCountErrorHandler errorHandler;
-	parser->setErrorHandler(&errorHandler);
-
-	// Reset error count first
-	errorHandler.resetErrors();
-*/
-
-	// Xerces-C++ 3.0
-	DOMLSParser* parser
-		= ((DOMImplementationLS*)impl)
-			->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
-
-	DOMConfiguration* conf(parser->getDomConfig());
-	// Perform namespace processing.
-	conf->setParameter(XMLUni::fgDOMNamespaces, true);
-	// Enable/Disable validation.
-	conf->setParameter(XMLUni::fgDOMValidate, true);
-	conf->setParameter(XMLUni::fgXercesSchema, true);
-	conf->setParameter(XMLUni::fgXercesSchemaFullChecking, false);
-	// Discard comment nodes in the document.
-	conf->setParameter(XMLUni::fgDOMComments, false);
-	// Enable datatype normalization.
-	conf->setParameter(XMLUni::fgDOMDatatypeNormalization, true);
-	/***************************************************************************
-	 Do not create EntityReference nodes in the DOM tree. No EntityReference
-	 nodes will be created, only the nodes corresponding to their fully expanded
-	 substitution text will be created.
-	 ***************************************************************************/
-	conf->setParameter(XMLUni::fgDOMEntities, false);
-	// Do not include ignorable whitespace in the DOM tree.
-	conf->setParameter(XMLUni::fgDOMElementContentWhitespace, false);
-	// We will release the DOM document ourselves.
-	conf->setParameter(XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-	DOMCountErrorHandler errorHandler;
-	conf->setParameter (XMLUni::fgDOMErrorHandler, &errorHandler);
-
-	// Reset error count first
-	errorHandler.resetErrors();
-
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc = 0;
-
-	try
+	if(pt->get_child_optional("DOModelTab"))
 	{
-	   // reset document pool
-	   parser->resetDocumentPool();
-	   doc = parser->parseURI(xmlFile);
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("DOModelTab")                )
+		{
+			cDOModel.push_back(Node2DOModel(&v.second));
+		}
 	}
-
-	catch (const XMLException& toCatch)
+	else
 	{
 		std::cout
-			<< std::endl
-			<< "Error during parsing: '"
-			<< xmlFile
-			<< std::endl;
+			<< "Error!! Code: bool DOWorld::ReadXML(const char*, IactRecordTab*)" << std::endl
+			<< "        Note: Cannot find tag \"DOModelTab\"!!" << std::endl;
+		exit(0);
 	}
 
-	/**************************************************************************
-	 * Extract the DOM tree, get the std::list of all the elements and report the
-	 * length as the count of elements.
-	 **************************************************************************/
-
-	if (errorHandler.getSawErrors())
+	if(pt->get_child_optional("IactModelTab"))
+	{
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("IactModelTab")              )
+		{
+			cIactModel.push_back(Node2IactModel(&v.second));
+		}
+	}
+	else
 	{
 		std::cout
-			<< std::endl
-			<< "Errors occurred, no output available"
-			<< std::endl
-			<< std::endl;
-	   	parser->release();
-		XMLPlatformUtils::Terminate();
-		return false;
+			<< "Error!! Code: bool DOWorld::ReadXML(const char*, IactRecordTab*)" << std::endl
+			<< "        Note: Cannot find tag \"IactModelTab\"!!" << std::endl;
+		exit(0);
 	}
 
-	pSystemParameter = node2sp(doc);
-
-	nl_doml = doc->getElementsByTagName(XMLtrans("DOModel"));
-	unsigned long ulDOModelSize = nl_doml->getLength();
-	for (i=0; i<ulDOModelSize; ++i)
+	if(pt->get_child_optional("DOStatusTab"))
 	{
-		cDOModel.push_back(node2doml(nl_doml->item(i)));
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("DOStatusTab")               )
+		{
+			cDOStatus.push_back(Node2DOStatus(&v.second));
+		}
+		pSystemParameter->SetDONumber(cDOStatus.size());
 	}
-
-	nl_iactml = doc->getElementsByTagName(XMLtrans("IactModel"));
-	unsigned long ulIactModelSize = nl_iactml->getLength();
-	for (i=0; i<ulIactModelSize; ++i)
+	else
 	{
-		cIactModel.push_back(node2iactml(nl_iactml->item(i)));
+		std::cout
+			<< "Error!! Code: bool DOWorld::ReadXML(const char*, IactRecordTab*)" << std::endl
+			<< "        Note: Cannot find tag \"DOStatusTab\"!!" << std::endl;
+		exit(0);
 	}
 
-	nl_dos = doc->getElementsByTagName(XMLtrans("DOStatus"));
-	unsigned long ulDOStatusSize = nl_dos->getLength();
-	pSystemParameter->SetDONumber(ulDOStatusSize);
-	for (i=0; i<ulDOStatusSize; ++i)
+	if(irtp != 0)
 	{
-		cDOStatus.push_back(node2dos (nl_dos->item(i)));
+		std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> ululis;
+		if(pt->get_child_optional("IactStatusTab"))
+		{
+			BOOST_FOREACH
+				(boost::property_tree::ptree::value_type &v,
+				 pt->get_child("IactStatusTab")             )
+			{
+				ululis = Node2IactStatus(&v.second);
+				irtp->PushRecord(ululis.first.first, ululis.first.second, *(ululis.second));
+			}
+			unsigned long ulSize = irtp->GetTabSize();
+			pSystemParameter->SetIactNumber(ulSize);
+		}
 	}
 
-	nl_is = doc->getElementsByTagName(XMLtrans("IactStatus"));
-	unsigned long ulIactStatusSize = nl_is->getLength();
-	pSystemParameter->SetIactNumber(ulIactStatusSize);
-	std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> ululis;
-	for (i=0; i<ulIactStatusSize; ++i)
-	{
-	    ululis = node2is(nl_is->item(i));
-        irtp->PushRecord(ululis.first.first, ululis.first.second, *(ululis.second));
-	}
-
-	parser->release();
-	XMLPlatformUtils::Terminate();
 	return DOWorld::Check();
 };
 
@@ -906,132 +669,65 @@ bool DOWorld::ReadXML(const char* xmlFile)
 {
 	DOWorld::Clear();
 
-	register unsigned int i;
+	boost::property_tree::ptree bPTree;//, *pt;
+	boost::property_tree::xml_parser::read_xml(xmlFile, bPTree);
+	boost::property_tree::ptree* pt = &bPTree.get_child("DOWorld");
 
-	XMLPlatformUtils::Initialize();
+	pSystemParameter
+		= Node2SystemParameter(&pt->get_child("SimParameter"));
 
-	DOMNodeList* nl_sp;
-	DOMNodeList* nl_doml;
-	DOMNodeList* nl_iactml;
-	DOMNodeList* nl_dos;
-	DOMElement*  element;
-
-	static const XMLCh gLS[] = { chLatin_L, chLatin_S, chNull };
-
-	DOMImplementation* impl
-		= DOMImplementationRegistry::getDOMImplementation(gLS);
-/*
-	// Xerces-C++ 2.x
-	DOMBuilder* parser
-		= ((createDOMBuilder*)impl)
-			->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
-	parser->setFeature(XMLUni::fgDOMNamespaces           , true);
-	parser->setFeature(XMLUni::fgXercesSchema            , true);
-	parser->setFeature(XMLUni::fgXercesSchemaFullChecking, true);
-	parser->setFeature(XMLUni::fgDOMValidation           , true);
-	parser->setFeature(XMLUni::fgDOMDatatypeNormalization, true);
-
-	DOMCountErrorHandler errorHandler;
-	parser->setErrorHandler(&errorHandler);
-
-	// Reset error count first
-	errorHandler.resetErrors();
-*/
-
-	// Xerces-C++ 3.0
-	DOMLSParser* parser
-		= ((DOMImplementationLS*)impl)
-			->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
-
-	DOMConfiguration* conf(parser->getDomConfig());
-	// Perform namespace processing.
-	conf->setParameter(XMLUni::fgDOMNamespaces, true);
-	// Enable/Disable validation.
-	conf->setParameter(XMLUni::fgDOMValidate, true);
-	conf->setParameter(XMLUni::fgXercesSchema, true);
-	conf->setParameter(XMLUni::fgXercesSchemaFullChecking, false);
-	// Discard comment nodes in the document.
-	conf->setParameter(XMLUni::fgDOMComments, false);
-	// Enable datatype normalization.
-	conf->setParameter(XMLUni::fgDOMDatatypeNormalization, true);
-	/***************************************************************************
-	 Do not create EntityReference nodes in the DOM tree. No EntityReference
-	 nodes will be created, only the nodes corresponding to their fully expanded
-	 substitution text will be created.
-	 ***************************************************************************/
-	conf->setParameter(XMLUni::fgDOMEntities, false);
-	// Do not include ignorable whitespace in the DOM tree.
-	conf->setParameter(XMLUni::fgDOMElementContentWhitespace, false);
-	// We will release the DOM document ourselves.
-	conf->setParameter(XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-	DOMCountErrorHandler errorHandler;
-	conf->setParameter (XMLUni::fgDOMErrorHandler, &errorHandler);
-
-	// Reset error count first
-	errorHandler.resetErrors();
-
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc = 0;
-
-	try
+	if(pt->get_child_optional("DOModelTab"))
 	{
-	   // reset document pool
-	   parser->resetDocumentPool();
-	   doc = parser->parseURI(xmlFile);
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("DOModelTab")                )
+		{
+			cDOModel.push_back(Node2DOModel(&v.second));
+		}
 	}
-
-	catch (const XMLException& toCatch)
+	else
 	{
 		std::cout
-			<< std::endl
-			<< "Error during parsing: '"
-			<< xmlFile
-			<< std::endl;
+			<< "Error!! Code: bool DOWorld::ReadXML(const char*, IactRecordTab*)" << std::endl
+			<< "        Note: Cannot find tag \"DOModelTab\"!!" << std::endl;
+		exit(0);
 	}
 
-	/**************************************************************************
-	 * Extract the DOM tree, get the std::list of all the elements and report the
-	 * length as the count of elements.
-	 **************************************************************************/
-
-	if (errorHandler.getSawErrors())
+	if(pt->get_child_optional("IactModelTab"))
+	{
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("IactModelTab")              )
+		{
+			cIactModel.push_back(Node2IactModel(&v.second));
+		}
+	}
+	else
 	{
 		std::cout
-			<< std::endl
-			<< "Errors occurred, no output available"
-			<< std::endl
-			<< std::endl;
-	   	parser->release();
-		XMLPlatformUtils::Terminate();
-		return false;
+			<< "Error!! Code: bool DOWorld::ReadXML(const char*, IactRecordTab*)" << std::endl
+			<< "        Note: Cannot find tag \"IactModelTab\"!!" << std::endl;
+		exit(0);
 	}
 
-	pSystemParameter = node2sp(doc);
-
-	nl_doml = doc->getElementsByTagName(XMLtrans("DOModel"));
-	unsigned long ulDOModelSize = nl_doml->getLength();
-	for (i=0; i<ulDOModelSize; ++i)
+	if(pt->get_child_optional("DOStatusTab"))
 	{
-		cDOModel.push_back(node2doml(nl_doml->item(i)));
+		BOOST_FOREACH
+			(boost::property_tree::ptree::value_type &v,
+			 pt->get_child("DOStatusTab")               )
+		{
+			cDOStatus.push_back(Node2DOStatus(&v.second));
+		}
+		pSystemParameter->SetDONumber(cDOStatus.size());
 	}
-
-	nl_iactml = doc->getElementsByTagName(XMLtrans("IactModel"));
-	unsigned long ulIactModelSize = nl_iactml->getLength();
-	for (i=0; i<ulIactModelSize; ++i)
+	else
 	{
-		cIactModel.push_back(node2iactml(nl_iactml->item(i)));
+		std::cout
+			<< "Error!! Code: bool DOWorld::ReadXML(const char*, IactRecordTab*)" << std::endl
+			<< "        Note: Cannot find tag \"DOStatusTab\"!!" << std::endl;
+		exit(0);
 	}
 
-	nl_dos = doc->getElementsByTagName(XMLtrans("DOStatus"));
-	unsigned long ulDOStatusSize = nl_dos->getLength();
-	pSystemParameter->SetDONumber(ulDOStatusSize);
-	for (i=0; i<ulDOStatusSize; ++i)
-	{
-		cDOStatus.push_back(node2dos (nl_dos->item(i)));
-	}
-
-	parser->release();
-	XMLPlatformUtils::Terminate();
 	return DOWorld::Check();
 };
 

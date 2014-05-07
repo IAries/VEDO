@@ -9,24 +9,18 @@ TMP_OBJS_DEBUG=${patsubst ${IMP}%,${TMP_DEBUG}%,${patsubst %.cpp,%.o,${wildcard 
 TMP_OBJS_RELEASE=${patsubst ${IMP}%,${TMP_RELEASE}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
 
 all: debug release
-debug: ${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a ${VEDO_LIB}libvedo-${TMP_TARGET}-x-debug.a
-release: ${VEDO_LIB}libvedo-${TMP_TARGET}.a ${VEDO_LIB}libvedo-${TMP_TARGET}-x.a
+debug: ${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a
+release: ${VEDO_LIB}libvedo-${TMP_TARGET}.a
 
 ${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a: ${TMP_OBJS_DEBUG}
 	${AR} ${AR_FLAG} $@ $^
 
-${VEDO_LIB}libvedo-${TMP_TARGET}-x-debug.a: ${TMP_OBJS_DEBUG}
-	${AR} ${AR_FLAG} $@ $^
-
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
-	${CXX} -o $@ ${CXX_FLAGxd} -c $<
+	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
 ${VEDO_LIB}libvedo-${TMP_TARGET}.a: ${TMP_OBJS_RELEASE}
 	${AR} ${AR_FLAG} $@ $^
 
-${VEDO_LIB}libvedo-${TMP_TARGET}-x.a: ${TMP_OBJS_RELEASE}
-	${AR} ${AR_FLAG} $@ $^
-
 ${TMP_RELEASE}%.o: ${IMP}%.cpp
-	${CXX} -o $@ ${CXX_FLAGx} -c $<
+	${CXX} -o $@ ${CXX_FLAG} -c $<
 

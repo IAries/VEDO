@@ -9,7 +9,7 @@ void DOWorld::DumpDOStatus(const char* filename) const
     std::ofstream oCSVFile(filename, std::ios::out);
 
     oCSVFile
-		<< "DOStatusSN, DOStatusID, DOName, "
+		<< "Time, DOStatusSN, DOStatusID, DOName, "
 		<< "Position-X, PositionY, PositionZ, "
 		<< "Velocity-X, VelocityY, VelocityZ, "
 		<< "AngularVelocity-X, AngularVelocity-Y, AngularVelocity-Z, "
@@ -26,9 +26,10 @@ void DOWorld::DumpDOStatus(const char* filename) const
 	{
 	    dosp = cDOStatus[ul];
 	    oCSVFile
-			<< ul                << ", "
-			<< dosp->GetID()     << ", "
-			<< dosp->GetDOName() << ", ";
+			<< pSystemParameter->GetTimeCurrent() << ", "
+			<< ul                                 << ", "
+			<< dosp->GetID()                      << ", "
+			<< dosp->GetDOName()                  << ", ";
 
 	    vV = dosp->GetPosition();
         oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";

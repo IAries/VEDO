@@ -6,9 +6,10 @@
 namespace vedo
 {
 typedef unsigned __int64 _VEDO_unsigned_long;
+typedef          __int64 _VEDO_long;
 
-static const std::string sVersion            = "X4 build 319";
-static const std::string sPublish            = "2014-03-19";
+static const std::string sVersion            = "X4 build 507";
+static const std::string sPublish            = "2014-05-07";
 
 static unsigned          uSizeOfConstant     = 3;     // dSafetyFactor, uNumUDDDOStatus, and uNumUDDImpactStatus
 static double            dSafetyFactor       = 1.1;   // Safety factor for contact detection
@@ -20,6 +21,6 @@ static const unsigned    uImpactBufferSize   = 65535;   // Buffer size for the c
 // uImpactBufferSize ~= 60,000 for 60,000 elements / 8 processors
 };   // namespace vedo
 
-#endif _VEDO_CONSTANTS_H
+#endif // _VEDO_CONSTANTS_H
 
 

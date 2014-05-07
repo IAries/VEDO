@@ -42,7 +42,6 @@
 			<Add option="-std=c++11" />
 			<Add option="-D_STD_CPP_11" />
 			<Add directory="../../../src/" />
-			<Add directory="C:/usr/xerces-c-64/include/" />
 			<Add directory="C:/usr/win-builds-64/include/" />
 			<Add directory="C:/usr/win-builds-64/mingw/include/" />
 		</Compiler>

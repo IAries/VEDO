@@ -57,6 +57,22 @@ Vector3d Vector3d::direction() const
 	return v;
 };
 
+bool Vector3d::normalized()
+{
+	double len = this->length();
+	if (len != 0)
+	{
+		_v[0] /= len;
+		_v[1] /= len;
+		_v[2] /= len;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+};
+
 Vector3d Vector3d::RotateAround(const Vector3d& va) const
 {
 	Vector3d u   = va.direction();

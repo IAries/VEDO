@@ -4135,7 +4135,9 @@ int main (int argc, char* argv[])
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* pWorld = ReadDOWorld(arg[2], pIactRecordTab);
 		pWorld->DumpDOStatus(argv[3]);
-		pIactRecordTab->DumpIactStatus(argv[4]);
+		pIactRecordTab
+			->DumpIactStatus
+				(pWorld->GetSystemParameter()->GetTimeCurrent(), argv[4]);
 		delete pWorld;
         delete pIactRecordTab;
 	}

@@ -109,7 +109,7 @@ public:
 		return true;
 	};
 
-	virtual TY operator () (const TX& tx)= 0;
+	virtual TY operator () (const TX& tx) const = 0;
 
 protected:
 

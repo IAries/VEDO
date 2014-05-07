@@ -215,10 +215,16 @@
 												</xs:choice>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="MaterialOption" minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="MaterialOption" minOccurs="0" maxOccurs="1">
 											<xs:complexType>
-												<xs:attribute name="Name" type="xs:string" use="required"/>
-												<xs:attribute name="Value" type="xs:double" use="required"/>
+												<xs:sequence>
+													<xs:element name="Option" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="Name" type="xs:string" use="required"/>
+															<xs:attribute name="Value" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
@@ -404,16 +410,28 @@
 												<xs:attribute name="z" type="xs:double" use="required"/>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="AccumulativeUserDefinedValue" minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="AccumulativeUserDefinedValue" minOccurs="0" maxOccurs="1">
 											<xs:complexType>
-												<xs:attribute name="SN" type="xs:unsignedLong" use="required"/>
-												<xs:attribute name="Value" type="xs:double" use="required"/>
+												<xs:sequence>
+													<xs:element name="AUDV" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="SN" type="xs:unsignedLong" use="required"/>
+															<xs:attribute name="Value" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
 										<xs:element name="UserDefinedValue" minOccurs="0" maxOccurs="unbounded">
 											<xs:complexType>
-												<xs:attribute name="SN" type="xs:unsignedLong" use="required"/>
-												<xs:attribute name="Value" type="xs:double" use="required"/>
+												<xs:sequence>
+													<xs:element name="UDV" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="SN" type="xs:unsignedLong" use="required"/>
+															<xs:attribute name="Value" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>

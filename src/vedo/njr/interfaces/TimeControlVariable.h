@@ -15,11 +15,12 @@ public:
 
 	TimeControlVariable()
 	{
+		_TimeHistory = 0;
 	};
 
 	TimeControlVariable
 		(const T& NewValue, njr::EFSTimeHistory<double>* TimeHistory):
-			_InitialValue(NewValue), Value(NewValue), _TimeHistory(TimeHistory)
+			_BaseValue(NewValue), Value(NewValue), _TimeHistory(TimeHistory)
 	{
 	};
 
@@ -30,36 +31,37 @@ public:
 
 	const TimeControlVariable& operator = (const TimeControlVariable& tcv)
 	{
-		_InitialValue = tcv._InitialValue;
-		Value         = tcv.Value;
-
-		if (tcv._TimeHistory != 0)
-			_TimeHistory  = tcv._TimeHistory;
-
+		Value        = tcv.Value;
+		_BaseValue   = tcv._BaseValue;
+		_TimeHistory = tcv._TimeHistory;
 		return *this;
 	};
 
 	const TimeControlVariable& operator = (const T& tv)
 	{
-		Value = tv;
+		_BaseValue = Value = tv;
+		_TimeHistory = 0;
 		return *this;
 	};
 
 	const TimeControlVariable& operator += (const T& tv)
 	{
-		Value += tv;
+		_BaseValue += tv;
+		Value      += tv;
 		return *this;
 	};
 
 	const TimeControlVariable& operator -= (const T& tv)
 	{
-		Value -= tv;
+		_BaseValue -= tv;
+		Value      -= tv;
 		return *this;
 	};
 
 	const TimeControlVariable& operator *= (const T& tv)
 	{
-		Value *= tv;
+		_BaseValue *= tv;
+		Value      *= tv;
 		return *this;
 	};
 
@@ -67,51 +69,58 @@ public:
 	{
 	};
 
-	T TimeValue(const double& dTime)
+	T TimeValue(const double& dTime) const
 	{
-		if(_TimeHistory != 0)
+		if(_TimeHistory)
 		{
-			return (*_TimeHistory)(dTime) * _InitialValue;
+			return (*_TimeHistory)(dTime) * _BaseValue;
 		}
 		else
 		{
-			std::cerr
-				<< "Error!! Code: T TimeControlVariable::TimeValue(const double&)" << std::endl
-				<< "        Note: _TimeHistory == 0" << std::endl;
-			exit(-1);
+			return _BaseValue;
 		}
-	};
-
-	T UpdateAndGetTimeValue(const double& dTime)
-	{
-		Update(dTime);
-		return Value;
 	};
 
 	void Update(const double& dTime)
 	{
-		if(_TimeHistory != 0)
+		if(_TimeHistory)
 		{
-			Value = (*_TimeHistory)(dTime) * _InitialValue;
+			Value = (*_TimeHistory)(dTime) * _BaseValue;
 		}
-		else
-		{
-			std::cerr
-				<< "Error!! Code: void TimeControlVariable::Update(const double& dTime)" << std::endl
-				<< "        Note: _TimeHistory == 0" << std::endl;
-			exit(-1);
-		}
+	};
+
+	const T GetBaseValue() const
+	{
+		return _BaseValue;
+	};
+
+	const njr::EFSTimeHistory<double>* GetTimeHistory() const
+	{
+		return _TimeHistory;
 	};
 
 	T Value;
 
 private:
 
-	T _InitialValue;
+	T _BaseValue;
 
 	njr::EFSTimeHistory<double>* _TimeHistory;
 };
 
 };   // namespace njr
+
+
+
+template <typename T>
+std::ostream& operator << (std::ostream& os, const njr::TimeControlVariable<T> & tcv)
+{
+	os << tcv.GetBaseValue() << std::endl;
+	if(tcv.GetTimeHistory())
+	{
+		os << "Time history (file: " << tcv.GetTimeHistory()->GetFileName() << ")" << std::endl;
+	}
+	return os;
+};
 
 #endif // _NJR_TIME_CONTROL_VARIABLE_H

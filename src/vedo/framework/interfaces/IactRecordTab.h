@@ -54,7 +54,7 @@ public:
 
 	void EraseElements(const std::vector<unsigned long>& ulIDList, const unsigned long& ulDONum);
 
-    void DumpIactStatus(const char* filename) const;
+    void DumpIactStatus(const double& time, const char* filename) const;
 
 	//binary output
 	std::ofstream& operator >> (std::ofstream& idof) const;

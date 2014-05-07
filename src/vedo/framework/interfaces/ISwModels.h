@@ -36,7 +36,7 @@ public:
 		 const double&      dCn,
 		 const double&      dImpactDepth,
 		 const njr::Vector3d& vImpactDirection,
-		 const njr::Vector3d& vRelativeNormalVelocity);
+		 const njr::Vector3d& vInitialRelativeNormalVelocity);
 
 	njr::Vector3d NormalForce
 		(const double&      dKn,
