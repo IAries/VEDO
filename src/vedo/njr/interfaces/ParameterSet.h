@@ -173,6 +173,25 @@ public:
 		}
 	};
 
+	ParameterSet<TNAME, TVALUE> Average(const ParameterSet<TNAME, TVALUE>& pstTarget) const
+	{
+		ParameterSet<TNAME, TVALUE> pstNew;
+
+		for(typename std::map<TNAME, TVALUE>::const_iterator
+			_mIterator  = _mttParameter.begin();
+			_mIterator != _mttParameter.end()  ;
+			_mIterator++                        )
+		{
+			if(pstTarget.Defined(_mIterator->first))
+			{
+				pstNew._mttParameter[_mIterator->first]
+					= 0.5 * (_mIterator->second + pstTarget(_mIterator->first));
+			}
+		}
+		return pstNew;
+	};
+
+
 	bool Defined(const TNAME& tName) const
 	{
 		typename std::map<TNAME, TVALUE>::const_iterator

@@ -17,22 +17,28 @@
 void usage (int g)
 {
 	std::cout
-		<< "iris-gm " << vedo::sVersion << std::endl
+		<< "iris-gm-ei " << vedo::sVersion << std::endl
 		<< std::endl
 		<< '\t' << "Usage:" << std::endl
-		<< '\t' << "iris-gm <Mode> <IDO file> <Record> <UpIact>" << std::endl
+		<< '\t' << "iris-gm-ei <Mode> <IDO file> <Record> <UpIact>"       << std::endl
+		<< '\t' << "           <InfluenceRadius> <AttractedSourceZ>"      << std::endl
+		<< '\t' << "           <InfluenceHeight> <ExpectedExternalForce>" << std::endl
 		<< std::endl
-		<< '\t' << "Mode           : geometric/redistribute"     << std::endl
-		<< '\t' << "Record         : integer"                    << std::endl
-		<< '\t' << "UpIact         : integer"                    << std::endl
+		<< '\t' << "Mode                 : geometric/redistribute"        << std::endl
+		<< '\t' << "Record               : integer"                       << std::endl
+		<< '\t' << "UpIact               : integer"                       << std::endl
+		<< '\t' << "InfluenceRadius      : Please read the source code"   << std::endl
+		<< '\t' << "AttractedSourceZ     : Please read the source code"   << std::endl
+		<< '\t' << "InfluenceHeight      : Please read the source code"   << std::endl
+		<< '\t' << "ExpectedExternalForce: Please read the source code"   << std::endl
 		<< std::endl
-		<< '\t' << "Error Condition: " << g << std::endl;
+		<< '\t' << "Error Condition      : " << g << std::endl;
 	exit(0);
 }
 
 int main (int argc, char* argv[])
 {
-	if (argc < 5)
+	if (argc < 10)
 		usage(1);
 
 	MPI_Init(&argc, &argv);
@@ -96,18 +102,49 @@ int main (int argc, char* argv[])
 	{
 		while (sm.ReDistribute());
 	}
-/*
-	else if (!strcmp(mode, "show"))
-	{
-		sm.ShowInteraction();
-		std::string vtufile(idofilename);
-		vtufile = vtufile.substr(0, vtufile.size() - 4) += ".vtu";
-		sm.WriteInteractionForce(vtufile.c_str());
-	}
-*/
 	else
 	{
-		while (sm.Run());
+		double dTubeRadius, dSoruceHeight, dAttractHeight, dExpectedForce;
+		sscanf(argv[6], "%lg", &dTubeRadius);
+		sscanf(argv[7], "%lg", &dSoruceHeight);
+		sscanf(argv[8], "%lg", &dAttractHeight);
+		sscanf(argv[9], "%lg", &dExpectedForce);
+		double dt = pDOWorld->GetSystemParameter()->GetTimeInterval();
+		njr::Vector3d vP, vAttractForce;
+		double dAttractForceConstant = dExpectedForce * dt;
+		njr::Vector3d vAttractSoruce(0.0, 0.0, dSoruceHeight);
+		std::vector<std::pair<njr::Vector3d, njr::Vector3d> > vvExternalImpact;
+		for(unsigned u=0; u<pDOWorld->GetSystemParameter()->GetDONumber(); u++)
+		{
+			if(u > 5)
+			{
+				vP = pDOWorld->GetDOStatus(u)->GetPosition();
+				if(   (std::pow(vP.x()*vP.x()+vP.y()*vP.y(), 0.5) <= dTubeRadius)
+				&& (vP.z() >= dAttractHeight)                                              )
+				{
+					if(vAttractSoruce.z() != vP.z())
+					{
+						vAttractForce.SetZ
+							(dAttractForceConstant / std::pow(vAttractSoruce.z() - vP.z(), 2.0));
+						vvExternalImpact.push_back(std::make_pair(vAttractForce, njr::ZERO));
+					}
+					else
+					{
+						vvExternalImpact.push_back(std::make_pair(njr::ZERO, njr::ZERO));
+					}
+				}
+				else
+				{
+					vvExternalImpact.push_back(std::make_pair(njr::ZERO, njr::ZERO));
+				}
+			}
+			else
+			{
+				vvExternalImpact.push_back(std::make_pair(njr::ZERO, njr::ZERO));
+			}
+		}
+
+		while (sm.Run(vvExternalImpact));
 	}
 
 	time(&starttime);

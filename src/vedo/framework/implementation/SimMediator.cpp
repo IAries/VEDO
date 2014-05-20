@@ -866,6 +866,7 @@ bool SimMediator::Run
 	starttime = endtime;
 
 	cDO.AddFieldImpact(csp->GetFieldAcceleration() * csp->GetTimeInterval());
+	cDO.AddConstrainedImpact(csp->GetTimeInterval());
 	for(unsigned long i=0; i<cDO.size(); i++)
 	{
 		cDO.AddImpact
@@ -879,7 +880,7 @@ bool SimMediator::Run
 	starttime = endtime;
 
 	cDO.Response(csp->GetTimeInterval());
-	cDO.EnforcePeriodicBoundaryConditions(csp->GetPeriodicBoundaryConditions());   // PBC by Liao 2009/5/27
+	cDO.EnforcePeriodicBoundaryConditions(csp->GetPeriodicBoundaryConditions());
 
 	time(&endtime);
 	timeResponseUpdating += (endtime - starttime);
@@ -899,10 +900,14 @@ bool SimMediator::Run
 	timeNextStep += (endtime - starttime - (pConsultant->timePartitioning));
 	starttime = endtime;
 
+	if (pConsultant->ISRecord() || pConsultant->ISReset())
+	{
+		CalculateSystemEnergy();
+	};
+
 	// Attention check if it has to rebuilder
 	if (pConsultant->ISReset())
 	{
-		CalculateSystemEnergy();
 		Initiate();
 	};
 

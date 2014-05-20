@@ -105,7 +105,7 @@ std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 	njr::WriteString(sEquationType,  idof);
 
 	unsigned int ims = (unsigned int) svIactMechanisms.size();
-	idof.write((const char*) &ims, sizeof(_VEDO_unsigned_long));
+	idof.write((const char*) &ims, sizeof(vedo_unsigned_long));
 	IactMechanism im;
 	for (unsigned int i=0; i<ims; i++)
 	{
@@ -123,7 +123,7 @@ std::ifstream& IactModel::operator << (std::ifstream& idof)
 	njr::ReadString(sEquationType,  idof);
 
     unsigned int ims;
-	idof.read((char*) &ims, sizeof (_VEDO_unsigned_long));
+	idof.read((char*) &ims, sizeof (vedo_unsigned_long));
 	IactMechanism im;
 	for (unsigned int i=0; i<ims; i++)
 	{

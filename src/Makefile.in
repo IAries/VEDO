@@ -4,8 +4,15 @@ ENVIRONMENT_MODE = MS-Win64-Adm-MinGW
 OPTIMIZE_FLAG  = -O3
 OPTIMIZE_FLAGd = -O0 -D_VEDO_DEBUG
 
-ifeq ($(ENVIRONMENT_MODE), MyLab-MyLinuxWorkstation-MyID-GCC)
+ifeq ($(ENVIRONMENT_MODE), MyLab-MyWorkstation-MyID-MyCompiler)
     PREFIX            = ${HOME}/usr/local/vedo/
+    MAKE              = gmake
+    COMPILER_MODE     = GCC
+    AR                = /usr/bin/ar
+    AR_FLAG           = -r
+else
+ifeq ($(ENVIRONMENT_MODE), MacOS-root-GCC)
+    PREFIX            = ${HOME}/vedo/
     MAKE              = gmake
     COMPILER_MODE     = GCC
     AR                = /usr/bin/ar
@@ -73,6 +80,7 @@ endif
 endif
 endif
 endif
+endif
 
 
 
@@ -109,6 +117,28 @@ SHARE_LNK_FLAGd   = ${VEDO_LNK_FLAGd} ${USR_LNK_FLAG}
 
 
 
+ifeq ($(COMPILER_MODE), GCC)
+    COMPILER_ROOT = /usr/
+    COMPILER_INC  = ${COMPILER_ROOT}include/
+    COMPILER_LIB  = ${COMPILER_ROOT}lib/
+    CXX           = ${COMPILER_ROOT}bin/g++
+    CXX_FLAG      = ${SHARE_CXX_FLAG}  -I${COMPILER_INC}
+    CXX_FLAGd     = ${SHARE_CXX_FLAGd} -I${COMPILER_INC}
+    LNK           = ${CXX}
+    LNK_FLAG      = ${SHARE_LNK_FLAG}  -L${COMPILER_LIB} -static -static-libgcc -static-libstdc++
+    LNK_FLAGd     = ${SHARE_LNK_FLAGd} -L${COMPILER_LIB} -static -static-libgcc -static-libstdc++
+    MPI_ROOT      = /opt/mpich/
+    MPI_INC       = ${MPI_ROOT}include/
+    MPI_CXX_FLAG  = -I${MPI_INC}
+    MPI_LIB       = ${MPI_ROOT}lib/
+    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -lmpi
+    mCXX          = ${CXX}
+    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
+    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
+    mLNK          = ${mCXX}
+    mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
+    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
+else
 ifeq ($(COMPILER_MODE), MS-Win64-Adm-MinGW)
     COMPILER_ROOT = /c/usr/win-builds-64/
     COMPILER_INC  = ${COMPILER_ROOT}include/
@@ -218,6 +248,7 @@ ifeq ($(COMPILER_MODE), NCHC-ALPS-GCC)
     mLNK          = ${mCXX}
     mLNK_FLAG     = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAG}
     mLNK_FLAGd    = ${MPI_LNK_FLAG} ${SHARE_LNK_FLAGd}
+endif
 endif
 endif
 endif

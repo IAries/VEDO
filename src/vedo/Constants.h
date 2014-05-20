@@ -5,11 +5,11 @@
 
 namespace vedo
 {
-typedef unsigned __int64 _VEDO_unsigned_long;
-typedef          __int64 _VEDO_long;
+typedef unsigned __int64 vedo_unsigned_long;
+typedef          __int64 vedo_long;
 
-static const std::string sVersion            = "X4 build 507";
-static const std::string sPublish            = "2014-05-07";
+static const std::string sVersion            = "X4 build 520";
+static const std::string sPublish            = "2014-05-20";
 
 static unsigned          uSizeOfConstant     = 3;     // dSafetyFactor, uNumUDDDOStatus, and uNumUDDImpactStatus
 static double            dSafetyFactor       = 1.1;   // Safety factor for contact detection

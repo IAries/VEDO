@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8C03691F-D99F-45A6-A63A-8589FA4D70B5}</ProjectGuid>
-    <RootNamespace>iris-gf</RootNamespace>
-    <ProjectName>iris-gf</ProjectName>
+    <ProjectGuid>{BFF37D8B-C6FD-46BB-AF38-566907A062EF}</ProjectGuid>
+    <RootNamespace>iris-gm-ei</RootNamespace>
+    <ProjectName>iris-gm-ei</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -45,12 +45,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\src\;C:\usr\mpich2-32\include\;..\..\ParMetis;..\..\ParMetis\ParMETISLib;..\..\ParMetis\METISLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\;C:\usr\mpich2-32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_VEDO_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>mpi.lib;ParMetis.lib;libvedo-common-debug.lib;libvedo-framework-debug.lib;libvedo-njr-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mpi.lib;libvedo-common-debug.lib;libvedo-framework-debug.lib;libvedo-njr-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\lib\vedo\VisualStudio11-32\;C:\usr\mpich2-32\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -65,13 +65,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\src\;C:\usr\mpich2-32\include\;..\..\ParMetis;..\..\ParMetis\ParMETISLib;..\..\ParMetis\METISLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\;C:\usr\mpich2-32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>mpi.lib;ParMetis.lib;libvedo-common.lib;libvedo-framework.lib;libvedo-njr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mpi.lib;libvedo-common.lib;libvedo-framework.lib;libvedo-njr.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\lib\vedo\VisualStudio11-32\;C:\usr\mpich2-32\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -79,15 +79,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\vedo\iris-gf\interfaces\NBSGPConsultant.h" />
+    <ClCompile Include="..\..\..\src\vedo\iris-gm-ei\implementation\Iris-GM-ei.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\iris-gm-ei\implementation\NBSParallelConsultant.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\vedo\iris-gf\implementation\BakGraphPartition.cpp" />
-    <ClCompile Include="..\..\..\src\vedo\iris-gf\implementation\GraphPartition.cpp" />
-    <ClCompile Include="..\..\..\src\vedo\iris-gf\implementation\Iris-GF.cpp" />
-    <ClCompile Include="..\..\..\src\vedo\iris-gf\implementation\NBSGPConsultant.cpp" />
-    <ClCompile Include="..\..\..\src\vedo\iris-gf\implementation\SyncCon.cpp" />
-    <ClCompile Include="..\..\..\src\vedo\iris-gf\implementation\Table.cpp" />
+    <ClInclude Include="..\..\..\src\vedo\iris-gm\interfaces\NBSParallelConsultant.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

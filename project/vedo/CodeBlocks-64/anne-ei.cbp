@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="anne" />
+		<Option title="anne-ei" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../../../bin/vedo/CodeBlocks-64/anne-debug" prefix_auto="1" extension_auto="1" />
+				<Option output="../../../bin/vedo/CodeBlocks-64/anne-ei-debug" prefix_auto="1" extension_auto="1" />
 				<Option object_output="../../../obj/vedo/CodeBlocks-64/debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -22,7 +22,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="../../../bin/vedo/CodeBlocks-64/anne" prefix_auto="1" extension_auto="1" />
+				<Option output="../../../bin/vedo/CodeBlocks-64/anne-ei" prefix_auto="1" extension_auto="1" />
 				<Option object_output="../../../obj/vedo/CodeBlocks-64/release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -53,7 +53,7 @@
 			<Add directory="../../../lib/vedo/CodeBlocks-64/" />
 			<Add directory="C:/usr/win-builds-64/lib/" />
 		</Linker>
-		<Unit filename="../../../src/vedo/anne/implementation/Anne.cpp" />
+		<Unit filename="../../../src/vedo/anne-ei/implementation/Anne-ei.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

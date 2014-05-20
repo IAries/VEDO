@@ -332,7 +332,7 @@ void IactRecordTab::DumpIactStatus(const double& time, const char* filename) con
 std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 {
     unsigned long ulInteractionNumber = mapImStatus.size();
-	idof.write((char*) &ulInteractionNumber, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &ulInteractionNumber, sizeof(vedo_unsigned_long));
 	if(ulInteractionNumber == 0)
 		return idof;
 
@@ -349,8 +349,8 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 			mapImStatusP != mapImStatus.end();
 			mapImStatusP++                                                                 )
 		{
-			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(_VEDO_unsigned_long));
-			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(_VEDO_unsigned_long));
+			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(vedo_unsigned_long));
+			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(vedo_unsigned_long));
 
 			isp   = &(mapImStatusP->second);
 			bTemp = isp->Contact();
@@ -385,8 +385,8 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 			mapImStatusP != mapImStatus.end();
 			mapImStatusP++                                                                 )
 		{
-			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(_VEDO_unsigned_long));
-			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(_VEDO_unsigned_long));
+			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(vedo_unsigned_long));
+			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(vedo_unsigned_long));
 			isp   = &(mapImStatusP->second);
 			bTemp = isp->Contact();
 			idof.write((char*) &bTemp                             , sizeof(bool));
@@ -419,7 +419,7 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 	mapImStatus.clear();
 	unsigned long ulInteractionNumber;
 
-	idof.read((char*) &ulInteractionNumber, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &ulInteractionNumber, sizeof(vedo_unsigned_long));
 	if(ulInteractionNumber == 0)
 		return idof;
 
@@ -437,8 +437,8 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 		memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
 		for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 		{
-			idof.read((char*) &ulElementsMaster          , sizeof(_VEDO_unsigned_long));
-			idof.read((char*) &ulElementsSlave           , sizeof(_VEDO_unsigned_long));
+			idof.read((char*) &ulElementsMaster          , sizeof(vedo_unsigned_long));
+			idof.read((char*) &ulElementsSlave           , sizeof(vedo_unsigned_long));
 
 			idof.read((char*) &bContact                  , sizeof(bool));
 			is.SetContact(bContact);
@@ -482,8 +482,8 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 	{
 		for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
 		{
-			idof.read((char*) &ulElementsMaster          , sizeof(_VEDO_unsigned_long));
-			idof.read((char*) &ulElementsSlave           , sizeof(_VEDO_unsigned_long));
+			idof.read((char*) &ulElementsMaster          , sizeof(vedo_unsigned_long));
+			idof.read((char*) &ulElementsSlave           , sizeof(vedo_unsigned_long));
 
 			idof.read((char*) &bContact                  , sizeof(bool));
 			is.SetContact(bContact);

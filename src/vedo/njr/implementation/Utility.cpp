@@ -15,7 +15,7 @@ void ReadString(std::string& os, std::ifstream &idof)
 {
 	unsigned int ssize;
 	char buffer [256];
-	idof.read ((char *)&ssize,	sizeof(vedo::_VEDO_unsigned_long));
+	idof.read ((char *)&ssize,	sizeof(vedo::vedo_unsigned_long));
 	idof.read ((char *)buffer, ssize);
 //	os.assign(buffer, 0, ssize);
 	buffer[(ssize>255) ? 255 : ssize]='\0';
@@ -25,7 +25,7 @@ void ReadString(std::string& os, std::ifstream &idof)
 void WriteString(const std::string& ostring, std::ofstream &idof)
 {
 	unsigned int ssize = (unsigned int) ostring.length();
-	idof.write ((char*)& ssize,	sizeof(vedo::_VEDO_unsigned_long));
+	idof.write ((char*)& ssize,	sizeof(vedo::vedo_unsigned_long));
 	idof.write (ostring.c_str(), ssize);
 };
 

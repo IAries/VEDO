@@ -280,17 +280,17 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 
 	njr::WriteString(sDOName  , idof);
 	njr::WriteString(sDOGroup , idof);
-	idof.write((const char*) &eBehavior     , sizeof(_VEDO_unsigned_long)  );
-	idof.write((const char*) &eScope        , sizeof(_VEDO_unsigned_long)  );
-	idof.write((const char*) &dDensity,       sizeof(double)           );
-	idof.write((const char*) &dDensityFactor, sizeof(double)           );
-	idof.write((const char*) &vExternalForce, sizeof(njr::Vector3d)    );
-	idof.write((const char*) &eColor        , sizeof(_VEDO_unsigned_long)  );
-	idof.write((const char*) &eType         , sizeof(_VEDO_unsigned_long)  );
-	idof.write((const char*) &uAttributes   , sizeof(DOShapeAttributes));
+	idof.write((const char*) &eBehavior     , sizeof(vedo_unsigned_long));
+	idof.write((const char*) &eScope        , sizeof(vedo_unsigned_long));
+	idof.write((const char*) &dDensity,       sizeof(double            ));
+	idof.write((const char*) &dDensityFactor, sizeof(double            ));
+	idof.write((const char*) &vExternalForce, sizeof(njr::Vector3d     ));
+	idof.write((const char*) &eColor        , sizeof(vedo_unsigned_long));
+	idof.write((const char*) &eType         , sizeof(vedo_unsigned_long));
+	idof.write((const char*) &uAttributes   , sizeof(DOShapeAttributes ));
 
 	MatOptSize = (unsigned int) matAttributes.size();
-	idof.write((const char*) &MatOptSize    , sizeof(_VEDO_unsigned_long)  );
+	idof.write((const char*) &MatOptSize    , sizeof(vedo_unsigned_long));
 	for (i=0; i<MatOptSize; i++)
 	{
 		DMO=matAttributes[i];
@@ -303,7 +303,7 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 		unsigned numhf = (unsigned int)(polyhedra.constrains().size());
 		std::vector<njr::HalfSpace> constrains = polyhedra.constrains();
 
-		idof.write ((char*) &numhf, sizeof(_VEDO_unsigned_long));
+		idof.write ((char*) &numhf, sizeof(vedo_unsigned_long));
 
 		for (i=0; i<numhf; i++)
 		{
@@ -321,16 +321,16 @@ std::ifstream& DOModel::operator << (std::ifstream &idof)
 
 	njr::ReadString(sDOName  , idof);
 	njr::ReadString(sDOGroup , idof);
- 	idof.read((char*) &eBehavior     , sizeof(_VEDO_unsigned_long));
- 	idof.read((char*) &eScope        , sizeof(_VEDO_unsigned_long));
-	idof.read((char*) &dDensity      , sizeof(double             ));
-	idof.read((char*) &dDensityFactor, sizeof(double             ));
-	idof.read((char*) &vExternalForce, sizeof(njr::Vector3d      ));
- 	idof.read((char*) &eColor        , sizeof(_VEDO_unsigned_long));
-	idof.read((char*) &eType         , sizeof(_VEDO_unsigned_long));
-	idof.read((char*) &uAttributes   , sizeof(DOShapeAttributes  ));
+ 	idof.read((char*) &eBehavior     , sizeof(vedo_unsigned_long));
+ 	idof.read((char*) &eScope        , sizeof(vedo_unsigned_long));
+	idof.read((char*) &dDensity      , sizeof(double            ));
+	idof.read((char*) &dDensityFactor, sizeof(double            ));
+	idof.read((char*) &vExternalForce, sizeof(njr::Vector3d     ));
+ 	idof.read((char*) &eColor        , sizeof(vedo_unsigned_long));
+	idof.read((char*) &eType         , sizeof(vedo_unsigned_long));
+	idof.read((char*) &uAttributes   , sizeof(DOShapeAttributes ));
 
-	idof.read((char*) &MatOptSize    , sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &MatOptSize    , sizeof(vedo_unsigned_long));
 	for (i=0; i<MatOptSize; i++)
 	{
 		njr::ReadString(DMO.Name, idof);
@@ -344,7 +344,7 @@ std::ifstream& DOModel::operator << (std::ifstream &idof)
 		njr::HalfSpace hf;
 		polyhedra.Clear();
 
-		idof.read((char*) &numhf, sizeof (_VEDO_unsigned_long));
+		idof.read((char*) &numhf, sizeof (vedo_unsigned_long));
 
 		for (i=0; i<numhf; i++)
 		{

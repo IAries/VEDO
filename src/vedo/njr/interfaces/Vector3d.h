@@ -78,7 +78,6 @@ public:
 	// Retrieves the direction of this std::vector
 	Vector3d direction() const;
 
-	// Normalize vector which make its length equals to 1
 	bool normalized();
 
 	// Outputs the version and Programmer

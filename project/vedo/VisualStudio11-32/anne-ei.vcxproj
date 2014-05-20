@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{59E0057B-241B-44F4-AB72-F9ED3A2F4BD6}</ProjectGuid>
+    <ProjectGuid>{E8A82233-700D-495E-94FF-ECCE5B9FE11F}</ProjectGuid>
     <RootNamespace>ane</RootNamespace>
-    <ProjectName>test</ProjectName>
+    <ProjectName>anne-ei</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -79,7 +79,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\vedo\test\implementation\Test.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\anne-ei\implementation\Anne-ei.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

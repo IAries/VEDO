@@ -13,9 +13,26 @@
 #include <cmath>
 #include <cstdlib>
 
-njr::Vector3d Node2Vector3d(boost::property_tree::ptree* pt)
+std::ostream& operator <<
+	(std::ostream& os,
+	 const std::pair<int, const boost::property_tree::ptree&>& rNode)
 {
-	boost::property_tree::ptree* pt2 = &(pt->get_child("<xmlattr>"));
+	int iNext = rNode.first + 4;
+	const boost::property_tree::ptree& rPT = rNode.second;
+	os << "\"" << rPT.data() << "\"" << std::endl;
+	for(auto it=rPT.begin(); it!=rPT.end(); ++it)
+	{
+		os.width(iNext);
+		os << "";
+		os << "\"" << it->first << "\"=";
+		os << std::pair<int, const boost::property_tree::ptree&>(iNext, it->second);
+	}
+	return os;
+};
+
+njr::Vector3d Node2Vector3d(boost::property_tree::ptree& pt)
+{
+	boost::property_tree::ptree* pt2 = &(pt.get_child("<xmlattr>"));
 	return
 		njr::Vector3d
 			(pt2->get<double>("x"),
@@ -23,9 +40,9 @@ njr::Vector3d Node2Vector3d(boost::property_tree::ptree* pt)
 			 pt2->get<double>("z") );
 };
 
-njr::HalfSpace Node2HalfSpace(boost::property_tree::ptree* pt)
+njr::HalfSpace Node2HalfSpace(boost::property_tree::ptree& pt)
 {
-	boost::property_tree::ptree* pt2 = &(pt->get_child("<xmlattr>"));
+	boost::property_tree::ptree* pt2 = &(pt.get_child("<xmlattr>"));
 	std::string sense = pt2->get<std::string>("sense");
 	Sense s;
 	if (sense == "E")
@@ -55,29 +72,29 @@ njr::HalfSpace Node2HalfSpace(boost::property_tree::ptree* pt)
 };
 
 std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
-	Node2DOShapeTypeAndAttributes(boost::property_tree::ptree* pt)
+	Node2DOShapeTypeAndAttributes(boost::property_tree::ptree& pt)
 {
 	vedo::DOShapeType       st;
 	vedo::DOShapeAttributes sa;
 
 	boost::property_tree::ptree *pt2, *pt3;
 
-	if(pt->get_child_optional("Sphere"))
+	if(pt.get_child_optional("Sphere"))
 	{
-		pt2 = &(pt->get_child("Sphere"));
+		pt2 = &(pt.get_child("Sphere"));
 		st = vedo::Sphere;
 		sa.sphere.radius = pt2->get<double>("<xmlattr>.Radius", 0.0);
 		if(sa.sphere.radius <= 0.0)
 		{
 			std::cout
-				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree&)" << std::endl
 				<< "        Note: parameter of \"sphere\" is wrong!!" << std::endl;
 			exit(0);
 		}
 	}
-	else if(pt->get_child_optional("QuasiPlate"))
+	else if(pt.get_child_optional("QuasiPlate"))
 	{
-		pt2 = &(pt->get_child("QuasiPlate"));
+		pt2 = &(pt.get_child("QuasiPlate"));
 		st = vedo::QuasiPlate;
 		sa.quasiplate.width  = pt2->get<double>("<xmlattr>.Width" , 0.0);
 		sa.quasiplate.length = pt2->get<double>("<xmlattr>.Length", 0.0);
@@ -87,14 +104,14 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
 		   || (sa.quasiplate.height <= 0.0))
 		{
 			std::cout
-				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
 				<< "        Note: parameter of \"QuasiPlate\" is wrong!!" << std::endl;
 			exit(0);
 		}
 	}
-	else if(pt->get_child_optional("QuasiPlateWithCircularHole"))
+	else if(pt.get_child_optional("QuasiPlateWithCircularHole"))
 	{
-		pt2 = &(pt->get_child("QuasiPlateWithCircularHole"));
+		pt2 = &(pt.get_child("QuasiPlateWithCircularHole"));
 		st = vedo::QuasiPlateWithCircularHole;
 		sa.quasiplatewithcircularhole.width       = pt2->get<double>("<xmlattr>.Width"      , 0.0);
 		sa.quasiplatewithcircularhole.length      = pt2->get<double>("<xmlattr>.Length"     , 0.0);
@@ -108,14 +125,14 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
 		   || (sa.quasiplatewithcircularhole.holeradius <= 0.0))
 		{
 			std::cout
-				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
 				<< "        Note: parameter of \"QuasiPlateWithCircularHole\" is wrong!!" << std::endl;
 			exit(0);
 		}
 	}
-	else if(pt->get_child_optional("QuasiCylinder"))
+	else if(pt.get_child_optional("QuasiCylinder"))
 	{
-		pt2 = &(pt->get_child("QuasiCylinder"));
+		pt2 = &(pt.get_child("QuasiCylinder"));
 		st = vedo::QuasiCylinder;
 		sa.quasicylinder.radius = pt2->get<double>("<xmlattr>.Radius", 0.0);
 		sa.quasicylinder.height = pt2->get<double>("<xmlattr>.Height", 0.0);
@@ -123,14 +140,14 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
 		   || (sa.quasicylinder.height <= 0.0))
 		{
 			std::cout
-				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
 				<< "        Note: parameter of \"QuasiCylinder\" is wrong!!" << std::endl;
 			exit(0);
 		}
 	}
-	else if(pt->get_child_optional("Ellipsoid"))
+	else if(pt.get_child_optional("Ellipsoid"))
 	{
-		pt2 = &(pt->get_child("Ellipsoid"));
+		pt2 = &(pt.get_child("Ellipsoid"));
 		st = vedo::Ellipsoid;
 		sa.ellipsoid.xlength = pt2->get<double>("<xmlattr>.XLength", 0.0);
 		sa.ellipsoid.ylength = pt2->get<double>("<xmlattr>.YLength", 0.0);
@@ -140,24 +157,24 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
 		   || (sa.ellipsoid.zlength <= 0.0))
 		{
 			std::cout
-				<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
 				<< "        Note: parameter of \"Ellipsoid\" is wrong!!" << std::endl;
 			exit(0);
 		}
 	}
-	else if(pt->get_child_optional("Polyhedra"))
+	else if(pt.get_child_optional("Polyhedra"))
 	{
-		pt2 = &(pt->get_child("Polyhedra"));
+		pt2 = &(pt.get_child("Polyhedra"));
 		st = vedo::Polyhedra;
 	}
-	else if(pt->get_child_optional("DMSphere"))
+	else if(pt.get_child_optional("DMSphere"))
 	{
-		pt2 = &(pt->get_child("DMSphere"));
+		pt2 = &(pt.get_child("DMSphere"));
 		st = vedo::DMSphere;
 	}
-	else if(pt->get_child_optional("polyhedrabrep"))
+	else if(pt.get_child_optional("polyhedrabrep"))
 	{
-		pt2 = &(pt->get_child("polyhedrabrep"));
+		pt2 = &(pt.get_child("polyhedrabrep"));
 		st = vedo::PolyhedraBRep;
 	}
 	else
@@ -169,7 +186,7 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
 };
 
 static vedo::SystemParameter*
-	Node2SystemParameter(boost::property_tree::ptree* pt)
+	Node2SystemParameter(boost::property_tree::ptree& pt)
 {
 	std::string sName;
 	boost::property_tree::ptree* pt2;
@@ -180,11 +197,11 @@ static vedo::SystemParameter*
 		vLowerBoundaryZOI, vUpperBoundaryZOI,
 		vLowerBoundaryPBC, vUpperBoundaryPBC;
 
-	if (pt->get_child_optional("SimConstant"))
+	if (pt.get_child_optional("SimConstant"))
 	{
 		BOOST_FOREACH
 			(boost::property_tree::ptree::value_type &v,
-			 pt->get_child("SimConstant")               )
+			 pt.get_child("SimConstant")               )
 		{
 			sName = v.second.get<std::string>("<xmlattr>.Name");
 			if(sName == "ContactDetectSafetyFactor")
@@ -217,17 +234,17 @@ static vedo::SystemParameter*
 		}
 	}
 
-	vFieldAcceleration = Node2Vector3d(&(pt->get_child("FieldAcceleration")));
+	vFieldAcceleration = Node2Vector3d(pt.get_child("FieldAcceleration"));
 
-	pt2 = &(pt->get_child("TimeControl.<xmlattr>"));
+	pt2 = &(pt.get_child("TimeControl.<xmlattr>"));
 	dTimeStart    = pt2->get<double>("Start"   );
 	dTimeStop     = pt2->get<double>("Stop"    );
 	dTimeInterval = pt2->get<double>("Interval");
 	dTimeCurrent  = pt2->get<double>("Current" );
 
-	if (pt->get_child_optional("ZOI"))
+	if (pt.get_child_optional("ZOI"))
 	{
-		pt2 = &(pt->get_child("ZOI.<xmlattr>"));
+		pt2 = &(pt.get_child("ZOI.<xmlattr>"));
 		double dBV[3];
 		dBV[0] = pt2->get<double>("XMin", 0.0);
 		dBV[1] = pt2->get<double>("YMin", 0.0);
@@ -244,9 +261,9 @@ static vedo::SystemParameter*
         vUpperBoundaryZOI.Set(0.0, 0.0, 0.0);
 	}
 
-	if (pt->get_child_optional("PBC"))
+	if (pt.get_child_optional("PBC"))
 	{
-		pt2 = &(pt->get_child("PBC.<xmlattr>"));
+		pt2 = &(pt.get_child("PBC.<xmlattr>"));
 		double dBV[3];
 		dBV[0] = pt2->get<double>("XMin", 0.0);
 		dBV[1] = pt2->get<double>("YMin", 0.0);
@@ -292,7 +309,7 @@ vedo::DOBehaviorType String2DOBehaviorType(const std::string& s)
 	else
 	{
 		std::cout
-			<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: vedo::DOBehaviorType String2DOBehavior(const std::string&)" << std::endl
+			<< "Error!! Code: DOWorld_ReadXML.cpp: vedo::DOBehaviorType String2DOBehavior(const std::string&)" << std::endl
 			<< "        Note: Type of \"Behavior\" is illegal!!" << std::endl;
 		exit(0);
 	}
@@ -359,15 +376,15 @@ vedo::DOScopeType String2ScopeType
 	else
 	{
 		std::cout
-			<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: vedo::DOScopeType String2ScopeType(const std::string&, vedo::DOBehaviorType&)" << std::endl
+			<< "Error!! Code: DOWorld_ReadXML.cpp: vedo::DOScopeType String2ScopeType(const std::string&, vedo::DOBehaviorType&)" << std::endl
 			<< "        Note: Type of \"Scope\" is illegal!!" << std::endl;
 		exit(0);
 	}
 };
 
-static vedo::DOModel* Node2DOModel(boost::property_tree::ptree* pt)
+static vedo::DOModel* Node2DOModel(boost::property_tree::ptree& pt)
 {
-	boost::property_tree::ptree* pt2 = &pt->get_child("<xmlattr>");
+	boost::property_tree::ptree* pt2 = &pt.get_child("<xmlattr>");
 
 	std::string          sDOName        = pt2->get<std::string>("DOName");
 	std::string          sDOGroup       = pt2->get<std::string>("DOGroup");
@@ -378,35 +395,35 @@ static vedo::DOModel* Node2DOModel(boost::property_tree::ptree* pt)
 	vedo::DOScopeType    eScope         = String2ScopeType(pt2->get<std::string>("Scope", "undefined"), eBehavior);
 
 	njr::Vector3d vExternalForce;
-	if(pt->get_child_optional("ExternalForce"))
+	if(pt.get_child_optional("ExternalForce"))
 	{
-		vExternalForce = Node2Vector3d(&pt->get_child("ExternalForce"));
+		vExternalForce = Node2Vector3d(pt.get_child("ExternalForce"));
 	}
 
 	vedo::DOShapeType       st;
 	vedo::DOShapeAttributes sa;
-	if(pt->get_child_optional("Shape"))
+	if(pt.get_child_optional("Shape"))
 	{
 		std::pair<vedo::DOShapeType, vedo::DOShapeAttributes>
-			psa = Node2DOShapeTypeAndAttributes(&pt->get_child("Shape"));
+			psa = Node2DOShapeTypeAndAttributes(pt.get_child("Shape"));
 		st = psa.first;
 		sa = psa.second;
 	}
 	else
 	{
 		std::cout
-			<< "Error!! Code: DOWorld_ReadXMLBoost.cpp: void Node2DOModel(boost::property_tree::ptree*)" << std::endl
+			<< "Error!! Code: DOWorld_ReadXML.cpp: void Node2DOModel(boost::property_tree::ptree*)" << std::endl
 			<< "        Note: Cannot find tag \"Shape\" in DOModel!!" << std::endl;
 		exit(0);
 	}
 
 	std::vector<vedo::DOMaterialAttribute> cMatOpt(0);
-	if (pt->get_child_optional("MaterialOption"))
+	if (pt.get_child_optional("MaterialOption"))
 	{
 		vedo::DOMaterialAttribute DOMatOpt;
 		BOOST_FOREACH
 			(boost::property_tree::ptree::value_type &v,
-			 pt->get_child("MaterialOption")            )
+			 pt.get_child("MaterialOption")            )
 		{
 			DOMatOpt.Name  = v.second.get<std::string>("<xmlattr>.Name");
 			DOMatOpt.Value = v.second.get<double>("<xmlattr>.Value");
@@ -417,13 +434,13 @@ static vedo::DOModel* Node2DOModel(boost::property_tree::ptree* pt)
 	if(st == vedo::Polyhedra)
 	{
 		njr::NJRpolyhedra polyhedra;
-		if (pt->get_child_optional("Shape.Polyhedra"))
+		if (pt.get_child_optional("Shape.Polyhedra"))
 		{
 			BOOST_FOREACH
 				(boost::property_tree::ptree::value_type &v,
-				 pt->get_child("Shape.Polyhedra")           )
+				 pt.get_child("Shape.Polyhedra")           )
 			{
-				polyhedra.AddConstrain(Node2HalfSpace(&v.second));
+				polyhedra.AddConstrain(Node2HalfSpace(v.second));
 			}
 		}
 		return new vedo::DOModel
@@ -436,9 +453,9 @@ static vedo::DOModel* Node2DOModel(boost::property_tree::ptree* pt)
 		 vExternalForce, st, sa, cColor, cMatOpt                        );
 };
 
-static vedo::IactModel* Node2IactModel(boost::property_tree::ptree* pt)
+static vedo::IactModel* Node2IactModel(boost::property_tree::ptree& pt)
 {
-	boost::property_tree::ptree* pt2 = &pt->get_child("<xmlattr>");
+	boost::property_tree::ptree* pt2 = &pt.get_child("<xmlattr>");
 
 	std::string sMasterGroup  = pt2->get<std::string>("MasterGroup");
 	std::string sSlaveGroup   = pt2->get<std::string>("SlaveGroup");
@@ -448,11 +465,12 @@ static vedo::IactModel* Node2IactModel(boost::property_tree::ptree* pt)
 	vedo::IactMechanism              iactmechanism;
 
 	bool bFirstData = true;
-	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, *pt)
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt)
 	{
 		if(bFirstData)
 		{
 			bFirstData = false;
+			// First sub-node is "<xmlattr>", so skip it.
 		}
 		else
 		{
@@ -466,25 +484,25 @@ static vedo::IactModel* Node2IactModel(boost::property_tree::ptree* pt)
 		(sMasterGroup, sSlaveGroup, sEquationType, svIactMechanisms);
 };
 
-static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree* pt)
+static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)
 {
-	std::string sDOName = pt->get<std::string>("<xmlattr>.DOName");
-	njr::Vector3d vPosition        = Node2Vector3d(&pt->get_child("Position"       ));
-	njr::Vector3d vVelocity        = Node2Vector3d(&pt->get_child("Velocity"       ));
-	njr::Vector3d vOrientationX    = Node2Vector3d(&pt->get_child("OrientationX"   ));
-	njr::Vector3d vOrientationZ    = Node2Vector3d(&pt->get_child("OrientationZ"   ));
-	njr::Vector3d vAngularVelocity = Node2Vector3d(&pt->get_child("AngularVelocity"));
+	std::string sDOName = pt.get<std::string>("<xmlattr>.DOName");
+	njr::Vector3d vPosition        = Node2Vector3d(pt.get_child("Position"       ));
+	njr::Vector3d vVelocity        = Node2Vector3d(pt.get_child("Velocity"       ));
+	njr::Vector3d vOrientationX    = Node2Vector3d(pt.get_child("OrientationX"   ));
+	njr::Vector3d vOrientationZ    = Node2Vector3d(pt.get_child("OrientationZ"   ));
+	njr::Vector3d vAngularVelocity = Node2Vector3d(pt.get_child("AngularVelocity"));
 
 	njr::Vector3d vImpact;
-	if(pt->get_child_optional("Impact"))
+	if(pt.get_child_optional("Impact"))
 	{
-		vImpact = Node2Vector3d(&pt->get_child("Impact"));
+		vImpact = Node2Vector3d(pt.get_child("Impact"));
 	}
 
 	njr::Vector3d vAngularImpact;
-	if(pt->get_child_optional("AngularImpact"))
+	if(pt.get_child_optional("AngularImpact"))
 	{
-		vAngularImpact = Node2Vector3d(&pt->get_child("AngularImpact"));
+		vAngularImpact = Node2Vector3d(pt.get_child("AngularImpact"));
 	}
 
 	return new vedo::DOStatus
@@ -493,9 +511,9 @@ static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree* pt)
 };
 
 static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*>
-	Node2IactStatus(boost::property_tree::ptree* pt)
+	Node2IactStatus(boost::property_tree::ptree& pt)
 {
-	boost::property_tree::ptree* pt2 = &(pt->get_child("<xmlattr>"));
+	boost::property_tree::ptree* pt2 = &(pt.get_child("<xmlattr>"));
 
 	unsigned long ulMaster = pt2->get<unsigned long>("MasterDOStatusSN");
 	unsigned long ulSlave  = pt2->get<unsigned long>("SlaveDOStatusSN" );
@@ -518,11 +536,11 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*>
 	double dInitialVelocity = pt2->get<double>("InitialVelocity");
 	double dOverlap         = pt2->get<double>("Overlap"        );
 
-	njr::Vector3d vShearForce            = Node2Vector3d(&pt->get_child("ShearForce"           ));
-	njr::Vector3d vImpactPoint           = Node2Vector3d(&pt->get_child("ImpactPoint"          ));
-	njr::Vector3d vImpactDirection       = Node2Vector3d(&pt->get_child("ImpactDirection"      ));
-	njr::Vector3d vImpactToMaster        = Node2Vector3d(&pt->get_child("ImpactToMaster"       ));
-	njr::Vector3d vAngularImpactToMaster = Node2Vector3d(&pt->get_child("AngularImpactToMaster"));
+	njr::Vector3d vShearForce            = Node2Vector3d(pt.get_child("ShearForce"           ));
+	njr::Vector3d vImpactPoint           = Node2Vector3d(pt.get_child("ImpactPoint"          ));
+	njr::Vector3d vImpactDirection       = Node2Vector3d(pt.get_child("ImpactDirection"      ));
+	njr::Vector3d vImpactToMaster        = Node2Vector3d(pt.get_child("ImpactToMaster"       ));
+	njr::Vector3d vAngularImpactToMaster = Node2Vector3d(pt.get_child("AngularImpactToMaster"));
 
 	if(vedo::uNumUDDImpactStatus != 0)
 	{
@@ -532,25 +550,25 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*>
 			*(dpudv+u) = 0.0;
 		}
 
-		if(pt->get_child_optional("AccumulativeUserDefinedValue"))
+		if(pt.get_child_optional("AccumulativeUserDefinedValue"))
 		{
 			unsigned uLocation = 0;
 			BOOST_FOREACH
 				(boost::property_tree::ptree::value_type &v,
-				 pt->get_child("AccumulativeUserDefinedValue"))
+				 pt.get_child("AccumulativeUserDefinedValue"))
 			{
 				*(dpudv+uLocation) = v.second.get<double>("<xmlattr>.Value");
 				uLocation++;
 			}
 		}
 
-		if(pt->get_child_optional("UserDefinedValue"))
+		if(pt.get_child_optional("UserDefinedValue"))
 		{
 			dpudv += 2*vedo::uNumUDDImpactStatus;
 			unsigned uLocation = 0;
 			BOOST_FOREACH
 				(boost::property_tree::ptree::value_type &v,
-				 pt->get_child("UserDefinedValue"))
+				 pt.get_child("UserDefinedValue"))
 			{
 				*(dpudv+uLocation) = v.second.get<double>("<xmlattr>.Value");
 				uLocation++;
@@ -586,12 +604,12 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 {
 	DOWorld::Clear();
 
-	boost::property_tree::ptree bPTree;//, *pt;
+	boost::property_tree::ptree bPTree;
 	boost::property_tree::xml_parser::read_xml(xmlFile, bPTree);
 	boost::property_tree::ptree* pt = &bPTree.get_child("DOWorld");
 
 	pSystemParameter
-		= Node2SystemParameter(&pt->get_child("SimParameter"));
+		= Node2SystemParameter(pt->get_child("SimParameter"));
 
 	if(pt->get_child_optional("DOModelTab"))
 	{
@@ -599,7 +617,7 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 			(boost::property_tree::ptree::value_type &v,
 			 pt->get_child("DOModelTab")                )
 		{
-			cDOModel.push_back(Node2DOModel(&v.second));
+			cDOModel.push_back(Node2DOModel(v.second));
 		}
 	}
 	else
@@ -616,7 +634,7 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 			(boost::property_tree::ptree::value_type &v,
 			 pt->get_child("IactModelTab")              )
 		{
-			cIactModel.push_back(Node2IactModel(&v.second));
+			cIactModel.push_back(Node2IactModel(v.second));
 		}
 	}
 	else
@@ -633,7 +651,7 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 			(boost::property_tree::ptree::value_type &v,
 			 pt->get_child("DOStatusTab")               )
 		{
-			cDOStatus.push_back(Node2DOStatus(&v.second));
+			cDOStatus.push_back(Node2DOStatus(v.second));
 		}
 		pSystemParameter->SetDONumber(cDOStatus.size());
 	}
@@ -654,7 +672,7 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 				(boost::property_tree::ptree::value_type &v,
 				 pt->get_child("IactStatusTab")             )
 			{
-				ululis = Node2IactStatus(&v.second);
+				ululis = Node2IactStatus(v.second);
 				irtp->PushRecord(ululis.first.first, ululis.first.second, *(ululis.second));
 			}
 			unsigned long ulSize = irtp->GetTabSize();
@@ -669,12 +687,12 @@ bool DOWorld::ReadXML(const char* xmlFile)
 {
 	DOWorld::Clear();
 
-	boost::property_tree::ptree bPTree;//, *pt;
+	boost::property_tree::ptree bPTree;
 	boost::property_tree::xml_parser::read_xml(xmlFile, bPTree);
 	boost::property_tree::ptree* pt = &bPTree.get_child("DOWorld");
 
 	pSystemParameter
-		= Node2SystemParameter(&pt->get_child("SimParameter"));
+		= Node2SystemParameter(pt->get_child("SimParameter"));
 
 	if(pt->get_child_optional("DOModelTab"))
 	{
@@ -682,7 +700,7 @@ bool DOWorld::ReadXML(const char* xmlFile)
 			(boost::property_tree::ptree::value_type &v,
 			 pt->get_child("DOModelTab")                )
 		{
-			cDOModel.push_back(Node2DOModel(&v.second));
+			cDOModel.push_back(Node2DOModel(v.second));
 		}
 	}
 	else
@@ -699,7 +717,7 @@ bool DOWorld::ReadXML(const char* xmlFile)
 			(boost::property_tree::ptree::value_type &v,
 			 pt->get_child("IactModelTab")              )
 		{
-			cIactModel.push_back(Node2IactModel(&v.second));
+			cIactModel.push_back(Node2IactModel(v.second));
 		}
 	}
 	else
@@ -716,7 +734,7 @@ bool DOWorld::ReadXML(const char* xmlFile)
 			(boost::property_tree::ptree::value_type &v,
 			 pt->get_child("DOStatusTab")               )
 		{
-			cDOStatus.push_back(Node2DOStatus(&v.second));
+			cDOStatus.push_back(Node2DOStatus(v.second));
 		}
 		pSystemParameter->SetDONumber(cDOStatus.size());
 	}

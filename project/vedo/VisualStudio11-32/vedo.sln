@@ -37,6 +37,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common.vcxproj", 
 		{8EE79D93-E8C1-465D-909A-F2D47DAD53FB} = {8EE79D93-E8C1-465D-909A-F2D47DAD53FB}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "anne-ei", "anne-ei.vcxproj", "{E8A82233-700D-495E-94FF-ECCE5B9FE11F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iris-gm-ei", "iris-gm-ei.vcxproj", "{BFF37D8B-C6FD-46BB-AF38-566907A062EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -77,6 +81,14 @@ Global
 		{59E0057B-241B-44F4-AB72-F9ED3A2F4BD6}.Debug|Win32.Build.0 = Debug|Win32
 		{59E0057B-241B-44F4-AB72-F9ED3A2F4BD6}.Release|Win32.ActiveCfg = Release|Win32
 		{59E0057B-241B-44F4-AB72-F9ED3A2F4BD6}.Release|Win32.Build.0 = Release|Win32
+		{E8A82233-700D-495E-94FF-ECCE5B9FE11F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E8A82233-700D-495E-94FF-ECCE5B9FE11F}.Debug|Win32.Build.0 = Debug|Win32
+		{E8A82233-700D-495E-94FF-ECCE5B9FE11F}.Release|Win32.ActiveCfg = Release|Win32
+		{E8A82233-700D-495E-94FF-ECCE5B9FE11F}.Release|Win32.Build.0 = Release|Win32
+		{BFF37D8B-C6FD-46BB-AF38-566907A062EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BFF37D8B-C6FD-46BB-AF38-566907A062EF}.Debug|Win32.Build.0 = Debug|Win32
+		{BFF37D8B-C6FD-46BB-AF38-566907A062EF}.Release|Win32.ActiveCfg = Release|Win32
+		{BFF37D8B-C6FD-46BB-AF38-566907A062EF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

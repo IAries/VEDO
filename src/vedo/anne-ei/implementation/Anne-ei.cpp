@@ -20,16 +20,21 @@
 void usage (int g)
 {
 	std::cout
-		<< "anne " << vedo::sVersion << std::endl
+		<< "anne-ei " << vedo::sVersion << std::endl
 		<< std::endl
 		<< '\t' << "Usage:" << std::endl
-		<< '\t' << "anne <Mode> <IDO file> <Type> <Record> <UpIact>" << std::endl
+		<< '\t' << "anne-ei <Mode> <IDO file> <Type> <Record> <UpIact>" << std::endl
+		<< '\t' << "        <InfluenceRadius> <AttractedSourceZ>"       << std::endl
+		<< '\t' << "        <InfluenceHeight> <ExpectedExternalForce>"  << std::endl
 		<< std::endl
-		<< '\t' << "Mode                 : analysis/redistribute"    << std::endl
-		<< '\t' << "Type                 : (I)  safe/near"           << std::endl
-		<< '\t' << "                       (II) nbs/leap"            << std::endl
-		<< '\t' << "Record               : integer"                  << std::endl
-		<< '\t' << "UpIact (for Type II) : integer"                  << std::endl
+		<< '\t' << "Mode                 : analysis/redistribute"       << std::endl
+		<< '\t' << "Type                 : nbs/leap"                    << std::endl
+		<< '\t' << "Record               : integer"                     << std::endl
+		<< '\t' << "UpIact               : integer"                     << std::endl
+		<< '\t' << "InfluenceRadius      : Please read the source code" << std::endl
+		<< '\t' << "AttractedSourceZ     : Please read the source code" << std::endl
+		<< '\t' << "InfluenceHeight      : Please read the source code" << std::endl
+		<< '\t' << "ExpectedExternalForce: Please read the source code" << std::endl
 		<< std::endl
 		<< '\t' << "Error Condition      : " << g << std::endl;
 	exit(0);
@@ -37,7 +42,7 @@ void usage (int g)
 
 int main (int argc, char* argv[])
 {
-	if (argc < 5)
+	if (argc < 10)
 		usage(1);
 
 	time_t starttime;   // Starting time
@@ -61,8 +66,7 @@ int main (int argc, char* argv[])
 	sscanf(argv[1], "%s", mode);
 	sscanf(argv[3], "%s", type);
 	sscanf(argv[4], "%d", &RecordStep);
-	if (argc >= 6)
-		sscanf(argv[5], "%d", &UpIact);
+	sscanf(argv[5], "%d", &UpIact);
 
 	vedo::DOWorld*       pDOWorld;
 	vedo::Consultant*    pConsultant;
@@ -80,28 +84,12 @@ int main (int argc, char* argv[])
 		usage(2);
 	}
 
-	if (!strcmp(type, "safe"))
+	if(!strcmp(type, "nbs"))
 	{
-		pConsultant = new vedo::SafeConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
-	}
-    else if (!strcmp(type, "near"))
-    {
-		pConsultant = new vedo::NearConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
-	}
-	else if (!strcmp(type, "nbs"))
-	{
-		if (argc < 6)
-		{
-			usage(3);
-		}
 	  	pConsultant = new vedo::NBSConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
 	}
 	else if (!strcmp(type, "leap"))
 	{
-	    if (argc < 6)
-	    {
-			usage(3);
-		}
 		pConsultant = new vedo::LeapConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
 	}
 	else
@@ -118,21 +106,52 @@ int main (int argc, char* argv[])
 
 	if (!strcmp(mode, "analysis"))
 	{
-		while (sm.Run());
+		double dTubeRadius, dSoruceHeight, dAttractHeight, dExpectedForce;
+		sscanf(argv[6], "%lg", &dTubeRadius);
+		sscanf(argv[7], "%lg", &dSoruceHeight);
+		sscanf(argv[8], "%lg", &dAttractHeight);
+		sscanf(argv[9], "%lg", &dExpectedForce);
+		double dt = pDOWorld->GetSystemParameter()->GetTimeInterval();
+		njr::Vector3d vP, vAttractForce;
+		double dAttractForceConstant = dExpectedForce * dt;
+		njr::Vector3d vAttractSoruce(0.0, 0.0, dSoruceHeight);
+		std::vector<std::pair<njr::Vector3d, njr::Vector3d> > vvExternalImpact;
+		for(unsigned u=0; u<pDOWorld->GetSystemParameter()->GetDONumber(); u++)
+		{
+			if(u > 5)
+			{
+				vP = pDOWorld->GetDOStatus(u)->GetPosition();
+				if(   (std::pow(vP.x()*vP.x()+vP.y()*vP.y(), 0.5) <= dTubeRadius)
+				&& (vP.z() >= dAttractHeight)                                              )
+				{
+					if(vAttractSoruce.z() != vP.z())
+					{
+						vAttractForce.SetZ
+							(dAttractForceConstant / std::pow(vAttractSoruce.z() - vP.z(), 2.0));
+						vvExternalImpact.push_back(std::make_pair(vAttractForce, njr::ZERO));
+					}
+					else
+					{
+						vvExternalImpact.push_back(std::make_pair(njr::ZERO, njr::ZERO));
+					}
+				}
+				else
+				{
+					vvExternalImpact.push_back(std::make_pair(njr::ZERO, njr::ZERO));
+				}
+			}
+			else
+			{
+				vvExternalImpact.push_back(std::make_pair(njr::ZERO, njr::ZERO));
+			}
+		}
+
+		while (sm.Run(vvExternalImpact));
 	}
 	else if (!strcmp(mode, "redistribute"))
 	{
 		while (sm.ReDistribute());
 	}
-/*
-	else if (!strcmp(mode, "show"))
-	{
-		sm.ShowInteraction();
-		std::string vtufile(idofilename);
-		vtufile = vtufile.substr(0, vtufile.size() - 4) += ".vtu";
-		sm.WriteInteractionForce(vtufile.c_str());
-	}
-*/
 	else
 	{
 		usage(1);

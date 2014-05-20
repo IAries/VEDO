@@ -29,15 +29,15 @@ bool DOWorld::ReadIDO(const char* filename, IactRecordTab* irtp)
 
 	pSystemParameter = new SystemParameter(idof);
 
-	idof.read((char*) &lnum_doml, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &lnum_doml, sizeof(vedo_unsigned_long));
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof));
 
-	idof.read((char*) &lnum_iactml, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &lnum_iactml, sizeof(vedo_unsigned_long));
 	for (i=0; i<lnum_iactml; ++i)
 		cIactModel.push_back(new IactModel(idof));
 
-	idof.read((char*) &lnum_dos, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &lnum_dos, sizeof(vedo_unsigned_long));
 	for (i=0; i<lnum_dos; ++i)
 		cDOStatus.push_back(new DOStatus(idof));
 
@@ -71,15 +71,15 @@ bool DOWorld::ReadIDO(const char* filename)
 
 	pSystemParameter = new SystemParameter(idof);
 
-	idof.read((char*) &lnum_doml, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &lnum_doml, sizeof(vedo_unsigned_long));
 	for (i=0; i<lnum_doml; ++i)
 		cDOModel.push_back(new DOModel(idof));
 
-	idof.read((char*) &lnum_iactml, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &lnum_iactml, sizeof(vedo_unsigned_long));
 	for (i=0; i<lnum_iactml; ++i)
 		cIactModel.push_back(new IactModel(idof));
 
-	idof.read((char*) &lnum_dos, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &lnum_dos, sizeof(vedo_unsigned_long));
 	for (i=0; i<lnum_dos; ++i)
 		cDOStatus.push_back(new DOStatus(idof));
 
@@ -108,22 +108,22 @@ void DOWorld::WriteIDO(const char* filename) const
 	*pSystemParameter >> idof;
 
 	unsigned long lnum_doml = (unsigned long) cDOModel.size();
-	idof.write((char*) &lnum_doml, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_doml, sizeof(vedo_unsigned_long));
 	for(idoml=cDOModel.begin(); idoml!=cDOModel.end(); ++idoml)
 		**idoml >> idof;
 
 	unsigned long lnum_iactml = (unsigned long) cIactModel.size();
-	idof.write((char*) &lnum_iactml, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_iactml, sizeof(vedo_unsigned_long));
 	for(iactml=cIactModel.begin(); iactml!=cIactModel.end(); ++iactml)
 		**iactml >> idof;
 
 	unsigned long lnum_dos = (unsigned long) cDOStatus.size();
-	idof.write((char*) &lnum_dos, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_dos, sizeof(vedo_unsigned_long));
 	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
 		**idos >> idof;
 
     unsigned long lnum_is = 0;
-	idof.write((char*) &lnum_is, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_is, sizeof(vedo_unsigned_long));
 
 	idof.close();
 };
@@ -148,17 +148,17 @@ void DOWorld::WriteIDO(const char* filename, const IactRecordTab* irtp) const
 	*pSystemParameter >> idof;
 
 	unsigned long lnum_doml = (unsigned long) cDOModel.size();
-	idof.write((char*) &lnum_doml, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_doml, sizeof(vedo_unsigned_long));
 	for(idoml=cDOModel.begin(); idoml!=cDOModel.end(); ++idoml)
 		**idoml >> idof;
 
 	unsigned long lnum_iactml = (unsigned long) cIactModel.size();
-	idof.write((char*) &lnum_iactml, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_iactml, sizeof(vedo_unsigned_long));
 	for(iactml=cIactModel.begin(); iactml!=cIactModel.end(); ++iactml)
 		**iactml >> idof;
 
 	unsigned long lnum_dos = (unsigned long) cDOStatus.size();
-	idof.write((char*) &lnum_dos, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &lnum_dos, sizeof(vedo_unsigned_long));
 	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
 		**idos >> idof;
 

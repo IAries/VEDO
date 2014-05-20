@@ -72,11 +72,11 @@ std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 {
 	njr::WriteString(vedo::sPublish, idof);
 
-	idof.write((char*) &uSizeOfSimConstant, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &uSizeOfSimConstant, sizeof(vedo_unsigned_long));
 	idof.write((char*) &vedo::dSafetyFactor, sizeof(double));
-	idof.write((char*) &vedo::uNumUDDDOStatus, sizeof(_VEDO_unsigned_long));
-	idof.write((char*) &vedo::uNumUDDImpactStatus, sizeof(_VEDO_unsigned_long));
-	idof.write((char*) &ulMaxIDofDO, sizeof(_VEDO_unsigned_long));
+	idof.write((char*) &vedo::uNumUDDDOStatus, sizeof(vedo_unsigned_long));
+	idof.write((char*) &vedo::uNumUDDImpactStatus, sizeof(vedo_unsigned_long));
+	idof.write((char*) &ulMaxIDofDO, sizeof(vedo_unsigned_long));
 
 	idof.write((char*) &dTimeStart, sizeof(double));
 	idof.write((char*) &dTimeStop, sizeof(double));
@@ -97,11 +97,11 @@ std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 	std::string Publish;
 	njr::ReadString(Publish, idof);
 
-	idof.read((char*) &uSizeOfSimConstant, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &uSizeOfSimConstant, sizeof(vedo_unsigned_long));
 	idof.read((char*) &vedo::dSafetyFactor, sizeof(double));
-	idof.read((char*) &vedo::uNumUDDDOStatus, sizeof(_VEDO_unsigned_long));
-	idof.read((char*) &vedo::uNumUDDImpactStatus, sizeof(_VEDO_unsigned_long));
-	idof.read((char*) &ulMaxIDofDO, sizeof(_VEDO_unsigned_long));
+	idof.read((char*) &vedo::uNumUDDDOStatus, sizeof(vedo_unsigned_long));
+	idof.read((char*) &vedo::uNumUDDImpactStatus, sizeof(vedo_unsigned_long));
+	idof.read((char*) &ulMaxIDofDO, sizeof(vedo_unsigned_long));
 
 	idof.read((char*) &dTimeStart, sizeof(double));
 	idof.read((char*) &dTimeStop, sizeof(double));

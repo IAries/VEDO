@@ -87,11 +87,11 @@ public:
 
 private:
 
-	double           _a;
-	double           _b;
-	double           _c;
-	double           _d;
-	vedo::_VEDO_long _sense;
+	double                    _a;
+	double                    _b;
+	double                    _c;
+	double                    _d;
+	vedo::vedo_unsigned_long _sense;
 
 };
 

@@ -187,7 +187,7 @@ void DOStatus::Clean()
 std::ofstream& vedo::DOStatus::operator >> (std::ofstream& idof) const
 {
      njr::WriteString(sDOName, idof);
-	 idof.write((char*) &ulID            , sizeof(vedo::_VEDO_unsigned_long));
+	 idof.write((char*) &ulID            , sizeof(vedo::vedo_unsigned_long));
 	 idof.write((char*) &vPosition       , sizeof(njr::Vector3d));
 	 idof.write((char*) &vVelocity       , sizeof(njr::Vector3d));
      idof.write((char*) &vOrientationX   , sizeof(njr::Vector3d));
@@ -202,7 +202,7 @@ std::ofstream& vedo::DOStatus::operator >> (std::ofstream& idof) const
 std::ifstream& vedo::DOStatus::operator << (std::ifstream& idof)
 {
      njr::ReadString(sDOName, idof);
-	 idof.read((char*) &ulID            , sizeof(vedo::_VEDO_unsigned_long));
+	 idof.read((char*) &ulID            , sizeof(vedo::vedo_unsigned_long));
 	 idof.read((char*) &vPosition       , sizeof(njr::Vector3d));
 	 idof.read((char*) &vVelocity       , sizeof(njr::Vector3d));
      idof.read((char*) &vOrientationX   , sizeof(njr::Vector3d));
