@@ -3,6 +3,7 @@
 
 #include <vedo/framework/interfaces/Assembler.h>
 
+#include <vedo/common/interfaces/CDQuasiCylinder2QuasiCylinder.h>
 #include <vedo/common/interfaces/CDSphere2QuasiCylinder.h>
 #include <vedo/common/interfaces/CDSphere2QuasiCylinderAT.h>
 #include <vedo/common/interfaces/CDSphere2QuasiPlate.h>
@@ -22,12 +23,6 @@
 #include <vedo/common/interfaces/DOQuasiPlate.h>
 #include <vedo/common/interfaces/DOQuasiPlateWithCircularHole.h>
 #include <vedo/common/interfaces/DOSphere.h>
-
-//#include <vedo/Common/interfaces/GSComplexShape.h>
-//#include <vedo/Common/interfaces/GSCylinder.h>
-//#include <vedo/Common/interfaces/GSEllipsoid.h>
-//#include <vedo/Common/interfaces/GSRectangle.h>
-//#include <vedo/Common/interfaces/GSSphere.h>
 
 #include <vedo/common/interfaces/ISwBSDBF.h>
 #include <vedo/common/interfaces/ISwBtSDBF.h>
@@ -57,12 +52,11 @@ vedo::Assembler* CreateNewAssembler()
 	pAssembler->AddIS(new vedo::IScf<vedo::ISwBtSDBF>("ISwBtSDBF"));
 	pAssembler->AddIS(new vedo::IScf<vedo::ISwHertz>("ISwHertz"));
 
-    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_Sphere>                     (vedo::Sphere, vedo::Sphere                    , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
-    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>              (vedo::Sphere, vedo::QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
-	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>                 (vedo::Sphere, vedo::QuasiPlate                , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
-	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlateWithCircularHole> (vedo::Sphere, vedo::QuasiPlateWithCircularHole, "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
-    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_SphereAT>        (vedo::Sphere, vedo::Sphere       , "List- <CT>ISwLSDAT"));
-    //pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinderAT> (vedo::Sphere, vedo::QuasiCylinder, "List- <CT>ISwLSDAT"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDQuasiCylinder_QuasiCylinder>       (vedo::QuasiCylinder, vedo::QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_Sphere>                     (vedo::Sphere       , vedo::Sphere                    , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
+    pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiCylinder>              (vedo::Sphere       , vedo::QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
+	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlate>                 (vedo::Sphere       , vedo::QuasiPlate                , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
+	pAssembler->AddCD(new vedo::CDcf<vedo::CDSphere_QuasiPlateWithCircularHole> (vedo::Sphere       , vedo::QuasiPlateWithCircularHole, "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwHertz"));
 
     return pAssembler;
 };

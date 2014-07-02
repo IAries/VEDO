@@ -45,6 +45,7 @@
 			<Add directory="C:/usr/win-builds-64/include/" />
 			<Add directory="C:/usr/win-builds-64/mingw/include/" />
 		</Compiler>
+		<Unit filename="../../../src/vedo/common/implementation/CDQuasiCylinder2QuasiCylinder.cpp" />
 		<Unit filename="../../../src/vedo/common/implementation/CDSphere2QuasiCylinder.cpp" />
 		<Unit filename="../../../src/vedo/common/implementation/CDSphere2QuasiCylinderAT.cpp" />
 		<Unit filename="../../../src/vedo/common/implementation/CDSphere2QuasiPlate.cpp" />
@@ -75,6 +76,7 @@
 		<Unit filename="../../../src/vedo/common/implementation/NBSConsultant.cpp" />
 		<Unit filename="../../../src/vedo/common/implementation/NearConsultant.cpp" />
 		<Unit filename="../../../src/vedo/common/implementation/SafeConsultant.cpp" />
+		<Unit filename="../../../src/vedo/common/interfaces/CDQuasiCylinder2QuasiCylinder.h" />
 		<Unit filename="../../../src/vedo/common/interfaces/CDSphere2QuasiCylinder.h" />
 		<Unit filename="../../../src/vedo/common/interfaces/CDSphere2QuasiCylinderAT.h" />
 		<Unit filename="../../../src/vedo/common/interfaces/CDSphere2QuasiPlate.h" />

@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdlib>
 
+/*
 std::ostream& operator <<
 	(std::ostream& os,
 	 const std::pair<int, const boost::property_tree::ptree&>& rNode)
@@ -29,6 +30,7 @@ std::ostream& operator <<
 	}
 	return os;
 };
+*/
 
 njr::Vector3d Node2Vector3d(boost::property_tree::ptree& pt)
 {

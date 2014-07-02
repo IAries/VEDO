@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\vedo\common\implementation\CDQuasiCylinder2QuasiCylinder.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiCylinderAT.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiPlate.cpp" />
     <ClCompile Include="..\..\..\src\vedo\common\implementation\CDSphere2QuasiPlateWithCircularHole.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="..\..\..\src\vedo\common\implementation\SafeConsultant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDQuasiCylinder2QuasiCylinder.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiCylinder.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiCylinderAT.h" />
     <ClInclude Include="..\..\..\src\vedo\common\interfaces\CDSphere2QuasiPlate.h" />

@@ -19,17 +19,7 @@
 			<Depends filename="framework.cbp" />
 			<Depends filename="common.cbp" />
 		</Project>
-		<Project filename="anne-ei.cbp">
-			<Depends filename="njr.cbp" />
-			<Depends filename="framework.cbp" />
-			<Depends filename="common.cbp" />
-		</Project>
 		<Project filename="iris-gm.cbp">
-			<Depends filename="njr.cbp" />
-			<Depends filename="framework.cbp" />
-			<Depends filename="common.cbp" />
-		</Project>
-		<Project filename="iris-gm-ei.cbp">
 			<Depends filename="njr.cbp" />
 			<Depends filename="framework.cbp" />
 			<Depends filename="common.cbp" />

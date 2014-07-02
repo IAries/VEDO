@@ -1,4 +1,4 @@
-ENVIRONMENT_MODE = MS-Win64-Adm-MinGW
+ENVIRONMENT_MODE = MS-Win32-Adm-MinGW
 # (ORG-Machine-User-Compiler)
 
 OPTIMIZE_FLAG  = -O3

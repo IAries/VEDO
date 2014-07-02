@@ -5,10 +5,10 @@ include Makefile.in
 all: debug release
 
 .PHONY: debug
-debug: knight-debug anne-debug anne-ei-debug iris-gm-debug iris-gm-ei-debug
+debug: knight-debug anne-debug iris-gm-debug
 
 .PHONY: release
-release: knight anne anne-ei iris-gm iris-gm-ei
+release: knight anne iris-gm
 
 # Knight (Pre-/Post-processor)
 .PHONY: knight
@@ -28,15 +28,6 @@ anne: libs
 anne-debug: libs-debug
 	(cd vedo/anne; ${MAKE} debug)
 
-# anne-ei (Sequential Analysis Engine with External Force)
-.PHONY: anne-ei
-anne-ei: libs
-	(cd vedo/anne-ei; ${MAKE} release)
-
-.PHONY: anne-ei-debug
-anne-ei-debug: libs-debug
-	(cd vedo/anne-ei; ${MAKE} debug)
-
 # iris (Parallel Analysis Engine)
 .PHONY: iris-gm
 iris-gm: libs
@@ -45,15 +36,6 @@ iris-gm: libs
 .PHONY: iris-gm-debug
 iris-gm-debug: libs-debug
 	(cd vedo/iris-gm; ${MAKE} debug)
-
-# iris (Parallel Analysis Engine with External Force)
-.PHONY: iris-gm
-iris-gm-ei: libs
-	(cd vedo/iris-gm-ei; ${MAKE} release)
-
-.PHONY: iris-gm-ei-debug
-iris-gm-ei-debug: libs-debug
-	(cd vedo/iris-gm-ei; ${MAKE} debug)
 
 # All Static Libraries
 .PHONY: libs
@@ -110,18 +92,14 @@ buildingdir:
 	mkdir ${VEDO_OBJ_DEBUG}common
 	mkdir ${VEDO_OBJ_DEBUG}knight
 	mkdir ${VEDO_OBJ_DEBUG}anne
-	mkdir ${VEDO_OBJ_DEBUG}anne-ei
 	mkdir ${VEDO_OBJ_DEBUG}iris-gm
-	mkdir ${VEDO_OBJ_DEBUG}iris-gm-ei
 	mkdir ${VEDO_OBJ_RELEASE}
 	mkdir ${VEDO_OBJ_RELEASE}njr
 	mkdir ${VEDO_OBJ_RELEASE}framework
 	mkdir ${VEDO_OBJ_RELEASE}common
 	mkdir ${VEDO_OBJ_RELEASE}knight
 	mkdir ${VEDO_OBJ_RELEASE}anne
-	mkdir ${VEDO_OBJ_RELEASE}anne-ei
 	mkdir ${VEDO_OBJ_RELEASE}iris-gm
-	mkdir ${VEDO_OBJ_RELEASE}iris-gm-ei
 
 # Clean
 .PHONY: clean
