@@ -3,19 +3,17 @@
 namespace vedo
 {
 
-DOOrbitalQuasiCylinder::DOOrbitalQuasiCylinder
-	(const DOStatus* cpdos, const DOModel* cpdoml)
-: DiscreteObject(cpdos, cpdoml)
+DOOrbitalQuasiCylinder::DOOrbitalQuasiCylinder(const DOStatus* cpdos, const DOModel* cpdoml): DiscreteObject(cpdos, cpdoml)
 {
-	double Radius      = cpdoml->GetShapeAttributes().quasicylinder.radius;
-	double Height      = cpdoml->GetShapeAttributes().quasicylinder.height;
-	dVolume            = cpdoml->GetVolume();
-	dMass              = cpdoml->GetMass();
-	dSudoMass          = 0.0;
-	vMassMomentInertia = njr::Vector3d();
-};
+	//vedo_float_t Radius = cpdoml->GetShapeAttributes().quasicylinder.radius;
+	//vedo_float_t Height = cpdoml->GetShapeAttributes().quasicylinder.height;
+	dVolume             = cpdoml->GetVolume();
+	dMass               = cpdoml->GetMass();
+	dSudoMass           = 0.0;
+	vMassMomentInertia  = njr::Vector3d();
+}
 
-void DOOrbitalQuasiCylinder::Response(double dt)
+void DOOrbitalQuasiCylinder::Response(vedo_float_t dt)
 {
 	njr::Vector3d V  = pDOStatus->GetVelocity();
 	njr::Vector3d AV = pDOStatus->GetAngularVelocity();
@@ -31,6 +29,6 @@ void DOOrbitalQuasiCylinder::Response(double dt)
 	//pDOStatus->SetVelocity(V);
 	//pDOStatus->SetAngularVelocity(AV);
 	ClearImpact();
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

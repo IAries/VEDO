@@ -7,39 +7,41 @@
 namespace vedo
 {
 
-class GSEllipsoid : public GeometricShape
+class GSEllipsoid: public GeometricShape
 {
 
 public:
 
 	GSEllipsoid
-		(const std::string&, const double&, const double&, const double&);
+		(const std::string&, const vedo_float_t&, const vedo_float_t&, const vedo_float_t&);
 
-	inline double GetXLength()
+	inline vedo_float_t GetXLength()
 	{
 		return _dXLength;
-	};
+	}
 
-	inline double GetYLength()
+	inline vedo_float_t GetYLength()
 	{
 		return _dYLength;
-	};
+	}
 
-	inline double GetZLength()
+	inline vedo_float_t GetZLength()
 	{
 		return _dZLength;
-	};
+	}
 
 	bool Inside(const njr::Vector3d&);
 
 protected:
 
-	double _dXLength;
-	double _dYLength;
-	double _dZLength;
+	vedo_float_t _dXLength;
+
+	vedo_float_t _dYLength;
+
+	vedo_float_t _dZLength;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 

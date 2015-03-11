@@ -1,4 +1,5 @@
 #include <vedo/njr/interfaces/HalfSpace.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -9,25 +10,25 @@ namespace njr
 HalfSpace::HalfSpace()
 {
 	HalfSpace::Set(0.0, 0.0, 1.0, 0, 1.0);
-};
+}
 
 HalfSpace::HalfSpace(const HalfSpace &hf)
 {
 	HalfSpace::Set(hf._a, hf._b, hf._c, hf._sense, hf._d);
-};
+}
 
-HalfSpace::HalfSpace(double a, double b, double c, Sense sense, double d)
+HalfSpace::HalfSpace(vedo::vedo_float_t a, vedo::vedo_float_t b, vedo::vedo_float_t c, Sense sense, vedo::vedo_float_t d)
 {
 	HalfSpace::Set(a, b, c, sense, d);
-};
+}
 
 const HalfSpace& HalfSpace::operator = (const HalfSpace &hf)
 {
 	HalfSpace::Set(hf.a(), hf.b(), hf.c(), hf.sense(), hf.d());
 	return *this;
-};
+}
 
-void HalfSpace::Set(double a, double b, double c, Sense sense, double d)
+void HalfSpace::Set(vedo::vedo_float_t a, vedo::vedo_float_t b, vedo::vedo_float_t c, Sense sense, vedo::vedo_float_t d)
 {
 	_a = a;
 	_b = b;
@@ -45,26 +46,27 @@ void HalfSpace::Set(double a, double b, double c, Sense sense, double d)
 			_sense = 1;
 			break;
 	}
-};
+}
 
-void HalfSpace::Set(double a, double b, double c, int sense, double d)
+void HalfSpace::Set
+	(vedo::vedo_float_t a, vedo::vedo_float_t b, vedo::vedo_float_t c, vedo::vedo_int_t sense, vedo::vedo_float_t d)
 {
 	_a     = a;
 	_b     = b;
 	_c     = c;
 	_d     = d;
 	_sense = sense;
-};
+}
 
 void HalfSpace::Normalize()
 {
-	double length;
+	vedo::vedo_float_t length;
 	length = sqrt (_a*_a + _b*_b + _c*_c);
 	_a /= length;
 	_b /= length;
 	_c /= length;
 	_d /= length;
-};
+}
 
 void HalfSpace::AbsRhs()
 {
@@ -84,12 +86,12 @@ void HalfSpace::AbsRhs()
 			_sense = G;
 		}
 	}
-};
+}
 
 void HalfSpace::Translate(const Vector3d& dp)
 {
 	_d += (_a*dp.x() + _b*dp.y() + _c * dp.z());
-};
+}
 
 void HalfSpace::RotateAround(const Vector3d &dw)
 {
@@ -101,9 +103,9 @@ void HalfSpace::RotateAround(const Vector3d &dw)
 	_a = gradient.x();
 	_b = gradient.y();
 	_c = gradient.z();
-};
+}
 
-};   // namespace njr
+}   // namespace njr
 
 
 
@@ -125,14 +127,14 @@ std::ostream& operator << (std::ostream& os, const njr::HalfSpace& hf)
 	}
 	os << hf.d() << ']' << std::endl;
 	return os;
-};
+}
 
 std::istream& operator >> (std::istream& is, njr::HalfSpace& hf)
 {
-	double a;
-	double b;
-	double c;
-	double d;
+	vedo::vedo_float_t a;
+	vedo::vedo_float_t b;
+	vedo::vedo_float_t c;
+	vedo::vedo_float_t d;
 	char sense;
 	Sense se;
     is >> a >> b >> c >> sense >> d;
@@ -157,5 +159,4 @@ std::istream& operator >> (std::istream& is, njr::HalfSpace& hf)
 
 	hf.Set(a, b, c, se, d);
 	return is;
-};   // namespace njr
-
+}

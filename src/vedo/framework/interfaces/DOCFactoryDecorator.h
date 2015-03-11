@@ -25,6 +25,6 @@ private:
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _DISCRETE_OBJECT_FACTORY_DECORATOR_H

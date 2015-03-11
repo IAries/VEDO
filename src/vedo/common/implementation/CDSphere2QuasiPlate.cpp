@@ -6,8 +6,7 @@
 namespace vedo
 {
 
-void CDSphere_QuasiPlate::CalDistance
-	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
+void CDSphere_QuasiPlate::CalDistance(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
 	njr::Vector3d vCa = pdoSlave->GetDOStatus()->GetPosition();
@@ -24,28 +23,25 @@ void CDSphere_QuasiPlate::CalDistance
 	njr::Vector3d vCap = vCa - (vCa - vCb).ProjectOn(vOz);
 
 	// Half height of Master
-	double dHHb
-		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.height;
+	vedo_float_t dHHb = 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.height;
 	// Half width of Master
-	double dHWb
-		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.width;
+	vedo_float_t dHWb = 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.width;
 	// Half length of Master
-	double dHLb
-		= 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.length;
+	vedo_float_t dHLb = 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.length;
 
-	double Dapx = (vCap - vCb) % vOx;
+	vedo_float_t Dapx = (vCap - vCb) % vOx;
 
-	if ( Dapx < -dHWb)
+	if (Dapx < -dHWb)
 	{
 		Dapx = -dHWb;
 	}
-	else if ( Dapx > dHWb)
+	else if (Dapx > dHWb)
 	{
 		Dapx = dHWb;
 	}
 
-	double Dapy = (vCap - vCb) % vOy;
-	if ( Dapy < -dHLb)
+	vedo_float_t Dapy = (vCap - vCb) % vOy;
+	if (Dapy < -dHLb)
 	{
 		Dapy = -dHLb;
 	}
@@ -54,20 +50,17 @@ void CDSphere_QuasiPlate::CalDistance
 		Dapy = dHLb;
 	}
 
-	/**************************************************************************
-     * The distance from vCaps to vCa is the shortest distance between surface
-     * of Slave and Master
-	 **************************************************************************/
+    // The distance from vCaps to vCa is the shortest distance between surface of Slave and Master
 	njr::Vector3d vCaps    = (vOx * Dapx) + (vOy * Dapy) + vCb;
 	njr::Vector3d vIm      = vCaps - vCa;
 	cInfo.vCenterToCenter  = vIm;
 
-	double dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
+	vedo_float_t dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
 	cInfo.dImpactDepth = dRa + dHHb - vIm.length();
 
-	if(cInfo.dImpactDepth > 0.0)
+	if (cInfo.dImpactDepth > 0.0)
 	{
-		double dS          = dRa - cInfo.dImpactDepth;
+		vedo_float_t dS = dRa - cInfo.dImpactDepth;
 		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * njr::dPI;
 	}
 	else
@@ -76,10 +69,9 @@ void CDSphere_QuasiPlate::CalDistance
 	}
 
 	cInfo.vImpactDirection = vIm.direction();
-};
+}
 
-void CDSphere_QuasiPlate::Detect
-	(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
+void CDSphere_QuasiPlate::Detect(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	CDSphere_QuasiPlate::CalDistance(pdoSlave, pdoMaster);
 
@@ -87,9 +79,7 @@ void CDSphere_QuasiPlate::Detect
 	{
 	    cInfo.vImpactPoint
 			= pdoSlave->GetDOStatus()->GetPosition()
-			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius
-				- 0.5 * cInfo.dImpactDepth)
-			* cInfo.vImpactDirection;
+			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 		cInfo.bUnBalance = (cInfo.bActive == false);
 		cInfo.bActive    = true;
 	}
@@ -98,6 +88,6 @@ void CDSphere_QuasiPlate::Detect
 		cInfo.bActive    = false;
 		cInfo.bUnBalance = false;
 	}
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

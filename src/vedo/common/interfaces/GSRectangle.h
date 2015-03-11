@@ -7,38 +7,40 @@
 namespace vedo
 {
 
-class GSRectangle : public GeometricShape
+class GSRectangle: public GeometricShape
 {
 
 public:
 
-	GSRectangle(const std::string&, const double&, const double&, const double&);
+	GSRectangle(const std::string&, const vedo_float_t&, const vedo_float_t&, const vedo_float_t&);
 
-	inline double GetWidth()
+	inline vedo_float_t GetWidth()
 	{
 		return _dWidth;
-	};
+	}
 
-	inline double GetLength()
+	inline vedo_float_t GetLength()
 	{
 		return _dLength;
-	};
+	}
 
-	inline double GetHeight()
+	inline vedo_float_t GetHeight()
 	{
 		return _dHeight;
-	};
+	}
 
 	bool Inside(const njr::Vector3d&);
 
 protected:
 
-	double _dWidth;
-	double _dLength;
-	double _dHeight;
+	vedo_float_t _dWidth;
+
+	vedo_float_t _dLength;
+
+	vedo_float_t _dHeight;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 

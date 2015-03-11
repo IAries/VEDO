@@ -12,14 +12,14 @@ class CubicLattice: public BravaisLatticeWithBasis
 {
 public:
 
-    void SetLatticeConstant(double a);
+    void SetLatticeConstant(vedo::vedo_float_t a);
 
-    inline double GetLatticeConstant() const
+    inline vedo::vedo_float_t GetLatticeConstant() const
     {
     	return latticeConstant;
     }
 
-    CubicLattice(double a);
+    CubicLattice(vedo::vedo_float_t a);
 
     inline ~CubicLattice()
     {
@@ -27,7 +27,7 @@ public:
 
 protected:
 
-    double latticeConstant;
+    vedo::vedo_float_t latticeConstant;
 };
 
 
@@ -35,7 +35,7 @@ class FCCLattice:public CubicLattice
 {
 public:
 
-    FCCLattice(double a=1.0);
+    FCCLattice(vedo::vedo_float_t a=1.0);
 
     ~FCCLattice(){}
 
@@ -47,30 +47,30 @@ class PrimitiveFCCLattice:public BravaisLatticeWithBasis
 
 public:
 
-    PrimitiveFCCLattice(double a=1.0);
+    PrimitiveFCCLattice(vedo::vedo_float_t a=1.0);
 
     ~PrimitiveFCCLattice(){};
 
     //! restores the usual definition of the lattice vectors.
     void ResetOrientation();
 
-    void SetLatticeConstant(double a);
+    void SetLatticeConstant(vedo::vedo_float_t a);
 
-    inline double GetLatticeConstant() const
+    inline vedo::vedo_float_t GetLatticeConstant() const
     {
     	return latticeConstant;
     }
 
 protected:
     //! The lattice constant has the same meaning as in FCCLattice
-    double latticeConstant;
+    vedo::vedo_float_t latticeConstant;
 };
 
 class BCCLattice:public CubicLattice
 {
 public:
 
-    BCCLattice(double a=1.0);
+    BCCLattice(vedo::vedo_float_t a=1.0);
 
     void AddAtomInCell(njr::Vector3d atomCoord, std::string name="");
 };
@@ -80,7 +80,7 @@ class DiamondLattice: public FCCLattice
 public:
 
     //! Note that the lattice spacing is the one of the uderlying cubic lattice
-    DiamondLattice(double a=1.0);
+    DiamondLattice(vedo::vedo_float_t a=1.0);
 
 	inline ~DiamondLattice()
 	{
@@ -94,8 +94,8 @@ class TriclinicLattice:public GeneralLattice
 public:
 
     TriclinicLattice
-    	(const double latticeConstants[3],
-		 const double anglesInUnitCell[3]);
+    	(const vedo::vedo_float_t latticeConstants[3],
+		 const vedo::vedo_float_t anglesInUnitCell[3]);
 
     //! Default constructor needed for serialization
 
@@ -105,24 +105,24 @@ public:
 	{
 	};
 
-    void SetLatticeConstants(const double latticeConstants[3]);
+    void SetLatticeConstants(const vedo::vedo_float_t latticeConstants[3]);
 
-    void SetAnglesInUnitCell(const double anglesInUnitCell[3]);
+    void SetAnglesInUnitCell(const vedo::vedo_float_t anglesInUnitCell[3]);
 
-    inline const double(&GetLatticeConstants()const) [3]
+    inline const vedo::vedo_float_t(&GetLatticeConstants()const) [3]
     {
     	return latticeConstants;
     }
 
-    inline const double(&GetAnglesInUnitCell()const) [3]
+    inline const vedo::vedo_float_t(&GetAnglesInUnitCell()const) [3]
     {
     	return anglesInUnitCell;
     }
 
 protected:
 
-    double latticeConstants[3];
-    double anglesInUnitCell[3];
+    vedo::vedo_float_t latticeConstants[3];
+    vedo::vedo_float_t anglesInUnitCell[3];
     void Set3DLatticeVectors();
 };
 

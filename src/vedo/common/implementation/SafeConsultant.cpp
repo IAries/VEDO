@@ -4,25 +4,21 @@
 namespace vedo
 {
 
-SafeConsultant::SafeConsultant
-	(DOWorld* DOWorld,
-	IactRecordTab* pIactRecordTab,
-	char filename[],
-	unsigned long ulwrite)
-: Consultant(DOWorld, pIactRecordTab, filename, ulwrite)
+SafeConsultant::SafeConsultant(DOWorld* DOWorld, IactRecordTab* pIactRecordTab, std::string filename, vedo_uint_t ulwrite):
+	Consultant(DOWorld, pIactRecordTab, filename, ulwrite)
 {
 	SafeConsultant::Reset();
-};
+}
 
 bool SafeConsultant::ISReset()
 {
 	return false;
-};
+}
 
 bool SafeConsultant::Reset()
 {
-	unsigned long ulDONum = pDOWorld->GetSystemParameter()->GetDONumber();
-    unsigned long ul, uj;
+	vedo_uint_t ulDONum = pDOWorld->GetSystemParameter()->GetDONumber();
+    vedo_uint_t ul, uj;
 	const IactModel* cpiactml;
 	std::string doname1, doname2;
 
@@ -42,16 +38,16 @@ bool SafeConsultant::Reset()
 			doname1 = pDOWorld->GetDOStatus(ul)->GetDOName();
 			doname2 = pDOWorld->GetDOStatus(uj)->GetDOName();
 
-			cpiactml = pDOWorld->GetIactModel
-				(pDOWorld->GetDOModel(doname1)->GetDOGroup(),
-				pDOWorld->GetDOModel(doname2)->GetDOGroup());
+			cpiactml
+				= pDOWorld->GetIactModel
+					(pDOWorld->GetDOModel(doname1)->GetDOGroup(), pDOWorld->GetDOModel(doname2)->GetDOGroup());
 
         	if (cpiactml == 0)
         	{
 				continue;
 			}
 
-			if ( doname1 == (cpiactml->GetMasterDOGroup()) )
+			if (doname1 == (cpiactml->GetMasterDOGroup()))
 			{
 				vcIactMaster.push_back(ul);
 				vcIactSlave.push_back(uj);
@@ -65,18 +61,15 @@ bool SafeConsultant::Reset()
 	}
 
 	#ifdef _VEDO_DEBUG
-		std::cout
-			<< "Interaction size = "
-			<< (unsigned int) vcIactMaster.size()
-			<< std::endl;
+		std::cout << "Interaction size = " << vcIactMaster.size() << std::endl;
 	#endif   // _VEDO_DEBUG
 
 	return true;
-};
+}
 
 void SafeConsultant::RebuildIactRecordTab(IactContainer& cIact)
 {
 	CollectUserDefinedData(cIact);
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

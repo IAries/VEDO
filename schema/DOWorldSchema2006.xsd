@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by caevclab (cae) -->
+<!-- edited with XML Spy v4.1 U (http://www.xmlspy.com) by hi (key) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="DOWorld">
+		<xs:annotation>
+			<xs:documentation>Discrete object simulation makeup language</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="Publish" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>publish date of this file formate</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Title" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>the title of the problem</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Note" type="xs:anyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>User's note of this problem</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SimParameter">
+					<xs:annotation>
+						<xs:documentation>Parameters of simulation system</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="TimeControl">
+								<xs:annotation>
+									<xs:documentation>start,stop,interval,current</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="Start" type="xs:double" use="required"/>
+									<xs:attribute name="Stop" type="xs:double" use="required"/>
+									<xs:attribute name="Interval" type="xs:double" use="required"/>
+									<xs:attribute name="Current" type="xs:double" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="NumObject" type="xs:unsignedLong">
+								<xs:annotation>
+									<xs:documentation>the amount of objects in this problem</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FieldForce">
+								<xs:annotation>
+									<xs:documentation>vector</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="x" type="xs:double" use="required"/>
+									<xs:attribute name="y" type="xs:double" use="required"/>
+									<xs:attribute name="z" type="xs:double" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="LowerBoundary">
+								<xs:annotation>
+									<xs:documentation>vector</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="x" type="xs:double" use="required"/>
+									<xs:attribute name="y" type="xs:double" use="required"/>
+									<xs:attribute name="z" type="xs:double" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="UpperBoundary">
+								<xs:annotation>
+									<xs:documentation>vector</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="x" type="xs:double" use="required"/>
+									<xs:attribute name="y" type="xs:double" use="required"/>
+									<xs:attribute name="z" type="xs:double" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SystemLog" type="xs:anyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Program running logs</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DOModelTab">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DOModel" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>DOName,DOGroup,Color,Behavior,Density</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Shape">
+											<xs:complexType>
+												<xs:choice>
+													<xs:element name="Sphere">
+														<xs:annotation>
+															<xs:documentation>radius</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:attribute name="Radius" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="QuasiCylinder">
+														<xs:annotation>
+															<xs:documentation>radius,height</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:attribute name="Radius" type="xs:double" use="required"/>
+															<xs:attribute name="Height" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="QuasiPlate">
+														<xs:annotation>
+															<xs:documentation>width,length,height</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:attribute name="Width" type="xs:double" use="required"/>
+															<xs:attribute name="Length" type="xs:double" use="required"/>
+															<xs:attribute name="Height" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Ellipsoid">
+														<xs:annotation>
+															<xs:documentation>xlength,ylength,zlength</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:attribute name="XLength" type="xs:double" use="required"/>
+															<xs:attribute name="YLength" type="xs:double" use="required"/>
+															<xs:attribute name="ZLength" type="xs:double" use="required"/>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Polyhedra">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="HalfSpace" maxOccurs="unbounded">
+																	<xs:complexType>
+																		<xs:simpleContent>
+																			<xs:extension base="xs:string">
+																				<xs:attribute name="a" type="xs:double" use="required"/>
+																				<xs:attribute name="b" type="xs:double" use="required"/>
+																				<xs:attribute name="c" type="xs:double" use="required"/>
+																				<xs:attribute name="sense" use="required">
+																					<xs:simpleType>
+																						<xs:restriction base="xs:NMTOKEN">
+																							<xs:enumeration value="L"/>
+																							<xs:enumeration value="G"/>
+																							<xs:enumeration value="E"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:attribute>
+																				<xs:attribute name="d" type="xs:double" use="required"/>
+																			</xs:extension>
+																		</xs:simpleContent>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:choice>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="MaterialOption" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="Name" type="xs:string" use="required"/>
+												<xs:attribute name="Value" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="DOName" type="xs:string" use="required"/>
+									<xs:attribute name="DOGroup" type="xs:string" use="required"/>
+									<xs:attribute name="Behavior" type="xs:string" use="required"/>
+									<xs:attribute name="Density" type="xs:double" use="required"/>
+									<xs:attribute name="Color" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="IactModelTab">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="IactModel" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>MasterGroup,SlaveGroup,EquationType</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Mechanism">
+											<xs:annotation>
+												<xs:documentation>Spring,Dashpot,Friction,Binding</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="Spring" type="xs:double" use="required"/>
+												<xs:attribute name="Dashpot" type="xs:double" use="required"/>
+												<xs:attribute name="Friction" type="xs:double" use="required"/>
+												<xs:attribute name="Binding" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Extend" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="Name" type="xs:string" use="required"/>
+												<xs:attribute name="Value" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="MasterGroup" type="xs:string" use="required"/>
+									<xs:attribute name="SlaveGroup" type="xs:string" use="required"/>
+									<xs:attribute name="EquationType" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DOStatusTab">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DOStatus" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>DOName</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="Position">
+											<xs:annotation>
+												<xs:documentation>vector</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required"/>
+												<xs:attribute name="y" type="xs:double" use="required"/>
+												<xs:attribute name="z" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="OrientationX">
+											<xs:annotation>
+												<xs:documentation>vector</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required"/>
+												<xs:attribute name="y" type="xs:double" use="required"/>
+												<xs:attribute name="z" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="OrientationZ">
+											<xs:annotation>
+												<xs:documentation>vector</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required"/>
+												<xs:attribute name="y" type="xs:double" use="required"/>
+												<xs:attribute name="z" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Velocity">
+											<xs:annotation>
+												<xs:documentation>vector</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required"/>
+												<xs:attribute name="y" type="xs:double" use="required"/>
+												<xs:attribute name="z" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="AngularVelocity">
+											<xs:annotation>
+												<xs:documentation>vector</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="x" type="xs:double" use="required"/>
+												<xs:attribute name="y" type="xs:double" use="required"/>
+												<xs:attribute name="z" type="xs:double" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:all>
+									<xs:attribute name="DOName" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

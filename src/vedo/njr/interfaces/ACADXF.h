@@ -1,19 +1,10 @@
-/******************************************************
- * acadxf.h  header file for AutoCAD DXF file
- *
- * History:
- *    Ver 1.0 Created 2001 Aug  by  C.T. Jitin Yang
- *    Ver 1.1 Modified 2003 Feb by  C.T. Jitin Yang
- *    Ver 1.2 Modifined 2003 July by C.T. Jitin Yang
- *    Ver 1.3 Modifined 2004 Jan 25 by C.T. Jitin Yang
- *       For CAE/CE/NTU summer traning course
- *       (C++ Programming Langurage)
- ******************************************************/
+// Header file for AutoCAD DXF file (2001-2004 by C.T. Jitin Yang)
 
 #ifndef _NJR_ACADXF_H
 #define _NJR_ACADXF_H
 
 #include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -21,13 +12,8 @@
 namespace njrdxf
 {
 
-/******************************************************************************
- * NJRDXFGroup is used to hold AutoCAD Group of binary DXF file AutoDXF Group
- * includes code and values.
- *
- * Reference: AutoCAD R13 DXF help file
- ******************************************************************************/
-
+// NJRDXFGroup is used to hold AutoCAD Group of binary DXF file AutoDXF Group includes code and values.
+// Reference: AutoCAD R13 DXF help file
 class Group
 {
 
@@ -40,27 +26,25 @@ public:
 	~Group() ;
 
 	// Retrieves _length
-	inline unsigned int length() const
+	inline vedo::vedo_uint_t length() const
 	{
 		return _length;
-	};
+	}
 
 	// Retrieves _value
 	inline const char* data() const
 	{
 		return _value;
-	};
+	}
 
 	// Retrieve its own GRoup_code of thie DXFGroup
 	inline Code code() const
 	{
 		return _code;
-	};
+	}
 
-	/**************************************************************************
-	 * 1. Retrieves false if the Group_code outs of range
-	 * 2. else set the value of this DXFGroup and Retrieve true
-	 **************************************************************************/
+	// 1. Retrieves false if the Group_code outs of range
+	// 2. else set the value of this DXFGroup and Retrieve true
 	bool SetValue(const void* value);
 
 private:
@@ -77,7 +61,7 @@ private:
 	char* _value;
 
 	// The length (bites) of the binary data of this DXFGroup
-	unsigned int _length;
+	vedo::vedo_uint_t _length;
 
 };
 
@@ -89,17 +73,14 @@ class Entitity
 
 public:
 
-	/**************************************************************************
-	 * Adds essential common DXFGroups of this entitity.
-	 * e.g. type, layer, color, handle
-	 **************************************************************************/
+	// Adds essential common DXFGroups of this entitity. e.g. type, layer, color, handle
 	Entitity();
 
 	// Cleans all DXFGroups in (the container of DXFGRoups)
 	~Entitity();
 
 	// Sets layer of this Entitity
-	void SetHandle(const long& value);
+	void SetHandle(const vedo::vedo_uint_t& value);
 
 	// Sets layer of this Entitity
 	void SetColor(const Color& value);
@@ -112,17 +93,15 @@ public:
 
 protected:
 
-	/**************************************************************************
-	 * Adds one essential DXFGroup of this entitity whoes Group_code equals to
-	 * vc
+	/********************************************************************************
+	 * Adds one essential DXFGroup of this entitity whoes Group_code equals to vc
 	 *
-	 * 1.  if the new Group_code can't find in the lconGroup (container of
-	 *     DXFGroupS)
+	 * 1.  if the new Group_code can't find in the lconGroup (container of DXFGroupS)
 	 * 1.a Adds one essential DXFGroup of this entitity
 	 * 1.b whoes Group_code equals to vc
 	 * 1.c Retrieves true
 	 * 2.  Retrieves false if the new Gruop_cone has existed
-	 **************************************************************************/
+	 ********************************************************************************/
 	bool AddGroup(const Code& vc);
 
 	// Sets the value of the DXFGroup whoes Group_code equals to vc
@@ -143,23 +122,17 @@ private:
 
 
 // NJRDXFLine is used to hold all essential DXFGroups of AutoCAD line Entitity
-class Line : public Entitity
+class Line: public Entitity
 {
 
 public:
 
-	/**************************************************************************
-	 * Adds essential DXFGroups of line Entitity to lconGroup (member of base
-	 * class)
-	 **************************************************************************/
+	// Adds essential DXFGroups of line Entitity to lconGroup (member of base class)
 	Line() ;
 
 	// Sets attributes of this Entitity
 	void Set
-		(const njr::Vector3d& p1,
-		const njr::Vector3d& p2,
-		const char* layer = "NJRDXFdefault",
-		const Color& color = bylayer);
+		(const njr::Vector3d& p1, const njr::Vector3d& p2, const char* layer = "NJRDXFdefault", const Color& color = bylayer);
 
 	// Set two endpoints of this line
 	void SetPoint1(const njr::Vector3d& point);
@@ -191,12 +164,8 @@ public:
 
 	// Sets attributes of this Entititty
 	void Set
-		(const njr::Vector3d& p1,
-		const njr::Vector3d& p2,
-		const njr::Vector3d& p3,
-		const njr::Vector3d& p4,
-		const char* layer = "NJRDXFdefault",
-		const Color& color = bylayer);
+		(const njr::Vector3d& p1, const njr::Vector3d& p2, const njr::Vector3d& p3, const njr::Vector3d& p4,
+		 const char* layer = "NJRDXFdefault", const Color& color = bylayer);
 
 	// Sets four corners of this 3d face
 	void SetPoint1(const njr::Vector3d &point);
@@ -216,6 +185,8 @@ private:
 
 };
 
+
+
 // NJRDXFText is used to hold all essential DXFGroups of AutoCAD Text Entitity
 class Text: public Entitity
 {
@@ -230,21 +201,14 @@ public:
 
 	// Sets attributes of this Entitity
 	void Set
-		(const njr::Vector3d& p1,
-		const char* text,
-		const double& dheight = 2.0,
-		const double& dangle=0.0,
-		const char* layer = "NJRDXFdefault",
-		const Color& color = bylayer);
+		(const njr::Vector3d& p1, const char* text, const vedo::vedo_float_t& dheight=2.0, const vedo::vedo_float_t& dangle=0.0,
+		 const char* layer = "NJRDXFdefault", const Color& color = bylayer                                                      );
 
 	// Sets the position of this Text
 	void SetPoint(const njr::Vector3d& point);
 
 	// Sets the size , angle, and content of this Text
-	void SetText
-		(const char* text,
-		const double& dheight = 2.0,
-		const double& dangle = 0.0) ;
+	void SetText(const char* text, const vedo::vedo_float_t& dheight = 2.0, const vedo::vedo_float_t& dangle = 0.0);
 
 private:
 
@@ -255,8 +219,9 @@ private:
 
 };
 
-// ofstream is AutoCAD Binary DXF File stream
 
+
+// ofstream is AutoCAD Binary DXF File stream
 class ofstream
 {
 
@@ -264,7 +229,7 @@ public:
 
 	ofstream()
 	{
-	};
+	}
 
 	/**************************************************************************
 	 * Constructor
@@ -301,10 +266,10 @@ private:
 	std::ofstream bdxf;
 
 	// The number of entitity that has been output to this dxf file
-	unsigned long hand;
+	vedo::vedo_uint_t hand;
 
 };
 
-}; // namespace njrdxf
+} // namespace njrdxf
 
 #endif // _NJR_ACADXF_H

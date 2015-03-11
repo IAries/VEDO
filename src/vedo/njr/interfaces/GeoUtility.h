@@ -7,22 +7,19 @@
 
 namespace njr
 {
-	double Distance(const njr::Vector3d&, const njr::HalfSpace&);
+	vedo::vedo_float_t Distance(const njr::Vector3d&, const njr::HalfSpace&);
 
-	double Distance(const njr::HalfSpace&, const njr::Vector3d&);
+	vedo::vedo_float_t Distance(const njr::HalfSpace&, const njr::Vector3d&);
 
-	double Volume(const njr::NJRpolygon& bottom, const njr::Vector3d& vertex);
+	vedo::vedo_float_t Volume(const njr::NJRpolygon& bottom, const njr::Vector3d& vertex);
 
-	double Volume
-		(const njr::NJRpolygon& bottom,
-		const njr::Vector3d& vertex,
-		njr::Vector3d& MassCenter);
+	vedo::vedo_float_t Volume(const njr::NJRpolygon& bottom, const njr::Vector3d& vertex, njr::Vector3d& MassCenter);
 
-	double Volume(const njr::NJRpolyhedra&);
+	vedo::vedo_float_t Volume(const njr::NJRpolyhedra&);
 
-	double Volume(const njr::NJRpolyhedra&, njr::Vector3d& MassCenter);
+	vedo::vedo_float_t Volume(const njr::NJRpolyhedra&, njr::Vector3d& MassCenter);
 
-	double CoverRadius(const njr::NJRpolyhedra&);
+	vedo::vedo_float_t CoverRadius(const njr::NJRpolyhedra&);
 
 	njr::Vector3d InertiaTensor(const njr::NJRpolyhedra&);
 };

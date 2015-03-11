@@ -12,104 +12,75 @@ class ISwModels
 
 public:
 
-	double CriticalTimeStep
-        (const double& dMeff, const double& dK);
+	vedo_float_t CriticalTimeStep(const vedo_float_t& dMeff, const vedo_float_t& dK);
 
-	double CriticalTimeStep
-        (const double& dMeff, const double& dKn,  const double& dKt);
+	vedo_float_t CriticalTimeStep(const vedo_float_t& dMeff, const vedo_float_t& dKn, const vedo_float_t& dKt);
 
-	double CriticalDamping
-		(const double& dMa, const double& dMb, const double& dKn);
+	vedo_float_t CriticalDamping(const vedo_float_t& dMa, const vedo_float_t& dMb, const vedo_float_t& dKn);
 
-	std::pair<double, double> CriticalDamping
-		(const double& dMa, const double& dMb,
-		 const double& dKn, const double& dKs );
+	std::pair<vedo_float_t, vedo_float_t> CriticalDamping
+		(const vedo_float_t& dMa, const vedo_float_t& dMb, const vedo_float_t& dKn, const vedo_float_t& dKs);
 
 	bool NormalBond
-		(const double& dKn,
-		 const double& dCn,
-		 const double& dBn,
-		 const double& dImpactDepth);
+		(const vedo_float_t& dKn, const vedo_float_t& dCn, const vedo_float_t& dBn, const vedo_float_t& dImpactDepth);
 
 	njr::Vector3d NormalForceHertzSpring
-		(const double&      dKn,
-		 const double&      dCn,
-		 const double&      dImpactDepth,
-		 const njr::Vector3d& vImpactDirection,
-		 const njr::Vector3d& vInitialRelativeNormalVelocity);
+		(const vedo_float_t& dKn, const vedo_float_t& dCn, const vedo_float_t& dImpactDepth,
+		 const njr::Vector3d& vImpactDirection, const njr::Vector3d& vInitialRelativeNormalVelocity);
 
 	njr::Vector3d NormalForce
-		(const double&      dKn,
-		 const double&      dCn,
-		 const double&      dImpactDepth,
-		 const njr::Vector3d& vImpactDirection,
-		 const njr::Vector3d& vRelativeNormalVelocity);
+		(const vedo_float_t& dKn, const vedo_float_t& dCn, const vedo_float_t& dImpactDepth,
+		 const njr::Vector3d& vImpactDirection, const njr::Vector3d& vRelativeNormalVelocity);
 
 	njr::Vector3d NormalForceNoTension
-		(const double&      dKn,
-		 const double&      dCn,
-		 const double&      dImpactDepth,
-		 const njr::Vector3d& vImpactDirection,
-		 const njr::Vector3d& vRelativeNormalVelocity);
+		(const vedo_float_t& dKn, const vedo_float_t& dCn, const vedo_float_t& dImpactDepth,
+		 const njr::Vector3d& vImpactDirection, const njr::Vector3d& vRelativeNormalVelocity);
 
 	njr::Vector3d NormalForce
-		(const double&      dKn,
-		 const double&      dCn,
-		 const double&      dBn,
-		 const double&      dImpactDepth,
-		 const njr::Vector3d& vImpactDirection,
-		 const njr::Vector3d& vRelativeNormalVelocity);
+		(const vedo_float_t& dKn, const vedo_float_t& dCn, const vedo_float_t& dBn,
+		 const vedo_float_t& dImpactDepth, const njr::Vector3d& vImpactDirection, const njr::Vector3d& vRelativeNormalVelocity);
 
 	njr::Vector3d NormalForceNoTension
-		(const double&      dKn,
-		 const double&      dCn,
-		 const double&      dBn,
-		 const double&      dImpactDepth,
-		 const njr::Vector3d& vImpactDirection,
-		 const njr::Vector3d& vRelativeNormalVelocity);
+		(const vedo_float_t& dKn, const vedo_float_t& dCn, const vedo_float_t& dBn,
+		 const vedo_float_t& dImpactDepth, const njr::Vector3d& vImpactDirection, const njr::Vector3d& vRelativeNormalVelocity);
 
-	double ElasticModules2EquivalentStiffness
-		(const double& dEa,
-		 const double& dEb,
-		 const double& dRa,
-		 const double& dRb,
-		 const double& dOverlapArea);
+	vedo_float_t ElasticModules2EquivalentStiffness
+		(const vedo_float_t& dEa, const vedo_float_t& dEb, const vedo_float_t& dRa, const vedo_float_t& dRb,
+		 const vedo_float_t& dOverlapArea                                                                   );
 
-	std::pair<bool, std::pair<double, double> > FrictionForce
-		(const double& dStaticFrictionCoefficient,
-		 const double& dKineticFrictionCoefficient,
-		 const double& dFrictionSwitch,
-		 const double& dRelativeShearVelocity,
-		 const double& dNormalForce                );
+	std::pair<bool, std::pair<vedo_float_t, vedo_float_t> > FrictionForce
+		(const vedo_float_t& dStaticFrictionCoefficient,
+		 const vedo_float_t& dKineticFrictionCoefficient,
+		 const vedo_float_t& dFrictionSwitch,
+		 const vedo_float_t& dRelativeShearVelocity,
+		 const vedo_float_t& dNormalForce                );
 
-	std::pair<bool, std::pair<double, double> > FrictionForce
-		(const double& dStaticFrictionCoefficient,
-		 const double& dKineticFrictionCoefficient,
-		 const double& dRelativeShearVelocity,
-		 const double& dNormalForce                );
+	std::pair<bool, std::pair<vedo_float_t, vedo_float_t> > FrictionForce
+		(const vedo_float_t& dStaticFrictionCoefficient,
+		 const vedo_float_t& dKineticFrictionCoefficient,
+		 const vedo_float_t& dRelativeShearVelocity,
+		 const vedo_float_t& dNormalForce                );
 
-	njr::Vector3d ShearForceRotation
-        (const njr::Vector3d&, const njr::Vector3d&);
+	njr::Vector3d ShearForceRotation(const njr::Vector3d&, const njr::Vector3d&);
 
-	double WetDampingRatioLegendre2006
-		(double dDryRestitutionCoefficient, double dBinaryStokesNumber);
+	vedo_float_t WetDampingRatioLegendre2006(vedo_float_t dDryRestitutionCoefficient, vedo_float_t dBinaryStokesNumber);
 /*
 private:
 
 	inline ISwModels()
 	{
-	};
+	}
 
 	inline ~ISwModels()
 	{
-	};
+	}
 
 	inline ISwModels(const ISwModels&)
 	{
-	};
+	}
 */
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // ISWMODELS_H

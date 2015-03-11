@@ -19,55 +19,54 @@ public:
 
 	void AddFieldImpact(const njr::Vector3d& vFieldImpact);
 
-	void AddImpact(const unsigned long& ul, const njr::Vector3d& vImpact, const njr::Vector3d& vAngularImpact);
+	void AddImpact(const vedo_uint_t& ul, const njr::Vector3d& vImpact, const njr::Vector3d& vAngularImpact);
 
-	//void AddExternalImpact
-	//	(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >&
-	//	 vvExternalImpact                                        );
+	//void AddExternalImpact(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >& vvExternalImpact);
 
-	void Response(const double dt);
+	void Response(const vedo_float_t dt);
 
-	void AddConstrainedImpact(const double dt);
+	void AddConstrainedImpact(const vedo_float_t dt);
 
 	void Clear();
 
 	void Add(DiscreteObject* pdo);
 
-	inline const DiscreteObject* GetDiscreteObject(unsigned int i)
+	inline const DiscreteObject* GetDiscreteObject(vedo_uint_t i)
 	{
 		return ( i<(lcDO.size()) ) ? lcDO[i] : 0;
-	};
+	}
 
-	inline DiscreteObject* operator[] (unsigned int i)
+	inline DiscreteObject* operator[] (vedo_uint_t i)
 	{
 		return ( i<(lcDO.size()) ) ? lcDO[i] : 0;
-	};
+	}
 
 	inline const std::vector<const DOStatus *>& GetDOStatus() const
 	{
 		return lcDOS;
-	};
+	}
 
-	inline const DOStatus* GetDOStatus(unsigned long ul) const
+	inline const DOStatus* GetDOStatus(vedo_uint_t ul) const
 	{
 		return lcDOS[ul];
-	};
+	}
 
-	inline unsigned long size() const
+	inline vedo_uint_t size() const
 	{
-		return (unsigned long)lcDO.size();
-	};
+		return (vedo_uint_t)lcDO.size();
+	}
 
-	void Erase(const std::vector<unsigned long>&);
+	void Erase(const std::vector<vedo_uint_t>&);
 
 	void EnforcePeriodicBoundaryConditions(const Boundary& pbc);
 
 private:
 
 	std::vector<DiscreteObject*> lcDO;
+
 	std::vector<const DOStatus*> lcDOS;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _DISCRETE_OBJECT_CONTAINER_H

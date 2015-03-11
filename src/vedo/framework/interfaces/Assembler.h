@@ -1,11 +1,10 @@
 #ifndef _ASSEMBLER_H
 #define _ASSEMBLER_H
 
-/******************************************************************************
- * IDOAssembler is the most complicated part of IDO. It uses four desinged
- * patterns conpect to design. They are Factory, Decorator, Builder, and
- * template
- ******************************************************************************/
+/******************************************************************************************************************************
+ * IDOAssembler is the most complicated part of IDO. It uses four desinged patterns conpect to design. They are Factory,
+ * Decorator, Builder, and template
+ ******************************************************************************************************************************/
 
 #include <vedo/framework/interfaces/CDCFactoryDecorator.h>
 #include <vedo/framework/interfaces/DOCFactoryDecorator.h>
@@ -26,37 +25,36 @@ public:
 	inline void AddDO(DOFactory* pdof)
 	{
 		dofd.AddDOCFactory(pdof);
-	};
+	}
 
 	inline void AddCD(CDFactory* pcdf)
 	{
 		cdfd.AddCDCFactory(pcdf);
-	};
+	}
 
 	inline void AddIS(ISFactory *pisf)
 	{
 		isfd.AddISCFactory(pisf);
-	};
+	}
 
-	Interaction* CreateInteraction
-		(DiscreteObject* pdo1,
-		DiscreteObject* pdo2,
-		const IactModel* cpiactml) const;
+	Interaction* CreateInteraction(DiscreteObject* pdo1, DiscreteObject* pdo2, const IactModel* cpiactml) const;
 
-	DiscreteObject* CreateDiscreteObject
-		(const DOModel* cpdoml, const DOStatus* cpdos) const;
+	DiscreteObject* CreateDiscreteObject(const DOModel* cpdoml, const DOStatus* cpdos) const;
 
 private:
 
 	CDCFactoryDecorator cdfd;
+
 	DOCFactoryDecorator dofd;
+
 	ISCFactoryDecorator isfd;
 
 	Assembler& operator = (Assembler&);
+
 	Assembler (const Assembler&);
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _ASSEMBLER_H

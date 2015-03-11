@@ -4,20 +4,19 @@
 namespace vedo
 {
 
-DOFixedQuasiPlateWithCircularHole::DOFixedQuasiPlateWithCircularHole
-	(const DOStatus* cpdos, const DOModel* cpdoml)
-: DiscreteObject(cpdos, cpdoml)
+DOFixedQuasiPlateWithCircularHole::DOFixedQuasiPlateWithCircularHole(const DOStatus* cpdos, const DOModel* cpdoml):
+	DiscreteObject(cpdos, cpdoml)
 {
-	double Width       = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.width;
-	double Height      = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.height;
-	double Length      = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.length;
-	double HoleRadius  = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
-	double HoleXOffset = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
-	double HoleYOffset = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
-	dVolume            = cpdoml->GetVolume();
-	dMass              = cpdoml->GetMass();
-	dSudoMass          = 0.0;
-	vMassMomentInertia = njr::Vector3d();
-};
+	//vedo_float_t Width       = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.width;
+	//vedo_float_t Height      = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.height;
+	//vedo_float_t Length      = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.length;
+	//vedo_float_t HoleRadius  = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
+	//vedo_float_t HoleXOffset = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
+	//vedo_float_t HoleYOffset = cpdoml->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
+	dVolume                  = cpdoml->GetVolume();
+	dMass                    = cpdoml->GetMass();
+	dSudoMass                = 0.0;
+	vMassMomentInertia       = njr::Vector3d();
+}
 
-};   // namespace vedo
+}   // namespace vedo

@@ -17,7 +17,7 @@ public:
 	bool Inside(const njr::Vector3d&);
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 

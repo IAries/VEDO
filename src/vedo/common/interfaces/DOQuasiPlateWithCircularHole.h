@@ -13,15 +13,14 @@ public:
 
 	DOQuasiPlateWithCircularHole(const DOStatus* pdos, const DOModel* pdoml);
 
-	void Response(double dt);
+	void Response(vedo_float_t dt);
 
-	inline double CrossAreaToSurface
-		(double& a, double& b, double& c, double& d) const
+	inline vedo_float_t CrossAreaToSurface(vedo_float_t& a, vedo_float_t& b, vedo_float_t& c, vedo_float_t& d) const
 	{
 		return 0.0;
 	}
 
-	inline double GetSudoContactRadius()
+	inline vedo_float_t GetSudoContactRadius()
 	{
 //		return cpDOModel->GetShapeAttributes().quasiplatewithcircularhole.height;
 		return 0.0;
@@ -36,6 +35,6 @@ private:
 	DOQuasiPlateWithCircularHole();
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _DO_QUASIPLATEWITHCIRCULARHOLE_H

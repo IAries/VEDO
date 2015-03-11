@@ -12,27 +12,27 @@ class GSSphere : public GeometricShape
 
 public:
 
-	GSSphere(const std::string&, const double&);
+	GSSphere(const std::string&, const vedo_float_t&);
 
-	inline double GetRadius() const
+	inline vedo_float_t GetRadius() const
 	{
 		return _dRadius;
-	};
+	}
 
 	inline bool Inside(const njr::Vector3d& p)
 	{
 		return ((p - _Status->GetPosition()).length() <= _dRadius);
-	};
+	}
 
 protected:
 
-	double _dRadius;
+	vedo_float_t _dRadius;
 
 private:
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 

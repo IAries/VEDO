@@ -35,17 +35,17 @@ public:
 
 	DOMCountErrorHandler():fSawErrors(false)
 	{
-	};
+	}
 
 	~DOMCountErrorHandler()
 	{
-	};
+	}
 
 	// Getter methods
 	bool getSawErrors() const
 	{
 		return fSawErrors;
-	};
+	}
 
 	// Implementation of the DOM ErrorHandler interface
 
@@ -76,12 +76,12 @@ public:
 			<< trans(domError.getMessage())
 			<< std::endl;
 		return true;
-	};
+	}
 
 	void resetErrors()
 	{
 		fSawErrors = false;
-	};
+	}
 
 private :
 
@@ -97,7 +97,7 @@ private :
 	 * Its used by the main code to suppress output if there are errors.
 	 **************************************************************************/
 	bool fSawErrors;
-};
+}
 
 #include <vedo/framework/interfaces/DOWorld.h>
 
@@ -109,14 +109,14 @@ static const char* trans(const XMLCh* const toTranscode)
 	strncpy (tempStr, g, 255);
 	XMLString::release(&g);
 	return tempStr;
-};
+}
 
 static const XMLCh* XMLtrans(const char* toTranscode)
 {
 	static XMLCh tempStr[256];
 	XMLString::transcode(toTranscode, tempStr, 255);
 	return tempStr;
-};
+}
 
 static bool node2data(std::string& des, const DOMNode* node)
 {
@@ -126,7 +126,7 @@ static bool node2data(std::string& des, const DOMNode* node)
 	}
 	des = trans(node->getFirstChild()->getNodeValue());
 	return true;
-};
+}
 
 static bool node2data(double& des, const DOMNode* node)
 {
@@ -136,7 +136,7 @@ static bool node2data(double& des, const DOMNode* node)
 	}
 	des = atof(trans(node->getFirstChild()->getNodeValue()));
 	return true;
-};
+}
 
 static bool node2data(unsigned& des, const DOMNode* node)
 {
@@ -146,7 +146,7 @@ static bool node2data(unsigned& des, const DOMNode* node)
 	}
 	des = atoi(trans(node->getFirstChild()->getNodeValue()));
 	return true;
-};
+}
 
 static bool node2data(unsigned long& des, const DOMNode* node)
 {
@@ -156,7 +156,7 @@ static bool node2data(unsigned long& des, const DOMNode* node)
 	}
 	des = atoi(trans(node->getFirstChild()->getNodeValue()));
 	return true;
-};
+}
 
 static bool node2data(bool& des, const DOMNode* node)
 {
@@ -166,7 +166,7 @@ static bool node2data(bool& des, const DOMNode* node)
 	}
 	des = atoi(trans(node->getFirstChild()->getNodeValue()));
 	return true;
-};
+}
 
 static bool node2data(vedo::DOShapeColor& des, const DOMNode* node)
 {
@@ -212,7 +212,7 @@ static bool node2data(vedo::DOShapeColor& des, const DOMNode* node)
 		des = njrdxf::bylayer;
 	}
 	return true;
-};
+}
 
 static bool node2data
 	(vedo::DOShapeType& st, vedo::DOShapeAttributes& sa, const DOMNode* node)
@@ -286,7 +286,7 @@ static bool node2data
 
 	st = vedo::NoType;
 	return false;
-};
+}
 
 static bool node2data(njr::Vector3d& des, const DOMNode *node)
 {
@@ -303,7 +303,7 @@ static bool node2data(njr::Vector3d& des, const DOMNode *node)
 
 	des.Set(x, y, z) ;
 	return true;
-};
+}
 
 static bool node2data(njr::HalfSpace& des, const DOMNode *node)
 {
@@ -339,7 +339,7 @@ static bool node2data(njr::HalfSpace& des, const DOMNode *node)
 	des.Set(a, b, c, s, d);
 
 	return true;
-};
+}
 
 static vedo::SystemParameter* node2sp(const DOMDocument* doc)
 {
@@ -479,7 +479,7 @@ static vedo::SystemParameter* node2sp(const DOMDocument* doc)
 			 vFieldAcceleration,
 			 vedo::Boundary(vLowerBoundaryZOI, vUpperBoundaryZOI),
 			 vedo::Boundary(vLowerBoundaryPBC, vUpperBoundaryPBC) );
-};
+}
 
 static vedo::DOModel* node2doml(const DOMNode* node)
 {
@@ -569,7 +569,7 @@ static vedo::DOModel* node2doml(const DOMNode* node)
 	if(!node2data(vExternalForce, element->getElementsByTagName(XMLtrans("ExternalForce"))->item(0)))
 	{
 		vExternalForce.Set(0.0, 0.0, 0.0);
-	};
+	}
 
 	node2data(st, sa, element->getElementsByTagName(XMLtrans("Shape"))->item(0));
 
@@ -624,7 +624,7 @@ static vedo::DOModel* node2doml(const DOMNode* node)
 		 sa,
 		 cColor,
 		 cMatOpt        );
-};
+}
 
 static vedo::DOStatus* node2dos (const DOMNode* node)
 {
@@ -659,7 +659,7 @@ static vedo::DOStatus* node2dos (const DOMNode* node)
 		 vAngularVelocity,
 		 vImpact,
 		 vAngularImpact   );
-};
+}
 
 static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> node2is(const DOMNode* node)
 {
@@ -720,7 +720,7 @@ static std::pair<std::pair<unsigned long, unsigned long>, vedo::ImpactStatus*> n
                      vShearForce, vImpactPoint, vImpactDirection,
                      vImpactToMaster, vAngularImpactToMaster, dOverlap));
 	}
-};
+}
 
 static vedo::IactModel* node2iactml (const DOMNode* node)
 {
@@ -753,7 +753,7 @@ static vedo::IactModel* node2iactml (const DOMNode* node)
 
 	return new vedo::IactModel
 		(sMasterGroup, sSlaveGroup, sEquationType, svIactMechanisms);
-};
+}
 
 
 
@@ -902,7 +902,7 @@ bool DOWorld::ReadXML(const char* xmlFile, IactRecordTab* irtp)
 	parser->release();
 	XMLPlatformUtils::Terminate();
 	return DOWorld::Check();
-};
+}
 
 bool DOWorld::ReadXML(const char* xmlFile)
 {
@@ -1035,6 +1035,6 @@ bool DOWorld::ReadXML(const char* xmlFile)
 	parser->release();
 	XMLPlatformUtils::Terminate();
 	return DOWorld::Check();
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

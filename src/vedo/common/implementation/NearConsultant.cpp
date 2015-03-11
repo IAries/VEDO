@@ -4,15 +4,11 @@
 namespace vedo
 {
 
-NearConsultant::NearConsultant
-	(DOWorld* DOWorld,
-	IactRecordTab* pIactRecordTab,
-	char filename[],
-	unsigned long ulwrite         )
-: Consultant(DOWorld, pIactRecordTab, filename, ulwrite)
+NearConsultant::NearConsultant(DOWorld* DOWorld, IactRecordTab* pIactRecordTab, std::string filename, vedo_uint_t ulwrite):
+	Consultant(DOWorld, pIactRecordTab, filename, ulwrite)
 {
 	NearConsultant::Reset();
-};
+}
 
 bool NearConsultant::ISReset()
 {
@@ -23,16 +19,12 @@ bool NearConsultant::ISReset()
 		pDOWorld->WriteIDO("terminate.ido", pIRTbl);
 	}
 	return false;
-};
+}
 
-static bool Detect
-	(const DOStatus* dos1,
-	const DOStatus* dos2,
-	const DOModel* doml1,
-	const DOModel* doml2  )
+static bool Detect(const DOStatus* dos1, const DOStatus* dos2, const DOModel* doml1, const DOModel* doml2)
 {
 
-	if ( doml1->GetShapeType() > doml2->GetShapeType() )
+	if (doml1->GetShapeType() > doml2->GetShapeType())
 	{
 	    const DOStatus* tdos  = dos1;
 		                dos1  = dos2;
@@ -42,29 +34,25 @@ static bool Detect
 		                doml2 = tdoml;
 	}
 
-	if (   (doml1->GetShapeType() == Sphere)
-		&& (doml2->GetShapeType() == Sphere) )
+	if ((doml1->GetShapeType() == Sphere) && (doml2->GetShapeType() == Sphere))
 	{
 		njr::Vector3d vIm = dos1->GetPosition() - dos2->GetPosition();
 		return
-			vIm.length()
-			<= ( (doml1->GetShapeAttributes().sphere.radius
-				+ doml2->GetShapeAttributes().sphere.radius) * 1.05);
+			(vIm.length() <= ( (doml1->GetShapeAttributes().sphere.radius + doml2->GetShapeAttributes().sphere.radius) * 1.05));
 	}
 
-	if (   (doml1->GetShapeType() == Sphere       )
-		&& (doml2->GetShapeType() == QuasiCylinder) )
+	if ((doml1->GetShapeType() == Sphere) && (doml2->GetShapeType() == QuasiCylinder))
 	{
-		double dHHb = 0.5 * doml2->GetShapeAttributes().quasicylinder.height;
-		njr::Vector3d     Ca = dos1->GetPosition();
-		njr::Vector3d     Cb = dos2->GetPosition();
+		vedo_float_t  dHHb   = 0.5 * doml2->GetShapeAttributes().quasicylinder.height;
+		njr::Vector3d Ca     = dos1->GetPosition();
+		njr::Vector3d Cb     = dos2->GetPosition();
 		njr::Vector3d Vaxial = dos2->GetOrientationZ();
-		njr::Vector3d    Cap;
-		double Dap = (Ca - Cb)%Vaxial;
+		njr::Vector3d Cap;
+		vedo_float_t  Dap    = (Ca - Cb)%Vaxial;
 		Cap = Cb + (Vaxial * Dap);
 		njr::Vector3d vIm;
 
-		if ( (Dap < dHHb) && (Dap > -dHHb) )
+		if ((Dap < dHHb) && (Dap > -dHHb))
 		{
 			vIm = Cap - Ca;
 		}
@@ -78,34 +66,26 @@ static bool Detect
 		}
 
 		return
-			vIm.length()
-			<= ((doml1->GetShapeAttributes().sphere.radius
-				+doml2->GetShapeAttributes().quasicylinder.radius) * 1.05);
+			(   vIm.length()
+			 <= ((doml1->GetShapeAttributes().sphere.radius + doml2->GetShapeAttributes().quasicylinder.radius) * 1.05));
 	}
 
 	std::cerr
 		<< "Error!! Code: NearConsultant.cpp" << std::endl
 		<< "        Note: DOShape is not in the std::list of NearConsultant" << std::endl;
 	exit(-1);
-};
+}
 
-static bool DetectSphere
-	(const DOStatus* dos1,
-	const DOStatus* dos2,
-	const DOModel* doml1,
-	const DOModel* doml2  )
+static bool DetectSphere(const DOStatus* dos1, const DOStatus* dos2, const DOModel* doml1, const DOModel* doml2)
 {
 	njr::Vector3d vIm = dos1->GetPosition() - dos2 ->GetPosition();
-	return
-		vIm.length()
-		<= ((doml1->GetShapeAttributes().sphere.radius
-			+doml2->GetShapeAttributes().sphere.radius) * 3);
-};
+	return (vIm.length() <= ((doml1->GetShapeAttributes().sphere.radius + doml2->GetShapeAttributes().sphere.radius) * 3.0));
+}
 
 bool NearConsultant::Reset()
 {
-	unsigned long ulDONum = pDOWorld->GetSystemParameter()->GetDONumber();
-	unsigned long ul, uj;
+	vedo_uint_t ulDONum = pDOWorld->GetSystemParameter()->GetDONumber();
+	vedo_uint_t ul, uj;
 	std::string doname1, doname2;
 
 	vcDO.clear();
@@ -113,20 +93,19 @@ bool NearConsultant::Reset()
 	vcIactSlave.clear();
 
 	for (ul=0; ul<ulDONum; ++ul)
+	{
 		vcDO.push_back(ul);
+	}
 
 	for (ul=0; ul<ulDONum; ++ul)
 	{
 		for (uj=ul+1; uj<ulDONum; ++uj)
 		{
-			const DOStatus*  cpdos1  = pDOWorld->GetDOStatus(ul);
-			const DOStatus*  cpdos2  = pDOWorld->GetDOStatus(uj);
-			const DOModel*   cpdoml1 = pDOWorld->GetDOModel(cpdos1->GetDOName());
-			const DOModel*   cpdoml2 = pDOWorld->GetDOModel(cpdos2->GetDOName());
-
-			const IactModel* cpiactml
-				= pDOWorld->GetIactModel
-					(cpdoml1->GetDOGroup(), cpdoml2->GetDOGroup());
+			const DOStatus*  cpdos1   = pDOWorld->GetDOStatus(ul);
+			const DOStatus*  cpdos2   = pDOWorld->GetDOStatus(uj);
+			const DOModel*   cpdoml1  = pDOWorld->GetDOModel(cpdos1->GetDOName());
+			const DOModel*   cpdoml2  = pDOWorld->GetDOModel(cpdos2->GetDOName());
+			const IactModel* cpiactml = pDOWorld->GetIactModel(cpdoml1->GetDOGroup(), cpdoml2->GetDOGroup());
 
 			if (cpiactml == 0)
 			{
@@ -143,7 +122,7 @@ bool NearConsultant::Reset()
 			}
 */
 
-//            if (cpiactml->GetExtend() == "NoExtend")
+//			if (cpiactml->GetExtend() == "NoExtend")
 //			{
 				if (DetectSphere(cpdos1, cpdos2, cpdoml1, cpdoml2) == false)
 				{
@@ -157,15 +136,15 @@ bool NearConsultant::Reset()
 	}
 
 	#ifdef _VEDO_DEBUG
-		std::cout << "Near Consultant Interaction size = " << vcIactMaster.size() << '\n';
+		std::cout << "Near Consultant Interaction size = " << vcIactMaster.size() << std::endl;
 	#endif   // _VEDO_DEBUG
 
 	return true;
-};
+}
 
 void NearConsultant::RebuildIactRecordTab(IactContainer& cIact)
 {
 	CollectUserDefinedData(cIact);
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

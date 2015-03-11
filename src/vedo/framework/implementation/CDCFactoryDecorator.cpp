@@ -8,12 +8,12 @@ namespace vedo
 
 CDCFactoryDecorator::CDCFactoryDecorator() : lcCDCFactory(0)
 {
-};
+}
 
 CDCFactoryDecorator::~CDCFactoryDecorator()
 {
 	for_each(lcCDCFactory.begin(), lcCDCFactory.end(), njr::Delete_ptr());
-};
+}
 
 void CDCFactoryDecorator::AddCDCFactory(CDFactory* pcdf)
 {
@@ -21,9 +21,9 @@ void CDCFactoryDecorator::AddCDCFactory(CDFactory* pcdf)
 
 	for (icdf=lcCDCFactory.begin(); icdf!=lcCDCFactory.end(); ++icdf)
 	{
-		if( (pcdf->equationtype())==((*icdf)->equationtype()) &&
-			(pcdf->slavetype())   ==((*icdf)->slavetype())&&
-			(pcdf->mastertype())  ==((*icdf)->mastertype())     )
+		if (   (pcdf->equationtype()) == ((*icdf)->equationtype())
+			&& (pcdf->slavetype()   ) == ((*icdf)->slavetype()   )
+			&& (pcdf->mastertype()  ) == ((*icdf)->mastertype()  ) )
 		{
 		    delete *icdf;
 			lcCDCFactory.remove(*icdf);
@@ -31,12 +31,10 @@ void CDCFactoryDecorator::AddCDCFactory(CDFactory* pcdf)
 		}
 	}
 	lcCDCFactory.push_back(pcdf);
-};
+}
 
 ContactDetector* CDCFactoryDecorator::Create
-	(const DiscreteObject* cpdoslave,
-	const DiscreteObject* cpdomaster,
-	const IactModel* cpiactmodel) const
+	(const DiscreteObject* cpdoslave, const DiscreteObject* cpdomaster, const IactModel* cpiactmodel) const
 {
     ContactDetector* pcd;
 	std::list<CDFactory *>::const_iterator icdf;
@@ -57,6 +55,6 @@ ContactDetector* CDCFactoryDecorator::Create
 		<< "              MasterModel  = " << cpdomaster->GetDOModel()->GetDOName() << std::endl
 		<< "              EquationType = " << cpiactmodel->GetEquationType() 	    << std::endl;
 	exit(-1);
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

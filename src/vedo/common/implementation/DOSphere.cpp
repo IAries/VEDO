@@ -5,29 +5,27 @@
 namespace vedo
 {
 
-DOSphere::DOSphere
-	(const DOStatus* cpdos, const DOModel* cpdoml)
-: DiscreteObject(cpdos, cpdoml)
+DOSphere::DOSphere(const DOStatus* cpdos, const DOModel* cpdoml): DiscreteObject(cpdos, cpdoml)
 {
-//	double Radius = cpdoml->GetShapeAttributes().sphere.radius;
+//	vedo_float_t Radius = cpdoml->GetShapeAttributes().sphere.radius;
 /*
-	double mmi = 0.4 * dMass * Radius * Radius;
+	vedo_float_t mmi = 0.4 * dMass * Radius * Radius;
 	vMassMomentInertia = njr::Vector3d(mmi, mmi, mmi);
 */
 	dVolume            = cpdoml->GetVolume();
 	dMass              = cpdoml->GetMass();
 	dSudoMass          = cpdoml->GetSudoMass();
 	vMassMomentInertia = cpdoml->GetMassMomentInertia();
-};
+}
 
-void DOSphere::Response(double dt)
+void DOSphere::Response(vedo_float_t dt)
 {
 	njr::Vector3d V      = pDOStatus->GetVelocity();
 	njr::Vector3d AV     = pDOStatus->GetAngularVelocity();
 	njr::Vector3d P      = pDOStatus->GetPosition();
 	njr::Vector3d Ox     = pDOStatus->GetOrientationX();
 	njr::Vector3d Oz     = pDOStatus->GetOrientationZ();
-	double        Radius = cpDOModel->GetShapeAttributes().sphere.radius;
+	vedo_float_t  Radius = cpDOModel->GetShapeAttributes().sphere.radius;
 
 	njr::Vector3d dv     = 1.0 / dSudoMass * vImpact;
 /*
@@ -47,19 +45,18 @@ void DOSphere::Response(double dt)
 	pDOStatus->SetVelocity(V + dv);
 	pDOStatus->SetAngularVelocity(AV + dav);
 	ClearImpact();
-};
+}
 
-double DOSphere::CrossAreaToSurface
-	(double& a, double& b, double& c, double& d) const
+vedo_float_t DOSphere::CrossAreaToSurface(vedo_float_t& a, vedo_float_t& b, vedo_float_t& c, vedo_float_t& d) const
 {
 	//Surface: ax+by+cz=d
 	njr::Vector3d vSurfaceNormal(a, b, c);
-	njr::Vector3d p = pDOStatus->GetPosition();
-	double r = cpDOModel->GetShapeAttributes().sphere.radius;
+	njr::Vector3d p               = pDOStatus->GetPosition();
+	vedo_float_t  r               = cpDOModel->GetShapeAttributes().sphere.radius;
 
-	double dSphere2Surface = fabs(d-(p%vSurfaceNormal)/vSurfaceNormal.length());
+	vedo_float_t  dSphere2Surface = fabs(d-(p%vSurfaceNormal)/vSurfaceNormal.length());
 
-	if(dSphere2Surface >= r)
+	if (dSphere2Surface >= r)
 	{
 		return 0.0;
 	}
@@ -67,6 +64,6 @@ double DOSphere::CrossAreaToSurface
 	{
 		return (r * r - dSphere2Surface * dSphere2Surface) * njr::dPI;
 	}
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

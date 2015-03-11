@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include <vedo/constants/interfaces/Constants.h>
+
 namespace vedo
 {
 
@@ -18,38 +20,15 @@ typedef enum njrdxf::Color DOShapeColor;
 
 
 
-enum DOShapeType
-{
-	NoType,
-	Sphere,
-	Ellipsoid,
-	QuasiCylinder,
-	QuasiPlate,
-	QuasiPlateWithCircularHole,
-	Polyhedra,
-	DMSphere,
-	PolyhedraBRep
-};
-
-
-
-enum DOBehaviorType
-{
-	NoDOBehaviorType,
-	constrained,
-	fixed,
-	mobile,
-	orbital
-};
-
-
-
-enum DOScopeType
-{
-	NoDOScopeType,
-	global,
-	local
-};
+#ifdef _STD_CPP_11
+	enum DOShapeType   : vedo_uint_t {NoType, Sphere, Ellipsoid, QuasiCylinder, QuasiPlate, QuasiPlateWithCircularHole, Polyhedra, DMSphere, PolyhedraBRep};
+	enum DOBehaviorType: vedo_uint_t {NoDOBehaviorType, constrained, fixed, mobile, orbital};
+	enum DOScopeType   : vedo_uint_t {NoDOScopeType, global, local};
+#else
+	enum DOShapeType    {NoType, Sphere, Ellipsoid, QuasiCylinder, QuasiPlate, QuasiPlateWithCircularHole, Polyhedra, DMSphere, PolyhedraBRep};
+	enum DOBehaviorType {NoDOBehaviorType, constrained, fixed, mobile, orbital};
+	enum DOScopeType    {NoDOScopeType, global, local};
+#endif   // _STD_CPP_11
 
 
 
@@ -61,37 +40,37 @@ union DOShapeAttributes
 
 	struct
 	{
-		double radius;
+		vedo_float_t radius;
 	} sphere;
 
 	struct
 	{
-		double radius;
-		double height;
+		vedo_float_t radius;
+		vedo_float_t height;
 	} quasicylinder;
 
 	struct
 	{
-		double width;
-		double height;
-		double length;
+		vedo_float_t width;
+		vedo_float_t height;
+		vedo_float_t length;
 	} quasiplate;
 
 	struct
 	{
-		double width;
-		double height;
-		double length;
-		double holeradius;
-		double holexoffset;
-		double holeyoffset;
+		vedo_float_t width;
+		vedo_float_t height;
+		vedo_float_t length;
+		vedo_float_t holeradius;
+		vedo_float_t holexoffset;
+		vedo_float_t holeyoffset;
 	} quasiplatewithcircularhole;
 
 	struct
 	{
-		double xlength;
-		double ylength;
-		double zlength;
+		vedo_float_t xlength;
+		vedo_float_t ylength;
+		vedo_float_t zlength;
 	} ellipsoid;
 
 	struct
@@ -112,19 +91,19 @@ union DOShapeAttributes
 struct DOMaterialAttribute
 {
 	std::string Name;
-	double Value;
+	vedo_float_t Value;
 
 	DOMaterialAttribute ()
 	{
 		Name  = "NoName";
 		Value = 0.0;
-	};
+	}
 
-	explicit DOMaterialAttribute (std::string n, double v)
+	explicit DOMaterialAttribute (std::string n, vedo_float_t v)
 	{
 		Name  = n;
 		Value = v;
-	};
+	}
 };
 
 
@@ -138,52 +117,24 @@ public:
 	explicit DOModel(const std::string& DOname);
 
 	DOModel
-		(const std::string& DOName,
-		const std::string& DOGroup,
-		const DOBehaviorType& Behavior,
-		const DOScopeType& Scope,
-		const double& Density,
-		const double& DensityFactor,
-		const njr::Vector3d& ExternalForce,
-		const DOShapeType&,
-		const DOShapeAttributes&,
-		const DOShapeColor&);
+		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
+		 const vedo_float_t& Density, const vedo_float_t& DensityFactor, const njr::Vector3d& ExternalForce,
+		 const DOShapeType&, const DOShapeAttributes&, const DOShapeColor&                                               );
 
 	DOModel
-		(const std::string& DOName,
-		const std::string& DOGroup,
-		const DOBehaviorType& Behavior,
-		const DOScopeType& Scope,
-		const double& Density,
-		const double& DensityFactor,
-		const njr::Vector3d& ExternalForce,
-		const DOShapeType&,
-		const DOShapeAttributes&,
-		const DOShapeColor&,
-		const std::vector<DOMaterialAttribute>&);
+		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
+		 const vedo_float_t& Density, const vedo_float_t& DensityFactor, const njr::Vector3d& ExternalForce,
+		 const DOShapeType&, const DOShapeAttributes&, const DOShapeColor&, const std::vector<DOMaterialAttribute>&      );
 
 	DOModel
-		(const std::string& DOName,
-		const std::string& DOGroup,
-		const DOBehaviorType& Behavior,
-		const DOScopeType& Scope,
-		const double& Density,
-		const double& DensityFactor,
-		const njr::Vector3d& ExternalForce,
-		const njr::NJRpolyhedra&,
-		const DOShapeColor&);
+		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
+		 const vedo_float_t& Density, const vedo_float_t& DensityFactor, const njr::Vector3d& ExternalForce,
+		 const njr::NJRpolyhedra&, const DOShapeColor&                                                                   );
 
 	DOModel
-		(const std::string& DOName,
-		const std::string& DOGroup,
-		const DOBehaviorType& Behavior,
-		const DOScopeType& Scope,
-		const double& Density,
-		const double& DensityFactor,
-		const njr::Vector3d& ExternalForce,
-		const njr::NJRpolyhedra&,
-		const DOShapeColor&,
-		const std::vector<DOMaterialAttribute>&);
+		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
+		const vedo_float_t& Density, const vedo_float_t& DensityFactor, const njr::Vector3d& ExternalForce,
+		const njr::NJRpolyhedra&, const DOShapeColor&, const std::vector<DOMaterialAttribute>&                           );
 
 	DOModel(const DOModel& doml);
 
@@ -192,123 +143,112 @@ public:
 	inline std::string GetDOName() const
 	{
 		return sDOName;
-	};
+	}
 
 	inline std::string GetDOGroup() const
 	{
 		return sDOGroup;
-	};
+	}
 
 	inline DOBehaviorType GetBehavior() const
 	{
 		return eBehavior;
-	};
+	}
 
 	inline DOScopeType GetScope() const
 	{
 		return eScope;
-	};
+	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline double GetDensity() const
+	inline vedo_float_t GetDensity() const
 	{
 		return dDensity;
-	};
+	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline double GetDensityFactor() const
+	inline vedo_float_t GetDensityFactor() const
 	{
 		return dDensityFactor;
-	};
+	}
 
 	inline njr::Vector3d GetExternalForce() const
 	{
 		return vExternalForce;
-	};
+	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline double GetVolume() const
+	inline vedo_float_t GetVolume() const
 	{
 		return dVolume;
-	};
+	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline double GetMass() const
+	inline vedo_float_t GetMass() const
 	{
 		return dMass;
-	};
+	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline double GetSudoMass() const
+	inline vedo_float_t GetSudoMass() const
 	{
 		return dSudoMass;
-	};
+	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
 	inline njr::Vector3d GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
-	};
+	}
 
-	inline double GetRange() const
+	inline vedo_float_t GetRange() const
 	{
 		return dRange;
-	};
+	}
 
 	inline DOShapeColor GetShapeColor() const
 	{
 		return eColor;
-	};
+	}
 
 	inline DOShapeType GetShapeType() const
 	{
 		return eType;
-	};
+	}
 
 	inline DOShapeAttributes GetShapeAttributes() const
 	{
 		return uAttributes;
-	};
+	}
 
 	inline const std::vector<DOMaterialAttribute>& GetMaterialAttributes() const
 	{
 		return matAttributes;
-	};
+	}
 
 	inline const njr::NJRpolyhedra& GetPolyhedra() const
 	{
 		return polyhedra;
-	};
+	}
 
-	double GetMaterialAttribute(std::string Name) const;
+	vedo_float_t GetMaterialAttribute(std::string Name) const;
 
 	// Cross area to surface ax+by+cz=d;
-	double CrossAreaToSurface
+	vedo_float_t CrossAreaToSurface
 		(const njr::Vector3d& vP,
-		 const double&      a,
-		 const double&      b,
-		 const double&      c,
-		 const double&      d ) const;
+		 const vedo_float_t& a, const vedo_float_t& b, const vedo_float_t& c, const vedo_float_t& d ) const;
 
-	std::pair<double, njr::Vector3d> VolumeInsideBoundary
-		(const njr::Vector3d& vP,
-		 const Boundary*    pBC,
-		 const double&      dMeshSize) const;
+	std::pair<vedo_float_t, njr::Vector3d> VolumeInsideBoundary
+		(const njr::Vector3d& vP, const Boundary* pBC, const vedo_float_t& dMeshSize) const;
 
-	std::pair<double, njr::Vector3d> ProjectedAreaOnXYPlane
-		(const njr::Vector3d& vP,
-		 const Boundary*    pBC,
-		 const double&      dMeshSize) const;
+	std::pair<vedo_float_t, njr::Vector3d> ProjectedAreaOnXYPlane
+		(const njr::Vector3d& vP, const Boundary* pBC, const vedo_float_t& dMeshSize) const;
 
-	std::pair<double, njr::Vector3d> ProjectedAreaOnYZPlane
-		(const njr::Vector3d& vP,
-		 const Boundary*    pBC,
-		 const double&      dMeshSize) const;
+	std::pair<vedo_float_t, njr::Vector3d> ProjectedAreaOnYZPlane
+		(const njr::Vector3d& vP, const Boundary* pBC, const vedo_float_t& dMeshSize) const;
 
-	std::pair<double, njr::Vector3d> ProjectedAreaOnXZPlane
-		(const njr::Vector3d& vP,
-		 const Boundary*    pBC,
-		 const double&      dMeshSize) const;
+	std::pair<vedo_float_t, njr::Vector3d> ProjectedAreaOnXZPlane
+		(const njr::Vector3d& vP, const Boundary* pBC, const vedo_float_t& dMeshSize) const;
 
 	const DOModel& operator = (const DOModel& doml);
 
@@ -316,6 +256,7 @@ public:
 
 	// Binary output and input
 	std::ofstream& operator >> (std::ofstream& idof) const;
+
 	std::ifstream& operator << (std::ifstream& idof);
 
 protected:
@@ -328,13 +269,13 @@ private:
 	std::string	                     sDOGroup;
 	DOBehaviorType                   eBehavior;
 	DOScopeType	                     eScope;
-	double                           dDensity;
-	double                           dDensityFactor;
+	vedo_float_t                     dDensity;
+	vedo_float_t                     dDensityFactor;
 	njr::Vector3d                    vExternalForce;
-	double                           dMass;
-	double                           dSudoMass;
-	double                           dVolume;
-	double                           dRange;
+	vedo_float_t                     dMass;
+	vedo_float_t                     dSudoMass;
+	vedo_float_t                     dVolume;
+	vedo_float_t                     dRange;
 	njr::Vector3d                    vMassMomentInertia;
 	DOShapeColor                     eColor;
 	DOShapeType	                     eType;
@@ -343,6 +284,6 @@ private:
 	njr::NJRpolyhedra                polyhedra;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _DOMODEL_H

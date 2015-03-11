@@ -1,7 +1,7 @@
 #ifndef _INTERACTION_CONTAINER_H
 #define _INTERACTION_CONTAINER_H
 
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/framework/interfaces/Interaction.h>
 #include <vector>
 
@@ -17,9 +17,9 @@ public:
 
 	~IactContainer();
 
-	void CalculateImpact(const double dt);
+	void CalculateImpact(const vedo_float_t dt);
 
-	void CalculateImpact(const double dt, unsigned long ul);
+	void CalculateImpact(const vedo_float_t dt, vedo::vedo_uint_t ul);
 
 	void CheckContactStatus();
 
@@ -29,26 +29,28 @@ public:
 
 	void Add(Interaction* piact);
 
-	inline unsigned long size() const
+	inline vedo::vedo_uint_t size() const
 	{
-		return (unsigned long)vcIact.size();
-	};
+		return (vedo::vedo_uint_t)vcIact.size();
+	}
 
-	inline const Interaction* GetInteraction(unsigned long ul)
+	inline const Interaction* GetInteraction(vedo::vedo_uint_t ul)
 	{
 		return (ul<vcIact.size()) ? vcIact[ul] : 0;
-	};
+	}
 
-	bool InteractionDetectContact(unsigned long ul);
+	bool InteractionDetectContact(vedo::vedo_uint_t ul);
 
-	void CleanSolverStatus(unsigned long i);
+	void BackupImpactStatus();
 
-	double GetUserDefinedValue(unsigned u) const;
+	void CleanSolverStatus(vedo::vedo_uint_t i);
 
-	inline double* GetUserDefinedValue() const
+	vedo_float_t GetUserDefinedValue(vedo_uint_t u) const;
+
+	inline vedo_float_t* GetUserDefinedValue() const
 	{
 	    return dpUDVInEachProcessor;
-	};
+	}
 
 	void CollectUserDefinedData();
 
@@ -56,11 +58,11 @@ private:
 
 	std::vector<Interaction*> vcIact;
 
-	double* dpUDVInEachProcessor;   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
-	//double dUDVInEachProcessor[2*uNumUDDImpactStatus];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+	vedo_float_t* dpUDVInEachProcessor;   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
+	//vedo_float_t dUDVInEachProcessor[2*uNumUDDImpactStatus];   // 0 ~ uNumUserDefinedData: Accumulative user-defined value
                                                          // uNumUserDefinedData ~ 2*uNumUserDefinedData-1: User-defined value
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _INTERACTION_CONTAINER_H

@@ -1,4 +1,4 @@
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/framework/interfaces/SimMediator.h>
 #include <vedo/framework/interfaces/DOMap.h>
 #include <vedo/framework/interfaces/DOModel.h>
@@ -18,26 +18,25 @@ namespace vedo
 
 DataFieldVTKWriter* DataFieldVTKWriter::_instance = 0;
 
-std::string GetRankString(int rank, int NP)
+std::string GetRankString(vedo_int_t rank, vedo_int_t NP)
 {
-    unsigned dig_total
-		= static_cast<unsigned>(log10(static_cast<double>(NP))) + 1;
-	unsigned dig;
-    if(rank == 0)
+    vedo_uint_t dig_total = static_cast<vedo_uint_t>(log10(static_cast<vedo_float_t>(NP))) + 1;
+	vedo_uint_t dig;
+    if (rank == 0)
     {
     	dig = 1;
     }
     else
     {
-	    dig = static_cast<unsigned>(log10(static_cast<double>(rank))) + 1;
+	    dig = static_cast<vedo_uint_t>(log10(static_cast<vedo_float_t>(rank))) + 1;
     }
 	std::string dig_string = "";
-   	for(unsigned i=0; i<dig; i++)
+   	for (vedo_uint_t i=0; i<dig; i++)
    	{
 		dig_string = char(48+rank%10) + dig_string;
         rank = rank/10;
     }
-   	for(unsigned i=0; i<(dig_total-dig); i++)
+   	for (vedo_uint_t i=0; i<(dig_total-dig); i++)
     {
     	dig_string = '0' + dig_string;
    	}
@@ -49,8 +48,7 @@ void SimMediator::CalculateSystemEnergy()
 	pConsultant->CalculateSystemEnergy();
 	if (rank == 0)
 	{
-		const SystemParameter* csp
-			= pConsultant->GetDOWorld()->GetSystemParameter();
+		const SystemParameter* csp = pConsultant->GetDOWorld()->GetSystemParameter();
 		FileLogSystemStatus
 			<< csp->GetTimeCurrent()                            << ", "
 			<< csp->GetDONumber()                               << ", "
@@ -71,16 +69,17 @@ void SimMediator::CalculateSystemEnergy()
 			<< csp->GetMomentumNorm()                           << ", "
 			<< csp->GetAngularMomentumNorm();
 
-		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+		for (vedo_uint_t u=0; u<2*uNumUDDImpactStatus; u++)
+		{
 			FileLogSystemStatus << ", " << pConsultant->GetUserDefinedValue(u);
+		}
 
 		FileLogSystemStatus << std::endl;
-	};
-};
+	}
+}
 
-SimMediator::SimMediator
-	(Consultant* Consultant, const Assembler* Assembler)
-	: pConsultant(Consultant), cpAssembler(Assembler), rank(0), NP(1), bFirstRun(true)
+SimMediator::SimMediator(Consultant* Consultant, const Assembler* Assembler):
+	pConsultant(Consultant), cpAssembler(Assembler), rank(0), NP(1), bFirstRun(true)
 {
 	TimeInitiate();
 	FileLog.open("time_0.csv", std::ios::out);
@@ -109,8 +108,10 @@ SimMediator::SimMediator
 		<< "Minimal angular velocity, Maximal angular velocity, "
 		<< "Norm of momentum, Norm of angular momentum";
 
-	for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+	for (vedo_uint_t u=0; u<2*uNumUDDImpactStatus; u++)
+	{
 		FileLogSystemStatus << ", User-defined Value " << u+1;
+	}
 
 	FileLogSystemStatus << std::endl;
 
@@ -118,25 +119,21 @@ SimMediator::SimMediator
 	Initiate();
 //	pConsultant->SyncWorld(cDO);
 //	pConsultant->RebuildIactRecordTab(cIact);
-	unsigned long ulDOSizeOld = cDO.size();
+	vedo_uint_t ulDOSizeOld = cDO.size();
 	if (pConsultant->CleanUp(cDO, cIact))
 	{
 		pConsultant->Reset();
-		unsigned long ulDOSizeNew = cDO.size();
-		if(ulDOSizeOld != ulDOSizeNew)
+		vedo_uint_t ulDOSizeNew = cDO.size();
+		if (ulDOSizeOld != ulDOSizeNew)
 		{
 			CalculateSystemEnergy();
 			Initiate();
 		}
 	}
-};
+}
 
-SimMediator::SimMediator
-	(Consultant* Consultant,
-	const Assembler* Assembler,
-	const unsigned int r,
-	const unsigned int np)
-	: pConsultant(Consultant), cpAssembler(Assembler), rank(r), NP(np), bFirstRun(true)
+SimMediator::SimMediator(Consultant* Consultant, const Assembler* Assembler, const vedo_uint_t r, const vedo_uint_t np):
+	pConsultant(Consultant), cpAssembler(Assembler), rank(r), NP(np), bFirstRun(true)
 {
 	pConsultant->SetRankNP(r, np);
 	TimeInitiate();
@@ -171,35 +168,39 @@ SimMediator::SimMediator
             << "Minimal angular velocity, Maximal angular velocity, "
             << "Norm of momentum, Norm of angular momentum";
 
-		for(unsigned u=0; u<2*uNumUDDImpactStatus; u++)
+		for (vedo_uint_t u=0; u<2*uNumUDDImpactStatus; u++)
+		{
 			FileLogSystemStatus << ", User-defined Value " << u+1;
+		}
 
 		FileLogSystemStatus << std::endl;
-	};
+	}
 
 	CalculateSystemEnergy();
 	Initiate();
 //	pConsultant->SyncWorld(cDO);
 //	pConsultant->RebuildIactRecordTab(cIact);
-	unsigned long ulDOSizeOld = cDO.size();
+	vedo_uint_t ulDOSizeOld = cDO.size();
 	if (pConsultant->CleanUp(cDO, cIact))
 	{
 		pConsultant->Reset();
-		unsigned long ulDOSizeNew = cDO.size();
-		if(ulDOSizeOld != ulDOSizeNew)
+		vedo_uint_t ulDOSizeNew = cDO.size();
+		if (ulDOSizeOld != ulDOSizeNew)
 		{
 			CalculateSystemEnergy();
 			Initiate();
 		}
 	}
-};
+}
 
 SimMediator::~SimMediator()
 {
 	FileLog.close();
 	if (rank == 0)
+	{
 		FileLogSystemStatus.close();
-};
+	}
+}
 
 void SimMediator::TimeInitiate()
 {
@@ -246,7 +247,7 @@ void SimMediator::ShowInteraction()
 		<< "Bond, Contacted, RememberedNormalStiffness, RememberedInitialVelocity, "
 		<< "RememberedShearForceX, RememberedShearForceY, RememberedShearForceZ";
 
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+	for(vedo_uint_t u=0; u<4*uNumUDDImpactStatus; u++)
 		FileInteraction << ", User-defined value " << u+1;
 
 	FileInteraction << std::endl;
@@ -256,11 +257,11 @@ void SimMediator::ShowInteraction()
 	const ImpactStatus* isp = 0;
 	njr::Vector3d
 		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
-	const double* cdpudv;
+	const vedo_float_t* cdpudv;
 
 	if (NP == 1)
 	{
-		for(unsigned long ul=0; ul<cIact.size(); ul++)
+		for(vedo_uint_t ul=0; ul<cIact.size(); ul++)
 		{
 			cIact.InteractionDetectContact(ul);
 			iap = cIact.GetInteraction(ul);
@@ -341,7 +342,7 @@ void SimMediator::ShowInteraction()
 					<< isp->ShearForce().y()  << ", "
 					<< isp->ShearForce().z();
 
-				for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+				for(vedo_uint_t u=0; u<4*uNumUDDImpactStatus; u++)
 					FileInteraction << ", " << *(cdpudv+u);
 
 				FileInteraction << std::endl;
@@ -350,7 +351,7 @@ void SimMediator::ShowInteraction()
 	}
 	else
 	{
-		for(unsigned long ul=0; ul<cIact.size(); ul++)
+		for(vedo_uint_t ul=0; ul<cIact.size(); ul++)
 		{
 			cIact.InteractionDetectContact(ul);
 			iap = cIact.GetInteraction(ul);
@@ -431,7 +432,7 @@ void SimMediator::ShowInteraction()
 					<< isp->ShearForce().y()  << ", "
 					<< isp->ShearForce().z();
 
-				for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+				for(vedo_uint_t u=0; u<4*uNumUDDImpactStatus; u++)
 					FileInteraction << ", " << *(cdpudv+u);
 
 				FileInteraction << std::endl;
@@ -476,7 +477,7 @@ void SimMediator::ShowInteraction()
 
 	if (NP == 1)
 	{
-		for(unsigned long ul=0; ul<cDO.size(); ul++)
+		for(vedo_uint_t ul=0; ul<cDO.size(); ul++)
 		{
 			dos              = cDO.GetDOStatus(ul);
 			vPosition        = dos->GetPosition();
@@ -516,7 +517,7 @@ void SimMediator::ShowInteraction()
 	}
 	else
 	{
-		for(unsigned long ul=0; ul<cDO.size(); ul++)
+		for(vedo_uint_t ul=0; ul<cDO.size(); ul++)
 		{
 			dos              = cDO.GetDOStatus(ul);
 			vPosition        = dos->GetPosition();
@@ -560,25 +561,26 @@ void SimMediator::ShowInteraction()
 */
 
 void SimMediator::WriteInteractionForce
-	(const char* filename,
-	 const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >* vvExternalImpact)
+	(const char* filename, const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >* vvExternalImpact)
 {
 	const SystemParameter* csp = pConsultant->GetDOWorld()->GetSystemParameter();
-	const double           dt  = csp->GetTimeInterval();
+	const vedo_float_t     dt  = csp->GetTimeInterval();
 
 	const DiscreteObject* dop = 0;
 
 	// Calculate the force due to interaction
 	//cIact.CalculateImpact(csp->GetTimeInterval());   // It has been done in the function "ShowImpact"
 
-	std::vector<double> iactForce_vec, extForce_vec, fieldForce_vec, totalForce_vec;
+	std::vector<vedo_float_t> iactForce_vec, extForce_vec, fieldForce_vec, totalForce_vec;
 
-	for(unsigned long ul=0; ul<cDO.size(); ul++)
+	for (vedo_uint_t ul=0; ul<cDO.size(); ul++)
 	{
 		dop = cDO.GetDiscreteObject(ul);
 
 		if (dop->GetDOModel()->GetBehavior() != mobile)
+		{
 			continue;
+		}
 
 		njr::Vector3d iactForce  = dop->GetImpact() * (1.0/dt);
 		njr::Vector3d fieldForce = csp->GetFieldAcceleration();
@@ -611,25 +613,23 @@ void SimMediator::WriteInteractionForce
             pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
         }
     #endif   // _STD_CPP_11
-};
+}
 
 void SimMediator::Initiate()
 {
 	cDO.Clear();
 	cIact.Clear();
 
-	unsigned long i, ulMaster, ulSlave;
+	vedo_uint_t i, ulMaster, ulSlave;
 
 	const DOModel*   cpdoml;
 	const DOStatus*  cpdos;
 	const IactModel* cpiactml;
 	const DOWorld*   cpDOWorld = pConsultant->GetDOWorld();
+	const Boundary*  pbc       = &(cpDOWorld->GetSystemParameter()->GetPeriodicBoundaryConditions());
 
-	const Boundary*  pbc
-		= &(cpDOWorld->GetSystemParameter()->GetPeriodicBoundaryConditions());
-
-	unsigned long DONum   = pConsultant->GetDONum();
-	unsigned long IactNum = pConsultant->GetIactNum();
+	vedo_uint_t DONum   = pConsultant->GetDONum();
+	vedo_uint_t IactNum = pConsultant->GetIactNum();
 
 	for (i=0; i<DONum; ++i)
 	{
@@ -644,24 +644,15 @@ void SimMediator::Initiate()
 		{
 			ulMaster = pConsultant->GetIactMaster(i);
 			ulSlave  = pConsultant->GetIactSlave(i);
-
-			cpiactml
-				= cpDOWorld
-					->GetIactModel
-						(cDO[ulMaster]->GetDOModel()->GetDOGroup(),
-						cDO[ulSlave]->GetDOModel()->GetDOGroup()   );
-
-			Interaction* pInteraction
-				= cpAssembler
-					->CreateInteraction(cDO[ulMaster], cDO[ulSlave], cpiactml);
+			cpiactml = cpDOWorld->GetIactModel(cDO[ulMaster]->GetDOModel()->GetDOGroup(), cDO[ulSlave]->GetDOModel()->GetDOGroup());
+			Interaction* pInteraction = cpAssembler->CreateInteraction(cDO[ulMaster], cDO[ulSlave], cpiactml);
 
 			if (pInteraction != 0)   // Aries added this judgement
 			{
 				pInteraction->SetPeriodicBoundaryConditions(pbc);
 				pInteraction->DetectContact();
 
-				const ImpactStatus* status
-					= pConsultant->RetrieveImpactStatus(ulMaster, ulSlave);
+				const ImpactStatus* status = pConsultant->RetrieveImpactStatus(ulMaster, ulSlave);
 
 				if (status != 0)
 				{
@@ -669,7 +660,7 @@ void SimMediator::Initiate()
 				}
 
 				cIact.Add(pInteraction);
-			};
+			}
 		}
 	}
 	else
@@ -678,34 +669,25 @@ void SimMediator::Initiate()
 		{
 			ulMaster = pConsultant->GetIactMaster(i);
 			ulSlave  = pConsultant->GetIactSlave(i);
-
-			cpiactml
-				= cpDOWorld
-					->GetIactModel
-						(cDO[ulMaster]->GetDOModel()->GetDOGroup(),
-						cDO[ulSlave]->GetDOModel()->GetDOGroup()   );
-
-			Interaction* pInteraction
-				= cpAssembler
-					->CreateInteraction(cDO[ulMaster], cDO[ulSlave], cpiactml);
+			cpiactml = cpDOWorld->GetIactModel(cDO[ulMaster]->GetDOModel()->GetDOGroup(), cDO[ulSlave]->GetDOModel()->GetDOGroup());
+			Interaction* pInteraction = cpAssembler->CreateInteraction(cDO[ulMaster], cDO[ulSlave], cpiactml);
 
 			if (pInteraction != 0)   // Aries added this judgement
 			{
-				const ImpactStatus* status
-					= pConsultant->RetrieveImpactStatus(ulMaster, ulSlave);
-
+				const ImpactStatus* status = pConsultant->RetrieveImpactStatus(ulMaster, ulSlave);
 				if (status != 0)
 				{
 					pInteraction->SetImpactStatus(status);
 				}
 
 				cIact.Add(pInteraction);
-			};
+			}
 		}
 	}
+
 	// Aries' Debug
 	//cIact.Dump("Interaction.txt");
-};
+}
 
 bool SimMediator::Run()
 {
@@ -761,30 +743,27 @@ bool SimMediator::Run()
 
 	if (pConsultant->ISRecord() || pConsultant->ISReset())
 	{
+		if (rank == 0)
+		{
+			std::cout << "Simulated time: " << csp->GetTimeCurrent() << " / " << csp->GetTimeStop() << std::endl;
+		}
 		CalculateSystemEnergy();
-	};
+	}
 
 	// Attention check if it has to rebuilder
 	if (pConsultant->ISReset())
 	{
 		Initiate();
-	};
+	}
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);
 
 	if (pConsultant->ISRecord())
 	{
-		timeComputing
-			= timeSystem
-			+ timeImpactSolving
-			+ timeFieldForceAdding
-			+ timeResponseUpdating
-			+ timeContactDetection;
-		timeCommunication
-			= timeSyncDOContainer
-			+ timePartitioning;
-		if(NP == 1)
+		timeComputing     = timeSystem + timeImpactSolving + timeFieldForceAdding + timeResponseUpdating + timeContactDetection;
+		timeCommunication = timeSyncDOContainer + timePartitioning;
+		if (NP == 1)
 		{
 			timeComputing += timeNextStep;
 		}
@@ -807,7 +786,7 @@ bool SimMediator::Run()
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
 			<< timeTotal                                                         << ", ";
-        if(timeTotal != 0.0)
+        if (timeTotal != 0.0)
         {
             FileLog
 			<< timeSystem/timeTotal                                              << ", "
@@ -837,11 +816,10 @@ bool SimMediator::Run()
 
 	return
 		((pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()) <
-		(pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop())      );
-};
+		 (pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop()   )   );
+}
 
-bool SimMediator::Run
-	(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >& vvExternalImpact)
+bool SimMediator::Run(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >& vvExternalImpact)
 {
 	time(&starttime);
 
@@ -850,7 +828,7 @@ bool SimMediator::Run
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);
-	starttime = endtime;
+	starttime   = endtime;
 
 	cIact.CalculateImpact(csp->GetTimeInterval());
 
@@ -867,65 +845,55 @@ bool SimMediator::Run
 
 	cDO.AddFieldImpact(csp->GetFieldAcceleration() * csp->GetTimeInterval());
 	cDO.AddConstrainedImpact(csp->GetTimeInterval());
-	for(unsigned long i=0; i<cDO.size(); i++)
+	for (vedo_uint_t i=0; i<cDO.size(); i++)
 	{
-		cDO.AddImpact
-			(i,
-			 vvExternalImpact[pConsultant->GetDO(i)].first,
-			 vvExternalImpact[pConsultant->GetDO(i)].second);
-	};
+		cDO.AddImpact(i, vvExternalImpact[pConsultant->GetDO(i)].first, vvExternalImpact[pConsultant->GetDO(i)].second);
+	}
 
 	time(&endtime);
 	timeFieldForceAdding += (endtime - starttime);
-	starttime = endtime;
+	starttime             = endtime;
 
 	cDO.Response(csp->GetTimeInterval());
 	cDO.EnforcePeriodicBoundaryConditions(csp->GetPeriodicBoundaryConditions());
 
 	time(&endtime);
 	timeResponseUpdating += (endtime - starttime);
-	starttime = endtime;
+	starttime             = endtime;
 
 	cIact.CheckContactStatus();
 
 	time(&endtime);
 	timeContactDetection += (endtime - starttime);
-	starttime = endtime;
+	starttime             = endtime;
 
 	pConsultant->ResetTimePartitioning();
 	bool bContinue = pConsultant->NextStep(cDO, cIact);
 
 	time(&endtime);
 	timePartitioning += (pConsultant->timePartitioning);
-	timeNextStep += (endtime - starttime - (pConsultant->timePartitioning));
-	starttime = endtime;
+	timeNextStep     += (endtime - starttime - (pConsultant->timePartitioning));
+	starttime         = endtime;
 
 	if (pConsultant->ISRecord() || pConsultant->ISReset())
 	{
 		CalculateSystemEnergy();
-	};
+	}
 
 	// Attention check if it has to rebuilder
 	if (pConsultant->ISReset())
 	{
 		Initiate();
-	};
+	}
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);
 
 	if (pConsultant->ISRecord())
 	{
-		timeComputing
-			= timeSystem
-			+ timeImpactSolving
-			+ timeFieldForceAdding
-			+ timeResponseUpdating
-			+ timeContactDetection;
-		timeCommunication
-			= timeSyncDOContainer
-			+ timePartitioning;
-		if(NP == 1)
+		timeComputing     = timeSystem + timeImpactSolving + timeFieldForceAdding + timeResponseUpdating + timeContactDetection;
+		timeCommunication = timeSyncDOContainer + timePartitioning;
+		if (NP == 1)
 		{
 			timeComputing += timeNextStep;
 		}
@@ -948,7 +916,7 @@ bool SimMediator::Run
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
 			<< timeTotal                                                         << ", ";
-        if(timeTotal != 0.0)
+        if (timeTotal != 0.0)
         {
             FileLog
 			<< timeSystem/timeTotal                                              << ", "
@@ -978,8 +946,8 @@ bool SimMediator::Run
 
 	return
 		((pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()) <
-		(pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop())      );
-};
+		 (pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop()   )   );
+}
 
 bool SimMediator::ReDistribute()
 {
@@ -1017,7 +985,7 @@ bool SimMediator::ReDistribute()
 	cDO.EnforcePeriodicBoundaryConditions(csp->GetPeriodicBoundaryConditions());
 
 	// Freeze all elements
-	for (unsigned long ul=0; ul<cDO.size(); ul++)
+	for (vedo_uint_t ul=0; ul<cDO.size(); ul++)
 	{
 		cDO[ul]->SetVelocity(njr::ZERO);
 		cDO[ul]->SetAngularVelocity(njr::ZERO);
@@ -1029,7 +997,7 @@ bool SimMediator::ReDistribute()
 		if (rank == 0)
 		{
 			std::ofstream FileContactNumber("contact_number.txt", std::ios::app);
-			unsigned long ulContactPairNumber = pConsultant->ContactNumber();
+			vedo_uint_t ulContactPairNumber = pConsultant->ContactNumber();
 			FileContactNumber
 				<< "Time = "
 				<< pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()
@@ -1050,11 +1018,15 @@ bool SimMediator::ReDistribute()
 
 		if (pConsultant->ISRecord() || pConsultant->ISReset())
 		{
+			if (rank == 0)
+			{
+				std::cout << "Simulated time: " << csp->GetTimeCurrent() << " / " << csp->GetTimeStop() << std::endl;
+			}
 			CalculateSystemEnergy();
-		};
+		}
 
 		// Clean all interactions
-		for (unsigned long ul=0; ul<cIact.size(); ul++)
+		for (vedo_uint_t ul=0; ul<cIact.size(); ul++)
 		{
 			cIact.CleanSolverStatus(ul);
 		}
@@ -1064,7 +1036,7 @@ bool SimMediator::ReDistribute()
 
 	// Clean all interactions
 /*
-	for (unsigned long ul=0; ul<cIact.size(); ul++)
+	for(vedo_uint_t ul=0; ul<cIact.size(); ul++)
 	{
 		cIact.CleanSolverStatus(ul);
 	}
@@ -1072,43 +1044,36 @@ bool SimMediator::ReDistribute()
 
 	time(&endtime);
 	timeResponseUpdating += (endtime - starttime);
-	starttime = endtime;
+	starttime             = endtime;
 
 	cIact.CheckContactStatus();
 
 	time(&endtime);
 	timeContactDetection += (endtime - starttime);
-	starttime = endtime;
+	starttime             = endtime;
 
 	pConsultant->ResetTimePartitioning();
 	bool bContinue = pConsultant->NextStep(cDO, cIact);
 
 	time(&endtime);
 	timePartitioning += (pConsultant->timePartitioning);
-	timeNextStep += (endtime - starttime - (pConsultant->timePartitioning));
-	starttime = endtime;
+	timeNextStep     += (endtime - starttime - (pConsultant->timePartitioning));
+	starttime         = endtime;
 
 	// Attention check if it has to rebuilder
 	if (pConsultant->ISReset())
 	{
 		Initiate();
-	};
+	}
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);
 
 	if (pConsultant->ISRecord())
 	{
-		timeComputing
-			= timeSystem
-			+ timeImpactSolving
-			+ timeFieldForceAdding
-			+ timeResponseUpdating
-			+ timeContactDetection;
-		timeCommunication
-			= timeSyncDOContainer
-			+ timePartitioning;
-		if(NP == 1)
+		timeComputing     = timeSystem + timeImpactSolving + timeFieldForceAdding + timeResponseUpdating + timeContactDetection;
+		timeCommunication = timeSyncDOContainer + timePartitioning;
+		if (NP == 1)
 		{
 			timeComputing += timeNextStep;
 		}
@@ -1131,7 +1096,7 @@ bool SimMediator::ReDistribute()
 			<< timeComputing                                                     << ", "
 			<< timeCommunication                                                 << ", "
 			<< timeTotal                                                         << ", ";
-        if(timeTotal != 0.0)
+        if (timeTotal != 0.0)
         {
             FileLog
 			<< timeSystem/timeTotal                                              << ", "
@@ -1161,7 +1126,7 @@ bool SimMediator::ReDistribute()
 
 	return
 		((pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()) <
-		(pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop())      );
-};
+		 (pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop()   )   );
+}
 
-};   // namespace vedo
+}   // namespace vedo

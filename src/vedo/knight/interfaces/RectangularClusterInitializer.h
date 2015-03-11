@@ -2,6 +2,7 @@
 #define RECTANGULARCLUSTERINITIALIZER_H
 
 #include <vedo/knight/interfaces/ClusterInitializer.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <cmath>
 
 class RectangularClusterInitializer : public ClusterInitializer
@@ -9,29 +10,29 @@ class RectangularClusterInitializer : public ClusterInitializer
 public:
 
 	RectangularClusterInitializer
-		(double rectangleSize[3], BravaisLatticeWithBasis *bravais);
+		(vedo::vedo_float_t rectangleSize[3], BravaisLatticeWithBasis *bravais);
 
 	virtual ~RectangularClusterInitializer();
 
-	void SetRectangleSize(const double rectangleSize[3]);
+	void SetRectangleSize(const vedo::vedo_float_t rectangleSize[3]);
 
 /*
-	inline double (GetRectangleSize() const)[3]
+	inline vedo::vedo_float_t (GetRectangleSize() const)[3]
 	{
-		return (double[3]) rectangleSize;
+		return (vedo::vedo_float_t[3]) rectangleSize;
 	}
 */
 
-	inline const double *GetRectangleSize() const
+	inline const vedo::vedo_float_t *GetRectangleSize() const
 	{
-		return (const double *)rectangleSize;
+		return (const vedo::vedo_float_t *)rectangleSize;
 	}
 
 protected:
 
-	double rectangleSize[3];
-	int SetMaxSize();
-	bool Inside(double X[3]);
+	vedo::vedo_float_t rectangleSize[3];
+	vedo::vedo_int_t SetMaxSize();
+	bool Inside(vedo::vedo_float_t X[3]);
 };
 
 #endif // !defined(RECTANGULARCLUSTERINITIALIZER_H)

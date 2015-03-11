@@ -4,237 +4,120 @@
 #include <vedo/framework/interfaces/DOWorld.h>
 #include <vedo/framework/interfaces/IactRecordTab.h>
 #include <cstdio>
-#include <string>
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
+#include <fstream>
+#include <iomanip>
+#include <string>
 #include <vector>
 
 namespace vedo
 {
 
-void DOWorld::WriteXML(const char* filename) const
+void DOWorld::WriteXMLPrefix(const std::string filename) const
 {
-	FILE *fpxml;
-	std::list<DOModel*>::const_iterator     idoml;
-	std::list<IactModel*>::const_iterator   iactml;
+	Constants* vedo_cp = Constants::Instance();
+
+	std::ofstream ofXML(filename.c_str(), std::ios::out);
+
+	std::list  <DOModel  *>::const_iterator idoml;
+	std::list  <IactModel*>::const_iterator iactml;
 	std::vector<DOStatus *>::const_iterator idos;
 
-	if ((fpxml = fopen (filename,"w")) == NULL )
+	if(!ofXML)
 	{
 		std::cerr
 			<< "Error!! Code: DOWorld::WriteXML(const char*)" << std::endl
-			<< "        Note: DOWorld cannot write XML file"  << std::endl;
+			<< "        Note: DOWorld cannot access XML file" << std::endl;
 		exit(-1);
-	};
+	}
 
-	fprintf
-		(fpxml,
-		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		"<!-- created by DOWorld -->\n"
-		"<DOWorld xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-		"\t\txsi:noNamespaceSchemaLocation=\"DOWorldSchema.xsd\">\n"
-		"\t<Version>%s</Version>\n"
-		"\t<SimParameter>\n"
-		"\t\t<SimConstant>\n"
-		"\t\t\t<Constant Name=\"ContactDetectSafetyFactor\" Value=\"%g\"/>\n"
-		"\t\t\t<Constant Name=\"NumUDDDOStatus\" Value=\"%d\"/>\n"
-		"\t\t\t<Constant Name=\"NumUDDIactStatus\" Value=\"%d\"/>\n"
-		"\t\t\t<Constant Name=\"MaxIDofDOStatus\" Value=\"%d\"/>\n"
-		"\t\t</SimConstant>\n"
-		"\t\t<TimeControl Start=\"%g\" Stop=\"%g\" Interval=\"%g\" Current=\"%g\"/>\n"
-		"\t\t<FieldAcceleration x=\"%g\" y=\"%g\" z=\"%g\"/>\n",
-		vedo::sPublish.c_str(),
-		vedo::dSafetyFactor,
-		vedo::uNumUDDDOStatus,
-		vedo::uNumUDDImpactStatus,
-		pSystemParameter->GetMaxIDofDO(),
-		pSystemParameter->GetTimeStart(),
-		pSystemParameter->GetTimeStop(),
-		pSystemParameter->GetTimeInterval(),
-		pSystemParameter->GetTimeCurrent(),
-		pSystemParameter->GetFieldAcceleration().x(),
-		pSystemParameter->GetFieldAcceleration().y(),
-		pSystemParameter->GetFieldAcceleration().z()  );
+	ofXML
+		<< "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl
+		<< "<DOWorld xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"DOWorldSchema.xsd\">" << std::endl
+		<< "\t<Version>" << vedo::sReleaseDate << "</Version>" << std::endl
+		<< "\t<SimParameter>" << std::endl
+		<< "\t\t<SimConstant>" << std::endl
+		<< "\t\t\t<Constant Name=\"ContactDetectSafetyFactor\" Value=\"" << vedo_cp->SafetyFactor() << "\"/>" << std::endl
+		<< "\t\t\t<Constant Name=\"NumUDDDOStatus\" Value=\"" << vedo::uNumUDDDOStatus << "\"/>" << std::endl
+		<< "\t\t\t<Constant Name=\"uNumUDDImpactStatus\" Value=\"" << vedo::uNumUDDImpactStatus << "\"/>" << std::endl
+		<< "\t\t\t<Constant Name=\"MaxIDofDOStatus\" Value=\"" << pSystemParameter->GetMaxIDofDO() << "\"/>" << std::endl
+		<< "\t\t</SimConstant>" << std::endl
+		<< "\t\t<TimeControl Start=\""    << pSystemParameter->GetTimeStart()
+		<<               "\" Stop=\""     << pSystemParameter->GetTimeStop()
+		<<               "\" Interval=\"" << pSystemParameter->GetTimeInterval()
+		<<               "\" Current=\""  << pSystemParameter->GetTimeCurrent() << "\"/>" << std::endl
+		<< "\t\t<FieldAcceleration x=\""  << pSystemParameter->GetFieldAcceleration().x()
+		<<                     "\" y=\""  << pSystemParameter->GetFieldAcceleration().y()
+		<<                     "\" z=\""  << pSystemParameter->GetFieldAcceleration().z() << "\"/>" << std::endl;
 
-	Boundary bZOI = pSystemParameter->GetZoneOfInterest();
-	if(bZOI.Active())
+	Boundary bc = pSystemParameter->GetZoneOfInterest();
+	if (bc.Active())
 	{
-		fprintf(fpxml, "\t\t<ZOI");
-		if(bZOI.GetSwitch(0))
+		ofXML << "\t\t<ZOI";
+		if (bc.GetSwitch(0))
 		{
-			fprintf
-				(fpxml,
-				 " XMin=\"%g\" XMax=\"%g\"",
-				 bZOI.GetLowerPoint().x(),
-				 bZOI.GetUpperPoint().x()   );
-		};
-		if(bZOI.GetSwitch(1))
-		{
-			fprintf
-				(fpxml,
-				 " YMin=\"%g\" YMax=\"%g\"",
-				 bZOI.GetLowerPoint().y(),
-				 bZOI.GetUpperPoint().y()   );
-		};
-		if(bZOI.GetSwitch(2))
-		{
-			fprintf
-				(fpxml,
-				 " ZMin=\"%g\" ZMax=\"%g\"",
-				 bZOI.GetLowerPoint().z(),
-				 bZOI.GetUpperPoint().z()   );
-		};
-		fprintf(fpxml, "/>\n");
-	};
+			ofXML << " XMin=\"" << bc.GetLowerPoint().x() << "\" XMax=\"" << bc.GetUpperPoint().x() << "\"";
+		}
 
-	Boundary bPBC = pSystemParameter->GetPeriodicBoundaryConditions();
-	if(bPBC.Active())
+		if (bc.GetSwitch(1))
+		{
+			ofXML << " YMin=\"" << bc.GetLowerPoint().y() << "\" YMax=\"" << bc.GetUpperPoint().y() << "\"";
+		}
+
+		if (bc.GetSwitch(2))
+		{
+			ofXML << " ZMin=\"" << bc.GetLowerPoint().z() << "\" ZMax=\"" << bc.GetUpperPoint().z() << "\"";
+		}
+
+		ofXML << "/>" << std::endl;
+	}
+
+	bc = pSystemParameter->GetPeriodicBoundaryConditions();
+	if (bc.Active())
 	{
-		fprintf(fpxml, "\t\t<PBC");
-		if(bPBC.GetSwitch(0))
+		ofXML << "\t\t<PBC";
+		if (bc.GetSwitch(0))
 		{
-			fprintf
-				(fpxml,
-				 " XMin=\"%g\" XMax=\"%g\"",
-				 bPBC.GetLowerPoint().x(),
-				 bPBC.GetUpperPoint().x()   );
-		};
-		if(bPBC.GetSwitch(1))
+			ofXML << " XMin=\"" << bc.GetLowerPoint().x() << "\" XMax=\"" << bc.GetUpperPoint().x() << "\"";
+		}
+
+		if (bc.GetSwitch(1))
 		{
-			fprintf
-				(fpxml,
-				 " YMin=\"%g\" YMax=\"%g\"",
-				 bPBC.GetLowerPoint().y(),
-				 bPBC.GetUpperPoint().y()   );
-		};
-		if(bPBC.GetSwitch(2))
+			ofXML << " YMin=\"" << bc.GetLowerPoint().y() << "\" YMax=\"" << bc.GetUpperPoint().y() << "\"";
+		}
+
+		if (bc.GetSwitch(2))
 		{
-			fprintf
-				(fpxml,
-				 " ZMin=\"%g\" ZMax=\"%g\"",
-				 bPBC.GetLowerPoint().z(),
-				 bPBC.GetUpperPoint().z()   );
-		};
-		fprintf(fpxml, "/>\n");
-	};
+			ofXML << " ZMin=\"" << bc.GetLowerPoint().z() << "\" ZMax=\"" << bc.GetUpperPoint().z() << "\"";
+		}
 
-	fprintf(fpxml, "\t</SimParameter>\n");
+		ofXML << "/>" << std::endl;
+	}
 
-	char* color[]
-		= {"bylayer", "red", "yellow", "green", "cyan", "blue", "magenta"};
-
-	char sa[256];
+	ofXML << "\t</SimParameter>" << std::endl;
 
 	std::string buffer1;
-
-	fprintf(fpxml, "\t<DOModelTab>\n");
-
-	std::string sBehavior, sScope;
+	ofXML << "\t<DOModelTab>" << std::endl;
 	for (idoml=cDOModel.begin(); idoml!=cDOModel.end(); ++idoml)
 	{
-		switch ((*idoml)->GetShapeType())
-		{
-			case Sphere:
-				sprintf
-					(sa,
-					"<Sphere Radius=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().sphere.radius);
-				buffer1 = sa;
-				break;
-			case QuasiPlate:
-				sprintf
-					(sa,
-					"<QuasiPlate Width=\"%g\" Length=\"%g\" Height=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().quasiplate.width,
-					(*idoml)->GetShapeAttributes().quasiplate.length,
-					(*idoml)->GetShapeAttributes().quasiplate.height );
-				 buffer1 = sa;
-				 break;
-			case QuasiPlateWithCircularHole:
-				sprintf
-					(sa,
-					"<QuasiPlate Width=\"%g\" Length=\"%g\" Height=\"%g\" HoleRadius=\"%g\" HoleXOffset=\"%g\" HoleYOffset=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.width,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.length,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.height,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeradius,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holexoffset,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset);
-				 buffer1 = sa;
-				 break;
-			case QuasiCylinder:
-				sprintf
-					(sa,
-					"<QuasiCylinder Radius=\"%g\" Height=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().quasicylinder.radius,
-					(*idoml)->GetShapeAttributes().quasicylinder.height );
-				buffer1 = sa;
-				break;
-			case Ellipsoid:
-				sprintf
-					(sa,
-					"<Ellipsoid XLength=\"%g\" YLength=\"%g\" ZLength=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().ellipsoid.xlength,
-					(*idoml)->GetShapeAttributes().ellipsoid.ylength,
-					(*idoml)->GetShapeAttributes().ellipsoid.zlength );
-				buffer1 = sa;
-			case Polyhedra:
-				njr::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
-				std::vector<njr::HalfSpace> faces = polyhedra.constrains();
-				sprintf(sa,"<Polyhedra>\n");
-				buffer1 = sa;
-				for (unsigned int i=0; i<faces.size(); ++i)
-				{
-					char sense;
-					switch (faces[i].sense())
-					{
-						case L:
-							sense ='L';
-							break;
-						case G:
-							sense ='G';
-							break;
-						case E:
-							sense ='E';
-							break;
-					}
-					sprintf
-						(sa,
-						"<HalfSpace a=\"%g\" b=\"%g\" c=\"%g\" sense=\"%c\" d=\"%g\"/>",
-						faces[i].a(),
-						faces[i].b(),
-						faces[i].c(),
-						sense,
-						faces[i].d());
-						buffer1.append(sa);
-				}
-				sprintf(sa, "</Polyhedra>\n\0");
-				buffer1.append(sa);
-				break;
-		}
-		if ( (((int)(*idoml)->GetShapeColor())>0)
-			&& (((int)(*idoml)->GetShapeColor())<=6) )
-		{
-			strcpy(sa, color[(int)(*idoml)->GetShapeColor()]);
-		}
-		else
-		{
-			strcpy(sa, "bylayer");
-		}
-
-		switch((*idoml)->GetBehavior())
+		ofXML
+			<< "\t\t<DOModel DOName=\"" << (*idoml)->GetDOName()
+			<< "\" DOGroup=\"" << (*idoml)->GetDOGroup()
+			<< "\" Behavior=\"";
+		switch ((*idoml)->GetBehavior())
 		{
 			case constrained:
-				sBehavior = "constrained";
+				ofXML << "constrained";
 				break;
 			case fixed:
-				sBehavior = "fixed";
+				ofXML << "fixed";
 				break;
 			case mobile:
-				sBehavior = "mobile";
+				ofXML << "mobile";
 				break;
 			case orbital:
-				sBehavior = "orbital";
+				ofXML << "orbital";
 				break;
 			default:
 				std::cerr
@@ -242,14 +125,14 @@ void DOWorld::WriteXML(const char* filename) const
 					<< "        Note: \"Behavior\" in DOModel wrong!!" << std::endl;
 				exit(-1);
 		}
-
-		switch((*idoml)->GetScope())
+		ofXML << "\" Scope=\"";
+		switch ((*idoml)->GetScope())
 		{
 			case local:
-				sScope = "local";
+				ofXML << "local";
 				break;
 			case global:
-				sScope = "global";
+				ofXML << "global";
 				break;
 			default:
 				std::cerr
@@ -257,534 +140,343 @@ void DOWorld::WriteXML(const char* filename) const
 					<< "        Note: \"Scope\" in DOModel wrong!!" << std::endl;
 				exit(-1);
 		}
+		ofXML << "\" Color=\"";
 
-		fprintf
-			(fpxml,
-			"\t\t<DOModel DOName=\"%s\" DOGroup=\"%s\"\n"
-			"\t\t\tColor=\"%s\" Behavior=\"%s\" Scope=\"%s\" Density=\"%g\" DensityFactor=\"%g\">\n"
-			"\t\t\t<ExternalForce x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<Shape>%s</Shape>\n",
-			(*idoml)->GetDOName().c_str(),
-			(*idoml)->GetDOGroup().c_str(),
-			sa,
-			sBehavior.c_str(),
-			sScope.c_str(),
-			(*idoml)->GetDensity(),
-			(*idoml)->GetDensityFactor(),
-			(*idoml)->GetExternalForce().x(),
-			(*idoml)->GetExternalForce().y(),
-			(*idoml)->GetExternalForce().z(),
-			buffer1.c_str()                  );
-
-		const std::vector<DOMaterialAttribute>&
-			cMatOpt = (*idoml)->GetMaterialAttributes();
-
-		if(cMatOpt.size() != 0)
-		{
-			fprintf(fpxml, "\t\t\t<MaterialOption>\n");
-			for (unsigned int i=0; i<cMatOpt.size(); i++)
+		#ifdef _STD_CPP_11
+			switch ((*idoml)->GetShapeColor())
 			{
-				fprintf
-					(fpxml,
-					 "\t\t\t\t<Option Name=\"%s\" Value=\"%g\" />\n",
-					 cMatOpt[i].Name.c_str(),
-					 cMatOpt[i].Value                        );
+				case njrdxf::Color::bylayer:
+					ofXML << "bylayer";
+					break;
+				case njrdxf::Color::red:
+					ofXML << "red";
+					break;
+				case njrdxf::Color::yellow:
+					ofXML << "yellow";
+					break;
+				case njrdxf::Color::green:
+					ofXML << "green";
+					break;
+				case njrdxf::Color::cyan:
+					ofXML << "cyan";
+					break;
+				case njrdxf::Color::blue:
+					ofXML << "blue";
+					break;
+				case njrdxf::Color::magenta:
+					ofXML << "magenta";
+					break;
+				default:
+					ofXML << "bylayer";
 			}
+		#else
+			switch ((*idoml)->GetShapeColor())
+			{
+				case njrdxf::bylayer:
+					ofXML << "bylayer";
+					break;
+				case njrdxf::red:
+					ofXML << "red";
+					break;
+				case njrdxf::yellow:
+					ofXML << "yellow";
+					break;
+				case njrdxf::green:
+					ofXML << "green";
+					break;
+				case njrdxf::cyan:
+					ofXML << "cyan";
+					break;
+				case njrdxf::blue:
+					ofXML << "blue";
+					break;
+				case njrdxf::magenta:
+					ofXML << "magenta";
+					break;
+				default:
+					ofXML << "bylayer";
+			}
+		#endif
 
-			fprintf(fpxml, "\t\t\t</MaterialOption>\n");
-		}
+		ofXML
+			<< "\" Density=\"" << (*idoml)->GetDensity()
+			<< "\" DensityFactor=\"" << (*idoml)->GetDensityFactor() << "\">" << std::endl
+			<< "\t\t\t<ExternalForce x=\"" << (*idoml)->GetExternalForce().x()
+			<<                   "\" y=\"" << (*idoml)->GetExternalForce().y()
+			<<                   "\" z=\"" << (*idoml)->GetExternalForce().z() << "\"/>" << std::endl
+			<< "\t\t\t<Shape>";
 
-		fprintf(fpxml,"\t\t</DOModel>\n");
-	}
-	fprintf(fpxml, "\t</DOModelTab>\n");
-	fprintf(fpxml, "\t<IactModelTab>\n");
-
-	for (iactml=cIactModel.begin(); iactml!=cIactModel.end(); ++iactml)
-	{
-		fprintf
-			(fpxml,
-			"\t\t<IactModel MasterGroup=\"%s\" SlaveGroup=\"%s\" EquationType=\"%s\">\n",
-			(*iactml)->GetMasterDOGroup().c_str(),
-			(*iactml)->GetSlaveDOGroup().c_str(),
-			(*iactml)->GetEquationType().c_str()  );
-
-		const std::vector<IactMechanism>&
-			svIactMechanisms = (*iactml)->GetIactMechanisms();
-
-		for (unsigned int i=0; i<svIactMechanisms.size(); i++)
-		{
-			fprintf
-				(fpxml,
-				"\t\t\t<Mechanism Name=\"%s\" Value=\"%g\"/>\n",
-				svIactMechanisms[i].Name.c_str(),
-				svIactMechanisms[i].Value);
-		}
-		fprintf(fpxml, "\t\t</IactModel>\n");
-	}
-	fprintf(fpxml, "\t</IactModelTab>\n");
-	fprintf(fpxml, "\t<DOStatusTab>\n");
-	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
-	{
-		fprintf (fpxml,
-			"\t\t<DOStatus DOName=\"%s\">\n"
-			"\t\t\t<Position x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<Velocity x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<OrientationX x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<OrientationZ x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<AngularVelocity x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<Impact x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<AngularImpact x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t</DOStatus>\n",
-			(*idos)->GetDOName().c_str(),
-			(*idos)->GetPosition().x(),
-			(*idos)->GetPosition().y(),
-			(*idos)->GetPosition().z(),
-			(*idos)->GetVelocity().x(),
-			(*idos)->GetVelocity().y(),
-			(*idos)->GetVelocity().z(),
-			(*idos)->GetOrientationX().x(),
-			(*idos)->GetOrientationX().y(),
-			(*idos)->GetOrientationX().z(),
-			(*idos)->GetOrientationZ().x(),
-			(*idos)->GetOrientationZ().y(),
-			(*idos)->GetOrientationZ().z(),
-			(*idos)->GetAngularVelocity().x(),
-			(*idos)->GetAngularVelocity().y(),
-			(*idos)->GetAngularVelocity().z(),
-			(*idos)->GetImpact().x(),
-			(*idos)->GetImpact().y(),
-			(*idos)->GetImpact().z(),
-			(*idos)->GetAngularImpact().x(),
-			(*idos)->GetAngularImpact().y(),
-			(*idos)->GetAngularImpact().z()   );
-	}
-	fprintf(fpxml, "\t</DOStatusTab>\n");
-
-	fprintf(fpxml, "</DOWorld>\n");
-	fclose(fpxml);
-};
-
-void DOWorld::WriteXML(const char* filename, const IactRecordTab* irtp) const
-{
-	FILE *fpxml;
-	std::list<DOModel*>::const_iterator     idoml;
-	std::list<IactModel*>::const_iterator   iactml;
-	std::vector<DOStatus *>::const_iterator idos;
-
-	if ((fpxml = fopen (filename,"w")) == NULL )
-	{
-		std::cerr
-			<< "Error!! Code: DOWorld::WriteXML(const char*)" << std::endl
-			<< "        Note: DOWorld cannot write XML file"  << std::endl;
-		exit(-1);
-	};
-
-	fprintf
-		(fpxml,
-		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		"<!-- created by DOWorld -->\n"
-		"<DOWorld xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-		"\t\txsi:noNamespaceSchemaLocation=\"DOWorldSchema.xsd\">\n"
-		"\t<Version>%s</Version>\n"
-		"\t<SimParameter>\n"
-		"\t\t<SimConstant>\n"
-		"\t\t\t<Constant Name=\"ContactDetectSafetyFactor\" Value=\"%g\"/>\n"
-		"\t\t\t<Constant Name=\"NumUDDDOStatus\" Value=\"%d\"/>\n"
-		"\t\t\t<Constant Name=\"NumUDDIactStatus\" Value=\"%d\"/>\n"
-		"\t\t\t<Constant Name=\"MaxIDofDOStatus\" Value=\"%d\"/>\n"
-		"\t\t</SimConstant>\n"
-		"\t\t<TimeControl Start=\"%g\" Stop=\"%g\" Interval=\"%g\" Current=\"%g\"/>\n"
-		"\t\t<FieldAcceleration x=\"%g\" y=\"%g\" z=\"%g\"/>\n",
-		vedo::sPublish.c_str(),
-		vedo::dSafetyFactor,
-		vedo::uNumUDDDOStatus,
-		vedo::uNumUDDImpactStatus,
-		pSystemParameter->GetMaxIDofDO(),
-		pSystemParameter->GetTimeStart(),
-		pSystemParameter->GetTimeStop(),
-		pSystemParameter->GetTimeInterval(),
-		pSystemParameter->GetTimeCurrent(),
-		pSystemParameter->GetFieldAcceleration().x(),
-		pSystemParameter->GetFieldAcceleration().y(),
-		pSystemParameter->GetFieldAcceleration().z()  );
-
-	Boundary bZOI = pSystemParameter->GetZoneOfInterest();
-	if(bZOI.Active())
-	{
-		fprintf(fpxml, "\t\t<ZOI");
-		if(bZOI.GetSwitch(0))
-		{
-			fprintf
-				(fpxml,
-				 " XMin=\"%g\" XMax=\"%g\"",
-				 bZOI.GetLowerPoint().x(),
-				 bZOI.GetUpperPoint().x()   );
-		};
-		if(bZOI.GetSwitch(1))
-		{
-			fprintf
-				(fpxml,
-				 " YMin=\"%g\" YMax=\"%g\"",
-				 bZOI.GetLowerPoint().y(),
-				 bZOI.GetUpperPoint().y()   );
-		};
-		if(bZOI.GetSwitch(2))
-		{
-			fprintf
-				(fpxml,
-				 " ZMin=\"%g\" ZMax=\"%g\"",
-				 bZOI.GetLowerPoint().z(),
-				 bZOI.GetUpperPoint().z()   );
-		};
-		fprintf(fpxml, "/>\n");
-	};
-
-	Boundary bPBC = pSystemParameter->GetPeriodicBoundaryConditions();
-	if(bPBC.Active())
-	{
-		fprintf(fpxml, "\t\t<PBC");
-		if(bPBC.GetSwitch(0))
-		{
-			fprintf
-				(fpxml,
-				 " XMin=\"%g\" XMax=\"%g\"",
-				 bPBC.GetLowerPoint().x(),
-				 bPBC.GetUpperPoint().x()   );
-		};
-		if(bPBC.GetSwitch(1))
-		{
-			fprintf
-				(fpxml,
-				 " YMin=\"%g\" YMax=\"%g\"",
-				 bPBC.GetLowerPoint().y(),
-				 bPBC.GetUpperPoint().y()   );
-		};
-		if(bPBC.GetSwitch(2))
-		{
-			fprintf
-				(fpxml,
-				 " ZMin=\"%g\" ZMax=\"%g\"",
-				 bPBC.GetLowerPoint().z(),
-				 bPBC.GetUpperPoint().z()   );
-		};
-		fprintf(fpxml, "/>\n");
-	};
-
-	fprintf(fpxml, "\t</SimParameter>\n");
-
-	char* color[]
-		= {"bylayer", "red", "yellow", "green", "cyan", "blue", "magenta"};
-
-	char sa[256];
-
-	std::string buffer1;
-
-	fprintf(fpxml, "\t<DOModelTab>\n");
-
-	std::string sBehavior, sScope;
-	for (idoml=cDOModel.begin(); idoml!=cDOModel.end(); ++idoml)
-	{
 		switch ((*idoml)->GetShapeType())
 		{
 			case Sphere:
-				sprintf
-					(sa,
-					"<Sphere Radius=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().sphere.radius);
-				buffer1 = sa;
+				ofXML
+					<< "<Sphere"
+					<< " Radius=\"" << (*idoml)->GetShapeAttributes().sphere.radius << "\""
+					<< "/>";
 				break;
 			case QuasiPlate:
-				sprintf
-					(sa,
-					"<QuasiPlate Width=\"%g\" Length=\"%g\" Height=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().quasiplate.width,
-					(*idoml)->GetShapeAttributes().quasiplate.length,
-					(*idoml)->GetShapeAttributes().quasiplate.height );
-				 buffer1 = sa;
-				 break;
+				ofXML
+					<< "<QuasiPlate"
+					<< " Width=\""  << (*idoml)->GetShapeAttributes().quasiplate.width  << "\""
+					<< " Length=\"" << (*idoml)->GetShapeAttributes().quasiplate.length << "\""
+					<< " Height=\"" << (*idoml)->GetShapeAttributes().quasiplate.height << "\""
+					<< "/>";
+				break;
 			case QuasiPlateWithCircularHole:
-				sprintf
-					(sa,
-					"<QuasiPlate Width=\"%g\" Length=\"%g\" Height=\"%g\" HoleRadius=\"%g\" HoleXOffset=\"%g\" HoleYOffset=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.width,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.length,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.height,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeradius,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holexoffset,
-					(*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset);
-				 buffer1 = sa;
-				 break;
+				ofXML
+					<< "<QuasiPlateWithCircularHole"
+					<< " Width=\""       << (*idoml)->GetShapeAttributes().quasiplatewithcircularhole.width       << "\""
+					<< " Length=\""      << (*idoml)->GetShapeAttributes().quasiplatewithcircularhole.length      << "\""
+					<< " Height=\""      << (*idoml)->GetShapeAttributes().quasiplatewithcircularhole.height      << "\""
+					<< " HoleRadius=\""  << (*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeradius  << "\""
+					<< " HoleXOffset=\"" << (*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holexoffset << "\""
+					<< " HoleYOffset=\"" << (*idoml)->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset << "\""
+					<< "/>";
+				break;
 			case QuasiCylinder:
-				sprintf
-					(sa,
-					"<QuasiCylinder Radius=\"%g\" Height=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().quasicylinder.radius,
-					(*idoml)->GetShapeAttributes().quasicylinder.height );
-				buffer1 = sa;
+				ofXML
+					<< "<QuasiCylinder"
+					<< " Radius=\"" << (*idoml)->GetShapeAttributes().quasicylinder.radius << "\""
+					<< " Height=\"" << (*idoml)->GetShapeAttributes().quasicylinder.height << "\""
+					<< "/>";
 				break;
 			case Ellipsoid:
-				sprintf
-					(sa,
-					"<Ellipsoid XLength=\"%g\" YLength=\"%g\" ZLength=\"%g\"/>\0",
-					(*idoml)->GetShapeAttributes().ellipsoid.xlength,
-					(*idoml)->GetShapeAttributes().ellipsoid.ylength,
-					(*idoml)->GetShapeAttributes().ellipsoid.zlength );
-				buffer1 = sa;
+				ofXML
+					<< "<Ellipsoid"
+					<< " XLength=\"" << (*idoml)->GetShapeAttributes().ellipsoid.xlength << "\""
+					<< " YLength=\"" << (*idoml)->GetShapeAttributes().ellipsoid.ylength << "\""
+					<< " YLength=\"" << (*idoml)->GetShapeAttributes().ellipsoid.zlength << "\""
+					<< "/>";
+				break;
 			case Polyhedra:
+				ofXML << std::endl << "\t\t\t\t<Polyhedra>" << std::endl;
 				njr::NJRpolyhedra polyhedra = (*idoml)->GetPolyhedra();
 				std::vector<njr::HalfSpace> faces = polyhedra.constrains();
-				sprintf(sa,"<Polyhedra>\n");
-				buffer1 = sa;
-				for (unsigned int i=0; i<faces.size(); ++i)
+				for (vedo_uint_t i=0; i<faces.size(); ++i)
 				{
-					char sense;
+					ofXML
+						<< "\t\t\t\t\t<HalfSpace a=\"" << faces[i].a()
+						<<           " b=\"" << faces[i].b()
+						<<           " c=\"" << faces[i].c()
+						<<           " d=\"" << faces[i].d()
+						<<           " sense=\"";
 					switch (faces[i].sense())
 					{
 						case L:
-							sense ='L';
+							ofXML << "L";
 							break;
 						case G:
-							sense ='G';
+							ofXML << "G";
 							break;
 						case E:
-							sense ='E';
+							ofXML << "E";
 							break;
+						default:
+							std::cerr
+								<< "Error!! Code: void DOWorld::WriteXML(const char*) const" << std::endl
+								<< "        Note: \"Sense\" of \"Polyhedra\" wrong!!"        << std::endl;
+							exit(-1);
 					}
-					sprintf
-						(sa,
-						"<HalfSpace a=\"%g\" b=\"%g\" c=\"%g\" sense=\"%c\" d=\"%g\"/>",
-						faces[i].a(),
-						faces[i].b(),
-						faces[i].c(),
-						sense,
-						faces[i].d());
-						buffer1.append(sa);
+					ofXML << "\"/>" << std::endl;
 				}
-				sprintf(sa, "</Polyhedra>\n\0");
-				buffer1.append(sa);
+				ofXML << "\t\t\t\t</Polyhedra>" << std::endl << "\t\t\t";
 				break;
+//			case PolyhedraBRep:
+				// This part is still under testing
+				//break;
+//			default:
+//				std::cerr
+//					<< "Error!! Code: void DOWorld::WriteXML(const char*) const" << std::endl
+//					<< "        Note: \"ShapeType\" wrong!!"                     << std::endl;
+//				exit(-1);
 		}
-		if ( (((int)(*idoml)->GetShapeColor())>0)
-			&& (((int)(*idoml)->GetShapeColor())<=6) )
-		{
-			strcpy(sa, color[(int)(*idoml)->GetShapeColor()]);
-		}
-		else
-		{
-			strcpy(sa, "bylayer");
-		}
+		ofXML << "</Shape>" << std::endl;
 
-		switch((*idoml)->GetBehavior())
+		const std::vector<DOMaterialAttribute>& cMatOpt = (*idoml)->GetMaterialAttributes();
+		if (cMatOpt.size() != 0)
 		{
-			case constrained:
-				sBehavior = "constrained";
-				break;
-			case fixed:
-				sBehavior = "fixed";
-				break;
-			case mobile:
-				sBehavior = "mobile";
-				break;
-			case orbital:
-				sBehavior = "orbital";
-				break;
-			default:
-				std::cerr
-					<< "Error!! Code: void DOWorld::WriteXML(const char*) const" << std::endl
-					<< "        Note: \"Behavior\" in DOModel wrong!!" << std::endl;
-				exit(-1);
-		}
-
-		switch((*idoml)->GetScope())
-		{
-			case local:
-				sScope = "local";
-				break;
-			case global:
-				sScope = "global";
-				break;
-			default:
-				std::cerr
-					<< "Error!! Code: void DOWorld::WriteXML(const char*) const" << std::endl
-					<< "        Note: \"Scope\" in DOModel wrong!!" << std::endl;
-				exit(-1);
-		}
-
-		fprintf
-			(fpxml,
-			"\t\t<DOModel DOName=\"%s\" DOGroup=\"%s\"\n"
-			"\t\t\tColor=\"%s\" Behavior=\"%s\" Scope=\"%s\" Density=\"%g\" DensityFactor=\"%g\">\n"
-			"\t\t\t<ExternalForce x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<Shape>%s</Shape>\n",
-			(*idoml)->GetDOName().c_str(),
-			(*idoml)->GetDOGroup().c_str(),
-			sa,
-			sBehavior.c_str(),
-			sScope.c_str(),
-			(*idoml)->GetDensity(),
-			(*idoml)->GetDensityFactor(),
-			(*idoml)->GetExternalForce().x(),
-			(*idoml)->GetExternalForce().y(),
-			(*idoml)->GetExternalForce().z(),
-			buffer1.c_str()                  );
-
-		const std::vector<DOMaterialAttribute>&
-			cMatOpt = (*idoml)->GetMaterialAttributes();
-
-		if(cMatOpt.size() != 0)
-		{
-			fprintf(fpxml, "\t\t\t<MaterialOption>\n");
-			for (unsigned int i=0; i<cMatOpt.size(); i++)
+			ofXML << "\t\t\t<MaterialOption>" << std::endl;
+			for (vedo_uint_t i=0; i<cMatOpt.size(); i++)
 			{
-				fprintf
-					(fpxml,
-					 "\t\t\t\t<Option Name=\"%s\" Value=\"%g\" />\n",
-					 cMatOpt[i].Name.c_str(),
-					 cMatOpt[i].Value                        );
+				ofXML
+					<< "\t\t\t\t<Option Name=\""  << cMatOpt[i].Name
+					<<              "\" Value=\"" << cMatOpt[i].Value << "\"/>" << std::endl;
 			}
-
-			fprintf(fpxml, "\t\t\t</MaterialOption>\n");
+			ofXML << "\t\t\t</MaterialOption>" << std::endl;
 		}
 
-		fprintf(fpxml,"\t\t</DOModel>\n");
+		ofXML << "\t\t</DOModel>" << std::endl;
 	}
-	fprintf(fpxml, "\t</DOModelTab>\n");
-	fprintf(fpxml, "\t<IactModelTab>\n");
+	ofXML << "\t</DOModelTab>" << std::endl;
 
+	ofXML << "\t<IactModelTab>" << std::endl;
 	for (iactml=cIactModel.begin(); iactml!=cIactModel.end(); ++iactml)
 	{
-		fprintf
-			(fpxml,
-			"\t\t<IactModel MasterGroup=\"%s\" SlaveGroup=\"%s\" EquationType=\"%s\">\n",
-			(*iactml)->GetMasterDOGroup().c_str(),
-			(*iactml)->GetSlaveDOGroup().c_str(),
-			(*iactml)->GetEquationType().c_str()  );
-
-		const std::vector<IactMechanism>&
-			svIactMechanisms = (*iactml)->GetIactMechanisms();
-
-		for (unsigned int i=0; i<svIactMechanisms.size(); i++)
+		ofXML
+			<< "\t\t<IactModel MasterGroup=\""  << (*iactml)->GetMasterDOGroup()
+			<<             "\" SlaveGroup=\""   << (*iactml)->GetSlaveDOGroup()
+			<<             "\" EquationType=\"" << (*iactml)->GetEquationType() << "\">" << std::endl;
+		const std::vector<IactMechanism>& svIactMechanisms = (*iactml)->GetIactMechanisms();
+		for (vedo_uint_t i=0; i<svIactMechanisms.size(); i++)
 		{
-			fprintf
-				(fpxml,
-				"\t\t\t<Mechanism Name=\"%s\" Value=\"%g\"/>\n",
-				svIactMechanisms[i].Name.c_str(),
-				svIactMechanisms[i].Value);
+			ofXML
+				<< "\t\t\t<Mechanism Name=\""  << svIactMechanisms[i].Name
+				<<               "\" Value=\"" << svIactMechanisms[i].Value << "\"/>" << std::endl;
 		}
-		fprintf(fpxml, "\t\t</IactModel>\n");
+		ofXML << "\t\t</IactModel>" << std::endl;
 	}
-	fprintf(fpxml, "\t</IactModelTab>\n");
-	fprintf(fpxml, "\t<DOStatusTab>\n");
+	ofXML << "\t</IactModelTab>" << std::endl;
+
+	ofXML << "\t<DOStatusTab>" << std::endl;
 	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
 	{
-		fprintf (fpxml,
-			"\t\t<DOStatus DOName=\"%s\">\n"
-			"\t\t\t<Position x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<Velocity x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<OrientationX x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<OrientationZ x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<AngularVelocity x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<Impact x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t\t<AngularImpact x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-			"\t\t</DOStatus>\n",
-			(*idos)->GetDOName().c_str(),
-			(*idos)->GetPosition().x(),
-			(*idos)->GetPosition().y(),
-			(*idos)->GetPosition().z(),
-			(*idos)->GetVelocity().x(),
-			(*idos)->GetVelocity().y(),
-			(*idos)->GetVelocity().z(),
-			(*idos)->GetOrientationX().x(),
-			(*idos)->GetOrientationX().y(),
-			(*idos)->GetOrientationX().z(),
-			(*idos)->GetOrientationZ().x(),
-			(*idos)->GetOrientationZ().y(),
-			(*idos)->GetOrientationZ().z(),
-			(*idos)->GetAngularVelocity().x(),
-			(*idos)->GetAngularVelocity().y(),
-			(*idos)->GetAngularVelocity().z(),
-			(*idos)->GetImpact().x(),
-			(*idos)->GetImpact().y(),
-			(*idos)->GetImpact().z(),
-			(*idos)->GetAngularImpact().x(),
-			(*idos)->GetAngularImpact().y(),
-			(*idos)->GetAngularImpact().z()   );
+		ofXML
+			<< "\t\t<DOStatus DOName=\"" << (*idos)->GetDOName() << "\">" << std::endl
+			<< std::setiosflags(std::ios::scientific) << std::setprecision(6)
+			<< "\t\t\t<Position        x=\"" << (*idos)->GetPosition()       .x()
+			<<                     "\" y=\"" << (*idos)->GetPosition()       .y()
+			<<                     "\" z=\"" << (*idos)->GetPosition()       .z() << "\"/>" << std::endl
+			<< "\t\t\t<Velocity        x=\"" << (*idos)->GetVelocity()       .x()
+			<<                     "\" y=\"" << (*idos)->GetVelocity()       .y()
+			<<                     "\" z=\"" << (*idos)->GetVelocity()       .z() << "\"/>" << std::endl
+			<< std::resetiosflags(std::ios::scientific) << std::setiosflags(std::ios::fixed) << std::setprecision(6)
+			<< "\t\t\t<OrientationX    x=\"" << (*idos)->GetOrientationX()   .x()
+			<<                     "\" y=\"" << (*idos)->GetOrientationX()   .y()
+			<<                     "\" z=\"" << (*idos)->GetOrientationX()   .z() << "\"/>" << std::endl
+			<< "\t\t\t<OrientationZ    x=\"" << (*idos)->GetOrientationZ()   .x()
+			<<                     "\" y=\"" << (*idos)->GetOrientationZ()   .y()
+			<<                     "\" z=\"" << (*idos)->GetOrientationZ()   .z() << "\"/>" << std::endl
+			<< std::resetiosflags(std::ios::fixed) << std::setiosflags(std::ios::scientific) << std::setprecision(6)
+			<< "\t\t\t<AngularVelocity x=\"" << (*idos)->GetAngularVelocity().x()
+			<<                     "\" y=\"" << (*idos)->GetAngularVelocity().y()
+			<<                     "\" z=\"" << (*idos)->GetAngularVelocity().z() << "\"/>" << std::endl
+			<< "\t\t\t<Impact          x=\"" << (*idos)->GetImpact()         .x()
+			<<                     "\" y=\"" << (*idos)->GetImpact()         .y()
+			<<                     "\" z=\"" << (*idos)->GetImpact()         .z() << "\"/>" << std::endl
+			<< "\t\t\t<AngularImpact   x=\"" << (*idos)->GetAngularImpact()  .x()
+			<<                     "\" y=\"" << (*idos)->GetAngularImpact()  .y()
+			<<                     "\" z=\"" << (*idos)->GetAngularImpact()  .z() << "\"/>" << std::endl
+			<< "\t\t</DOStatus>"                                                            << std::endl
+			<< std::resetiosflags(std::ios::scientific);
 	}
-	fprintf(fpxml, "\t</DOStatusTab>\n");
+	ofXML << "\t</DOStatusTab>" << std::endl;
+	ofXML.close();
+}
 
-    const std::map< std::pair<unsigned long, unsigned long>, ImpactStatus >* mapImStatusP = &(irtp->GetData());
+void DOWorld::WriteXMLPostfix(const std::string filename) const
+{
+	std::ofstream ofXML(filename.c_str(), std::ios::app);
 
-	if(mapImStatusP->size() != 0)
+	if (!ofXML)
 	{
-		fprintf(fpxml, "\t<IactStatusTab>\n");
+		std::cerr
+			<< "Error!! Code: DOWorld::WriteXML(const char*)" << std::endl
+			<< "        Note: DOWorld cannot access XML file" << std::endl;
+		exit(-1);
+	}
 
-		std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator mmapImStatus;
-		unsigned long ulMaster, ulSlave;
+	ofXML << "</DOWorld>" << std::endl;
+	ofXML.close();
+}
+
+void DOWorld::WriteXMLIactRecordTab(const std::string filename, const IactRecordTab* irtp) const
+{
+	std::ofstream ofXML(filename.c_str(), std::ios::app);
+
+	if (!ofXML)
+	{
+		std::cerr
+			<< "Error!! Code: DOWorld::WriteXML(const char*)" << std::endl
+			<< "        Note: DOWorld cannot access XML file" << std::endl;
+		exit(-1);
+	}
+
+    const std::map< std::pair<vedo::vedo_uint_t, vedo::vedo_uint_t>, ImpactStatus >* mapImStatusP = &(irtp->GetData());
+
+	if (mapImStatusP->size() != 0)
+	{
+		ofXML << "\t<IactStatusTab>" << std::endl;
+		std::map<std::pair<vedo::vedo_uint_t, vedo::vedo_uint_t>, ImpactStatus>::const_iterator mmapImStatus;
 		const ImpactStatus* isp;
-		njr::Vector3d
-			vShearForce,
-			vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
-		const double* dpUDV;
+		njr::Vector3d vShearForce, vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
+		const vedo_float_t* dpUDV;
 		for (mmapImStatus=(mapImStatusP->begin()); mmapImStatus!=(mapImStatusP->end()); mmapImStatus++)
 		{
-			ulMaster               = mmapImStatus->first.first;
-			ulSlave                = mmapImStatus->first.second;
 			isp                    = &(mmapImStatus->second);
-			dpUDV                  = isp->RetrieveAllUserDefinedValue();
 			vShearForce            = isp->ShearForce();
 			vImpactPoint           = isp->ImpactPoint();
 			vImpactDirection       = isp->ImpactDirection();
 			vImpactToMaster        = isp->ImpactToMaster();
 			vAngularImpactToMaster = isp->AngularImpactToMaster();
-			fprintf (fpxml,
-				"\t\t<IactStatus MasterDOStatusSN=\"%d\" SlaveDOStatusSN=\"%d\"\n"
-				"\t\t\tContact=\"%d\" Bond=\"%d\" NormalStiffness=\"%g\" InitialVelocity=\"%g\" Overlap=\"%g\">\n"
-				"\t\t\t<ShearForce x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-				"\t\t\t<ImpactPoint x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-				"\t\t\t<ImpactDirection x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-				"\t\t\t<ImpactToMaster x=\"%g\" y=\"%g\" z=\"%g\"/>\n"
-				"\t\t\t<AngularImpactToMaster x=\"%g\" y=\"%g\" z=\"%g\"/>\n",
-				ulMaster, ulSlave, isp->Contact(), isp->Bond(),
-				isp->Kn(), isp->InitialVelocity(), isp->Overlap(),
-				vShearForce.x(), vShearForce.y(), vShearForce.z(),
-				vImpactPoint.x(), vImpactPoint.y(), vImpactPoint.z(),
-				vImpactDirection.x(), vImpactDirection.y(), vImpactDirection.z(),
-				vImpactToMaster.x(), vImpactToMaster.y(), vImpactToMaster.z(),
-				vAngularImpactToMaster.x(),
-				vAngularImpactToMaster.y(),
-				vAngularImpactToMaster.z() );
+			ofXML
+				<< "\t\t<IactStatus MasterDOStatusSN=\"" << mmapImStatus->first.first
+				<<              "\" SlaveDOStatusSN=\""  << mmapImStatus->first.second
+				<<              "\" Contact=\""          << isp->Contact()
+				<<              "\" Bond=\""             << isp->Bond()                << "\""   << std::endl
+				<< std::setiosflags(std::ios::scientific) << std::setprecision(6)
+				<< "\t\t            NormalStiffness=\""  << isp->Kn()
+				<<              "\" InitialVelocity=\""  << isp->InitialVelocity()
+				<<              "\" Overlap=\""          << isp->Overlap()             << "\">"  << std::endl
+				<< "\t\t\t<ShearForce            x=\""   << vShearForce.x()
+				<<                           "\" y=\""   << vShearForce.y()
+				<<                           "\" z=\""   << vShearForce.z()            << "\"/>" << std::endl
+				<< "\t\t\t<ImpactPoint           x=\""   << vImpactPoint.x()
+				<<                           "\" y=\""   << vImpactPoint.y()
+				<<                           "\" z=\""   << vImpactPoint.z()           << "\"/>" << std::endl
+				<< std::resetiosflags(std::ios::scientific) << std::setiosflags(std::ios::fixed) << std::setprecision(6)
+				<< "\t\t\t<ImpactDirection       x=\""   << vImpactDirection.x()
+				<<                           "\" y=\""   << vImpactDirection.y()
+				<<                           "\" z=\""   << vImpactDirection.z()       << "\"/>" << std::endl
+				<< std::resetiosflags(std::ios::fixed) << std::setiosflags(std::ios::scientific) << std::setprecision(6)
+				<< "\t\t\t<ImpactToMaster        x=\""   << vImpactToMaster.x()
+				<<                           "\" y=\""   << vImpactToMaster.y()
+				<<                           "\" z=\""   << vImpactToMaster.z()        << "\"/>" << std::endl
+				<< "\t\t\t<AngularImpactToMaster x=\""   << vAngularImpactToMaster.x()
+				<<                           "\" y=\""   << vAngularImpactToMaster.y()
+				<<                           "\" z=\""   << vAngularImpactToMaster.z() << "\"/>" << std::endl
+				<< std::resetiosflags(std::ios::scientific);
 
-			if(vedo::uNumUDDImpactStatus != 0)
+			if (vedo::uNumUDDImpactStatus != 0)
 			{
-				fprintf(fpxml, "\t\t\t<AccumulativeUserDefinedValue>\n");
-				for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
+				dpUDV = isp->RetrieveAllUserDefinedValue();
+				ofXML << "\t\t\t<AccumulativeUserDefinedValue>" << std::endl;
+				for (vedo_uint_t u=0; u<vedo::uNumUDDImpactStatus; u++)
 				{
-					fprintf
-						(fpxml,
-						 "\t\t\t\t<AUDV SN=\"%d\" Value=\"%g\" />\n",
-						 u, *(dpUDV+u)                               );
+					ofXML
+						<< "\t\t\t\t<AUDV SN=\"" << u
+						<<            "\" Value=\"" << *(dpUDV+u) << "\"/>" << std::endl;
 				}
-				fprintf(fpxml, "\t\t\t</AccumulativeUserDefinedValue>\n");
+				ofXML << "\t\t\t</AccumulativeUserDefinedValue>" << std::endl;
 
-				fprintf(fpxml, "\t\t\t<UserDefinedValue>\n");
-				for (unsigned u=0; u<vedo::uNumUDDImpactStatus; u++)
+				ofXML << "\t\t\t<UserDefinedValue>" << std::endl;
+				for (vedo_uint_t u=0; u<vedo::uNumUDDImpactStatus; u++)
 				{
-					fprintf
-						(fpxml,
-						 "\t\t\t\t<UDV SN=\"%d\" Value=\"%g\" />\n",
-						 u, *(dpUDV+3*vedo::uNumUDDImpactStatus+u)  );
+					ofXML
+						<< "\t\t\t\t<UDV SN=\"" << u
+						<<           "\" Value=\"" << *(dpUDV+3*vedo::uNumUDDImpactStatus+u) << "\"/>" << std::endl;
 				}
-				fprintf(fpxml, "\t\t\t</UserDefinedValue>\n");
-
+				ofXML << "\t\t\t</UserDefinedValue>" << std::endl;
 			}
 
-			fprintf (fpxml, "\t\t</IactStatus>\n");
+			ofXML << "\t\t</IactStatus>" << std::endl;
 		}
-		fprintf(fpxml, "\t</IactStatusTab>\n");
+		ofXML << "\t</IactStatusTab>" << std::endl;
 	}
 
-	fprintf(fpxml, "</DOWorld>\n");
-	fclose(fpxml);
-};
+	ofXML.close();
+}
 
-};   // namespace vedo
+void DOWorld::WriteXML(const std::string filename) const
+{
+	WriteXMLPrefix(filename);
+	WriteXMLPostfix(filename);
+}
+
+void DOWorld::WriteXML(const std::string filename, const IactRecordTab* irtp) const
+{
+	WriteXMLPrefix(filename);
+	WriteXMLIactRecordTab(filename, irtp);
+	WriteXMLPostfix(filename);
+}
+
+}   // namespace vedo

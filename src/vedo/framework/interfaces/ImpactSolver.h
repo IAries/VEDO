@@ -19,20 +19,14 @@ public:
 	virtual ~ImpactSolver();
 
 	virtual njr::Vector3d NextStep
-		(const ContactDetector* pcd,
-		DiscreteObject* pdoSlave,
-		DiscreteObject* pdoMaster,
-		double dt) = 0;
+		(const ContactDetector* pcd, DiscreteObject* pdoSlave, DiscreteObject* pdoMaster, vedo_float_t dt) = 0;
 
-	virtual bool InitialStep
-		(const ContactDetector* pcd,
-		DiscreteObject* pdoSlave,
-		DiscreteObject* pdoMaster   ) = 0;
+	virtual bool InitialStep(const ContactDetector* pcd, DiscreteObject* pdoSlave, DiscreteObject* pdoMaster) = 0;
 
 	virtual std::string type() const
 	{
 		return "ImpactSolver";
-	};
+	}
 
 	inline const ImpactStatus* GetImpactStatus() const
 	{
@@ -47,29 +41,34 @@ public:
 	inline void SetPeriodicBoundaryConditions(const Boundary* bc)
 	{
 		pBC = bc;
-	};
+	}
 
-	inline const double* RetrieveUserDefinedValue()
+	inline const vedo_float_t* RetrieveUserDefinedValue()
 	{
 		return ImStatus.RetrieveUserDefinedValue();
-	};
+	}
 
 	inline void CleanStatus()
 	{
 		ImStatus.Clean();
 	}
 
+	inline void BackupStatus()
+	{
+		ImStatus.Backup();
+	}
+
 protected:
-
-	const Boundary* pBC;
-
-	const IactModel* cpIactModel;
 
 	ImpactSolver(const IactModel* cpIactml);
 
-	ImpactStatus ImStatus;
+	const Boundary*  pBC;
 
-	ISwModels* ism;
+	const IactModel* cpIactModel;
+
+	ISwModels*       ism;
+
+	ImpactStatus     ImStatus;
 
 private:
 
@@ -78,6 +77,6 @@ private:
 	ImpactSolver& operator = (const ImpactSolver&);
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _IMPACT_SOLVER_H

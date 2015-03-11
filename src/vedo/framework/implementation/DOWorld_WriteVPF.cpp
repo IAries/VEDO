@@ -2,40 +2,37 @@
 #include <vedo/framework/interfaces/DOWorld.h>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
 
 namespace vedo
 {
 
-void DOWorld::WriteVPF (const char* filename) const
+void DOWorld::WriteVPF(const std::string filename) const
 {
-	FILE *fpvpf;
-    double Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;
-    double dX, dY, dZ, thickness = 0.001;
+    vedo_float_t Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;
     const DOModel* pdoml;
 	std::vector<DOStatus *>::const_iterator idos;
 	njr::NJRpolyhedra polyhedra;
 	std::vector<njr::NJRpolygon> faces;
 	njr::Vector3d Vt;
 
-	if ((fpvpf = fopen(filename, "w"))== NULL )
+	std::ofstream ofVPF(filename.c_str(), std::ios::out);
+	if (!ofVPF)
 	{
 		std::cerr
 			<< "Error!! Code: DOWorld::WriteVPF(const char*)" << std::endl
 			<< "        Note: DOWorld cannot write vpf file" << std::endl;
 		exit(-1);
-	};
+	}
 
-	fprintf(fpvpf,"<Header>\n");
-	fprintf
-		(fpvpf,
-		"%g %g %g %g\n",
-		pSystemParameter->GetTimeStart(),
-		pSystemParameter->GetTimeStop(),
-		pSystemParameter->GetTimeInterval(),
-		pSystemParameter->GetTimeCurrent());
-
-	fprintf(fpvpf, "</Header>\n");
-	fprintf(fpvpf,"<DiscreteObject>\n");
+	ofVPF
+		<< "<Header>"                                  << std::endl
+		<< '\t' << pSystemParameter->GetTimeStart()    << " "
+		        << pSystemParameter->GetTimeStop()     << " "
+		        << pSystemParameter->GetTimeInterval() << " "
+		        << pSystemParameter->GetTimeCurrent()  << std::endl
+		<< "</Header>"                                 << std::endl
+		<< "<DiscreteObject>"                          << std::endl;
 
 /*
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
@@ -77,7 +74,7 @@ void DOWorld::WriteVPF (const char* filename) const
 			 "plate", "ZoneOfInterest",
 			 vCenter.x(), vCenter.y(), vCenter.z() - 0.5*dZ,
 			 1.0, 0.0, 0.0,   0.0, 0.0, 1.0,   dY, dX, thickness       );
-	};
+	}
 
 	Boundary PeriodicBoundaryConditions
 		= DOWorld::GetSystemParameter()->GetPeriodicBoundaryConditions();
@@ -120,225 +117,158 @@ void DOWorld::WriteVPF (const char* filename) const
 			 "plate", "PeriodicBoundaryConditions",
 			 vCenter.x(), vCenter.y(), vCenter.z() - 0.5*dZ,
 			 1.0, 0.0, 0.0,   0.0, 0.0, 1.0,   dY, dX, thickness       );
-	};
+	}
 */
 
 	for (idos=cDOStatus.begin(); idos!=cDOStatus.end(); ++idos)
 	{
-		switch(GetDOModel((*idos)->GetDOName())->GetShapeType())
+		switch (GetDOModel((*idos)->GetDOName())->GetShapeType())
 		{
 			case Sphere:
-				Radius
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().sphere.radius;
-				fprintf
-					(fpvpf,
-//					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g\n", "sphere",
-					"%s %s %g %g %g %g %g %g %g %g %g %g\n", "sphere",
-					(*idos)->GetDOName().c_str(),
-					(*idos)->GetPosition().x(),
-					(*idos)->GetPosition().y(),
-					(*idos)->GetPosition().z(),
-					(*idos)->GetVelocity().x(),
-					(*idos)->GetVelocity().y(),
-					(*idos)->GetVelocity().z(),
-                    (*idos)->GetAngularVelocity().x(),
-                    (*idos)->GetAngularVelocity().y(),
-                    (*idos)->GetAngularVelocity().z(),
-					Radius);
-//					Radius,
-//					(*idos)->GetGranularTemperatureV(),
-//					(*idos)->GetGranularTemperatureAV());
+				ofVPF
+					<< "\tsphere "
+					<< (*idos)->GetDOName()              << " "
+					<< (*idos)->GetPosition().x()        << " "
+					<< (*idos)->GetPosition().y()        << " "
+					<< (*idos)->GetPosition().z()        << " "
+					<< (*idos)->GetVelocity().x()        << " "
+					<< (*idos)->GetVelocity().y()        << " "
+					<< (*idos)->GetVelocity().z()        << " "
+                    << (*idos)->GetAngularVelocity().x() << " "
+                    << (*idos)->GetAngularVelocity().y() << " "
+                    << (*idos)->GetAngularVelocity().z() << " "
+					<< DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().sphere.radius << std::endl;
 				break;
 			case Polyhedra:
 				pdoml     = DOWorld::GetDOModel((*idos)->GetDOName());
 				polyhedra = pdoml->GetPolyhedra();
 				faces     = polyhedra.faces();
-				fprintf
-					(fpvpf,
-//					"<polyhedra> %s %u %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-					"<polyhedra> %s %u %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-					(*idos)->GetDOName().c_str(),
-					faces.size(),
-					(*idos)->GetPosition().x(),
-					(*idos)->GetPosition().y(),
-					(*idos)->GetPosition().z(),
-					(*idos)->GetOrientationX().x(),
-					(*idos)->GetOrientationX().y(),
-					(*idos)->GetOrientationX().z(),
-					(*idos)->GetOrientationZ().x(),
-					(*idos)->GetOrientationZ().y(),
-					(*idos)->GetOrientationZ().z(),
-					(*idos)->GetVelocity().x(),
-					(*idos)->GetVelocity().y(),
-					(*idos)->GetVelocity().z(),
-                    (*idos)->GetAngularVelocity().x(),
-                    (*idos)->GetAngularVelocity().y(),
-                    (*idos)->GetAngularVelocity().z());
-//                    (*idos)->GetAngularVelocity().z(),
-//					(*idos)->GetGranularTemperatureV(),
-//					(*idos)->GetGranularTemperatureAV());
+				ofVPF
+					<< "\t<polyhedra>"                           << std::endl
+					<< '\t' << (*idos)->GetDOName()              << " "
+					        << faces.size()                      << " "
+					        << (*idos)->GetPosition().x()        << " "
+					        << (*idos)->GetPosition().y()        << " "
+					        << (*idos)->GetPosition().z()        << " "
+					        << (*idos)->GetOrientationX().x()    << " "
+					        << (*idos)->GetOrientationX().y()    << " "
+					        << (*idos)->GetOrientationX().z()    << " "
+					        << (*idos)->GetOrientationZ().x()    << " "
+					        << (*idos)->GetOrientationZ().y()    << " "
+					        << (*idos)->GetOrientationZ().z()    << " "
+					        << (*idos)->GetVelocity().x()        << " "
+					        << (*idos)->GetVelocity().y()        << " "
+					        << (*idos)->GetVelocity().z()        << " "
+					        << (*idos)->GetAngularVelocity().x() << " "
+					        << (*idos)->GetAngularVelocity().y() << " "
+					        << (*idos)->GetAngularVelocity().z() << std::endl;
 
-				for	(unsigned int i=0; i<polyhedra.constrains().size();	++i)
+				for	(vedo_uint_t i=0; i<polyhedra.constrains().size();	++i)
 				{
-					fprintf
-						(fpvpf,
-						"<constrain> %s %d %d %g %g %g [%d] %g </constrain>\n",
-						(*idos)->GetDOName().c_str(),
-						i,
-						faces[i].vertexes().size(),
-						polyhedra.constrains()[i].a(),
-						polyhedra.constrains()[i].b(),
-						polyhedra.constrains()[i].c(),
-						(int) polyhedra.constrains()[i].sense(),
-						polyhedra.constrains()[i].d()	        );
-					for	(unsigned int j=0; j<faces[i].vertexes().size(); ++j)
+					ofVPF
+						<< "\t\t<constrain>"                 << std::endl
+						<< (*idos)->GetDOName()              << " "
+						<< i                                 << " "
+						<< faces[i].vertexes().size()        << " "
+						<< polyhedra.constrains()[i].a()     << " "
+						<< polyhedra.constrains()[i].b()     << " "
+						<< polyhedra.constrains()[i].c()     << " "
+						<< polyhedra.constrains()[i].sense() << " "
+						<< polyhedra.constrains()[i].d()     << std::endl
+						<< "\t\t</constrain>"                << std::endl;
+					for	(vedo_uint_t j=0; j<faces[i].vertexes().size(); ++j)
 					{
-						fprintf
-							(fpvpf,
-							"<vertex> %s %g %g %g </vertex>\n",
-							(*idos)->GetDOName().c_str(),
-							faces[i].vertexes()[j].x(),
-							faces[i].vertexes()[j].y(),
-							faces[i].vertexes()[j].z()    );
+						ofVPF
+							<< "\t\t<vertex>"             << std::endl
+							<< (*idos)->GetDOName()       << " "
+							<< faces[i].vertexes()[j].x() << " "
+							<< faces[i].vertexes()[j].y() << " "
+							<< faces[i].vertexes()[j].z() << std::endl
+							<< "\t\t</vertex>"            << std::endl;
 					}
 				}
-				fprintf(fpvpf, "</polyhedra>\n");
+				ofVPF << "\t</polyhedra>" << std::endl;
 				break;
 			case QuasiPlate:
-				Height
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplate.height;
-				Width
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplate.width;
-				Length
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplate.length;
-				fprintf
-					(fpvpf,
-//					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g\n",
-					"plate",
-					(*idos)->GetDOName().c_str(),
-					(*idos)->GetPosition().x(),
-					(*idos)->GetPosition().y(),
-					(*idos)->GetPosition().z(),
-					(*idos)->GetOrientationX().x(),
-					(*idos)->GetOrientationX().y(),
-					(*idos)->GetOrientationX().z(),
-					(*idos)->GetOrientationZ().x(),
-					(*idos)->GetOrientationZ().y(),
-					(*idos)->GetOrientationZ().z(),
-                    Length,
-					Width,
-					Height);
-//					Height,
-//					(*idos)->GetGranularTemperatureV(),
-//					(*idos)->GetGranularTemperatureAV());
+				Height = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplate.height;
+				Width  = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplate.width;
+				Length = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplate.length;
+				ofVPF
+					<< "\tplate "
+					<< (*idos)->GetDOName()           << " "
+					<< (*idos)->GetPosition().x()     << " "
+					<< (*idos)->GetPosition().y()     << " "
+					<< (*idos)->GetPosition().z()     << " "
+					<< (*idos)->GetOrientationX().x() << " "
+					<< (*idos)->GetOrientationX().y() << " "
+					<< (*idos)->GetOrientationX().z() << " "
+					<< (*idos)->GetOrientationZ().x() << " "
+					<< (*idos)->GetOrientationZ().y() << " "
+					<< (*idos)->GetOrientationZ().z() << " "
+					<< Length                         << " "
+					<< Width                          << " "
+					<< Height                         << std::endl;
 				break;
 			case QuasiPlateWithCircularHole:
-				Height
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplatewithcircularhole.height;
-				Width
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplatewithcircularhole.width;
-				Length
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplatewithcircularhole.length;
-
-                HoleRadius = DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
-
-                HoleXOffset = DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
-
-                HoleYOffset = DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
-
-				fprintf
-					(fpvpf,
-//					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-					"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-					"plate",
-					(*idos)->GetDOName().c_str(),
-					(*idos)->GetPosition().x(),
-					(*idos)->GetPosition().y(),
-					(*idos)->GetPosition().z(),
-					(*idos)->GetOrientationX().x(),
-					(*idos)->GetOrientationX().y(),
-					(*idos)->GetOrientationX().z(),
-					(*idos)->GetOrientationZ().x(),
-					(*idos)->GetOrientationZ().y(),
-					(*idos)->GetOrientationZ().z(),
-                    Length,
-					Width,
-					Height,
-					HoleRadius,
-					HoleXOffset,
-					HoleYOffset );
-//					Height,
-//					(*idos)->GetGranularTemperatureV(),
-//					(*idos)->GetGranularTemperatureAV());
+				Height      = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.height;
+				Width       = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.width;
+				Length      = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.length;
+				HoleRadius  = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
+				HoleXOffset = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
+				HoleYOffset = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
+				ofVPF
+					<< "\tplate "
+					<< (*idos)->GetDOName()           << " "
+					<< (*idos)->GetPosition().x()     << " "
+					<< (*idos)->GetPosition().y()     << " "
+					<< (*idos)->GetPosition().z()     << " "
+					<< (*idos)->GetOrientationX().x() << " "
+					<< (*idos)->GetOrientationX().y() << " "
+					<< (*idos)->GetOrientationX().z() << " "
+					<< (*idos)->GetOrientationZ().x() << " "
+					<< (*idos)->GetOrientationZ().y() << " "
+					<< (*idos)->GetOrientationZ().z() << " "
+					<< Length                         << " "
+					<< Width                          << " "
+					<< Height                         << " "
+					<< HoleRadius                     << " "
+					<< HoleXOffset                    << " "
+					<< HoleYOffset                    << std::endl;
 				break;
 			case QuasiCylinder:
-				Height
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasicylinder.height;
-				Radius
-					= DOWorld::GetDOModel
-						((*idos)->GetDOName())
-							->GetShapeAttributes().quasicylinder.radius;
-
-				Vt
-					= (*idos)->GetPosition()
-					- ((*idos)->GetOrientationZ()*(0.5*Height));
-
-				fprintf
-					(fpvpf,
-//					"%s %s %g %g %g %g %g %g %g %g %g %g\n",
-					"%s %s %g %g %g %g %g %g %g %g\n",
-					"cylinder",
-					(*idos)->GetDOName().c_str(),
-					Vt.x(),
-					Vt.y(),
-					Vt.z(),
-					Radius,
-					Height,
-					(*idos)->GetOrientationZ().x(),
-					(*idos)->GetOrientationZ().y(),
-					(*idos)->GetOrientationZ().z());
-//					(*idos)->GetOrientationZ().z(),
-//					(*idos)->GetGranularTemperatureV(),
-//					(*idos)->GetGranularTemperatureAV());
+				Height = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasicylinder.height;
+				Radius = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasicylinder.radius;
+				Vt     = (*idos)->GetPosition() - ((*idos)->GetOrientationZ()*(0.5*Height));
+				ofVPF
+					<< "\tcylinder "
+					<< (*idos)->GetDOName()           << " "
+					<< Vt.x()                         << " "
+					<< Vt.y()                         << " "
+					<< Vt.z()                         << " "
+					<< Radius                         << " "
+					<< Height                         << " "
+					<< (*idos)->GetOrientationZ().x() << " "
+					<< (*idos)->GetOrientationZ().y() << " "
+					<< (*idos)->GetOrientationZ().z() << std::endl;
 				break;
 			default:
-				std::cerr << "Unknown VPF shape" << std::endl;
+				std::cerr
+					<< "Error!! Code: DOWorld::WriteVPF(const char*)" << std::endl
+					<< "        Note: Unknown VPF shape"              << std::endl;
+				exit(-1);
 		}
 	}
-	fprintf (fpvpf, "</DiscreteObject>\n");
-	fclose (fpvpf);
-};
+	ofVPF << "</DiscreteObject>" << std::endl;
+	ofVPF.close();
+}
 
-std::vector<unsigned long> GetObjectTypeNumber(const DOWorld* DOW)
+std::vector<vedo::vedo_uint_t> GetObjectTypeNumber(const DOWorld* DOW)
 {
 	std::vector<DOStatus*>                 DOS = DOW->GetDOStatus();
 	std::vector<DOStatus*>::const_iterator DOSP;
 	std::string LastDOName = (*(DOS.begin()))->GetDOName();
-	std::vector<unsigned long> DataStructure;
-	unsigned long DataNumber = 0;
+	std::vector<vedo::vedo_uint_t> DataStructure;
+	vedo::vedo_uint_t DataNumber = 0;
 	for (DOSP = DOS.begin(); DOSP != DOS.end(); ++DOSP, DataNumber++)
 	{
 		if ((*DOSP)->GetDOName() != LastDOName)
@@ -350,17 +280,15 @@ std::vector<unsigned long> GetObjectTypeNumber(const DOWorld* DOW)
 	}
 	DataStructure.push_back(DataNumber);
 	return DataStructure;
-};
+}
 
-void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
+void DOWorld::WriteVPF (const std::string filename, const DOWorld* opw) const
 {
 	// "opw" is the "DOWorld" status of original system
-	std::vector<unsigned long> OriginalDataStructure = GetObjectTypeNumber(opw);
-	std::vector<unsigned long> CurrentDataStructure  = GetObjectTypeNumber(this);
+	std::vector<vedo::vedo_uint_t> OriginalDataStructure = GetObjectTypeNumber(opw);
+	std::vector<vedo::vedo_uint_t> CurrentDataStructure  = GetObjectTypeNumber(this);
 
-	FILE *fpvpf;
-    double Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;
-    double dX, dY, dZ, thickness = 0.001;
+    vedo_float_t Radius, Height, Width, Length, HoleRadius, HoleXOffset, HoleYOffset;
     const DOModel* pdoml;
 	std::vector<DOStatus *>::const_iterator  idos;
 	std::vector<DOStatus *> ocDOStatus = opw->GetDOStatus();
@@ -369,25 +297,23 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 	std::vector<njr::NJRpolygon> faces;
 	njr::Vector3d Vt;
 
-	if ((fpvpf = fopen(filename, "w")) == NULL)
+	std::ofstream ofVPF(filename.c_str(), std::ios::out);
+	if (!ofVPF)
 	{
 		std::cerr
 			<< "Error!! Code: DOWorld::WriteVPF(const char*, const DOWorld*)" << std::endl
 			<< "        Note: DOWorld cannot write vpf file"                  << std::endl;
 		exit(-1);
-	};
+	}
 
-	fprintf(fpvpf,"<Header>\n");
-	fprintf
-		(fpvpf,
-		"%g %g %g %g\n",
-		pSystemParameter->GetTimeStart(),
-		pSystemParameter->GetTimeStop(),
-		pSystemParameter->GetTimeInterval(),
-		pSystemParameter->GetTimeCurrent());
-
-	fprintf(fpvpf, "</Header>\n");
-	fprintf(fpvpf,"<DiscreteObject>\n");
+	ofVPF
+		<< "<Header>"                                  << std::endl
+		<< '\t' << pSystemParameter->GetTimeStart()    << " "
+		        << pSystemParameter->GetTimeStop()     << " "
+		        << pSystemParameter->GetTimeInterval() << " "
+		        << pSystemParameter->GetTimeCurrent()  << std::endl
+		<< "</Header>"                                 << std::endl
+		<< "<DiscreteObject>"                          << std::endl;
 
 /*
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
@@ -430,245 +356,165 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 		1.0, 0.0, 0.0,   0.0, 0.0, 1.0,   dY, dX, thickness);
 */
 
-	unsigned long gap;
+	vedo::vedo_uint_t gap;
 	idos  =  cDOStatus.begin();
 	oidos = ocDOStatus.begin();
-	for(unsigned uli=0; uli<OriginalDataStructure.size(); uli++)
+	for (vedo_uint_t uli=0; uli<OriginalDataStructure.size(); uli++)
 	{
 		gap = OriginalDataStructure[uli] - CurrentDataStructure[uli];
-		for(unsigned ulj=0; ulj<CurrentDataStructure[uli]; ulj++)
+		for (vedo_uint_t ulj=0; ulj<CurrentDataStructure[uli]; ulj++)
 		{
-			switch(GetDOModel((*idos)->GetDOName())->GetShapeType())
+			switch (GetDOModel((*idos)->GetDOName())->GetShapeType())
 			{
 				case Sphere:
-					Radius
-						= DOWorld::GetDOModel
-							((*idos)->GetDOName())
-								->GetShapeAttributes().sphere.radius;
-					fprintf
-						(fpvpf,
-//						"%s %s %g %g %g %g %g %g %g %g %g %g %g %g\n", "sphere",
-						"%s %s %g %g %g %g %g %g %g %g %g %g\n", "sphere",
-						(*idos)->GetDOName().c_str(),
-						(*idos)->GetPosition().x(),
-						(*idos)->GetPosition().y(),
-						(*idos)->GetPosition().z(),
-						(*idos)->GetVelocity().x(),
-						(*idos)->GetVelocity().y(),
-						(*idos)->GetVelocity().z(),
-                        (*idos)->GetAngularVelocity().x(),
-                        (*idos)->GetAngularVelocity().y(),
-                        (*idos)->GetAngularVelocity().z(),
-						Radius);
-//						Radius,
-//						(*idos)->GetGranularTemperatureV(),
-//						(*idos)->GetGranularTemperatureAV());
+					ofVPF
+						<< "\tsphere "
+						<< (*idos)->GetDOName()              << " "
+						<< (*idos)->GetPosition().x()        << " "
+						<< (*idos)->GetPosition().y()        << " "
+						<< (*idos)->GetPosition().z()        << " "
+						<< (*idos)->GetVelocity().x()        << " "
+						<< (*idos)->GetVelocity().y()        << " "
+						<< (*idos)->GetVelocity().z()        << " "
+						<< (*idos)->GetAngularVelocity().x() << " "
+						<< (*idos)->GetAngularVelocity().y() << " "
+						<< (*idos)->GetAngularVelocity().z() << " "
+						<< DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().sphere.radius << std::endl;
 					break;
 				case Polyhedra:
 					pdoml     = DOWorld::GetDOModel((*idos)->GetDOName());
 					polyhedra = pdoml->GetPolyhedra();
 					faces     = polyhedra.faces();
-					fprintf
-						(fpvpf,
-//						"<polyhedra> %s %u %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-						"<polyhedra> %s %u %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-						(*idos)->GetDOName().c_str(),
-						faces.size(),
-						(*idos)->GetPosition().x(),
-						(*idos)->GetPosition().y(),
-						(*idos)->GetPosition().z(),
-						(*idos)->GetOrientationX().x(),
-						(*idos)->GetOrientationX().y(),
-						(*idos)->GetOrientationX().z(),
-						(*idos)->GetOrientationZ().x(),
-						(*idos)->GetOrientationZ().y(),
-						(*idos)->GetOrientationZ().z(),
-						(*idos)->GetVelocity().x(),
-						(*idos)->GetVelocity().y(),
-						(*idos)->GetVelocity().z(),
-                        (*idos)->GetAngularVelocity().x(),
-                        (*idos)->GetAngularVelocity().y(),
-                        (*idos)->GetAngularVelocity().z());
-//                        (*idos)->GetAngularVelocity().z(),
-//						(*idos)->GetGranularTemperatureV(),
-//						(*idos)->GetGranularTemperatureAV());
+					ofVPF
+						<< "\t<polyhedra>"                           << std::endl
+						<< '\t' << (*idos)->GetDOName()              << " "
+								<< faces.size()                      << " "
+								<< (*idos)->GetPosition().x()        << " "
+								<< (*idos)->GetPosition().y()        << " "
+								<< (*idos)->GetPosition().z()        << " "
+								<< (*idos)->GetOrientationX().x()    << " "
+								<< (*idos)->GetOrientationX().y()    << " "
+								<< (*idos)->GetOrientationX().z()    << " "
+								<< (*idos)->GetOrientationZ().x()    << " "
+								<< (*idos)->GetOrientationZ().y()    << " "
+								<< (*idos)->GetOrientationZ().z()    << " "
+								<< (*idos)->GetVelocity().x()        << " "
+								<< (*idos)->GetVelocity().y()        << " "
+								<< (*idos)->GetVelocity().z()        << " "
+								<< (*idos)->GetAngularVelocity().x() << " "
+								<< (*idos)->GetAngularVelocity().y() << " "
+								<< (*idos)->GetAngularVelocity().z() << std::endl;
 
-					for	(unsigned int i=0; i<polyhedra.constrains().size();	++i)
+					for	(vedo_uint_t i=0; i<polyhedra.constrains().size();	++i)
 					{
-						fprintf
-							(fpvpf,
-							"<constrain> %s %d %d %g %g %g [%d] %g </constrain>\n",
-							(*idos)->GetDOName().c_str(),
-							i,
-							faces[i].vertexes().size(),
-							polyhedra.constrains()[i].a(),
-							polyhedra.constrains()[i].b(),
-							polyhedra.constrains()[i].c(),
-							(int) polyhedra.constrains()[i].sense(),
-							polyhedra.constrains()[i].d()	        );
-						for	(unsigned int j=0; j<faces[i].vertexes().size(); ++j)
+						ofVPF
+							<< "\t\t<constrain>"                 << std::endl
+							<< (*idos)->GetDOName()              << " "
+							<< i                                 << " "
+							<< faces[i].vertexes().size()        << " "
+							<< polyhedra.constrains()[i].a()     << " "
+							<< polyhedra.constrains()[i].b()     << " "
+							<< polyhedra.constrains()[i].c()     << " "
+							<< polyhedra.constrains()[i].sense() << " "
+							<< polyhedra.constrains()[i].d()     << std::endl
+							<< "\t\t</constrain>"                << std::endl;
+						for	(vedo_uint_t j=0; j<faces[i].vertexes().size(); ++j)
 						{
-							fprintf
-								(fpvpf,
-								"<vertex> %s %g %g %g </vertex>\n",
-								(*idos)->GetDOName().c_str(),
-								faces[i].vertexes()[j].x(),
-								faces[i].vertexes()[j].y(),
-								faces[i].vertexes()[j].z()    );
+							ofVPF
+								<< "\t\t<vertex>"             << std::endl
+								<< (*idos)->GetDOName()       << " "
+								<< faces[i].vertexes()[j].x() << " "
+								<< faces[i].vertexes()[j].y() << " "
+								<< faces[i].vertexes()[j].z() << std::endl
+								<< "\t\t</vertex>"            << std::endl;
 						}
 					}
-					fprintf(fpvpf, "</polyhedra>\n");
+					ofVPF << "\t</polyhedra>" << std::endl;
 					break;
 				case QuasiPlate:
-					Height
-						= DOWorld::GetDOModel
-							((*idos)->GetDOName())
-								->GetShapeAttributes().quasiplate.height;
-					Width
-						= DOWorld::GetDOModel
-							((*idos)->GetDOName())
-								->GetShapeAttributes().quasiplate.width;
-					Length
-						= DOWorld::GetDOModel
-							((*idos)->GetDOName())
-								->GetShapeAttributes().quasiplate.length;
-					fprintf
-						(fpvpf,
-//						"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-						"%s %s %g %g %g %g %g %g %g %g %g %g %g %g\n",
-						"plate",
-						(*idos)->GetDOName().c_str(),
-						(*idos)->GetPosition().x(),
-						(*idos)->GetPosition().y(),
-						(*idos)->GetPosition().z(),
-						(*idos)->GetOrientationX().x(),
-						(*idos)->GetOrientationX().y(),
-						(*idos)->GetOrientationX().z(),
-						(*idos)->GetOrientationZ().x(),
-						(*idos)->GetOrientationZ().y(),
-						(*idos)->GetOrientationZ().z(),
-						Length,
-						Width,
-						Height);
-//						Height,
-//						(*idos)->GetGranularTemperatureV(),
-//						(*idos)->GetGranularTemperatureAV());
+					Height = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplate.height;
+					Width  = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplate.width;
+					Length = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplate.length;
+					ofVPF
+						<< "\tplate "
+						<< (*idos)->GetDOName()           << " "
+						<< (*idos)->GetPosition().x()     << " "
+						<< (*idos)->GetPosition().y()     << " "
+						<< (*idos)->GetPosition().z()     << " "
+						<< (*idos)->GetOrientationX().x() << " "
+						<< (*idos)->GetOrientationX().y() << " "
+						<< (*idos)->GetOrientationX().z() << " "
+						<< (*idos)->GetOrientationZ().x() << " "
+						<< (*idos)->GetOrientationZ().y() << " "
+						<< (*idos)->GetOrientationZ().z() << " "
+						<< Length                         << " "
+						<< Width                          << " "
+						<< Height                         << std::endl;
 					break;
-                case QuasiPlateWithCircularHole:
-                    Height
-                        = DOWorld::GetDOModel
-                            ((*idos)->GetDOName())
-                                ->GetShapeAttributes().quasiplatewithcircularhole.height;
-                    Width
-                        = DOWorld::GetDOModel
-                            ((*idos)->GetDOName())
-                                ->GetShapeAttributes().quasiplatewithcircularhole.width;
-                    Length
-                        = DOWorld::GetDOModel
-                            ((*idos)->GetDOName())
-                                ->GetShapeAttributes().quasiplatewithcircularhole.length;
-
-                    HoleRadius = DOWorld::GetDOModel
-                            ((*idos)->GetDOName())
-                                ->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
-
-                    HoleXOffset = DOWorld::GetDOModel
-                            ((*idos)->GetDOName())
-                                ->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
-
-                    HoleYOffset = DOWorld::GetDOModel
-                            ((*idos)->GetDOName())
-                                ->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
-
-                    fprintf
-                        (fpvpf,
-                        "%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-                        "plate",
-                        (*idos)->GetDOName().c_str(),
-                        (*idos)->GetPosition().x(),
-                        (*idos)->GetPosition().y(),
-                        (*idos)->GetPosition().z(),
-                        (*idos)->GetOrientationX().x(),
-                        (*idos)->GetOrientationX().y(),
-                        (*idos)->GetOrientationX().z(),
-                        (*idos)->GetOrientationZ().x(),
-                        (*idos)->GetOrientationZ().y(),
-                        (*idos)->GetOrientationZ().z(),
-                        Length,
-                        Width,
-                        Height,
-                        HoleRadius,
-                        HoleXOffset,
-                        HoleYOffset );
-					fprintf
-						(fpvpf,
-						"%s %s %g %g %g %g %g %g %g %g\n",
-						"cylinder",
-						(*idos)->GetDOName().c_str(),
-                        (*idos)->GetPosition().x() + HoleXOffset,
-                        (*idos)->GetPosition().y() + HoleYOffset,
-                        (*idos)->GetPosition().z(),
-						HoleRadius,
-						Height,
-						(*idos)->GetOrientationZ().x(),
-						(*idos)->GetOrientationZ().y(),
-						(*idos)->GetOrientationZ().z());
+				case QuasiPlateWithCircularHole:
+					Height      = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.height;
+					Width       = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.width;
+					Length      = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.length;
+					HoleRadius  = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.holeradius;
+					HoleXOffset = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.holexoffset;
+					HoleYOffset = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
+					ofVPF
+						<< "\tplate "
+						<< (*idos)->GetDOName()           << " "
+						<< (*idos)->GetPosition().x()     << " "
+						<< (*idos)->GetPosition().y()     << " "
+						<< (*idos)->GetPosition().z()     << " "
+						<< (*idos)->GetOrientationX().x() << " "
+						<< (*idos)->GetOrientationX().y() << " "
+						<< (*idos)->GetOrientationX().z() << " "
+						<< (*idos)->GetOrientationZ().x() << " "
+						<< (*idos)->GetOrientationZ().y() << " "
+						<< (*idos)->GetOrientationZ().z() << " "
+						<< Length                         << " "
+						<< Width                          << " "
+						<< Height                         << " "
+						<< HoleRadius                     << " "
+						<< HoleXOffset                    << " "
+						<< HoleYOffset                    << std::endl;
                     break;
 				case QuasiCylinder:
-					Height
-						= DOWorld::GetDOModel
-							((*idos)->GetDOName())
-								->GetShapeAttributes().quasicylinder.height;
-					Radius
-						= DOWorld::GetDOModel
-							((*idos)->GetDOName())
-								->GetShapeAttributes().quasicylinder.radius;
-
-					Vt
-						= (*idos)->GetPosition()
-						- ((*idos)->GetOrientationZ()*(0.5*Height));
-
-					fprintf
-						(fpvpf,
-//						"%s %s %g %g %g %g %g %g %g %g %g %g\n",
-						"%s %s %g %g %g %g %g %g %g %g\n",
-						"cylinder",
-						(*idos)->GetDOName().c_str(),
-						Vt.x(),
-						Vt.y(),
-						Vt.z(),
-						Radius,
-						Height,
-						(*idos)->GetOrientationZ().x(),
-						(*idos)->GetOrientationZ().y(),
-						(*idos)->GetOrientationZ().z());
-//						(*idos)->GetOrientationZ().z(),
-//						(*idos)->GetGranularTemperatureV(),
-//						(*idos)->GetGranularTemperatureAV());
+					Height = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasicylinder.height;
+					Radius = DOWorld::GetDOModel((*idos)->GetDOName())->GetShapeAttributes().quasicylinder.radius;
+					Vt     = (*idos)->GetPosition() - ((*idos)->GetOrientationZ()*(0.5*Height));
+					ofVPF
+						<< "\tcylinder "
+						<< (*idos)->GetDOName()           << " "
+						<< Vt.x()                         << " "
+						<< Vt.y()                         << " "
+						<< Vt.z()                         << " "
+						<< Radius                         << " "
+						<< Height                         << " "
+						<< (*idos)->GetOrientationZ().x() << " "
+						<< (*idos)->GetOrientationZ().y() << " "
+						<< (*idos)->GetOrientationZ().z() << std::endl;
 					break;
 				default:
-					std::cerr << "Unknown VPF shape" << std::endl;
+					std::cerr
+						<< "Error!! Code: DOWorld::WriteVPF(const char*, const DOWorld*)" << std::endl
+						<< "        Note: Unknown VPF shape"                              << std::endl;
+					exit(-1);
 			}
 			idos++;
 			oidos++;
 		}
 		// Add redundant DiscreteObjects
 		njr::Vector3d vRedundant;
-		if(gap != 0)
+		if (gap != 0)
 		{
-			switch(GetDOModel((*oidos)->GetDOName())->GetShapeType())
+			switch (GetDOModel((*oidos)->GetDOName())->GetShapeType())
 			{
 				case Sphere:
-					for(unsigned ulj=0; ulj<gap; ulj++)
+					for (vedo_uint_t ulj=0; ulj<gap; ulj++)
 					{
-						fprintf
-							(fpvpf,
-							"%s %s %g %g %g %g %g %g %g %g %g %g %g\n", "sphere",
-							(*oidos)->GetDOName().c_str(),
-							vRedundant.x(), vRedundant.y(), vRedundant.z(),
-							0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0,
-							0.0, 0.0                                       );
+						ofVPF
+							<< "\tsphere " << (*oidos)->GetDOName() << " "
+							<< vRedundant.x() << " " << vRedundant.y() << " " << vRedundant.z()
+							<< " 0 0 0 0 0 0 0" << std::endl;
 						oidos++;
 					}
 					break;
@@ -676,101 +522,81 @@ void DOWorld::WriteVPF (const char* filename, const DOWorld* opw) const
 					pdoml     = DOWorld::GetDOModel((*oidos)->GetDOName());
 					polyhedra = pdoml->GetPolyhedra();
 					faces     = polyhedra.faces();
-					for(unsigned ulj=0; ulj<gap; ulj++)
+					for (vedo_uint_t ulj=0; ulj<gap; ulj++)
 					{
-						fprintf
-							(fpvpf,
-							"<polyhedra> %s %u %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-							(*oidos)->GetDOName().c_str(),
-							faces.size(),
-							vRedundant.x(), vRedundant.y(), vRedundant.z(),
-							1.0, 0.0, 0.0,
-							0.0, 0.0, 1.0,
-							0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0,
-							0.0                                            );
-						for	(unsigned int i=0; i<polyhedra.constrains().size();	++i)
+						ofVPF
+							<< "\t<polyhedra>" << std::endl
+							<< '\t' << (*oidos)->GetDOName() << " " << faces.size() << " "
+									<< vRedundant.x() << " " << vRedundant.y() << " " << vRedundant.z()
+									<< " 1 0 0 0 0 1 0 0 0 0 0 0" << std::endl;
+						for	(vedo_uint_t i=0; i<polyhedra.constrains().size();	++i)
 						{
-							fprintf
-								(fpvpf,
-								"<constrain> %s %d %d %g %g %g [%d] %g </constrain>\n",
-								(*oidos)->GetDOName().c_str(),
-								i,
-								faces[i].vertexes().size(),
-								polyhedra.constrains()[i].a(),
-								polyhedra.constrains()[i].b(),
-								polyhedra.constrains()[i].c(),
-								(int) polyhedra.constrains()[i].sense(),
-								polyhedra.constrains()[i].d()	        );
-							for	(unsigned int j=0; j<faces[i].vertexes().size(); ++j)
+							ofVPF
+								<< "\t\t<constrain>"                 << std::endl
+								<< (*oidos)->GetDOName()             << " "
+								<< i                                 << " "
+								<< faces[i].vertexes().size()        << " "
+								<< polyhedra.constrains()[i].a()     << " "
+								<< polyhedra.constrains()[i].b()     << " "
+								<< polyhedra.constrains()[i].c()     << " "
+								<< polyhedra.constrains()[i].sense() << " "
+								<< polyhedra.constrains()[i].d()     << std::endl
+								<< "\t\t</constrain>"                << std::endl;
+							for	(vedo_uint_t j=0; j<faces[i].vertexes().size(); ++j)
 							{
-								fprintf
-									(fpvpf,
-									"<vertex> %s %g %g %g </vertex>\n",
-									(*oidos)->GetDOName().c_str(),
-									faces[i].vertexes()[j].x(),
-									faces[i].vertexes()[j].y(),
-									faces[i].vertexes()[j].z()    );
+								ofVPF
+									<< "\t\t<vertex>"             << std::endl
+									<< (*oidos)->GetDOName()      << " "
+									<< faces[i].vertexes()[j].x() << " "
+									<< faces[i].vertexes()[j].y() << " "
+									<< faces[i].vertexes()[j].z() << std::endl
+									<< "\t\t</vertex>"            << std::endl;
 							}
 						}
-						fprintf(fpvpf, "</polyhedra>\n");
+						ofVPF << "\t</polyhedra>" << std::endl;
 						oidos++;
 					}
 					break;
 				case QuasiPlate:
-					for(unsigned ulj=0; ulj<gap; ulj++)
+					for (vedo_uint_t ulj=0; ulj<gap; ulj++)
 					{
-						fprintf
-							(fpvpf,
-							"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-							"plate",
-							(*oidos)->GetDOName().c_str(),
-							vRedundant.x(), vRedundant.y(), vRedundant.z(),
-							1.0, 0.0, 0.0,
-							0.0, 0.0, 1.0,
-							0.001, 0.001, 0.001,
-							0.0                                            );
+						ofVPF
+							<< "\tplate " << (*oidos)->GetDOName() << " "
+							<< vRedundant.x() << " " << vRedundant.y() << " " << vRedundant.z()
+							<< " 1 0 0 0 0 1 0.001 0.001 0.001" << std::endl;
 						oidos++;
 					}
 					break;
 				case QuasiPlateWithCircularHole:
-					for(unsigned ulj=0; ulj<gap; ulj++)
+					for (vedo_uint_t ulj=0; ulj<gap; ulj++)
 					{
-						fprintf
-							(fpvpf,
-							"%s %s %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-							"plate",
-							(*oidos)->GetDOName().c_str(),
-							vRedundant.x(), vRedundant.y(), vRedundant.z(),
-							1.0, 0.0, 0.0,
-							0.0, 0.0, 1.0,
-							0.001, 0.001, 0.001,
-							0.0                                            );
+						ofVPF
+							<< "\tplate " << (*oidos)->GetDOName() << " "
+							<< vRedundant.x() << " " << vRedundant.y() << " " << vRedundant.z()
+							<< " 1 0 0 0 0 1 0.001 0.001 0.001 0 0 0" << std::endl;
 						oidos++;
 					}
 					break;
 				case QuasiCylinder:
-					for(unsigned ulj=0; ulj<gap; ulj++)
+					for (vedo_uint_t ulj=0; ulj<gap; ulj++)
 					{
-						fprintf
-							(fpvpf,
-							"%s %s %g %g %g %g %g %g %g %g %g\n",
-							"cylinder",
-							(*oidos)->GetDOName().c_str(),
-							vRedundant.x(), vRedundant.y(), vRedundant.z(),
-							0.001, 0.001,
-							0.0, 0.0, 0.1,
-							0.0                                            );
+						ofVPF
+							<< "\tcylinder " << (*oidos)->GetDOName() << " "
+							<< vRedundant.x() << " " << vRedundant.y() << " " << vRedundant.z()
+							<< " 0.001 0.001 0 0 1" << std::endl;
 						oidos++;
 					}
 					break;
 				default:
-					std::cerr << "Unknown VPF shape" << std::endl;
+					std::cerr
+						<< "Error!! Code: DOWorld::WriteVPF(const char*, const DOWorld*)" << std::endl
+						<< "        Note: Unknown VPF shape"                              << std::endl;
+					exit(-1);
 			}
 		}
 	}
-	fprintf (fpvpf, "</DiscreteObject>\n");
-	fclose (fpvpf);
-};
+	ofVPF << "</DiscreteObject>" << std::endl;
+	ofVPF.close();
+}
 
-};   // namespace vedo
+}   // namespace vedo

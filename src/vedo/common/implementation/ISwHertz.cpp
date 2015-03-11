@@ -1,38 +1,26 @@
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/common/interfaces/ISwHertz.h>
 #include <cmath>
 
 namespace vedo
 {
 
-ISwHertz::ISwHertz
-	(const DiscreteObject* cpdoSlave,
-	const DiscreteObject* cpdoMaster,
-	const IactModel* cpiactml) : ImpactSolver(cpiactml)
+ISwHertz::ISwHertz(const DiscreteObject* cpdoSlave, const DiscreteObject* cpdoMaster, const IactModel* cpiactml):
+	ImpactSolver(cpiactml)
 {
-	kn      = cpiactml->GetIactMechanism("NormalStiffness");
-	cn      = cpiactml->GetIactMechanism("DampingCoefficient");
+	kn = cpiactml->GetIactMechanism("NormalStiffness");
+	cn = cpiactml->GetIactMechanism("DampingCoefficient");
 }
 
-bool ISwHertz::InitialStep
-	(const ContactDetector *CInfo,
-	DiscreteObject *pdoSlave,
-	DiscreteObject *pdoMaster)
+bool ISwHertz::InitialStep(const ContactDetector *CInfo, DiscreteObject *pdoSlave, DiscreteObject *pdoMaster)
 {
 	return true;
 }
 
-njr::Vector3d ISwHertz::NextStep
-	(const ContactDetector* CInfo,
-	DiscreteObject* A,
-	DiscreteObject* B,
-	double dt                     )
+njr::Vector3d ISwHertz::NextStep(const ContactDetector* CInfo, DiscreteObject* A, DiscreteObject* B, vedo_float_t dt)
 {
-	/**********************************************************************
-	 * CInfo->GetContactInfo() -> vImpactDirection
-	 * represents direction of (Position B - Position A)
-	 **********************************************************************/
-	const double        dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
+	// CInfo->GetContactInfo() -> vImpactDirection represents direction of (Position B - Position A)
+	const vedo_float_t  dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
 	const njr::Vector3d vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
 
 	if (!(CInfo->GetContactInfo()->bActive))
@@ -43,11 +31,11 @@ njr::Vector3d ISwHertz::NextStep
 
     ImStatus.SetContactInformation(CInfo->GetContactInfo());
 
-	const DOStatus*   dosA = A->GetDOStatus();
-	const DOStatus*   dosB = B->GetDOStatus();
+	const DOStatus*     dosA = A->GetDOStatus();
+	const DOStatus*     dosB = B->GetDOStatus();
 
-	const njr::Vector3d vIa  = A->GetMassMomentInertia();
-	const njr::Vector3d vIb  = B->GetMassMomentInertia();
+	//const njr::Vector3d vIa  = A->GetMassMomentInertia();
+	//const njr::Vector3d vIb  = B->GetMassMomentInertia();
 
 	const njr::Vector3d vVa  = dosA->GetVelocity();
 	const njr::Vector3d vVb  = dosB->GetVelocity();
@@ -74,8 +62,7 @@ njr::Vector3d ISwHertz::NextStep
 			this->pBC->DifferenceBoundaryConditions(&vDepthRadiusB);
 		}
 
-		vRelativeV
-			= vVa - vVb + vAVa.Cross(vDepthRadiusA) - vAVb.Cross(vDepthRadiusB);
+		vRelativeV  = vVa - vVb + vAVa.Cross(vDepthRadiusA) - vAVb.Cross(vDepthRadiusB);
 		vRelativeVn = (vRelativeV % vImpDirection) * vImpDirection;
 		vRelativeVs = vRelativeV - vRelativeVn;
 
@@ -83,13 +70,11 @@ njr::Vector3d ISwHertz::NextStep
 		{
 			bool bContact = true;
 			ImStatus.SetContact(bContact);
-			double dInitialVelocity = vRelativeVn.length();
+			vedo_float_t dInitialVelocity = vRelativeVn.length();
 			ImStatus.SetInitialVelocity(dInitialVelocity);
 		}
 
-		vForceAn
-			= ism->NormalForceHertzSpring
-				(kn, cn, dImpDepth, vImpDirection, vRelativeVn);
+		vForceAn = ism->NormalForceHertzSpring(kn, cn, dImpDepth, vImpDirection, vRelativeVn);
 	}
 	else
 	{
@@ -98,7 +83,7 @@ njr::Vector3d ISwHertz::NextStep
 	}
 
 	// Calculate the Impact force
-	ImpactA = vForceAn  * dt;
+	ImpactA = vForceAn * dt;
 
     ImStatus.SetImpactInformation(-1.0 * ImpactA, njr::Vector3d(njr::ZERO));
 
@@ -106,6 +91,6 @@ njr::Vector3d ISwHertz::NextStep
 	B->AddImpact(-1.0 * ImpactA, njr::Vector3d(njr::ZERO));
 
 	return ImpactA;
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

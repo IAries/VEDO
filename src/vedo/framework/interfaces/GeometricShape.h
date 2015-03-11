@@ -25,27 +25,27 @@ public:
 	inline std::string GetType() const
 	{
 		return _sType;
-	};
+	}
 
 	inline std::string GetName() const
 	{
 		return _sName;
-	};
+	}
 
 	inline std::list<GeometricShape*> GetListGS() const
 	{
 		return _ListGS;
-	};
+	}
 
 	inline DOStatus* GetStatus() const
 	{
 		return _Status;
-	};
+	}
 
 	inline void SetStatus(DOStatus* s)
 	{
 		*_Status = *s;
-	};
+	}
 
 	virtual void Add(GeometricShape*);
 
@@ -58,13 +58,17 @@ public:
 protected:
 
 	GeometricShape();
+
 	std::string                _sType;
+
 	std::string                _sName;
+
 	std::list<GeometricShape*> _ListGS;
+
 	DOStatus*                  _Status;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 

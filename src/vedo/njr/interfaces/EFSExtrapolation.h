@@ -19,23 +19,23 @@ public:
 
 	EFSExtrapolation()
 	{
-	};
+	}
 
 	EFSExtrapolation(const EFSExtrapolation& ef)
 	{
 		*this = ef;
-	};
+	}
 
 	const EFSExtrapolation& operator = (const EFSExtrapolation& ef)
 	{
-		(this->_sFileName)  = ef._sFileName;
+		(this->_sFileName) = ef._sFileName;
 		(this->_KeyPoints) = ef._KeyPoints;
 		return *this;
-	};
+	}
 
 	~EFSExtrapolation()
 	{
-	};
+	}
 
 	EFSExtrapolation(const char* cFileName)
 	{
@@ -45,16 +45,16 @@ public:
 		std::ifstream iFile(cFileName, std::ios::in);
 
 		// Count the size of time history
-		unsigned long ulNumData = this->CountingInputFileSize(iFile);
-		if(ulNumData != 0)
+		vedo::vedo_uint_t ulNumData = this->CountingInputFileSize(iFile);
+		if (ulNumData != 0)
 		{
 			iFile >> tX >> tY;
 			(this->_KeyPoints).push_back(std::make_pair(tX, tY));
 			TX tXLast = tX;
-			for (unsigned long ul=1; ul<ulNumData; ul++)
+			for (vedo::vedo_uint_t ul=1; ul<ulNumData; ul++)
 			{
 				iFile >> tX >> tY;
-				if(tX >= tXLast)
+				if (tX >= tXLast)
 				{
 					(this->_KeyPoints).push_back(std::make_pair(tX, tY));
 					tXLast = tX;
@@ -69,12 +69,12 @@ public:
 			}
 		}
 		iFile.close();
-	};
+	}
 
 	virtual const std::string GetName() const
 	{
 		return "EFSExtrapolation";
-	};
+	}
 
 	virtual bool AddValue(TX tX, TY tY)
 	{
@@ -87,14 +87,14 @@ public:
 		{
 			std::cout
 				<< "Error!! Code: EFSExtrapolation::AddValue(TX, TY)" << std::endl
-				<< "        Note: X doesn't increase." << std::endl;
+				<< "        Note: X doesn't increase."                << std::endl;
 			return false;
 		}
-	};
+	}
 
 	virtual TY operator () (const TX& tX)
 	{
-		unsigned long ulSize = (this->_KeyPoints).size();
+		vedo::vedo_uint_t ulSize = (this->_KeyPoints).size();
 		if (ulSize == 0)
 		{
 			return TY();
@@ -131,7 +131,7 @@ public:
 			}
 			else
 			{
-				for (unsigned long ul=1; ul<ulSize; ul++)
+				for (vedo::vedo_uint_t ul=1; ul<ulSize; ul++)
 				{
 					if (tX < ((this->_KeyPoints)[ul].first))
 					{
@@ -147,9 +147,9 @@ public:
 			std::cerr << "Error!! Code: TY EFSExtrapolation::GetValue(TX) const" << std::endl;
 			exit(-1);
 		}
-	};
+	}
 };
 
-};   // namespace njr
+}   // namespace njr
 
 #endif   // _NJR_EXPLICIT_FUNCTION_SCATTER_EXTRAPOLATION_H

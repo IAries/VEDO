@@ -12,52 +12,52 @@ namespace njr
 {
 
 template <typename TValue>
-class EFSTimeHistory: public EFScatter<double, TValue>
+class EFSTimeHistory: public EFScatter<vedo::vedo_float_t, TValue>
 {
 
 public:
 
 	EFSTimeHistory()
 	{
-	};
+	}
 
 	EFSTimeHistory(const EFSTimeHistory& ef)
 	{
 		*this = ef;
-	};
+	}
 
 	const EFSTimeHistory& operator = (const EFSTimeHistory& ef)
 	{
 		(this->_sFileName) = ef._sFileName;
 		(this->_KeyPoints) = ef._KeyPoints;
 		return *this;
-	};
+	}
 
 	~EFSTimeHistory()
 	{
-	};
+	}
 
 	EFSTimeHistory(const char* cFileName)
 	{
 		(this->_sFileName) = cFileName;
-		double dTime;
+		vedo::vedo_float_t dTime;
 		TValue tValue;
 		std::ifstream iFile(cFileName, std::ios::in);
 
 		// Count the size of time history
-		unsigned long ulNumData = this->CountingInputFileSize(iFile);
-		if(ulNumData != 0)
+		vedo::vedo_uint_t ulNumData = this->CountingInputFileSize(iFile);
+		if (ulNumData != 0)
 		{
 			iFile >> dTime >> tValue;
-			if(dTime >= 0.0)
+			if (dTime >= 0.0)
 			{
 				(this->_KeyPoints).push_back(std::make_pair(dTime, tValue));
-				double dTimeLast = dTime;
+				vedo::vedo_float_t dTimeLast = dTime;
 
-				for (unsigned long ul=1; ul<ulNumData; ul++)
+				for (vedo::vedo_uint_t ul=1; ul<ulNumData; ul++)
 				{
 					iFile >> dTime >> tValue;
-					if(dTime >= dTimeLast)
+					if (dTime >= dTimeLast)
 					{
 						(this->_KeyPoints).push_back(std::make_pair(dTime, tValue));
 						dTimeLast = dTime;
@@ -80,16 +80,16 @@ public:
 			}
 		}
 		iFile.close();
-	};
+	}
 
 	virtual const std::string GetName() const
 	{
 		return "EFSTimeHistory";
-	};
+	}
 
-	virtual bool AddValue(double dTime, TValue tValue)
+	virtual bool AddValue(vedo::vedo_float_t dTime, TValue tValue)
 	{
-		if((this->_KeyPoints).size() != 0)
+		if ((this->_KeyPoints).size() != 0)
 		{
 			if (dTime >= (this->_KeyPoints)[(this->_KeyPoints).size()-1].first)
 			{
@@ -99,7 +99,7 @@ public:
 			else
 			{
 				std::cout
-					<< "Error!! Code: EFSTimeHistory::AddValue(double, TValue)" << std::endl
+					<< "Error!! Code: EFSTimeHistory::AddValue(vedo::vedo_float_t, TValue)" << std::endl
 					<< "        Note: X doesn't increase." << std::endl;
 				return false;
 			}
@@ -109,11 +109,11 @@ public:
 			(this->_KeyPoints).push_back(std::make_pair(dTime, tValue));
 			return true;
 		}
-	};
+	}
 
-	virtual TValue operator () (const double& dTime) const
+	virtual TValue operator () (const vedo::vedo_float_t& dTime) const
 	{
-		unsigned long ulSize = (this->_KeyPoints).size();
+		vedo::vedo_uint_t ulSize = (this->_KeyPoints).size();
 		if (ulSize == 0)
 		{
 			return TValue();
@@ -124,8 +124,8 @@ public:
 		}
 		else
 		{
-			double dTime1  = (this->_KeyPoints)[0       ].first;
-			double dTime2  = (this->_KeyPoints)[ulSize-1].first;
+			vedo::vedo_float_t dTime1  = (this->_KeyPoints)[0       ].first;
+			vedo::vedo_float_t dTime2  = (this->_KeyPoints)[ulSize-1].first;
 			TValue tValue1 = (this->_KeyPoints)[0       ].second;
 			TValue tValue2 = (this->_KeyPoints)[ulSize-1].second;
 			if (dTime == dTime1)
@@ -146,7 +146,7 @@ public:
 			}
 			else
 			{
-				for (unsigned long ul=1; ul<ulSize; ul++)
+				for (vedo::vedo_uint_t ul=1; ul<ulSize; ul++)
 				{
 					if (dTime < ((this->_KeyPoints)[ul].first))
 					{
@@ -159,12 +159,12 @@ public:
 				}
 			}
 
-			std::cerr << "Error!! Code: TValue EFSTimeHistory::operator () (double) const" << std::endl;
+			std::cerr << "Error!! Code: TValue EFSTimeHistory::operator () (vedo::vedo_float_t) const" << std::endl;
 			exit(-1);
 		}
-	};
+	}
 };
 
-};   // namespace njr
+}   // namespace njr
 
 #endif   // _NJR_EXPLICIT_FUNCTION_SCATTER_TIME_HISTORY_H

@@ -1,4 +1,4 @@
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/njr/interfaces/Utility.h>
 #include <vedo/framework/interfaces/IactRecordTab.h>
 #include <cstring>
@@ -11,42 +11,40 @@ namespace vedo
 
 IactRecordTab::IactRecordTab()
 {
-};
+}
 
-IactRecordTab::IactRecordTab
-	(const std::map<std::pair<unsigned long,unsigned long>, ImpactStatus>& m)
+IactRecordTab::IactRecordTab(const std::map<std::pair<vedo_uint_t,vedo_uint_t>, ImpactStatus>& m)
 {
 	mapImStatus = m;
-};
+}
 
-const ImpactStatus* IactRecordTab::GetImpactStatus
-	(unsigned long master,unsigned long slave)
+const ImpactStatus* IactRecordTab::GetImpactStatus(vedo_uint_t master,vedo_uint_t slave)
 {
-	std::map<std::pair<unsigned long,unsigned long>, ImpactStatus>::const_iterator iter
+	std::map<std::pair<vedo_uint_t,vedo_uint_t>, ImpactStatus>::const_iterator iter
 		= mapImStatus.find(std::make_pair(master, slave));
 	return (iter != mapImStatus.end()) ? &(iter->second) : 0;
-};
+}
 
 void IactRecordTab::CleanUserDefinedValueInImpactStatus()
 {
-	for(std::map<std::pair<unsigned long,unsigned long>, ImpactStatus>::iterator iter = mapImStatus.begin();
-		iter != mapImStatus.end();
-		iter++)
+	for (std::map<std::pair<vedo_uint_t,vedo_uint_t>, ImpactStatus>::iterator
+		 iter = mapImStatus.begin(); iter != mapImStatus.end(); iter++)
+	{
 		iter->second.CleanAllUserDefinedValue();
-};
+	}
+}
 
-void IactRecordTab::PushRecord
-	(unsigned long master, unsigned long slave, const ImpactStatus& s)
+void IactRecordTab::PushRecord(vedo_uint_t master, vedo_uint_t slave, const ImpactStatus& s)
 {
 	mapImStatus.insert(std::make_pair(std::make_pair(master,slave),s));
 }
 
-void IactRecordTab::ModifyPair(std::map<unsigned long, long> mNewPairList)
+void IactRecordTab::ModifyPair(std::map<vedo_uint_t, vedo::vedo_int_t> mNewPairList)
 {
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator mmapImStatus;
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> mapImStatusExtra;
-	std::vector<std::pair<unsigned long, unsigned long> > vErasePair;
-	unsigned long ulFirstOriginal, ulSecondOriginal, ulFirstNew, ulSecondNew;
+	std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::iterator mmapImStatus;
+	std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus> mapImStatusExtra;
+	std::vector<std::pair<vedo_uint_t, vedo_uint_t> > vErasePair;
+	vedo_uint_t ulFirstOriginal, ulSecondOriginal, ulFirstNew, ulSecondNew;
 	for (mmapImStatus=mapImStatus.begin(); mmapImStatus!=mapImStatus.end(); mmapImStatus++)
 	{
 		ulFirstOriginal  = mmapImStatus->first.first;
@@ -60,39 +58,55 @@ void IactRecordTab::ModifyPair(std::map<unsigned long, long> mNewPairList)
 		}
 	}
 
-	for (unsigned ul=0; ul<vErasePair.size(); ul++)
+	for (vedo_uint_t ul=0; ul<vErasePair.size(); ul++)
+	{
 		mapImStatus.erase(mapImStatus.find(vErasePair[ul]));
+	}
 
-	for (mmapImStatus=mapImStatusExtra.begin();
-		 mmapImStatus!=mapImStatusExtra.end();
-		 mmapImStatus++                        )
+	for (mmapImStatus=mapImStatusExtra.begin(); mmapImStatus!=mapImStatusExtra.end(); mmapImStatus++)
+	{
 		mapImStatus[mmapImStatus->first] = mmapImStatus->second;
-};
+	}
+}
 
-unsigned long IactRecordTab::ContactNumber() const
+vedo_uint_t IactRecordTab::ContactNumber() const
 {
-	unsigned long ulContactNumber = 0;
-	for (std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator
-			pmapImStatus=mapImStatus.begin();
-		pmapImStatus!=mapImStatus.end();
-		pmapImStatus++                                                        )
+	vedo_uint_t ulContactNumber = 0;
+	for (std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::const_iterator
+		 pmapImStatus = mapImStatus.begin(); pmapImStatus != mapImStatus.end(); pmapImStatus++)
 	{
 		if (pmapImStatus->second.Contact())
+		{
 			ulContactNumber++;
+		}
 	}
 	return ulContactNumber;
-};
+}
 
-void IactRecordTab::EraseElement(const unsigned long& ulID)
+vedo_uint_t IactRecordTab::BondNumber() const
 {
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> NewmapImStatus;
-	unsigned long ulNew1, ulNew2;
-	for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator
-		itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++)
+	vedo_uint_t ulBondNumber = 0;
+	for (std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::const_iterator
+		 pmapImStatus = mapImStatus.begin(); pmapImStatus != mapImStatus.end(); pmapImStatus++)
 	{
-		if((itr->first.first != ulID) && (itr->first.second != ulID))
+		if (pmapImStatus->second.Contact())
 		{
-			if(itr->first.first > ulID)
+			ulBondNumber++;
+		}
+	}
+	return ulBondNumber;
+}
+
+void IactRecordTab::EraseElement(const vedo_uint_t& ulID)
+{
+	std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus> NewmapImStatus;
+	vedo_uint_t ulNew1, ulNew2;
+	for (std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::iterator
+		 itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++)
+	{
+		if ((itr->first.first != ulID) && (itr->first.second != ulID))
+		{
+			if (itr->first.first > ulID)
 			{
 				ulNew1 = itr->first.first - 1;
 			}
@@ -101,7 +115,7 @@ void IactRecordTab::EraseElement(const unsigned long& ulID)
 				ulNew1 = itr->first.first;
 			}
 
-			if(itr->first.second > ulID)
+			if (itr->first.second > ulID)
 			{
 				ulNew2 = itr->first.second - 1;
 			}
@@ -114,30 +128,29 @@ void IactRecordTab::EraseElement(const unsigned long& ulID)
 		}
 	}
 	mapImStatus = NewmapImStatus;
-};
+}
 
-void IactRecordTab::EraseElements
-	(const std::vector<unsigned long>& ulIDList, const unsigned long& ulDONum)
+void IactRecordTab::EraseElements(const std::vector<vedo_uint_t>& ulIDList, const vedo_uint_t& ulDONum)
 {
 	std::vector<bool> bActived;
-	unsigned long ulIDListSize = ulIDList.size();
-	unsigned long ul, ul2;
-	unsigned long ulID = 0;
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::iterator itr;
+	vedo_uint_t ulIDListSize = ulIDList.size();
+	vedo_uint_t ul, ul2;
+	vedo_uint_t ulID = 0;
+	std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::iterator itr;
 
-	for(itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
+	for (itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
 	{
 		bActived.push_back(true);
-		for(ul=0; ul<ulIDListSize; ul++)
+		for (ul=0; ul<ulIDListSize; ul++)
 		{
-			if(itr->first.first == ulIDList[ul])
+			if (itr->first.first == ulIDList[ul])
 			{
 				bActived[ulID] = false;
 				break;
 			}
 			else
 			{
-				if(itr->first.second == ulIDList[ul])
+				if (itr->first.second == ulIDList[ul])
 				{
 					bActived[ulID] = false;
 					break;
@@ -146,21 +159,21 @@ void IactRecordTab::EraseElements
 		}
 	}
 
-	std::vector<unsigned long> ulNewID;
+	std::vector<vedo_uint_t> ulNewID;
 	bool bActivedMark;
 	ulID = 0;
-	for(ul=0; ul<ulDONum; ul++)
+	for (ul=0; ul<ulDONum; ul++)
 	{
 		bActivedMark = true;
-		for(ul2=0; ul2<ulIDListSize; ul2++)
+		for (ul2=0; ul2<ulIDListSize; ul2++)
 		{
-			if(ul == ulIDList[ul2])
+			if (ul == ulIDList[ul2])
 			{
 				bActivedMark = false;
 				break;
 			}
 		}
-		if(bActivedMark)
+		if (bActivedMark)
 		{
 			ulNewID.push_back(ulID);
 			ulID++;
@@ -172,23 +185,20 @@ void IactRecordTab::EraseElements
 	}
 
 	ulID = 0;
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> NewmapImStatus;
-	for(itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
+	std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus> NewmapImStatus;
+	for (itr = mapImStatus.begin(); itr != mapImStatus.end(); itr++, ulID++)
 	{
-		if(bActived[ulID])
+		if (bActived[ulID])
 		{
-			NewmapImStatus
-				[std::make_pair
-					(ulNewID[itr->first.first],
-					 ulNewID[itr->first.second])] = itr->second;
+			NewmapImStatus[std::make_pair(ulNewID[itr->first.first], ulNewID[itr->first.second])] = itr->second;
 		}
 	}
 	mapImStatus = NewmapImStatus;
-};
+}
 
 void IactRecordTab::print() const
 {
-	std::map<std::pair<unsigned long,unsigned long>, ImpactStatus>::const_iterator iter;
+	std::map<std::pair<vedo_uint_t,vedo_uint_t>, ImpactStatus>::const_iterator iter;
 	for (iter=mapImStatus.begin(); iter!=mapImStatus.end(); ++iter)
 	{
 		std::cout
@@ -238,9 +248,9 @@ void IactRecordTab::print() const
 			<< iter->second.Overlap()
 			<< std::endl;
 	}
-};
+}
 
-void IactRecordTab::DumpIactStatus(const double& time, const char* filename) const
+void IactRecordTab::DumpIactStatus(const vedo_float_t& time, const char* filename) const
 {
     std::ofstream oCSVFile(filename, std::ios::out);
 
@@ -258,18 +268,18 @@ void IactRecordTab::DumpIactStatus(const double& time, const char* filename) con
 		<< "AngularImpactToMaster-Y, "
 		<< "AngularImpactToMaster-Z";
 
-	for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+	for(vedo_uint_t u=0; u<4*uNumUDDImpactStatus; u++)
+	{
 		oCSVFile << ", User-defined-Value-" << u+1;
+	}
 
     oCSVFile << std::endl;
 
-    const std::pair<unsigned long, unsigned long> * ppulul;
+    const std::pair<vedo_uint_t, vedo_uint_t> * ppulul;
     const ImpactStatus* pis;
     njr::Vector3d vV;
-    for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator
-        pmapImStatus  = mapImStatus.begin();
-        pmapImStatus != mapImStatus.end();
-        pmapImStatus++                      )
+    for(std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::const_iterator
+        pmapImStatus = mapImStatus.begin(); pmapImStatus != mapImStatus.end(); pmapImStatus++)
     {
         ppulul = &(pmapImStatus->first);
         pis    = &(pmapImStatus->second);
@@ -279,7 +289,7 @@ void IactRecordTab::DumpIactStatus(const double& time, const char* filename) con
 			<< ppulul->first  << ", "
 			<< ppulul->second << ", ";
 
-        if(pis->Contact())
+        if (pis->Contact())
         {
             oCSVFile << "1, ";
         }
@@ -288,7 +298,7 @@ void IactRecordTab::DumpIactStatus(const double& time, const char* filename) con
             oCSVFile << "0, ";
         }
 
-        if(pis->Bond())
+        if (pis->Bond())
         {
             oCSVFile << "1, ";
         }
@@ -318,39 +328,41 @@ void IactRecordTab::DumpIactStatus(const double& time, const char* filename) con
         vV = pis->AngularImpactToMaster();
         oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z();
 
-        const double* cdpudv = pis->RetrieveAllUserDefinedValue();
+        const vedo_float_t* cdpudv = pis->RetrieveAllUserDefinedValue();
 
-		for(unsigned u=0; u<4*uNumUDDImpactStatus; u++)
+		for (vedo_uint_t u=0; u<4*uNumUDDImpactStatus; u++)
+		{
 			oCSVFile << ", " << *(cdpudv+u);
+		}
 
 		oCSVFile << std::endl;
     }
 
     oCSVFile.close();
-};
+}
 
 std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 {
-    unsigned long ulInteractionNumber = mapImStatus.size();
-	idof.write((char*) &ulInteractionNumber, sizeof(vedo_unsigned_long));
+    vedo_uint_t ulInteractionNumber = mapImStatus.size();
+	idof.write((char*) &ulInteractionNumber, sizeof(vedo_uint_t));
 	if(ulInteractionNumber == 0)
+	{
 		return idof;
+	}
 
 	const ImpactStatus* isp;
 	bool                bTemp;
-	double              dTemp;
+	vedo_float_t        dTemp;
 	njr::Vector3d       vTemp;
 
 	if(uNumUDDImpactStatus != 0)
 	{
-		const double* dpUDV;
-		for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator
-			mapImStatusP = mapImStatus.begin();
-			mapImStatusP != mapImStatus.end();
-			mapImStatusP++                                                                 )
+		const vedo_float_t* dpUDV;
+		for (std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::const_iterator
+			 mapImStatusP = mapImStatus.begin(); mapImStatusP != mapImStatus.end(); mapImStatusP++)
 		{
-			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(vedo_unsigned_long));
-			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(vedo_unsigned_long));
+			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(vedo_uint_t));
+			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(vedo_uint_t));
 
 			isp   = &(mapImStatusP->second);
 			bTemp = isp->Contact();
@@ -358,87 +370,85 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 			bTemp = isp->Bond();
 			idof.write((char*) &bTemp                             , sizeof(bool));
 			dTemp =isp->Kn();
-			idof.write((char*) &dTemp                             , sizeof(double));
+			idof.write((char*) &dTemp                             , sizeof(vedo_float_t));
 			dTemp =isp->InitialVelocity();
-			idof.write((char*) &dTemp                             , sizeof(double));
+			idof.write((char*) &dTemp                             , sizeof(vedo_float_t));
 			vTemp = isp->ShearForce();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->ImpactPoint();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->ImpactDirection();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->ImpactToMaster();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->AngularImpactToMaster();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			dTemp =isp->Overlap();
-			idof.write((char*) &dTemp                             , sizeof(double));
+			idof.write((char*) &dTemp                             , sizeof(vedo_float_t));
 			dpUDV = isp->RetrieveAllUserDefinedValue();
-			idof.write((char*) dpUDV                              , uNumUDDImpactStatus*sizeof(double));
-			idof.write((char*) (dpUDV+3*vedo::uNumUDDImpactStatus), uNumUDDImpactStatus*sizeof(double));
+			idof.write((char*) dpUDV                              , uNumUDDImpactStatus*sizeof(vedo_float_t));
+			idof.write((char*) (dpUDV+3*vedo::uNumUDDImpactStatus), uNumUDDImpactStatus*sizeof(vedo_float_t));
 		}
 	}
 	else
 	{
-		for(std::map<std::pair<unsigned long, unsigned long>, ImpactStatus>::const_iterator
-			mapImStatusP = mapImStatus.begin();
-			mapImStatusP != mapImStatus.end();
-			mapImStatusP++                                                                 )
+		for(std::map<std::pair<vedo_uint_t, vedo_uint_t>, ImpactStatus>::const_iterator
+			mapImStatusP = mapImStatus.begin(); mapImStatusP != mapImStatus.end(); mapImStatusP++)
 		{
-			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(vedo_unsigned_long));
-			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(vedo_unsigned_long));
+			idof.write((char*) &(mapImStatusP->first.first)       , sizeof(vedo_uint_t));
+			idof.write((char*) &(mapImStatusP->first.second)      , sizeof(vedo_uint_t));
 			isp   = &(mapImStatusP->second);
 			bTemp = isp->Contact();
 			idof.write((char*) &bTemp                             , sizeof(bool));
 			bTemp = isp->Bond();
 			idof.write((char*) &bTemp                             , sizeof(bool));
 			dTemp =isp->Kn();
-			idof.write((char*) &dTemp                             , sizeof(double));
+			idof.write((char*) &dTemp                             , sizeof(vedo_float_t));
 			dTemp =isp->InitialVelocity();
-			idof.write((char*) &dTemp                             , sizeof(double));
+			idof.write((char*) &dTemp                             , sizeof(vedo_float_t));
 			vTemp = isp->ShearForce();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->ImpactPoint();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->ImpactDirection();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->ImpactToMaster();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			vTemp = isp->AngularImpactToMaster();
-			idof.write((char*) &vTemp                             , 3*sizeof(double));
+			idof.write((char*) &vTemp                             , 3*sizeof(vedo_float_t));
 			dTemp =isp->Overlap();
-			idof.write((char*) &dTemp                             , sizeof(double));
+			idof.write((char*) &dTemp                             , sizeof(vedo_float_t));
 		}
 	}
 
 	return idof;
-};
+}
 
 std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 {
 	mapImStatus.clear();
-	unsigned long ulInteractionNumber;
+	vedo_uint_t ulInteractionNumber;
 
-	idof.read((char*) &ulInteractionNumber, sizeof(vedo_unsigned_long));
+	idof.read((char*) &ulInteractionNumber, sizeof(vedo_uint_t));
 	if(ulInteractionNumber == 0)
+	{
 		return idof;
+	}
 
-	unsigned long ulElementsMaster, ulElementsSlave;
+	vedo_uint_t   ulElementsMaster, ulElementsSlave;
 	bool          bContact, bBond;
-	double        dKn, dInitialVelocity, dOverlap;
-	njr::Vector3d
-        vShearForce, vImpactPoint, vImpactDirection,
-        vImpactToMaster, vAngularImpactToMaster;
+	vedo_float_t  dKn, dInitialVelocity, dOverlap;
+	njr::Vector3d vShearForce, vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
 	ImpactStatus  is;
 
 	if(uNumUDDImpactStatus != 0)
 	{
-		double* dpudv = new double[4*vedo::uNumUDDImpactStatus];
-		memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(double));
-		for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
+		vedo_float_t* dpudv = new vedo_float_t[4*vedo::uNumUDDImpactStatus];
+		memcpy(dpudv, is.RetrieveAllUserDefinedValue(), 4*uNumUDDImpactStatus*sizeof(vedo_float_t));
+		for (vedo_uint_t ul=0; ul<ulInteractionNumber; ++ul)
 		{
-			idof.read((char*) &ulElementsMaster          , sizeof(vedo_unsigned_long));
-			idof.read((char*) &ulElementsSlave           , sizeof(vedo_unsigned_long));
+			idof.read((char*) &ulElementsMaster          , sizeof(vedo_uint_t));
+			idof.read((char*) &ulElementsSlave           , sizeof(vedo_uint_t));
 
 			idof.read((char*) &bContact                  , sizeof(bool));
 			is.SetContact(bContact);
@@ -446,44 +456,42 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 			idof.read((char*) &bBond                     , sizeof(bool));
 			is.SetBond(bBond);
 
-			idof.read((char*) &dKn                       , sizeof(double));
+			idof.read((char*) &dKn                       , sizeof(vedo_float_t));
 			is.SetKn(dKn);
 
-			idof.read((char*) &dInitialVelocity          , sizeof(double));
+			idof.read((char*) &dInitialVelocity          , sizeof(vedo_float_t));
 			is.SetInitialVelocity(dInitialVelocity);
 
-			idof.read((char*) &vShearForce               , 3*sizeof(double));
+			idof.read((char*) &vShearForce               , 3*sizeof(vedo_float_t));
 			is.SetShearForce(vShearForce);
 
-			idof.read((char*) &vImpactPoint              , 3*sizeof(double));
+			idof.read((char*) &vImpactPoint              , 3*sizeof(vedo_float_t));
 			is.SetImpactPoint(vImpactPoint);
 
-			idof.read((char*) &vImpactDirection          , 3*sizeof(double));
+			idof.read((char*) &vImpactDirection          , 3*sizeof(vedo_float_t));
 			is.SetImpactDirection(vImpactDirection);
 
-			idof.read((char*) &vImpactToMaster           , 3*sizeof(double));
+			idof.read((char*) &vImpactToMaster           , 3*sizeof(vedo_float_t));
 			is.SetImpactToMaster(vImpactToMaster);
 
-			idof.read((char*) &vAngularImpactToMaster    , 3*sizeof(double));
+			idof.read((char*) &vAngularImpactToMaster    , 3*sizeof(vedo_float_t));
 			is.SetAngularImpactToMaster(vAngularImpactToMaster);
 
-			idof.read((char*) &dOverlap                  , sizeof(double));
+			idof.read((char*) &dOverlap                  , sizeof(vedo_float_t));
 			is.SetOverlap(dOverlap);
 
-			idof.read((char*) dpudv                      , uNumUDDImpactStatus*sizeof(double));
-			idof.read((char*) dpudv+3*uNumUDDImpactStatus, uNumUDDImpactStatus*sizeof(double));
+			idof.read((char*) dpudv                      , uNumUDDImpactStatus*sizeof(vedo_float_t));
+			idof.read((char*) dpudv+3*uNumUDDImpactStatus, uNumUDDImpactStatus*sizeof(vedo_float_t));
 
-			mapImStatus.insert
-                (std::make_pair
-                    (std::make_pair(ulElementsMaster, ulElementsSlave), is));
+			mapImStatus.insert(std::make_pair(std::make_pair(ulElementsMaster, ulElementsSlave), is));
 		}
 	}
 	else
 	{
-		for (unsigned long ul=0; ul<ulInteractionNumber; ++ul)
+		for (vedo_uint_t ul=0; ul<ulInteractionNumber; ++ul)
 		{
-			idof.read((char*) &ulElementsMaster          , sizeof(vedo_unsigned_long));
-			idof.read((char*) &ulElementsSlave           , sizeof(vedo_unsigned_long));
+			idof.read((char*) &ulElementsMaster          , sizeof(vedo_uint_t));
+			idof.read((char*) &ulElementsSlave           , sizeof(vedo_uint_t));
 
 			idof.read((char*) &bContact                  , sizeof(bool));
 			is.SetContact(bContact);
@@ -491,37 +499,35 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 			idof.read((char*) &bBond                     , sizeof(bool));
 			is.SetBond(bBond);
 
-			idof.read((char*) &dKn                       , sizeof(double));
+			idof.read((char*) &dKn                       , sizeof(vedo_float_t));
 			is.SetKn(dKn);
 
-			idof.read((char*) &dInitialVelocity          , sizeof(double));
+			idof.read((char*) &dInitialVelocity          , sizeof(vedo_float_t));
 			is.SetInitialVelocity(dInitialVelocity);
 
-			idof.read((char*) &vShearForce               , 3*sizeof(double));
+			idof.read((char*) &vShearForce               , 3*sizeof(vedo_float_t));
 			is.SetShearForce(vShearForce);
 
-			idof.read((char*) &vImpactPoint              , 3*sizeof(double));
+			idof.read((char*) &vImpactPoint              , 3*sizeof(vedo_float_t));
 			is.SetImpactPoint(vImpactPoint);
 
-			idof.read((char*) &vImpactDirection          , 3*sizeof(double));
+			idof.read((char*) &vImpactDirection          , 3*sizeof(vedo_float_t));
 			is.SetImpactDirection(vImpactDirection);
 
-			idof.read((char*) &vImpactToMaster           , 3*sizeof(double));
+			idof.read((char*) &vImpactToMaster           , 3*sizeof(vedo_float_t));
 			is.SetImpactToMaster(vImpactToMaster);
 
-			idof.read((char*) &vAngularImpactToMaster    , 3*sizeof(double));
+			idof.read((char*) &vAngularImpactToMaster    , 3*sizeof(vedo_float_t));
 			is.SetAngularImpactToMaster(vAngularImpactToMaster);
 
-			idof.read((char*) &dOverlap                  , sizeof(double));
+			idof.read((char*) &dOverlap                  , sizeof(vedo_float_t));
 			is.SetOverlap(dOverlap);
 
-			mapImStatus.insert
-                (std::make_pair
-                    (std::make_pair(ulElementsMaster, ulElementsSlave), is));
+			mapImStatus.insert(std::make_pair(std::make_pair(ulElementsMaster, ulElementsSlave), is));
 		}
 	}
 
 	return idof;
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

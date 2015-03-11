@@ -1,10 +1,10 @@
 #ifndef _NJR_ACADXF_SOLID_H
 #define _NJR_ACADXF_SOLID_H
 
-#include <vedo/Constants.h>
 #include <vedo/njr/interfaces/Constants.h>
 #include <vedo/njr/interfaces/ACADXF.h>
 #include <vedo/njr/interfaces/Polygon.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <list>
 #include <string>
 
@@ -30,7 +30,7 @@ protected:
 	std::list<Face *> lcon3dFace;
 
 	// (Face per angle) of this solid
-	double fpa;
+	vedo::vedo_float_t fpa;
 
 private:
 
@@ -41,6 +41,8 @@ private:
 
 };
 
+
+
 // Cuboid is used to hold and set those faces of a Cuboid
 class Cuboid : public Solid
 {
@@ -50,14 +52,8 @@ public:
 	Cuboid();
 
 	void Set
-		(const double& dWidth,
-		const double& dLength,
-		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+		(const vedo::vedo_float_t& dWidth, const vedo::vedo_float_t& dLength, const vedo::vedo_float_t& dHeight,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -74,17 +70,11 @@ class Ellipsoid : public Solid
 
 public:
 
-	Ellipsoid(const double& fpa = njr::dOneTwelfthPI);
+	Ellipsoid(const vedo::vedo_float_t& fpa = njr::dOneTwelfthPI);
 
 	void Set
-		(const double& dlx,
-		const double& dly,
-		const double& dlz,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+		(const vedo::vedo_float_t& dlx, const vedo::vedo_float_t& dly, const vedo::vedo_float_t& dlz,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -94,21 +84,19 @@ private:
 
 };
 
+
+
 // Sphere is used to hold and set those faces of a sphere
 class Sphere : public Ellipsoid
 {
 
 public:
 
-	Sphere(const double& fpa = njr::dOneTwelfthPI);
+	Sphere(const vedo::vedo_float_t& fpa = njr::dOneTwelfthPI);
 
 	void Set
-		(const double& dRadius,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+		(const vedo::vedo_float_t& dRadius,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -118,22 +106,19 @@ private:
 
 };
 
+
+
 // Cylinder is used to hold and set those faces of a Cylinder
 class Cylinder : public Solid
 {
 
 public:
 
-	Cylinder(const double& fpa = njr::dOneTwelfthPI);
+	Cylinder(const vedo::vedo_float_t& fpa = njr::dOneTwelfthPI);
 
 	void Set
-		(const double& dRadius,
-		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+		(const vedo::vedo_float_t& dRadius, const vedo::vedo_float_t& dHeight,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -143,22 +128,19 @@ private:
 
 };
 
+
+
 // QuasiCylinder is used to hold and set those faces of a QuasiCylinder
 class QuasiCylinder: public Solid
 {
 
 public:
 
-	QuasiCylinder(const double& fpa = njr::dOneTwelfthPI);
+	QuasiCylinder(const vedo::vedo_float_t& fpa = njr::dOneTwelfthPI);
 
 	void Set
-		(const double& dRadius,
-		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+		(const vedo::vedo_float_t& dRadius, const vedo::vedo_float_t& dHeight,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -168,22 +150,19 @@ private:
 
 };
 
+
+
 // QuasiPlate is used to hold and set those faces of a QuasiPlate
 class QuasiPlate: public Solid
 {
 
 public:
 
-	QuasiPlate(const double& fpa = njr::dOneTwelfthPI);
+	QuasiPlate(const vedo::vedo_float_t& fpa = njr::dOneTwelfthPI);
 
-	void Set(const double& dWidth,
-		const double& dLength,
-		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+	void Set
+		(const vedo::vedo_float_t& dWidth, const vedo::vedo_float_t& dLength, const vedo::vedo_float_t& dHeight,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -193,6 +172,8 @@ private:
 
 };
 
+
+
 // Aries: Need to modified. It was copied from the QuasiPlate but noy consider about the circular hole
 // QuasiPlateWithCircularHole is used to hold and set those faces of a QuasiPlateWithCircularHole
 class QuasiPlateWithCircularHole: public Solid
@@ -200,16 +181,11 @@ class QuasiPlateWithCircularHole: public Solid
 
 public:
 
-	QuasiPlateWithCircularHole(const double& fpa = njr::dOneTwelfthPI);
+	QuasiPlateWithCircularHole(const vedo::vedo_float_t& fpa = njr::dOneTwelfthPI);
 
-	void Set(const double& dWidth,
-		const double& dLength,
-		const double& dHeight,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color& color);
+	void Set
+		(const vedo::vedo_float_t& dWidth, const vedo::vedo_float_t& dLength, const vedo::vedo_float_t& dHeight,
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -218,6 +194,8 @@ private:
 	QuasiPlateWithCircularHole& operator = (const QuasiPlateWithCircularHole&);
 
 };
+
+
 
 // Polygon is used to hold and set those faces of a Polygon
 class Polygon : public Solid
@@ -229,11 +207,7 @@ public:
 
 	void Set
 		(const njr::NJRpolygon&,
-		const njr::Vector3d& vP,
-		const njr::Vector3d& vOX,
-		const njr::Vector3d& vOZ,
-		const char* layer,
-		const Color &color);
+		 const njr::Vector3d& vP, const njr::Vector3d& vOX, const njr::Vector3d& vOZ, const char* layer, const Color &color);
 
 private:
 
@@ -245,6 +219,6 @@ private:
 
 njrdxf::ofstream& operator << (njrdxf::ofstream&, Solid*);
 
-};   // namespace njrdxf
+}   // namespace njrdxf
 
 #endif // _NJR_ACADXF_SOLID_H

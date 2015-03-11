@@ -36,74 +36,74 @@ void DOWorld::Draw(const char* filename)  const
 		{
 			case Ellipsoid:
 				ellipsoid.Set
-				 	(shA.ellipsoid.xlength,
-					shA.ellipsoid.ylength,
-					shA.ellipsoid.zlength,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					(shA.ellipsoid.xlength,
+					 shA.ellipsoid.ylength,
+					 shA.ellipsoid.zlength,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
 				bdxf << &ellipsoid;
 				break;
 			case Sphere:
 				sphere.Set
 					(shA.sphere.radius,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
-					bdxf << &sphere;
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
+				 bdxf << &sphere;
 				break;
 			case QuasiPlate:
 				cuboid.Set
 					(shA.quasiplate.width,
-					shA.quasiplate.length,
-					shA.quasiplate.height,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					 shA.quasiplate.length,
+					 shA.quasiplate.height,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
 				bdxf << &cuboid;
 				break;
 			case QuasiPlateWithCircularHole:
 			    // Aries: Need to be modified. It was copied from the QuasiPlate but not consider about the hole
 				cuboid2.Set
 					(shA.quasiplatewithcircularhole.width,
-					shA.quasiplatewithcircularhole.length,
-					shA.quasiplatewithcircularhole.height,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					 shA.quasiplatewithcircularhole.length,
+					 shA.quasiplatewithcircularhole.height,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()                );
 				bdxf << &cuboid2;
 				break;
 			case QuasiCylinder:
 				cylinder.Set
 					(shA.quasicylinder.radius,
-					shA.quasicylinder.height,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					 shA.quasicylinder.height,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
 				bdxf << &cylinder;
 				break;
 			case Polyhedra:
 				polyhedra = pdoml->GetPolyhedra();
 				faces = polyhedra.faces();
-				for (unsigned int i=0; i<faces.size(); ++i)
+				for (vedo_uint_t i=0; i<faces.size(); ++i)
 				{
 					polygon.Set
 						(faces[i],
-						(*idos)->GetPosition(),
-						(*idos)->GetOrientationX(),
-						(*idos)->GetOrientationZ(),
-						pdoml->GetDOGroup().c_str(),
-						pdoml->GetShapeColor()      );
+						 (*idos)->GetPosition(),
+						 (*idos)->GetOrientationX(),
+						 (*idos)->GetOrientationZ(),
+						 pdoml->GetDOGroup().c_str(),
+						 pdoml->GetShapeColor()      );
 					bdxf << &polygon;
 				}
 				break;
@@ -111,8 +111,8 @@ void DOWorld::Draw(const char* filename)  const
 				text.Set((*idos)->GetPosition(),"Unknown 3dSolid Model");
 				bdxf << &text;
 		}
-	};
-};
+	}
+}
 
 void DOWorld::HighDraw(const char* filename) const
 {
@@ -140,76 +140,76 @@ void DOWorld::HighDraw(const char* filename) const
 		switch (pdoml->GetShapeType())
 		{
 			case Ellipsoid:
-				 ellipsoid.Set
-				 	(shA.ellipsoid.xlength,
-					shA.ellipsoid.ylength,
-					shA.ellipsoid.zlength,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+				ellipsoid.Set
+					(shA.ellipsoid.xlength,
+					 shA.ellipsoid.ylength,
+					 shA.ellipsoid.zlength,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
 				bdxf << &ellipsoid;
 				break;
 			case Sphere:
 				sphere.Set
 					(shA.sphere.radius,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
 				bdxf << &sphere;
 				break;
 			case QuasiPlate:
 				qplate.Set
 					(shA.quasiplate.width,
-					shA.quasiplate.length,
-					shA.quasiplate.height,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					 shA.quasiplate.length,
+					 shA.quasiplate.height,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
 				bdxf << &qplate;
 				break;
 
 			case QuasiPlateWithCircularHole:
 				qplate2.Set
 					(shA.quasiplatewithcircularhole.width,
-					shA.quasiplatewithcircularhole.length,
-					shA.quasiplatewithcircularhole.height,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
+					 shA.quasiplatewithcircularhole.length,
+					 shA.quasiplatewithcircularhole.height,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()                );
 				bdxf << &qplate2;
 				break;
 
 			case QuasiCylinder:
 				qcylinder.Set
 					(shA.quasicylinder.radius,
-					shA.quasicylinder.height,
-					(*idos)->GetPosition(),
-					(*idos)->GetOrientationX(),
-					(*idos)->GetOrientationZ(),
-					pdoml->GetDOGroup().c_str(),
-					pdoml->GetShapeColor());
-					bdxf << &qcylinder;
+					 shA.quasicylinder.height,
+					 (*idos)->GetPosition(),
+					 (*idos)->GetOrientationX(),
+					 (*idos)->GetOrientationZ(),
+					 pdoml->GetDOGroup().c_str(),
+					 pdoml->GetShapeColor()      );
+				bdxf << &qcylinder;
 				break;
 			case Polyhedra:
 				polyhedra = pdoml->GetPolyhedra();
 				faces = polyhedra.faces();
-				for (unsigned int i=0; i<faces.size(); ++i)
+				for (vedo_uint_t i=0; i<faces.size(); ++i)
 				{
 					polygon.Set
 						(faces[i],
-						(*idos)->GetPosition(),
-						(*idos)->GetOrientationX(),
-						(*idos)->GetOrientationZ(),
-						pdoml->GetDOGroup().c_str(),
-						pdoml->GetShapeColor());
+						 (*idos)->GetPosition(),
+						 (*idos)->GetOrientationX(),
+						 (*idos)->GetOrientationZ(),
+						 pdoml->GetDOGroup().c_str(),
+						 pdoml->GetShapeColor()      );
 					bdxf << &polygon;
 				}
 				break;
@@ -217,7 +217,7 @@ void DOWorld::HighDraw(const char* filename) const
 				text.Set((*idos)->GetPosition(),"Unknown 3dSolid Model");
 				bdxf << &text;
 		}
-	};
-};
+	}
+}
 
-};   // namespace vedo
+}   // namespace vedo

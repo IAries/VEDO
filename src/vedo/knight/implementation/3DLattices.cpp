@@ -1,13 +1,14 @@
 #include <vedo/knight/interfaces/3DLattices.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <cmath>
 
 ////////////////////////  CUBIC LATTICE //////////////////////////////////////
 
-CubicLattice::CubicLattice(double a)
+CubicLattice::CubicLattice(vedo::vedo_float_t a)
 {
-    for(int vec=0; vec<3; vec++)
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
     {
-        for(int coord=0; coord<3;coord++)
+        for(vedo::vedo_int_t coord=0; coord<3;coord++)
         {
             latticeVectors[vec][coord] = (vec==coord? a : 0.);
         }
@@ -16,12 +17,12 @@ CubicLattice::CubicLattice(double a)
     UpdateMemberVariables();
 }
 
-void CubicLattice::SetLatticeConstant(double a)
+void CubicLattice::SetLatticeConstant(vedo::vedo_float_t a)
 {
-    double factor = a/latticeConstant;
-    for(int vec=0; vec<3; vec++)
+    vedo::vedo_float_t factor = a/latticeConstant;
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
     {
-        for(int coord=0; coord<3; coord++)
+        for(vedo::vedo_int_t coord=0; coord<3; coord++)
             latticeVectors[vec][coord] *= factor;
     }
     latticeConstant = a;
@@ -32,18 +33,18 @@ void CubicLattice::SetLatticeConstant(double a)
 
 ////////////////////////  FCC LATTICE //////////////////////////////////////
 
-FCCLattice::FCCLattice(double a): CubicLattice(a)
+FCCLattice::FCCLattice(vedo::vedo_float_t a): CubicLattice(a)
 {
     std::vector<njr::Vector3d> atomsCoord;
-    atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
+    atomsCoord.push_back(njr::Vector3d(0.0, 0.0, 0.0));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
 void FCCLattice::AddAtomInCell(njr::Vector3d atomCoord, std::string name)
 {
-    double shifts[4][3] = {{0.,0.,0.},{0.,0.5,0.5},{0.5,0.,0.5},{0.5,0.5,0.}};
-    for(int at=0; at<4; ++at)
+    vedo::vedo_float_t shifts[4][3] = {{0.,0.,0.},{0.,0.5,0.5},{0.5,0.,0.5},{0.5,0.5,0.}};
+    for(vedo::vedo_int_t at=0; at<4; ++at)
 	{
 		BravaisLatticeWithBasis::AddAtomInCell
 			(atomCoord+njr::Vector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
@@ -54,11 +55,11 @@ void FCCLattice::AddAtomInCell(njr::Vector3d atomCoord, std::string name)
 
 ////////////////////////  PRIMITIVE FCC LATTICE //////////////////////////////////////
 
-PrimitiveFCCLattice::PrimitiveFCCLattice(double a)
+PrimitiveFCCLattice::PrimitiveFCCLattice(vedo::vedo_float_t a)
 {
-    for(int vec = 0; vec < 3; vec++)
+    for(vedo::vedo_int_t vec = 0; vec < 3; vec++)
     {
-        for(int coord = 0; coord < 3; coord++)
+        for(vedo::vedo_int_t coord = 0; coord < 3; coord++)
         {
             latticeVectors[vec][coord] = (vec == coord ? 0.0 : 0.5*a);
         }
@@ -69,10 +70,10 @@ PrimitiveFCCLattice::PrimitiveFCCLattice(double a)
 
 void PrimitiveFCCLattice::ResetOrientation()
 {
-    double newVectors[3][3];
-    for(int vec = 0; vec < 3; vec++)
+    vedo::vedo_float_t newVectors[3][3];
+    for(vedo::vedo_int_t vec = 0; vec < 3; vec++)
 	{
-        for(int coord = 0; coord < 3; coord++)
+        for(vedo::vedo_int_t coord = 0; coord < 3; coord++)
         {
             newVectors[vec][coord] =
                 (vec == coord ? 0.0 : 0.5 * latticeConstant);
@@ -81,12 +82,12 @@ void PrimitiveFCCLattice::ResetOrientation()
     SetLatticeVectors(newVectors);
 }
 
-void PrimitiveFCCLattice::SetLatticeConstant(double a)
+void PrimitiveFCCLattice::SetLatticeConstant(vedo::vedo_float_t a)
 {
-    double factor = a/latticeConstant;
-    for(int vec=0; vec<3; vec++)
+    vedo::vedo_float_t factor = a/latticeConstant;
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
     {
-        for(int coord=0; coord<3; coord++)
+        for(vedo::vedo_int_t coord=0; coord<3; coord++)
 		{
             latticeVectors[vec][coord] *= factor;
 		}
@@ -98,7 +99,7 @@ void PrimitiveFCCLattice::SetLatticeConstant(double a)
 
 ////////////////////////  BCC LATTICE //////////////////////////////////////
 
-BCCLattice::BCCLattice(double a): CubicLattice(a)
+BCCLattice::BCCLattice(vedo::vedo_float_t a): CubicLattice(a)
 {
     std::vector<njr::Vector3d> atomsCoord;
     atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
@@ -108,8 +109,8 @@ BCCLattice::BCCLattice(double a): CubicLattice(a)
 
 void BCCLattice::AddAtomInCell(njr::Vector3d atomCoord, std::string name)
 {
-    double shifts[2][3] = {{0.,0.,0.},{0.5,0.5,0.5}};
-    for(int at=0; at<2; ++at)
+    vedo::vedo_float_t shifts[2][3] = {{0.,0.,0.},{0.5,0.5,0.5}};
+    for(vedo::vedo_int_t at=0; at<2; ++at)
 	{
         BravaisLatticeWithBasis::AddAtomInCell
         	(atomCoord+njr::Vector3d(shifts[at][0], shifts[at][1], shifts[at][2]),
@@ -120,7 +121,7 @@ void BCCLattice::AddAtomInCell(njr::Vector3d atomCoord, std::string name)
 
 ////////////////////////  DIAMOND LATTICE //////////////////////////////////////
 
-DiamondLattice::DiamondLattice(double a): FCCLattice(a)
+DiamondLattice::DiamondLattice(vedo::vedo_float_t a): FCCLattice(a)
 {
     std::vector<njr::Vector3d> atomsCoord;
     atomsCoord.push_back(njr::Vector3d(0., 0., 0.));
@@ -132,7 +133,7 @@ DiamondLattice::DiamondLattice(double a): FCCLattice(a)
 void DiamondLattice::AddAtomInCell
 	(njr::Vector3d atomCoord, std::string name)
 {
-    double shifts[2][3] = {{0.,0.,0.},{0.25,0.25,0.25}};
+    vedo::vedo_float_t shifts[2][3] = {{0.,0.,0.},{0.25,0.25,0.25}};
 	FCCLattice::AddAtomInCell
 		(atomCoord+njr::Vector3d(shifts[0][0], shifts[0][1], shifts[0][2]), name);
     FCCLattice::AddAtomInCell
@@ -143,10 +144,10 @@ void DiamondLattice::AddAtomInCell
 ////////////////////////  TRICLINIC LATTICE //////////////////////////////////////
 
 
-TriclinicLattice::TriclinicLattice(const double latticeConstants[3],
-                                   const double anglesInUnitCell[3])
+TriclinicLattice::TriclinicLattice(const vedo::vedo_float_t latticeConstants[3],
+                                   const vedo::vedo_float_t anglesInUnitCell[3])
 {
-    for (int vec=0; vec<3; vec++)
+    for (vedo::vedo_int_t vec=0; vec<3; vec++)
     {
         this->latticeConstants[vec] = latticeConstants[vec];
         this->anglesInUnitCell[vec] = anglesInUnitCell[vec];
@@ -157,7 +158,7 @@ TriclinicLattice::TriclinicLattice(const double latticeConstants[3],
 
 TriclinicLattice::TriclinicLattice()
 {
-    for(int vec=0; vec<3; ++vec)
+    for(vedo::vedo_int_t vec=0; vec<3; ++vec)
     {
 //        anglesInUnitCell[vec] = M_PI/2;
         anglesInUnitCell[vec] = 1.5707963267949;
@@ -167,12 +168,12 @@ TriclinicLattice::TriclinicLattice()
     UpdateMemberVariables();
 }
 
-void TriclinicLattice::SetLatticeConstants(const double latticeConstants[3])
+void TriclinicLattice::SetLatticeConstants(const vedo::vedo_float_t latticeConstants[3])
 {
-    for(int vec=0; vec<3; vec++)
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
     {
-        double factor = latticeConstants[vec]/this->latticeConstants[vec];
-        for(int coord=0; coord<3; coord++)
+        vedo::vedo_float_t factor = latticeConstants[vec]/this->latticeConstants[vec];
+        for(vedo::vedo_int_t coord=0; coord<3; coord++)
         {
         	this->latticeVectors[vec][coord] *= factor;
         }
@@ -181,9 +182,9 @@ void TriclinicLattice::SetLatticeConstants(const double latticeConstants[3])
     UpdateMemberVariables();
 }
 
-void TriclinicLattice::SetAnglesInUnitCell(const double anglesInUnitCell[3])
+void TriclinicLattice::SetAnglesInUnitCell(const vedo::vedo_float_t anglesInUnitCell[3])
 {
-    for(int coord=0; coord<3; coord++)
+    for(vedo::vedo_int_t coord=0; coord<3; coord++)
         this->anglesInUnitCell[coord] = anglesInUnitCell[coord];
     Set3DLatticeVectors();
     UpdateMemberVariables();

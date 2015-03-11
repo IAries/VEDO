@@ -7,32 +7,33 @@
 namespace vedo
 {
 
-class GSCylinder : public GeometricShape
+class GSCylinder: public GeometricShape
 {
 
 public:
 
-	GSCylinder(const std::string&, const double&, const double&);
+	GSCylinder(const std::string&, const vedo_float_t&, const vedo_float_t&);
 
-	inline double GetRadius()
+	inline vedo_float_t GetRadius()
 	{
 		return _dRadius;
-	};
+	}
 
-	inline double GetHeight()
+	inline vedo_float_t GetHeight()
 	{
 		return _dHeight;
-	};
+	}
 
 	bool Inside(const njr::Vector3d&);
 
 protected:
 
-	double _dRadius;
-	double _dHeight;
+	vedo_float_t _dRadius;
+
+	vedo_float_t _dHeight;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 

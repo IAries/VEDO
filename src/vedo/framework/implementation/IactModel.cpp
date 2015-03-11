@@ -1,4 +1,4 @@
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/njr/interfaces/Utility.h>
 #include <vedo/framework/interfaces/IactModel.h>
 
@@ -11,23 +11,23 @@ IactModel::IactModel(const std::string& mg, const std::string& sg)
 {
 	sMasterDOGroup = mg;
 	sSlaveDOGroup  = sg;
-};
+}
 
 bool IactModel::operator () (const IactModel* piactml) const
 {
-	if((sMasterDOGroup == piactml->sMasterDOGroup) &&
-		(sSlaveDOGroup == piactml->sSlaveDOGroup)    )
+	if (   (sMasterDOGroup == piactml->sMasterDOGroup)
+		&& (sSlaveDOGroup  == piactml->sSlaveDOGroup ) )
 	{
 		return true;
 	}
 
-	if((sMasterDOGroup == piactml->sSlaveDOGroup) &&
-		(sSlaveDOGroup == piactml->sMasterDOGroup)  )
+	if(    (sMasterDOGroup == piactml->sSlaveDOGroup )
+		&& (sSlaveDOGroup  == piactml->sMasterDOGroup) )
 	{
 		return true;
 	}
 	return false;
-};
+}
 
 /*
 IactModel::IactModel
@@ -41,7 +41,7 @@ IactModel::IactModel
     sEquationType  = EquationType;
 	iactAttributes = imAttributes;
 	sExtend        = "NoExtend";
-};
+}
 */
 
 IactModel::IactModel
@@ -54,21 +54,21 @@ IactModel::IactModel
 	sSlaveDOGroup    = SlaveDOGroup;
     sEquationType    = EquationType;
 	svIactMechanisms = svIMs;
-};
+}
 
 IactModel::IactModel(const IactModel& iactml)
 {
 	*this = iactml;
-};
+}
 
 IactModel::IactModel(std::ifstream& idof)
 {
 	*this << idof;
-};
+}
 
-double IactModel::GetIactMechanism(std::string Name) const
+vedo_float_t IactModel::GetIactMechanism(std::string Name) const
 {
-	for (unsigned int i=0; i<svIactMechanisms.size(); i++)
+	for (vedo_uint_t i=0; i<svIactMechanisms.size(); i++)
 	{
 		if (svIactMechanisms[i].Name == Name)
 		{
@@ -86,7 +86,7 @@ double IactModel::GetIactMechanism(std::string Name) const
 		<< std::endl;
 
 	return 0.0;
-};
+}
 
 
 const IactModel& IactModel::operator = (const IactModel& iactml)
@@ -96,7 +96,7 @@ const IactModel& IactModel::operator = (const IactModel& iactml)
     sEquationType    = iactml.sEquationType;
 	svIactMechanisms = iactml.svIactMechanisms;
 	return *this;
-};
+}
 
 std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 {
@@ -104,17 +104,17 @@ std::ofstream& IactModel::operator >> (std::ofstream& idof) const
 	njr::WriteString(sSlaveDOGroup,  idof);
 	njr::WriteString(sEquationType,  idof);
 
-	unsigned int ims = (unsigned int) svIactMechanisms.size();
-	idof.write((const char*) &ims, sizeof(vedo_unsigned_long));
+	vedo_uint_t ims = (vedo_uint_t) svIactMechanisms.size();
+	idof.write((const char*) &ims, sizeof(vedo_uint_t));
 	IactMechanism im;
-	for (unsigned int i=0; i<ims; i++)
+	for (vedo_uint_t i=0; i<ims; i++)
 	{
 		im = svIactMechanisms[i];
 		njr::WriteString(im.Name, idof);
-		idof.write((const char*) &(im.Value), sizeof(double));
+		idof.write((const char*) &(im.Value), sizeof(vedo_float_t));
 	}
 	return idof;
-};
+}
 
 std::ifstream& IactModel::operator << (std::ifstream& idof)
 {
@@ -122,17 +122,17 @@ std::ifstream& IactModel::operator << (std::ifstream& idof)
 	njr::ReadString(sSlaveDOGroup,  idof);
 	njr::ReadString(sEquationType,  idof);
 
-    unsigned int ims;
-	idof.read((char*) &ims, sizeof (vedo_unsigned_long));
+    vedo_uint_t ims;
+	idof.read((char*) &ims, sizeof (vedo_uint_t));
 	IactMechanism im;
-	for (unsigned int i=0; i<ims; i++)
+	for (vedo_uint_t i=0; i<ims; i++)
 	{
 		njr::ReadString(im.Name, idof);
-		idof.read((char*) &(im.Value), sizeof(double));
+		idof.read((char*) &(im.Value), sizeof(vedo_float_t));
 		svIactMechanisms.push_back(im);
 	}
 
 	return idof;
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

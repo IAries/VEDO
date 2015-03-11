@@ -11,6 +11,6 @@ ContactDetector::ContactDetector()
 	cInfo.bActive      = true;
 	cInfo.bUnBalance   = false;
 	pBC                = 0;
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

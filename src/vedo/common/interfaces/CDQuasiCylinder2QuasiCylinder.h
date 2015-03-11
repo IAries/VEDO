@@ -11,18 +11,16 @@ class CDQuasiCylinder_QuasiCylinder : public ContactDetector
 
 public:
 
-	void CalDistance
-		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+	void CalDistance(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
-	void Detect
-		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 	virtual std::string type () const
 	{
 		return "QuasiCylinder_QuasiCylinder";
-	};
+	}
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _QUASICYLINDER_2_QUASICYLINDER

@@ -39,7 +39,7 @@ void LinearProgramming::Clear()
 		delete [] nbasis;
 		nbasis = 0;
 	}
-};
+}
 
 bool LinearProgramming::PurgeArtificialVariable()
 {
@@ -53,9 +53,9 @@ bool LinearProgramming::PurgeArtificialVariable()
 		return false;
 	}
 
-	std::vector<unsigned int> NewNbasis;
+	std::vector<vedo::vedo_uint_t> NewNbasis;
 
-	for (unsigned int i=0; i<nbas; i++)
+	for (vedo::vedo_uint_t i=0; i<nbas; i++)
 	{
 		if (kid[nbasis[i]] != 'M')
 		{
@@ -65,9 +65,9 @@ bool LinearProgramming::PurgeArtificialVariable()
 
 	delete nbasis;
 
-	nbasis = new unsigned int[NewNbasis.size()];
+	nbasis = new vedo::vedo_uint_t[NewNbasis.size()];
 
-	for (unsigned int i=0; i< NewNbasis.size(); i++)
+	for (vedo::vedo_uint_t i=0; i< NewNbasis.size(); i++)
 	{
 		nbasis[i]=NewNbasis[i];
 	}
@@ -79,9 +79,9 @@ bool LinearProgramming::PurgeArtificialVariable()
 	num_m  = 0;
 
 	return true;
-};
+}
 
-double  LinearProgramming::GetObjValue()
+vedo::vedo_float_t  LinearProgramming::GetObjValue()
 {
 	Matrix BIA(rows, 1);
 	Matrix RCOST(1, cols);
@@ -91,28 +91,26 @@ double  LinearProgramming::GetObjValue()
 	Matrix rhsmemo = rhs;
 
 	RandomGenerator random;
-	double objval;
-	double ch [2];
+	vedo::vedo_float_t objval;
+	vedo::vedo_float_t ch [2];
 
-    unsigned int i;
-	unsigned int temp;
-	unsigned int pxin;
-	unsigned int pxout;
-	unsigned int cuti = 0;
+    vedo::vedo_uint_t i;
+	vedo::vedo_uint_t temp;
+	vedo::vedo_uint_t pxin;
+	vedo::vedo_uint_t pxout;
+	vedo::vedo_uint_t cuti = 0;
 
 	for (i=0; i<rows; ++i)
 	{
-		rhs(i, 0) = rhs(i, 0) * ( 1.0 + random(1e-9, -1e-9) );
+		rhs(i, 0) = rhs(i, 0) * ( 1.0 + random.GeneratingDouble(1e-9, -1e-9) );
 	}
 
-	while ( (++cuti) < (nbas*5) )
+	while ((++cuti) < (nbas*5))
 	{
 		XBASIS = BI * rhs;
-		objval = ( obj.Select(basis, rows) * XBASIS ) (0, 0);
+		objval = (obj.Select(basis, rows) * XBASIS)(0, 0);
 
-		RCOST
-			= ( obj.Select(basis,rows) * BI * A.Select(nbasis,nbas) )
-			- obj.Select(nbasis,nbas);
+		RCOST = (obj.Select(basis,rows) * BI * A.Select(nbasis,nbas)) - obj.Select(nbasis,nbas);
 
 		for (i=0; i<nbas; ++i)
 		{
@@ -134,7 +132,7 @@ double  LinearProgramming::GetObjValue()
 
 		for (i=0; i<rows; ++i)
 		{
-			if(BIA(i,0) == 0.0)
+			if (BIA(i,0) == 0.0)
 			{
 				ch[1] = 1e24;
 			}
@@ -176,19 +174,19 @@ double  LinearProgramming::GetObjValue()
 
 	return objval;
 
-};
+}
 
 void LinearProgramming::Allocation()
 {
 	kid    = new char[cols];
-	basis  = new unsigned int [rows];
-	nbasis = new unsigned int [nbas];
+	basis  = new vedo::vedo_uint_t [rows];
+	nbasis = new vedo::vedo_uint_t [nbas];
 
 	obj.Resize(1,cols);
 	A.Resize(rows,cols);
 	rhs.Resize(rows,1);
 	BI.Resize(rows,rows);
-};
+}
 
 LinearProgramming::LinearProgramming()
 {
@@ -205,7 +203,7 @@ LinearProgramming::LinearProgramming()
 	kid    = 0;
 	basis  = 0;
 	nbasis = 0;
-};
+}
 
 LinearProgramming::LinearProgramming(const LinearProgramming &lp)
 {
@@ -221,23 +219,22 @@ LinearProgramming::LinearProgramming(const LinearProgramming &lp)
 	_feasiable = lp._feasiable;
 	_polygon   = lp._polygon;
 
-	memcpy(kid,    lp.kid,     sizeof(char)         * cols);
-	memcpy(basis,  lp.basis,   sizeof(unsigned int) * rows);
-	memcpy(nbasis, lp.nbasis , sizeof(unsigned int) * nbas);
+	memcpy(kid,    lp.kid,     sizeof(char)              * cols);
+	memcpy(basis,  lp.basis,   sizeof(vedo::vedo_uint_t) * rows);
+	memcpy(nbasis, lp.nbasis , sizeof(vedo::vedo_uint_t) * nbas);
 
 	obj = lp.obj;
 	rhs = lp.rhs;
 	BI  = lp.BI;
 	A   = lp.A;
-};
+}
 
 LinearProgramming::~LinearProgramming()
 {
 	LinearProgramming::Clear();
-};
+}
 
-const LinearProgramming& LinearProgramming::operator =
-	(const LinearProgramming& lp)
+const LinearProgramming& LinearProgramming::operator = (const LinearProgramming& lp)
 {
 	LinearProgramming::Clear();
 
@@ -253,9 +250,9 @@ const LinearProgramming& LinearProgramming::operator =
 	_feasiable = lp._feasiable;
 	_polygon   = lp._polygon;
 
-	memcpy(kid   , lp.kid   , sizeof(char)         * cols);
-	memcpy(basis , lp.basis , sizeof(unsigned int) * rows);
-	memcpy(nbasis, lp.nbasis, sizeof(unsigned int) * nbas);
+	memcpy(kid   , lp.kid   , sizeof(char)              * cols);
+	memcpy(basis , lp.basis , sizeof(vedo::vedo_uint_t) * rows);
+	memcpy(nbasis, lp.nbasis, sizeof(vedo::vedo_uint_t) * nbas);
 
 	obj = lp.obj;
 	rhs = lp.rhs;
@@ -263,18 +260,18 @@ const LinearProgramming& LinearProgramming::operator =
 	A   = lp.A;
 
 	return *this;
-};
+}
 
 void LinearProgramming::Set(const njr::NJRpolyhedra &a)
 {
 	LinearProgramming::Clear();
 
-	register unsigned int number;
-	register unsigned int i;
-	register unsigned int m;
-	register unsigned int s;
-	unsigned int n;
-	unsigned int b;
+	register vedo::vedo_uint_t number;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t m;
+	register vedo::vedo_uint_t s;
+	vedo::vedo_uint_t n;
+	vedo::vedo_uint_t b;
 
 	std::vector<njr::HalfSpace> vchf = a.constrains();
 
@@ -283,12 +280,11 @@ void LinearProgramming::Set(const njr::NJRpolyhedra &a)
 		vchf[i].Translate(BMvector);
 	}
 
-	for_each
-		(vchf.begin(), vchf.end(), std::mem_fun_ref(&njr::HalfSpace::AbsRhs));
+	for_each(vchf.begin(), vchf.end(), std::mem_fun_ref(&njr::HalfSpace::AbsRhs));
 
-	number = (unsigned int) vchf.size();
+	number = (vedo::vedo_uint_t) vchf.size();
 
-	for(i=0; i< number ; ++i)
+	for (i=0; i< number; ++i)
 	{
 		switch ( vchf[i].sense() )
 		{
@@ -332,14 +328,14 @@ void LinearProgramming::Set(const njr::NJRpolyhedra &a)
 	nbasis [1] = 1;
 	nbasis [2] = 2;
 
-	for (i=0 , m=3+num_s , s=3 , n=3 , b=0 ; i < number ; ++i)
+	for (i=0, m=3+num_s, s=3, n=3, b=0; i<number; ++i)
 	{
-		A(i, 0)= vchf[i].a();
-		A(i, 1)= vchf[i].b();
-		A(i, 2)= vchf[i].c();
+		A(i, 0)   = vchf[i].a();
+		A(i, 1)   = vchf[i].b();
+		A(i, 2)   = vchf[i].c();
 		rhs(i, 0) = vchf[i].d();
 
-		switch ( vchf[i].sense() )
+		switch (vchf[i].sense())
 		{
 			case G:
 				nbasis[n] = s;
@@ -365,7 +361,7 @@ void LinearProgramming::Set(const njr::NJRpolyhedra &a)
 				break;
 		}
 	}
-};
+}
 
 
 bool LinearProgramming::Check()
@@ -382,62 +378,48 @@ bool LinearProgramming::Check()
 
 	 Matrix rhsmemo = rhs;
 
-     double objval;
-     double ch [2];
+     vedo::vedo_float_t objval;
+     vedo::vedo_float_t ch [2];
 
-     unsigned int i;
-     unsigned int temp;
+     vedo::vedo_uint_t i;
+     vedo::vedo_uint_t temp;
 
 	// Counter of iterationis
-	unsigned int cuti = 0;
+	vedo::vedo_uint_t cuti = 0;
 
-	/**************************************************************************
-	 * The pointer of the variable is selected from nonbasis set and will be
-	 * put into basis set in next iteration.
-	 **************************************************************************/
-	unsigned int pxin;
+	// The pointer of the variable is selected from nonbasis set and will be put into basis set in next iteration.
+	vedo::vedo_uint_t pxin;
 
-	/**************************************************************************
-	 * The pointer of the variable is selected from basis set and will be put
-	 * into nonbasis set in next iteration.
-	 **************************************************************************/
-	unsigned int pxout;
+	// The pointer of the variable is selected from basis set and will be put into nonbasis set in next iteration.
+	vedo::vedo_uint_t pxout;
 
 	RandomGenerator random(2000);
 
 	for (i=0; i<rows; ++i)
 	{
-		rhs(i, 0) = rhs(i, 0) * (1.0 + random(1e-9, -1e-9) );
+		rhs(i, 0) = rhs(i, 0) * (1.0 + random.GeneratingDouble(1e-9, -1e-9) );
 	}
 
 	BI = 1.0;
 
-	while ( (++cuti) < (nbas*5) )
+	while ((++cuti) < (nbas*5))
 	{
-		/**********************************************************************
-		 * Calculate the feasiable solution and objective value in this
-		 * iteration.
-		 **********************************************************************/
+		// Calculate the feasiable solution and objective value in this iteration.
 		XBASIS = BI * rhs;
 		objval = (obj.Select(basis, rows) * XBASIS) (0,0);
 
-		if ( objval >= 0 )
+		if (objval >= 0)
 		{
 			break;
 		}
 
-		/**********************************************************************
-		 * 1. calculate the reduce cost (RCOST) of each non-basis variable and
-		 *    make sue if all RCOSTS >= 0.
-		 * 2. If all RCOST >= 0 , the feasiable solution in the iteration is
-		 *    the optimum solution of this stdlp.
-		 * 3. Select one non-basis variable whoese RCOST < 0 into basis set in
-		 *    next iteration.
-		 **********************************************************************/
+		/********************************************************************************************************
+		 * 1. calculate the reduce cost (RCOST) of each non-basis variable and make sue if all RCOSTS >= 0.
+		 * 2. If all RCOST >= 0 , the feasiable solution in the iteration is the optimum solution of this stdlp.
+		 * 3. Select one non-basis variable whoese RCOST < 0 into basis set in next iteration.
+		 ********************************************************************************************************/
 
-		RCOST
-			= (obj.Select(basis,rows) * BI * A.Select(nbasis,nbas))
-			- obj.Select(nbasis,nbas);
+		RCOST = (obj.Select(basis,rows) * BI * A.Select(nbasis,nbas)) - obj.Select(nbasis,nbas);
 
 		for (i=0; i<nbas; ++i)
 		{
@@ -522,11 +504,11 @@ bool LinearProgramming::Check()
 	rhs      = rhsmemo;
 
 	return _feasiable;
-};
+}
 
-void LinearProgramming::print () const
+void LinearProgramming::print() const
 {
-	register unsigned int i;
+	register vedo::vedo_uint_t i;
 
 	std::cout << ((_checked)   ? "checked "           : "unchecked "          );
 	std::cout << ((_feasiable) ? "feasiable "         : "infeasiable "        );
@@ -536,25 +518,23 @@ void LinearProgramming::print () const
 	printf("\nbasis\n");
 	for (i=0; i<rows; ++i)
 	{
-		printf
-			( (i%5==4) ? "[%3d %c]\n" : "[%3d %c] ", basis[i], kid[basis[i]]);
+		printf( (i%5==4) ? "[%3d %c]\n" : "[%3d %c] ", basis[i], kid[basis[i]]);
 	}
 
 	printf("\nnonbasis\n");
 	for (i=0; i<nbas; ++i)
 	{
-		printf
-			( (i%5==4) ? "[%3d %c]\n" : "[%3d %c]", nbasis[i], kid[nbasis[i]]);
+		printf( (i%5==4) ? "[%3d %c]\n" : "[%3d %c]", nbasis[i], kid[nbasis[i]]);
 	}
 	printf ("\n");
-};
+}
 
 
 NJRpolygon LinearProgramming::GetPolygon()
 {
 	std::vector<Vector3d>vertexes(0);
 
-	if (_polygon==false)
+	if (_polygon == false)
 	{
 		return NJRpolygon(vertexes);
 	}
@@ -565,60 +545,55 @@ NJRpolygon LinearProgramming::GetPolygon()
 	Matrix E(rows, rows);
 	Matrix rhsmemo = rhs;
 
-	unsigned int i;
-	unsigned int num_ans;
-	unsigned int temp;
-	double       ch[2];
+	vedo::vedo_uint_t i;
+	vedo::vedo_uint_t num_ans;
+	vedo::vedo_uint_t temp;
+	vedo::vedo_float_t ch[2];
 
-	/**************************************************************************
-	 * There should be only two non-basis variables that is not artiffical
-	 * variables,if all feasible solutions of this problems are on the same
-	 * plane.
-	 **************************************************************************/
-    const unsigned max_ans = (rows-1) * (rows-2) / 2;
+	/**************************************************************************************************************************
+	 * There should be only two non-basis variables that is not artiffical variables,if all feasible solutions of this problems
+	 * are on the same plane.
+	 **************************************************************************************************************************/
+    const vedo::vedo_uint_t max_ans = (rows-1) * (rows-2) / 2;
 
-	unsigned int nonbasis[3];
-	unsigned int inibasis[2];
+	vedo::vedo_uint_t nonbasis[3];
+	vedo::vedo_uint_t inibasis[2];
 
-	/**************************************************************************
-	 * The pointer of the variable is selected from nonbasis set and will be
-	 * put into basis set in next iteration.
-	 **************************************************************************/
-	unsigned int  pxout=0;
+	// The pointer of the variable is selected from nonbasis set and will be put into basis set in next iteration.
+	vedo::vedo_uint_t  pxout=0;
 
-   	RandomGenerator random(2000);
+	RandomGenerator random(2000);
 
 	for (i=0; i<rows; ++i)
-	rhs(i, 0) = rhs(i, 0) * ( 1.0 + random(1e-9, -1e-9) );
+	{
+		rhs(i, 0) = rhs(i, 0) * (1.0 + random.GeneratingDouble(1e-9, -1e-9));
+	}
 
-	/**************************************************************************
-	 * Select and record the only two non-basis variables that is not
-	 * artiffical varisable
-	 **************************************************************************/
+	// Select and record the only two non-basis variables that is not artiffical varisable
 	for(temp=0, i=0 ;i<nbas; ++i)
 	{
-		if ( (kid[nbasis[i]] == 'S') || (kid[nbasis[i]] == 'P') )
+		if ((kid[nbasis[i]] == 'S') || (kid[nbasis[i]] == 'P'))
 		{
 			inibasis[temp]=nbasis[i];
 			temp++;
 		}
 	}
 
-	nonbasis[1]=inibasis[0];
-	nonbasis[2]=inibasis[1];
+	nonbasis[1] = inibasis[0];
+	nonbasis[2] = inibasis[1];
 
 	for (num_ans=0; num_ans<max_ans; num_ans++)
 	{
 		XBASIS = BI * rhs;
 		X = BI * rhsmemo;
 
-		double x = 0.0;
-		double y = 0.0;
-		double z = 0.0;
+		vedo::vedo_float_t x = 0.0;
+		vedo::vedo_float_t y = 0.0;
+		vedo::vedo_float_t z = 0.0;
 
 		for(i=0; i<rows ;i++)
 		{
-			switch(basis[i])
+			switch (basis[i])
 			{
 				case 0:
 					x = X(i,0);
@@ -650,7 +625,7 @@ NJRpolygon LinearProgramming::GetPolygon()
 		nonbasis[0]  = basis[pxout];
 		basis[pxout] = nonbasis[2];
 
-		if (   (inibasis[0] == nonbasis[0]) && (inibasis[1] == nonbasis[1]) )
+		if ((inibasis[0] == nonbasis[0]) && (inibasis[1] == nonbasis[1]))
 		{
 			break;
 		}
@@ -662,23 +637,18 @@ NJRpolygon LinearProgramming::GetPolygon()
 
         for (i=0; i<rows; ++i)
 		{
-			E(i, pxout)
-				= (i!=pxout) ? (-BIA(i,0)/BIA(pxout,0)) : (1.0/BIA(pxout,0));
+			E(i, pxout) = (i!=pxout) ? (-BIA(i,0)/BIA(pxout,0)) : (1.0/BIA(pxout,0));
 		}
         BI = E * BI;
 	}
 
 	rhs = rhsmemo;
 	return NJRpolygon(vertexes);
-};
+}
 
 bool LinearProgramming::GetExtremeValue
-	(double& maxX,
-	double& minX,
-	double& maxY,
-	double& minY,
-	double& maxZ,
-	double& minZ)
+	(vedo::vedo_float_t& maxX, vedo::vedo_float_t& minX, vedo::vedo_float_t& maxY,
+	 vedo::vedo_float_t& minY, vedo::vedo_float_t& maxZ, vedo::vedo_float_t& minZ )
 {
 
 	if (LinearProgramming::PurgeArtificialVariable() == false)
@@ -712,6 +682,6 @@ bool LinearProgramming::GetExtremeValue
 	obj(0,2) = 0.0;
 
 	return true;
-};
+}
 
-};   // namespace njr
+}   // namespace njr

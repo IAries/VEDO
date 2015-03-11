@@ -13,7 +13,7 @@ debug: ${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a
 release: ${VEDO_LIB}libvedo-${TMP_TARGET}.a
 
 ${VEDO_LIB}libvedo-${TMP_TARGET}-debug.a: ${TMP_OBJS_DEBUG}
-	${AR} ${AR_FLAG} $@ $^
+	${AR} ${AR_FLAGd} $@ $^
 
 ${TMP_DEBUG}%.o: ${IMP}%.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<

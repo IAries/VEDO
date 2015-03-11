@@ -39,10 +39,19 @@ iris-gm-debug: libs-debug
 
 # All Static Libraries
 .PHONY: libs
-libs: njr framework common
+libs: constants njr framework common
 
 .PHONY: libs-debug
-libs-debug: njr-debug framework-debug common-debug
+libs-debug: constants-debug njr-debug framework-debug common-debug
+
+# Constants
+.PHONY: constants
+constants:
+	(cd vedo/constants; ${MAKE} release)
+
+.PHONY: constants-debug
+constants-debug:
+	(cd vedo/constants; ${MAKE} debug)
 
 # NJR (Utility Library)
 .PHONY: njr
@@ -87,6 +96,7 @@ buildingdir:
 	rm -Rf ${VEDO_OBJ}
 	mkdir ${VEDO_OBJ}
 	mkdir ${VEDO_OBJ_DEBUG}
+	mkdir ${VEDO_OBJ_DEBUG}constants
 	mkdir ${VEDO_OBJ_DEBUG}njr
 	mkdir ${VEDO_OBJ_DEBUG}framework
 	mkdir ${VEDO_OBJ_DEBUG}common
@@ -94,6 +104,7 @@ buildingdir:
 	mkdir ${VEDO_OBJ_DEBUG}anne
 	mkdir ${VEDO_OBJ_DEBUG}iris-gm
 	mkdir ${VEDO_OBJ_RELEASE}
+	mkdir ${VEDO_OBJ_RELEASE}constants
 	mkdir ${VEDO_OBJ_RELEASE}njr
 	mkdir ${VEDO_OBJ_RELEASE}framework
 	mkdir ${VEDO_OBJ_RELEASE}common

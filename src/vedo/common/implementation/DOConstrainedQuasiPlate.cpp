@@ -4,20 +4,18 @@
 namespace vedo
 {
 
-DOConstrainedQuasiPlate::DOConstrainedQuasiPlate
-	(const DOStatus* cpdos, const DOModel* cpdoml)
-: DiscreteObject(cpdos, cpdoml)
+DOConstrainedQuasiPlate::DOConstrainedQuasiPlate(const DOStatus* cpdos, const DOModel* cpdoml): DiscreteObject(cpdos, cpdoml)
 {
-	double Width  = cpdoml->GetShapeAttributes().quasiplate.width;
-	double Height = cpdoml->GetShapeAttributes().quasiplate.height;
-	double Length = cpdoml->GetShapeAttributes().quasiplate.length;
-	dVolume            = cpdoml->GetVolume();
-	dMass              = cpdoml->GetMass();
-	dSudoMass          = cpdoml->GetSudoMass();
-	vMassMomentInertia = njr::Vector3d();
-};
+	//vedo_float_t Width  = cpdoml->GetShapeAttributes().quasiplate.width;
+	//vedo_float_t Height = cpdoml->GetShapeAttributes().quasiplate.height;
+	//vedo_float_t Length = cpdoml->GetShapeAttributes().quasiplate.length;
+	dVolume             = cpdoml->GetVolume();
+	dMass               = cpdoml->GetMass();
+	dSudoMass           = cpdoml->GetSudoMass();
+	vMassMomentInertia  = njr::Vector3d();
+}
 
-void DOConstrainedQuasiPlate::Response(double dt)
+void DOConstrainedQuasiPlate::Response(vedo_float_t dt)
 {
 	njr::Vector3d V   = pDOStatus->GetVelocity();
 	njr::Vector3d AV  = pDOStatus->GetAngularVelocity();
@@ -34,6 +32,6 @@ void DOConstrainedQuasiPlate::Response(double dt)
 	pDOStatus->SetVelocity(V + dv);
 	//pDOStatus->SetAngularVelocity(AV);
 	ClearImpact();
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

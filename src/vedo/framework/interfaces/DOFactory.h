@@ -18,15 +18,14 @@ public:
 	virtual DOShapeType shapetype() const
 	{
 		return NoType;
-	};
+	}
 
 	virtual DOBehaviorType behavior() const
 	{
 		return NoDOBehaviorType;
-	};
+	}
 
-	virtual DiscreteObject* Create
-		(const DOModel* pdoml, const DOStatus* pdos) const = 0;
+	virtual DiscreteObject* Create(const DOModel* pdoml, const DOStatus* pdos) const = 0;
 };
 
 
@@ -39,17 +38,16 @@ public:
 	DOShapeType shapetype() const
 	{
 		return shType;
-	};
+	}
 
 	DOBehaviorType behavior() const
 	{
 		return eBehavior;
-	};
+	}
 
-	DOcf(DOShapeType Type, DOBehaviorType Behavior)
-		: shType(Type), eBehavior(Behavior)
+	DOcf(DOShapeType Type, DOBehaviorType Behavior): shType(Type), eBehavior(Behavior)
 	{
-	};
+	}
 
 	DiscreteObject* Create(const DOModel* pdoml, const DOStatus* pdos) const
 	{
@@ -69,13 +67,17 @@ public:
 private:
 
 	DOShapeType	   shType;
+
 	DOBehaviorType eBehavior;
+
 	DOcf();
+
 	DOcf(const DOcf&);
+
 	DOcf& operator == (DOcf&);
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _DISCRETE_OBJECT_FACTORY_H

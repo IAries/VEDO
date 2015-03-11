@@ -13,17 +13,17 @@ public:
 
 	DOFixedSphere(const DOStatus* pdos, const DOModel* pdoml);
 
-	inline void Response(double dt)
+	inline void Response(vedo_float_t dt)
 	{
 		ClearImpact();
 	}
 
-	double CrossAreaToSurface(double& a, double& b, double& c, double& d) const;
+	vedo_float_t CrossAreaToSurface(vedo_float_t& a, vedo_float_t& b, vedo_float_t& c, vedo_float_t& d) const;
 
-	inline double GetSudoContactRadius()
+	inline vedo_float_t GetSudoContactRadius()
 	{
 		return cpDOModel->GetShapeAttributes().sphere.radius;
-	};
+	}
 
 private:
 
@@ -34,6 +34,6 @@ private:
 	DOFixedSphere();
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _DO_FIXEDSPHERE_H

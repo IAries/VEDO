@@ -1,62 +1,78 @@
 #ifndef _NJR_HALFSPACE_H
 #define _NJR_HALFSPACE_H
 
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/njr/interfaces/Vector3d.h>
 #include <fstream>
 
 #include <stdint.h>
 
-enum Sense
-{
-	E =  0,
-	G = -1,
-	L =  1,
-	e =  0,
-	g = -1,
-	l =  1
-};
+#ifdef _STD_CPP_11
+	enum Sense: vedo::vedo_int_t
+	{
+		E =  0,
+		G = -1,
+		L =  1,
+		e =  0,
+		g = -1,
+		l =  1
+	};
+#else
+	enum Sense
+	{
+		E =  0,
+		G = -1,
+		L =  1,
+		e =  0,
+		g = -1,
+		l =  1
+	};
+#endif
+
+
+
 
 namespace njr
 {
 
 class HalfSpace
 {
+
 public:
 
-	explicit HalfSpace(double a, double b, double c, Sense sense, double d);
+	explicit HalfSpace(vedo::vedo_float_t a, vedo::vedo_float_t b, vedo::vedo_float_t c, Sense sense, vedo::vedo_float_t d);
 
 	HalfSpace(const HalfSpace &);
 
 	HalfSpace();
 
-	inline double a() const
+	inline vedo::vedo_float_t a() const
 	{
 		return _a;
-	};
+	}
 
-	inline double b() const
+	inline vedo::vedo_float_t b() const
 	{
 		return _b;
-	};
+	}
 
-	inline double c() const
+	inline vedo::vedo_float_t c() const
 	{
 		return _c;
-	};
+	}
 
-	inline double d() const
+	inline vedo::vedo_float_t d() const
 	{
 		return _d;
-	};
+	}
 
 	inline Sense sense() const
 	{
-        if(_sense > 0)
+        if (_sense > 0)
         {
             return L;
         }
-        else if(_sense < 0)
+        else if (_sense < 0)
         {
             return G;
         }
@@ -64,7 +80,7 @@ public:
         {
             return E;
         }
-	};
+	}
 
 	const HalfSpace& operator = (const HalfSpace &);
 
@@ -76,26 +92,26 @@ public:
 
 	void RotateAround(const Vector3d&);
 
-	void Set(double a, double b, double c, Sense sense, double d);
+	void Set(vedo::vedo_float_t a, vedo::vedo_float_t b, vedo::vedo_float_t c, Sense sense, vedo::vedo_float_t d);
 
-	void Set(double a, double b, double c, int sense, double d);
+	void Set(vedo::vedo_float_t a, vedo::vedo_float_t b, vedo::vedo_float_t c, vedo::vedo_int_t sense, vedo::vedo_float_t d);
 
 	inline void SetSense2E()
 	{
 		_sense = E;
-	};
+	}
 
 private:
 
-	double                    _a;
-	double                    _b;
-	double                    _c;
-	double                    _d;
-	vedo::vedo_unsigned_long _sense;
+	vedo::vedo_float_t _a;
+	vedo::vedo_float_t _b;
+	vedo::vedo_float_t _c;
+	vedo::vedo_float_t _d;
+	vedo::vedo_int_t   _sense;
 
 };
 
-};   // namespace njr
+}   // namespace njr
 
 
 

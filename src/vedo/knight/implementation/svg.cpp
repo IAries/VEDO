@@ -1,5 +1,6 @@
 #include <vedo/framework/interfaces/DOWorld.h>
 #include <vedo/framework/interfaces/DOMap.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <algorithm>
 #include <iterator>
 
@@ -15,8 +16,8 @@ void svg(const vedo::DOWorld* World, std::string filename)
 
 	std::ofstream svgf(filename.c_str());
 
-	unsigned long ul;
-	unsigned long numberDO = World->GetSystemParameter()->GetDONumber();
+	vedo::vedo_uint_t ul;
+	vedo::vedo_uint_t numberDO = World->GetSystemParameter()->GetDONumber();
 
 	std::vector<vedo::DOMap> vDOMap(numberDO);
 	std::vector<vedo::DOMap> MTab_Temp, MTab;
@@ -39,19 +40,19 @@ void svg(const vedo::DOWorld* World, std::string filename)
 		 back_inserter(MTab),
 		 vedo::DOMap::ISFixed      );
 
-	double maxX
+	vedo::vedo_float_t maxX
 		= max_element
 			(MTab.begin(), MTab.end(), vedo::DOMap::ComX)->cpdos()->GetPosition().x();
 
-	double minX
+	vedo::vedo_float_t minX
 		= min_element
 			(MTab.begin(), MTab.end(), vedo::DOMap::ComX)->cpdos()->GetPosition().x();
 
-	double maxY
+	vedo::vedo_float_t maxY
 		= max_element
 			(MTab.begin(), MTab.end(), vedo::DOMap::ComY)->cpdos()->GetPosition().y();
 
-	double minY
+	vedo::vedo_float_t minY
 		= min_element
 			(MTab.begin(), MTab.end(), vedo::DOMap::ComY)->cpdos()->GetPosition().y();
 

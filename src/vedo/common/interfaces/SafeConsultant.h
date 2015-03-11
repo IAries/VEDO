@@ -11,11 +11,7 @@ class SafeConsultant : public Consultant
 
 public:
 
-	SafeConsultant
-		(DOWorld* DOWorld,
-		IactRecordTab* pIactRecordTab,
-		char filename[],
-		unsigned long ulwrite);
+	SafeConsultant(DOWorld* DOWorld, IactRecordTab* pIactRecordTab, std::string filename, vedo_uint_t ulwrite);
 
 	virtual bool ISReset();
 
@@ -24,6 +20,6 @@ public:
 	virtual void RebuildIactRecordTab(IactContainer& cIact);
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif  // _SAFE_CONSULTANT_H

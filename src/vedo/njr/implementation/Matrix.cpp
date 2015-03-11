@@ -10,15 +10,15 @@ namespace njr
 
 const char* Matrix::characteristic() const
 {
-	if ( (_rows==1) && (_cols==1) )
+	if ((_rows==1) && (_cols==1))
 	{
 		return "VALUE";
 	}
-	else if ( ( (_rows==1) || (_cols==1) ) && (_rows != _cols) )
+	else if (( (_rows==1) || (_cols==1) ) && (_rows != _cols))
 	{
 		return "VECTOR";
 	}
-	else if ( (_rows == _cols) && (_rows != 1) )
+	else if ((_rows == _cols) && (_rows != 1))
 	{
 		return "CUBIC";
 	}
@@ -26,7 +26,7 @@ const char* Matrix::characteristic() const
 	{
 		return "IRREGULAR";
 	}
-};
+}
 
 Matrix::Matrix()
 {
@@ -34,16 +34,16 @@ Matrix::Matrix()
 	_cols  = 0;
 	matrix = 0;
 	matval = 0;
-};
+}
 
-Matrix::Matrix(const unsigned int& r, const unsigned int& c)
+Matrix::Matrix(const vedo::vedo_uint_t& r, const vedo::vedo_uint_t& c)
 {
-	unsigned int i;
+	vedo::vedo_uint_t i;
 	_rows = r;
 	_cols = c;
 
-	matrix = new double* [_rows];
-	matval = new double  [_rows*_cols];
+	matrix = new vedo::vedo_float_t* [_rows];
+	matval = new vedo::vedo_float_t  [_rows*_cols];
 
 	for (i=0; i<r; ++i)
 	{
@@ -51,25 +51,25 @@ Matrix::Matrix(const unsigned int& r, const unsigned int& c)
 	}
 
 	*this = 0.0;
-};
+}
 
 Matrix::Matrix(const Matrix& M)
 {
-	register unsigned int i;
+	register vedo::vedo_uint_t i;
 
 	_rows = M._rows;
 	_cols = M._cols;
 
-	matrix = new double * [_rows];
-	matval = new double   [_rows*_cols];
+	matrix = new vedo::vedo_float_t * [_rows];
+	matval = new vedo::vedo_float_t   [_rows*_cols];
 
 	for (i=0; i<_rows; ++i)
 	{
 		matrix[i] = matval + _cols * i;
 	}
 
-	memcpy(matval, M.matval, sizeof(double) * _rows * _cols);
-};
+	memcpy(matval, M.matval, sizeof(vedo::vedo_float_t) * _rows * _cols);
+}
 
 Matrix::~Matrix()
 {
@@ -82,26 +82,26 @@ Matrix::~Matrix()
 	{
 		delete [] matrix;
 	}
-};
+}
 
-void Matrix::Resize(const unsigned int& r, const unsigned int& c)
+void Matrix::Resize(const vedo::vedo_uint_t& r, const vedo::vedo_uint_t& c)
 {
-	if(matval != 0)
+	if (matval != 0)
 	{
 		delete [] matval;
 	}
 
-	if(matrix != 0 )
+	if (matrix != 0)
 	{
 		delete [] matrix;
 	}
 
-	unsigned int i;
+	vedo::vedo_uint_t i;
 	_rows = r;
 	_cols = c;
 
-	matrix = new double* [_rows];
-	matval = new double  [_rows*_cols];
+	matrix = new vedo::vedo_float_t* [_rows];
+	matval = new vedo::vedo_float_t  [_rows*_cols];
 
 	for (i=0; i<r; ++i)
 	{
@@ -109,21 +109,21 @@ void Matrix::Resize(const unsigned int& r, const unsigned int& c)
 	}
 
 	*this = 0.0;
-};
+}
 
 
 const Matrix& Matrix::operator = (const Matrix& M)
 {
-	register unsigned int i;
+	register vedo::vedo_uint_t i;
 
-	if ( (_rows != M._rows) || (_cols != M._cols) )
+	if ((_rows != M._rows) || (_cols != M._cols))
 	{
-		if(matval != 0 )
+		if (matval != 0 )
 		{
 			delete [] matval;
 		}
 
-		if(matrix != 0)
+		if (matrix != 0)
 		{
 			delete [] matrix;
 		}
@@ -131,8 +131,8 @@ const Matrix& Matrix::operator = (const Matrix& M)
 		_rows = M._rows;
 		_cols = M._cols;
 
-		matrix = new double* [_rows];
-		matval = new double  [_rows*_cols];
+		matrix = new vedo::vedo_float_t* [_rows];
+		matval = new vedo::vedo_float_t  [_rows*_cols];
 
 		for (i=0; i<_rows; ++i)
 		{
@@ -140,14 +140,14 @@ const Matrix& Matrix::operator = (const Matrix& M)
 		}
 	}
 
-	memcpy (matval, M.matval, sizeof(double) * _rows * _cols);
+	memcpy (matval, M.matval, sizeof(vedo::vedo_float_t) * _rows * _cols);
 	return *this;
-};
+}
 
-const Matrix& Matrix::operator = (const double& v)
+const Matrix& Matrix::operator = (const vedo::vedo_float_t& v)
 {
-	register unsigned int i;
-	register unsigned int j;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
 
 	for (i=0; i<_rows; ++i)
 	{
@@ -158,14 +158,14 @@ const Matrix& Matrix::operator = (const double& v)
 	}
 
 	return *this;
-};
+}
 
 Matrix Matrix::operator * (const Matrix &M) const
 {
-	register unsigned int i;
-	register unsigned int j;
-	register unsigned int k;
-	register unsigned int m;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
+	register vedo::vedo_uint_t k;
+	register vedo::vedo_uint_t m;
 
 	Matrix C(_rows, M._cols);
 
@@ -194,16 +194,16 @@ Matrix Matrix::operator * (const Matrix &M) const
 	}
 
 	return C;
-};
+}
 
 Matrix Matrix::operator + (const Matrix &M) const
 {
-	register unsigned int i;
-	register unsigned int j;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
 
 	Matrix C(_rows, _cols);
 
-	if (( _cols != M._cols) || ( _rows != M._rows))
+	if ((_cols != M._cols) || (_rows != M._rows))
 	{
 		std::cerr << "Error!! Code: Matrix::operator + (const Matrix)" << std::endl;
 		exit(-1);
@@ -218,16 +218,16 @@ Matrix Matrix::operator + (const Matrix &M) const
 	}
 
 	return C;
-};
+}
 
 Matrix Matrix::operator - (const Matrix &M) const
 {
-	register unsigned int i;
-	register unsigned int j;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
 
 	Matrix C(_rows,_cols);
 
-	if ( ( _cols != M._cols) || ( _rows != M._rows) )
+	if ((_cols != M._cols) || ( _rows != M._rows))
 	{
 		std::cerr << "Error!! Code: Matrix::operator - (const Matrix)" << std::endl;
 		exit(-1);
@@ -242,18 +242,16 @@ Matrix Matrix::operator - (const Matrix &M) const
 	}
 
 	return C;
-};
+}
 
-Matrix Matrix::Select (unsigned int* selected, unsigned int len) const
+Matrix Matrix::Select(vedo::vedo_uint_t* selected, vedo::vedo_uint_t len) const
 {
-	register unsigned int i;
-	register unsigned int j;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
 
 	if (_cols < len)
 	{
-		std::cerr
-			<< "Error!! Code: Matrix::Select (unsigned int*, unsigned int)"
-			<< std::endl;
+		std::cerr << "Error!! Code: Matrix::Select (vedo_uint_t*, vedo_uint_t)" << std::endl;
 		exit(-1);
 	}
 
@@ -271,21 +269,21 @@ Matrix Matrix::Select (unsigned int* selected, unsigned int len) const
 		else
 		{
 			std::cerr
-				<< "Error!! Code: Matrix::Select (unsigned int*, unsigned int)" << std::endl
-				<< "        Note: Selected columns out of range" << std::endl;
+				<< "Error!! Code: Matrix::Select (vedo_uint_t*, vedo_uint_t)" << std::endl
+				<< "        Note: Selected columns out of range"              << std::endl;
 			exit(-1);
 		}
 	}
 
 	return C;
-};
+}
 
 const Matrix& Matrix::Transpose()
 {
 	Matrix t(_cols, _rows);
 
-	register unsigned int i;
-	register unsigned int j;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
 
 	for (i=0; i<_rows; ++i)
 	{
@@ -296,42 +294,42 @@ const Matrix& Matrix::Transpose()
 	}
 
 	return (*this = t);
-};
+}
 
-double& Matrix::operator () (const unsigned int& r, const unsigned int& c)
+vedo::vedo_float_t& Matrix::operator () (const vedo::vedo_uint_t& r, const vedo::vedo_uint_t& c)
 {
-	if ( (r >= _rows) || (c >= _cols) )
+	if ((r >= _rows) || (c >= _cols))
 	{
-		std::cerr << "Error!! Code: Matrix::operator () (const unsigned int&, const unsigned int&)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::operator () (const vedo_uint_t&, const vedo_uint_t&)" << std::endl;
 		exit(-1);
 	}
 	else
 	{
 		return matrix[r][c];
 	}
-};
+}
 
-double Matrix::Get(const unsigned int& r, const unsigned int& c) const
+vedo::vedo_float_t Matrix::Get(const vedo::vedo_uint_t& r, const vedo::vedo_uint_t& c) const
 {
-	if ( (r >= _rows) || (c >= _cols) )
+	if ((r >= _rows) || (c >= _cols))
 	{
-		std::cerr << "Error!! Code: Matrix::Get() (const unsigned int&, const unsigned int&)" << std::endl;
+		std::cerr << "Error!! Code: Matrix::Get() (const vedo_uint_t&, const vedo_uint_t&)" << std::endl;
 		exit(-1);
 	}
 	else
 	{
 		return matrix[r][c];
 	}
-};
+}
 
-};   // namespace njr
+}   // namespace njr
 
 
 
 std::ostream& operator << (std::ostream& os, const njr::Matrix& m)
 {
-	register unsigned int i;
-	register unsigned int j;
+	register vedo::vedo_uint_t i;
+	register vedo::vedo_uint_t j;
 
 	printf ("rows=%3d cols=%3d  ", m.rows(), m.columns());
 
@@ -346,4 +344,4 @@ std::ostream& operator << (std::ostream& os, const njr::Matrix& m)
 	}
 
 	return os;
-};
+}

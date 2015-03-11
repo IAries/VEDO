@@ -7,33 +7,41 @@
 #include <vedo/framework/interfaces/GeometricShape.h>
 #include <vedo/framework/interfaces/SimMediator.h>
 #include <vedo/iris-gm/interfaces/NBSParallelConsultant.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/ModuleList.h>
 #include <cstdio>
 #include <cstring>
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <string>
 
-void usage (int g)
+vedo::Constants* vedo_cp = vedo::Constants::Instance();
+
+void usage (vedo::vedo_int_t g)
 {
 	std::cout
-		<< "iris-gm " << vedo::sVersion << std::endl
+		<< "Iris-GM " << vedo::sVersion << " " << vedo_cp->SysInfo() << std::endl
 		<< std::endl
-		<< '\t' << "Usage:" << std::endl
-		<< '\t' << "iris-gm <Mode> <IDO file> <Record> <UpIact>" << std::endl
-		<< std::endl
-		<< '\t' << "Mode           : geometric/redistribute"     << std::endl
-		<< '\t' << "Record         : integer"                    << std::endl
-		<< '\t' << "UpIact         : integer"                    << std::endl
-		<< std::endl
-		<< '\t' << "Error Condition: " << g << std::endl;
+		<< "Usage: iris-gm <Mode> <IDO file> <Record> <UpIact>"      << std::endl
+		<< "Mode  : analysis/redistribute"                           << std::endl
+		<< "Record: integer"                                         << std::endl
+		<< "UpIact: integer"                                         << std::endl;
 	exit(0);
 }
 
-int main (int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	if (argc < 5)
+	{
 		usage(1);
+	}
+
+	std::vector<std::string> arg;
+	for (int i=0; i<argc; i++)
+	{
+		arg.push_back(argv[i]);
+	}
 
 	MPI_Init(&argc, &argv);
 
@@ -41,23 +49,19 @@ int main (int argc, char* argv[])
 	time_t endtime;     // Endind time
 	time(&starttime);
 
-	double timeSystem           = 0.0;   // Time of system preparing, starting and ending
-	double timeImpactSolving    = 0.0;   // Time of impact solving
-	double timeSyncDOContainer  = 0.0;   // Time of "SyncDOContainer"
-	double timeFieldForceAdding = 0.0;   // Time of field force adding
-	double timeResponseUpdating = 0.0;   // Time of response updating
-	double timeContactDetection = 0.0;   // Time of contact detection
-	double timeNextStep         = 0.0;   // Time of "NextStep"
-	double timePartitioning     = 0.0;   // Time of problem partitioning
+	vedo::vedo_float_t timeSystem           = 0.0;   // Time of system preparing, starting and ending
+	vedo::vedo_float_t timeImpactSolving    = 0.0;   // Time of impact solving
+	vedo::vedo_float_t timeSyncDOContainer  = 0.0;   // Time of "SyncDOContainer"
+	vedo::vedo_float_t timeFieldForceAdding = 0.0;   // Time of field force adding
+	vedo::vedo_float_t timeResponseUpdating = 0.0;   // Time of response updating
+	vedo::vedo_float_t timeContactDetection = 0.0;   // Time of contact detection
+	vedo::vedo_float_t timeNextStep         = 0.0;   // Time of "NextStep"
+	vedo::vedo_float_t timePartitioning     = 0.0;   // Time of problem partitioning
 
-	char         mode[256];
-	char*        idofilename;
-	unsigned int RecordStep;
-	unsigned int UpIact;
-
-	sscanf(argv[1], "%s", mode);
-	sscanf(argv[3], "%d", &RecordStep);
-	sscanf(argv[4], "%d", &UpIact);
+	std::string mode = argv[1];
+	vedo::Constants* vedo_cp = vedo::Constants::Instance();
+	vedo::vedo_uint_t RecordStep = vedo_cp->String2T<vedo::vedo_uint_t>(argv[3]);
+	vedo::vedo_uint_t UpIact     = vedo_cp->String2T<vedo::vedo_uint_t>(argv[4]);
 
 	vedo::DOWorld*       pDOWorld;
 	vedo::Consultant*    pConsultant;
@@ -68,7 +72,8 @@ int main (int argc, char* argv[])
 	timeSystem += (endtime - starttime);
 	starttime = endtime;
 
-	if ( !strcmp (strlen(argv[2]) - 4 + argv[2], ".ido") )
+	std::string idofilename;
+	if (njr::CheckSubName(arg[2], ".ido" ))
 	{
 		pDOWorld    = new vedo::DOWorld;
 		idofilename = argv[2];
@@ -80,24 +85,23 @@ int main (int argc, char* argv[])
     }
 
 	pConsultant = new vedo::NBSParallelConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
-	//njr::RunTime("Simulation Start !!");
 
 	int rank;   // Rank   of processores
 	int NP;     // Number of processores
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &NP);
 
-	vedo::SimMediator sm(pConsultant, pAssembler, static_cast<unsigned int>(rank), static_cast<unsigned int>(NP));
+	vedo::SimMediator sm(pConsultant, pAssembler, static_cast<vedo::vedo_uint_t>(rank), static_cast<vedo::vedo_uint_t>(NP));
 
 	time(&endtime);
 	timeSystem += (endtime - starttime);
 
-	if (!strcmp(mode, "redistribute"))
+	if (mode == "redistribute")
 	{
 		while (sm.ReDistribute());
 	}
 /*
-	else if (!strcmp(mode, "show"))
+	else if (mode == "show")
 	{
 		sm.ShowInteraction();
 		std::string vtufile(idofilename);
@@ -127,21 +131,12 @@ int main (int argc, char* argv[])
 	timePartitioning      = (sm.timePartitioning);
 
 	time(&endtime);
-	timeSystem += (endtime - starttime);
+	timeSystem           += (endtime - starttime);
 
-	double timeComputing
-		= timeSystem
-		+ timeImpactSolving
-		+ timeFieldForceAdding
-		+ timeResponseUpdating
-		+ timeContactDetection;
-
-	double timeCommunication
-		= timeSyncDOContainer
-		+ timeNextStep
-		+ timePartitioning;
-
-	double timeTotal = timeComputing + timeCommunication;
+	vedo::vedo_float_t timeComputing
+		= timeSystem + timeImpactSolving + timeFieldForceAdding + timeResponseUpdating + timeContactDetection;
+	vedo::vedo_float_t timeCommunication = timeSyncDOContainer + timeNextStep + timePartitioning;
+	vedo::vedo_float_t timeTotal = timeComputing + timeCommunication;
 
 	if(rank == 0)
 	{
@@ -198,4 +193,4 @@ int main (int argc, char* argv[])
 
 	exit(0);
   	return true;
-};
+}

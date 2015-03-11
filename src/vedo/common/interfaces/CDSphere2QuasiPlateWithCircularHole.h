@@ -6,23 +6,21 @@
 namespace vedo
 {
 
-class CDSphere_QuasiPlateWithCircularHole : public ContactDetector
+class CDSphere_QuasiPlateWithCircularHole: public ContactDetector
 {
 
 public:
 
-	void CalDistance
-		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+	void CalDistance(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
-	void Detect
-		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 	virtual std::string type () const
 	{
 		return "CDSphere_QuasiPlateWithCircularHole";
-	};
+	}
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _CDSPHERE_2_QUASIPLATEWITHCIRCULARHOLE_H

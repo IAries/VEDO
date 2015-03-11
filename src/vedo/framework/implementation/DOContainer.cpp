@@ -9,62 +9,49 @@ namespace vedo
 
 DOContainer::DOContainer(): lcDO(0), lcDOS(0)
 {
-};
+}
 
 DOContainer::~DOContainer()
 {
 	DOContainer::Clear();
-};
+}
 
 void DOContainer::AddFieldImpact(const njr::Vector3d& vFieldImpact)
 {
 	std::vector<DiscreteObject *>::iterator ido;
-	for(ido=lcDO.begin(); ido!=lcDO.end(); ++ido)
+	for (ido=lcDO.begin(); ido!=lcDO.end(); ++ido)
 	{
 		(*ido)->AddImpact(vFieldImpact*((*ido)->GetSudoMass()));
 	}
-};
+}
 
-void DOContainer::AddImpact
-	(const unsigned long& ul,
-	 const njr::Vector3d& vImpact,
-	 const njr::Vector3d& vAngularImpact)
+void DOContainer::AddImpact(const vedo::vedo_uint_t& ul, const njr::Vector3d& vImpact, const njr::Vector3d& vAngularImpact)
 {
 	lcDO[ul]->AddImpact(vImpact, vAngularImpact);
-};
+}
 
 /*
-void DOContainer::AddExternalImpact
-	(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >&
-	 vvExternalImpact                                        )
+void DOContainer::AddExternalImpact(const std::vector<std::pair<njr::Vector3d, njr::Vector3d> >& vvExternalImpact)
 {
 	std::vector<DiscreteObject*>::iterator ido;
 	std::vector<std::pair<njr::Vector3d, njr::Vector3d> >::iterator iExternalImpact;
-	unsigned long ul = 0;
-	for(ido=lcDO.begin();
-		ido!=lcDO.end(), ul<vvExternalImpact.size();
-		++ido, ++ul)
+	vedo::vedo_uint_t ul = 0;
+	for(ido=lcDO.begin(); ido!=lcDO.end(), ul<vvExternalImpact.size(); ++ido, ++ul)
 	{
 		(*ido)->AddImpact(vvExternalImpact[ul].first, vvExternalImpact[ul].second);
 	}
-};
+}
 */
 
-void DOContainer::AddConstrainedImpact(const double dt)
+void DOContainer::AddConstrainedImpact(const vedo_float_t dt)
 {
-	for_each
-		(lcDO.begin(),
-		 lcDO.end(),
-		 bind2nd(std::mem_fun(&DiscreteObject::AddConstrainedImpact), dt));
-};
+	for_each(lcDO.begin(), lcDO.end(), bind2nd(std::mem_fun(&DiscreteObject::AddConstrainedImpact), dt));
+}
 
-void DOContainer::Response(const double dt)
+void DOContainer::Response(const vedo_float_t dt)
 {
-	for_each
-		(lcDO.begin(),
-		 lcDO.end(),
-		 bind2nd(std::mem_fun(&DiscreteObject::Response), dt));
-};
+	for_each(lcDO.begin(), lcDO.end(), bind2nd(std::mem_fun(&DiscreteObject::Response), dt));
+}
 
 void DOContainer::EnforcePeriodicBoundaryConditions(const Boundary& pbc)
 {
@@ -72,17 +59,14 @@ void DOContainer::EnforcePeriodicBoundaryConditions(const Boundary& pbc)
 	Func_Type func_obj(&DiscreteObject::EnforcePeriodicBoundaryConditions);
 	njr::binder2nd_refArg<Func_Type> binded_func(func_obj, pbc);
 	for_each(lcDO.begin(), lcDO.end(), binded_func);
-};
+}
 
 void DOContainer::Clear()
 {
-	for_each
-		(lcDO.begin(),
-		lcDO.end(),
-		njr::Delete_ptr() );
+	for_each(lcDO.begin(), lcDO.end(), njr::Delete_ptr());
 	lcDO.clear();
 	lcDOS.clear();
-};
+}
 
 void DOContainer::Add(DiscreteObject* pdo)
 {
@@ -96,20 +80,20 @@ void DOContainer::Add(DiscreteObject* pdo)
 
 	lcDO.push_back(pdo);
 	lcDOS.push_back(pdo->GetDOStatus());
-};
+}
 
-void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
+void DOContainer::Erase(const std::vector<vedo::vedo_uint_t>& EraseList)
 {
-	const unsigned long numberDO      = lcDO.size();
-	const unsigned long ErasenumberDO = EraseList.size();
-	unsigned long ul;
+	const vedo::vedo_uint_t numberDO      = lcDO.size();
+	const vedo::vedo_uint_t ErasenumberDO = EraseList.size();
+	vedo::vedo_uint_t ul;
 
-	unsigned long ulEraseCounter = 0;
-	for(ul=EraseList[0]; ul<numberDO; ul++)
+	vedo::vedo_uint_t ulEraseCounter = 0;
+	for (ul=EraseList[0]; ul<numberDO; ul++)
 	{
-		if(ulEraseCounter < ErasenumberDO)
+		if (ulEraseCounter < ErasenumberDO)
 		{
-			if(ul < EraseList[ulEraseCounter])
+			if (ul < EraseList[ulEraseCounter])
 			{
 				lcDO[ul-ulEraseCounter] = lcDO[ul];
 				lcDOS[ul-ulEraseCounter] = lcDOS[ul];
@@ -127,19 +111,19 @@ void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
 	}
 	lcDO.resize(numberDO-ErasenumberDO);
 	lcDOS.resize(numberDO-ErasenumberDO);
-};
+}
 
 /*
-void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
+void DOContainer::Erase(const std::vector<vedo::vedo_uint_t>& EraseList)
 {
-	const unsigned long numberDO      = lcDO.size();
-	const unsigned long ErasenumberDO = EraseList.size();
-	const unsigned long NewnumberDO   = numberDO - ErasenumberDO;
+	const vedo::vedo_uint_t numberDO      = lcDO.size();
+	const vedo::vedo_uint_t ErasenumberDO = EraseList.size();
+	const vedo::vedo_uint_t NewnumberDO   = numberDO - ErasenumberDO;
 	std::vector<DiscreteObject*> NewlcDO(NewnumberDO);
 	std::vector<const DOStatus*> NewlcDOS(NewnumberDO);
 
-	unsigned long ul;
-	unsigned long ulEraseCounter = 0;
+	vedo::vedo_uint_t ul;
+	vedo::vedo_uint_t ulEraseCounter = 0;
 	for(ul=0; ul<numberDO; ul++)
 	{
 		if(ulEraseCounter < ErasenumberDO)
@@ -177,7 +161,7 @@ void DOContainer::Erase(const std::vector<unsigned long>& EraseList)
 	}
 	NewlcDO.clear();
 	NewlcDOS.clear();
-};
+}
 */
 
-};   // namespace vedo
+}   // namespace vedo

@@ -4,6 +4,7 @@
 
 #include <vedo/knight/interfaces/BravaisLatticeWithBasis.h>
 #include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <limits>
 
 //////////////////////////////////////////////////////////////////////
@@ -12,10 +13,10 @@
 
 BravaisLatticeWithBasis::BravaisLatticeWithBasis()
 {
-    for(int coord=0; coord<3; coord++) origin[coord] = 0.;
+    for(vedo::vedo_int_t coord=0; coord<3; coord++) origin[coord] = 0.;
 	// we temporarily set a cubic lattice
-    for(int vec=0; vec<3; vec++)
-        for(int coord=0; coord<3; coord++)
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
+        for(vedo::vedo_int_t coord=0; coord<3; coord++)
             latticeVectors[vec][coord] = (vec==coord? 1. :0.);
 
     std::vector<njr::Vector3d> atomsCoord;
@@ -29,13 +30,13 @@ BravaisLatticeWithBasis::~BravaisLatticeWithBasis()
 }
 
 void BravaisLatticeWithBasis::CartesianCoordinatesFromLatticeCoordinates(
-                              double cartesianCoordinates[3],
-                              const double latticeCoordinates[3]) const
+                              vedo::vedo_float_t cartesianCoordinates[3],
+                              const vedo::vedo_float_t latticeCoordinates[3]) const
 {
-    for (int i=0; i<3; i++)
+    for (vedo::vedo_int_t i=0; i<3; i++)
     {
         cartesianCoordinates[i] = origin[i];
-        for (int j=0; j<3; j++)
+        for (vedo::vedo_int_t j=0; j<3; j++)
         {
             cartesianCoordinates[i]
             	+= latticeVectors[j][i] * latticeCoordinates[j];
@@ -44,13 +45,13 @@ void BravaisLatticeWithBasis::CartesianCoordinatesFromLatticeCoordinates(
 }
 
 void BravaisLatticeWithBasis::LatticeCoordinatesFromCartesianCoordinates(
-                              double latticeCoordinates[3],
-                              const double cartesianCoordinates[3]) const
+                              vedo::vedo_float_t latticeCoordinates[3],
+                              const vedo::vedo_float_t cartesianCoordinates[3]) const
 {
-    for (int i=0; i<3; i++)
+    for (vedo::vedo_int_t i=0; i<3; i++)
     {
         latticeCoordinates[i]=0;
-        for (int j=0; j<3; j++)
+        for (vedo::vedo_int_t j=0; j<3; j++)
         {
             latticeCoordinates[i] += inverseOfLatticeVectors[j][i] *
                                     (cartesianCoordinates[j]-origin[j]);
@@ -59,34 +60,34 @@ void BravaisLatticeWithBasis::LatticeCoordinatesFromCartesianCoordinates(
 }
 
 void BravaisLatticeWithBasis::ClosestLatticeSiteIndices(
-                              int latticeIndices[3],
-                              const double cartesianCoordinates[3]) const
+                              vedo::vedo_int_t latticeIndices[3],
+                              const vedo::vedo_float_t cartesianCoordinates[3]) const
 {
-    double latticeCoordinates[3] ;
+    vedo::vedo_float_t latticeCoordinates[3] ;
 
     this
     	->LatticeCoordinatesFromCartesianCoordinates
     		(latticeCoordinates, cartesianCoordinates);
 
-    int i ;
+    vedo::vedo_int_t i ;
     for (i=0; i<3; ++i)
     {
-        latticeIndices[i] = (int)floor(latticeCoordinates[i]+0.5) ; // truncate the double
+        latticeIndices[i] = (vedo::vedo_int_t)floor(latticeCoordinates[i]+0.5) ; // truncate the vedo::vedo_float_t
     }
 }
 
 void BravaisLatticeWithBasis::ClosestAtomCartesianCoordinates(
-                              double atomCartesianCoordinates[3],
-                              const double position[3]) const
+                              vedo::vedo_float_t atomCartesianCoordinates[3],
+                              const vedo::vedo_float_t position[3]) const
 {
-    int coord;
-    double distSq,closestDistanceSq = std::numeric_limits<double>::max();
-	double atomIndices[3],atomPosition[3];
+    vedo::vedo_int_t coord;
+    vedo::vedo_float_t distSq,closestDistanceSq = std::numeric_limits<vedo::vedo_float_t>::max();
+	vedo::vedo_float_t atomIndices[3],atomPosition[3];
     // find closest lattice site
-    int latticeIndices[3];
+    vedo::vedo_int_t latticeIndices[3];
     this->ClosestLatticeSiteIndices(latticeIndices,position);
 
-    const int nAtomsPerCell = GetNAtomsPerCell();
+    const vedo::vedo_int_t nAtomsPerCell = GetNAtomsPerCell();
 
     if(nAtomsPerCell == 1)
     {
@@ -98,17 +99,17 @@ void BravaisLatticeWithBasis::ClosestAtomCartesianCoordinates(
     }
 
     //loop through all neighboring unit cells
-    int neighborIndices[3],nCells = 1;
+    vedo::vedo_int_t neighborIndices[3],nCells = 1;
     for(coord=0;coord<3;++coord)
     {
         nCells *= 3;
         neighborIndices[coord] = - 1;
     }
 
-    for(int cell=0;cell<nCells;++cell)
+    for(vedo::vedo_int_t cell=0;cell<nCells;++cell)
     {
         // loop through all atoms within each unit cell
-        for(int basisAtom=0;basisAtom<nAtomsPerCell;++basisAtom)
+        for(vedo::vedo_int_t basisAtom=0;basisAtom<nAtomsPerCell;++basisAtom)
         {
             // lattice site is latticeIndices plus neighborIndices
             // atom site is lattice site plus atomsCoordinatesInCell
@@ -130,7 +131,7 @@ void BravaisLatticeWithBasis::ClosestAtomCartesianCoordinates(
             distSq = 0.;
             for(coord=0;coord<3;++coord)
             {
-                double difference = position[coord] - atomPosition[coord];
+                vedo::vedo_float_t difference = position[coord] - atomPosition[coord];
                 distSq += difference*difference;
             }
             if(distSq < closestDistanceSq)
@@ -156,9 +157,9 @@ void BravaisLatticeWithBasis::ClosestAtomCartesianCoordinates(
 }
 
 
-void BravaisLatticeWithBasis::RotateLatticeVectors(double rotation[3][3])
+void BravaisLatticeWithBasis::RotateLatticeVectors(vedo::vedo_float_t rotation[3][3])
 {
-    double newLatticeVectors[3][3];
+    vedo::vedo_float_t newLatticeVectors[3][3];
 
 	if(fabs(Determinant(rotation,3)-1.) > 1.0e-11)
 	{
@@ -171,16 +172,16 @@ void BravaisLatticeWithBasis::RotateLatticeVectors(double rotation[3][3])
 		return;
 	}
 
-	double test1, test2;   // check that rotation is a rotation matrix (ie det R = +1 , and the norm of its colums and row is 1)
-    for(int vec=0; vec<3; vec++)
+	vedo::vedo_float_t test1, test2;   // check that rotation is a rotation matrix (ie det R = +1 , and the norm of its colums and row is 1)
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
     {
         test1 = test2 = 0.;
-        for(int coord=0; coord<3; coord++)
+        for(vedo::vedo_int_t coord=0; coord<3; coord++)
         {
             test1 += rotation[coord][vec]*rotation[coord][vec];
             test2 += rotation[vec][coord]*rotation[vec][coord];
             newLatticeVectors[vec][coord] = 0.;
-            for(int k=0; k<3; k++)
+            for(vedo::vedo_int_t k=0; k<3; k++)
             {
             	newLatticeVectors[vec][coord]
             	+= rotation[coord][k]*latticeVectors[vec][k];
@@ -204,10 +205,10 @@ void BravaisLatticeWithBasis::RotateLatticeVectors(double rotation[3][3])
 void BravaisLatticeWithBasis::ResetOrientation()
 {
     assert((3 == 2) || (3 == 3)); // currently set only for 2 or 3 D
-    int coord;
-    double newVectors[3][3];
-    double norms[3];
-    for(int vec=0; vec<3; ++vec)
+    vedo::vedo_int_t coord;
+    vedo::vedo_float_t newVectors[3][3];
+    vedo::vedo_float_t norms[3];
+    for(vedo::vedo_int_t vec=0; vec<3; ++vec)
         norms[vec]
         	= sqrt
         		(latticeVectors[vec][0] * latticeVectors[vec][0]
@@ -215,7 +216,7 @@ void BravaisLatticeWithBasis::ResetOrientation()
 				+ latticeVectors[vec][2] * latticeVectors[vec][2]);
     newVectors[0][0] = norms[0];
     for(coord=1; coord<3; coord++) newVectors[0][coord] = 0.;
-    double cosTheta = 0., sinTheta;  // Theta is the angle between v1 and v2
+    vedo::vedo_float_t cosTheta = 0., sinTheta;  // Theta is the angle between v1 and v2
     for(coord=0; coord<3; coord++)
         cosTheta += latticeVectors[0][coord] * latticeVectors[1][coord];
     cosTheta /= norms[0]*norms[1];
@@ -224,7 +225,7 @@ void BravaisLatticeWithBasis::ResetOrientation()
     newVectors[1][1] = norms[1]*sinTheta;
 
 	for(coord=2; coord<3; coord++) newVectors[1][coord] = 0.;
-	double cosPsi, tmp = 0.; // Psi is the angle between v3 and v1 X v2.
+	vedo::vedo_float_t tmp = 0.; // Psi is the angle between v3 and v1 X v2.
 	// inverseOfLatticeVectors[*][2] is orthogonal to v1 and v2 and its norm is 1/|v3|cos Psi
 	for(coord=0; coord<3; coord++)
 	{
@@ -232,9 +233,9 @@ void BravaisLatticeWithBasis::ResetOrientation()
 			+= inverseOfLatticeVectors[coord][2]
 			* inverseOfLatticeVectors[coord][2];
 	}
-	cosPsi = 1./sqrt(tmp)/norms[2];
+	vedo::vedo_float_t cosPsi = 1./sqrt(tmp)/norms[2];
 	newVectors[2][2] = 1./sqrt(tmp);   // = cosPsi * norms[2]
-	double proj[3];
+	vedo::vedo_float_t proj[3];
 	for(coord=0; coord<3; coord++) proj[coord] = latticeVectors[2][coord]
 		- inverseOfLatticeVectors[coord][2]/tmp;
 	newVectors[2][0] = DotProduct(latticeVectors[0], proj, 3) / norms[0];
@@ -243,15 +244,15 @@ void BravaisLatticeWithBasis::ResetOrientation()
 	newVectors[2][1]
 		= (tmp - newVectors[1][0]*newVectors[2][0])/newVectors[1][1];
 
-	double oldvolume = volumeOfCell;
+	vedo::vedo_float_t oldvolume = volumeOfCell;
     SetLatticeVectors(newVectors);
     assert(fabs(volumeOfCell/oldvolume - 1.) < 1.0e-8);
 }
 
 
-void BravaisLatticeWithBasis::RescaleLatticeVectors(double a)
+void BravaisLatticeWithBasis::RescaleLatticeVectors(vedo::vedo_float_t a)
 {
-    int vec, coord;
+    vedo::vedo_int_t vec, coord;
     for(vec=0; vec<3; vec++)
     {
         for(coord=0; coord<3; coord++) latticeVectors[vec][coord] *= a;
@@ -259,9 +260,9 @@ void BravaisLatticeWithBasis::RescaleLatticeVectors(double a)
     UpdateMemberVariables();
 }
 
-void BravaisLatticeWithBasis::RescaleLatticeVectors(double a[3])
+void BravaisLatticeWithBasis::RescaleLatticeVectors(vedo::vedo_float_t a[3])
 {
-    int vec, coord;
+    vedo::vedo_int_t vec, coord;
     for(vec=0; vec<3; vec++)
     {
         for(coord=0; coord<3; coord++) latticeVectors[vec][coord] *= a[vec];
@@ -276,20 +277,20 @@ void BravaisLatticeWithBasis::UpdateMemberVariables()
 
     // we look for the smallest length of any std::vector of the form \sum a_i v_i,
     //			where v_i is a lattice std::vector and a_i = -1, 0, 1
-    double maxi = 0.0;
-    double mini = std::numeric_limits<double>::max();
-    double miniinside = std::numeric_limits<double>::max();
-    double vect[3] ,norm;
-    int i, k, index[3];
+    vedo::vedo_float_t maxi = 0.0;
+    vedo::vedo_float_t mini = std::numeric_limits<vedo::vedo_float_t>::max();
+    vedo::vedo_float_t miniinside = std::numeric_limits<vedo::vedo_float_t>::max();
+    vedo::vedo_float_t vect[3] ,norm;
+    vedo::vedo_int_t i, k, index[3];
 
-    const int nAtomsPerCell = GetNAtomsPerCell();
+    const vedo::vedo_int_t nAtomsPerCell = GetNAtomsPerCell();
     assert(nAtomsPerCell > 0);
-	int threeToTheDIM = 3;
+	vedo::vedo_int_t threeToTheDIM = 3;
 	for(k = 1; k < 3; ++k) threeToTheDIM *= 3;
 
     for(i=0;i<threeToTheDIM;i++)
     {
-        int tmp = i;
+        vedo::vedo_int_t tmp = i;
         for(k=0;k<3;k++)
         {
             index[k] = tmp%3;
@@ -299,15 +300,15 @@ void BravaisLatticeWithBasis::UpdateMemberVariables()
         for(k=0; k<3; k++)
         {
             vect[k] = 0.;
-            for(int l=0; l<3; l++)
+            for(vedo::vedo_int_t l=0; l<3; l++)
                 vect[k] += (index[l]-1)*latticeVectors[l][k];
             norm += vect[k]*vect[k];
         }
         norm = sqrt(norm);
         if(norm>maxi) maxi = norm;
         if(norm<mini && norm != 0.) mini = norm;
-        for(int l=0; l<nAtomsPerCell; l++)
-            for(int m=0; m<nAtomsPerCell; m++)
+        for(vedo::vedo_int_t l=0; l<nAtomsPerCell; l++)
+            for(vedo::vedo_int_t m=0; m<nAtomsPerCell; m++)
             {
                 norm = 0;
                 for(k=0; k<3; k++)
@@ -339,20 +340,20 @@ void BravaisLatticeWithBasis::UpdateMemberVariables()
     minInteratomicSpacing = miniinside;
 
     // Inverse. this routine is very basic, but we'll use it a few times and for small matrices
-    double tempMat[3][3];
+    vedo::vedo_float_t tempMat[3][3];
     for(i=0;i<3;i++)
     {
-        for(int j=0;j<3;j++)
+        for(vedo::vedo_int_t j=0;j<3;j++)
         {
             for(k=0;k<i;k++)
             {
-                int l;
+                vedo::vedo_int_t l;
                 for(l=0;l<j;l++) tempMat[k][l] = latticeVectors[k][l];
                 for(l=j+1;l<3;l++) tempMat[k][l-1] = latticeVectors[k][l];
             }
             for(k=i+1;k<3;k++)
             {
-                int l;
+                vedo::vedo_int_t l;
                 for(l=0;l<j;l++) tempMat[k-1][l] = latticeVectors[k][l];
                 for(l=j+1;l<3;l++) tempMat[k-1][l-1] = latticeVectors[k][l];
             }
@@ -363,7 +364,7 @@ void BravaisLatticeWithBasis::UpdateMemberVariables()
 }
 
 
-double BravaisLatticeWithBasis::Determinant(const double M[3][3],const int dim)
+vedo::vedo_float_t BravaisLatticeWithBasis::Determinant(const vedo::vedo_float_t M[3][3],const vedo::vedo_int_t dim)
 {
     // this routine is very basic, but we'll use it a few times and for small matrices (TC)
     if(dim==1)
@@ -376,8 +377,8 @@ double BravaisLatticeWithBasis::Determinant(const double M[3][3],const int dim)
     }
     else
     {
-        double temp = 0., matrixtemp[3][3];
-        int i, j, k;
+        vedo::vedo_float_t temp = 0., matrixtemp[3][3];
+        vedo::vedo_int_t i, j, k;
         {
             for(i=0; i<dim; i++)
             {
@@ -396,20 +397,20 @@ double BravaisLatticeWithBasis::Determinant(const double M[3][3],const int dim)
     }
 }
 
-double BravaisLatticeWithBasis::DotProduct
-	(double const *v1, double const *v2, int n)
+vedo::vedo_float_t BravaisLatticeWithBasis::DotProduct
+	(vedo::vedo_float_t const *v1, vedo::vedo_float_t const *v2, vedo::vedo_int_t n)
 {
-    double tmp=0.;
-    for(int coord=0; coord<n; coord++) tmp += v1[coord] * v2[coord];
+    vedo::vedo_float_t tmp=0.;
+    for(vedo::vedo_int_t coord=0; coord<n; coord++) tmp += v1[coord] * v2[coord];
     return tmp;
 }
 
 void BravaisLatticeWithBasis::SetLatticeVectors
-	(const double latticeVectors[3][3])
+	(const vedo::vedo_float_t latticeVectors[3][3])
 {
-    for (int vec = 0; vec < 3; vec++)
+    for (vedo::vedo_int_t vec = 0; vec < 3; vec++)
     {
-        for (int coord = 0; coord < 3; coord++)
+        for (vedo::vedo_int_t coord = 0; coord < 3; coord++)
         {
             this->latticeVectors[vec][coord] = latticeVectors[vec][coord];
         }
@@ -423,8 +424,8 @@ void BravaisLatticeWithBasis::SetAtomsCoordinatesInCell(
 {
     atomTypes.clear();
     atomsCoordinatesInCell.clear();
-    const int nAtomsPerCell = atomsCoord.size();
-    for(int at=0; at<nAtomsPerCell; ++at)
+    const vedo::vedo_int_t nAtomsPerCell = atomsCoord.size();
+    for(vedo::vedo_int_t at=0; at<nAtomsPerCell; ++at)
     {
         std::string name = (pAtomTypes ? (*pAtomTypes)[at] : "");
         AddAtomInCell(atomsCoord[at], name);
@@ -435,23 +436,23 @@ void BravaisLatticeWithBasis::AddAtomInCell(njr::Vector3d atomCoord,
                                             std::string name)
 {
     // make sure the atoms coordinates are between 0 and 1.
-    double x = fmod(atomCoord.x(), 1.);
+    vedo::vedo_float_t x = fmod(atomCoord.x(), 1.);
     if(x < 0.) x += 1.;
-    double y = fmod(atomCoord.y(), 1.);
+    vedo::vedo_float_t y = fmod(atomCoord.y(), 1.);
     if(y < 0.) y += 1.;
-    double z = fmod(atomCoord.z(), 1.);
+    vedo::vedo_float_t z = fmod(atomCoord.z(), 1.);
     if(z < 0.) z += 1.;
     atomsCoordinatesInCell.push_back(njr::Vector3d(x,y,z));
     atomTypes.push_back(name);
     UpdateMemberVariables();
 }
 
-GeneralLattice::GeneralLattice(double a)
+GeneralLattice::GeneralLattice(vedo::vedo_float_t a)
 {
-    double tmpMat[3][3];
-    for(int vec=0; vec<3; vec++)
+    vedo::vedo_float_t tmpMat[3][3];
+    for(vedo::vedo_int_t vec=0; vec<3; vec++)
     {
-		for(int coord=0; coord<3; coord++)
+		for(vedo::vedo_int_t coord=0; coord<3; coord++)
 		{
 			tmpMat[vec][coord] = (vec==coord? a :0.0);
 		}
@@ -459,7 +460,7 @@ GeneralLattice::GeneralLattice(double a)
     SetLatticeVectors(tmpMat);
 }
 
-GeneralLattice::GeneralLattice(const double latticeVectors[3][3])
+GeneralLattice::GeneralLattice(const vedo::vedo_float_t latticeVectors[3][3])
 {
     SetLatticeVectors(latticeVectors);
 }

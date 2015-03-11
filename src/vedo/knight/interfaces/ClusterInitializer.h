@@ -22,7 +22,7 @@ class ClusterInitializer
 public:
     //! Returns a rough estimate of the largest 3 of the cluster
     /*! in real units. This is meant to be useful for graphics */
-    double GetMaxSize() const;
+    vedo::vedo_float_t GetMaxSize() const;
 
     //! Constructor.
     /*! When overloaded, must set up maxSize array in initializer
@@ -35,11 +35,11 @@ public:
     void Create(std::string doName, vedo::DOWorld* pWorld);
 
     //! Set the center of the cluster.
-    void SetCenter(double clusterCenter[3]);
+    void SetCenter(vedo::vedo_float_t clusterCenter[3]);
 
     //! Returns the center of the cluster (in real units)
     /*! this is meant to be useful for graphics */
-    const double * GetCenter() const {return clusterCenter;}
+    const vedo::vedo_float_t * GetCenter() const {return clusterCenter;}
 
     //! Set a lattice
     void SetBravaisLattice(const BravaisLatticeWithBasis *bravais) ;
@@ -56,26 +56,26 @@ protected:
     /*! The \a positions array must be preallocated and is filled by this function.
     \a nAtomsInArrays containts the current number of atoms in the cluster. There's
     one number per type of atoms (and \a positions has one leaf per type) */
-    void MakeSlab(int center[3],
-                  int subDimension,
+    void MakeSlab(vedo::vedo_int_t center[3],
+                  vedo::vedo_int_t subDimension,
                   vedo::DOStatus& dos, vedo::DOWorld* pWorld);
 
     // Called at the begining of Create.
     /*!It sets the bounds on the solid in the lattice coordinates and returns an
     upper bounds to the number of atoms contained in the cluster.
     */
-    virtual int SetMaxSize() = 0;
+    virtual vedo::vedo_int_t SetMaxSize() = 0;
 
     //! Tells if point X is inside cluster
-    virtual bool Inside(double X[3]) = 0;
+    virtual bool Inside(vedo::vedo_float_t X[3]) = 0;
 
     //! The coordinates of the cluster in real space
-    double clusterCenter[3];
+    vedo::vedo_float_t clusterCenter[3];
 
     //! Cluster has maximum extent minSize[i]...maxSize[i] along basis std::vector i
     //@{
-    int minSize[3];
-    int maxSize[3];
+    vedo::vedo_int_t minSize[3];
+    vedo::vedo_int_t maxSize[3];
     //@}
 };
 

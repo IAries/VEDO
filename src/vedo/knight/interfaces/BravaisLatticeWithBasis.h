@@ -10,6 +10,7 @@
 // We're calling the former "LatticeVector" and the latter "AtomCoordinatesInCell"
 
 #include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
@@ -27,72 +28,72 @@ public:
 
     virtual ~BravaisLatticeWithBasis();
 
-    inline void SetOrigin(const double origin[3])
+    inline void SetOrigin(const vedo::vedo_float_t origin[3])
     {
-    	for (int coord=0; coord<3; coord++)
+    	for (vedo::vedo_int_t coord=0; coord<3; coord++)
     	{
     		this->origin[coord] = origin[coord];
     	}
     }
 
-    inline const double (&GetOrigin() const)[3]
+    inline const vedo::vedo_float_t (&GetOrigin() const)[3]
     {
     	return origin;
     }
 
-    inline const double (&GetLatticeVectors() const)[3][3]
+    inline const vedo::vedo_float_t (&GetLatticeVectors() const)[3][3]
     {
     	return latticeVectors;
     }
 
     void CartesianCoordinatesFromLatticeCoordinates
-    	(double cartesianCoordinates[3],
-    	 const double latticeCoordinates[3]) const;
+    	(vedo::vedo_float_t cartesianCoordinates[3],
+    	 const vedo::vedo_float_t latticeCoordinates[3]) const;
 
     void LatticeCoordinatesFromCartesianCoordinates
-    	(double latticeCoordinates[3],
-    	 const double cartesianCoordinates[3]) const;
+    	(vedo::vedo_float_t latticeCoordinates[3],
+    	 const vedo::vedo_float_t cartesianCoordinates[3]) const;
 
     void ClosestLatticeSiteIndices
-    	(int latticeIndices[3],
-    	 const double cartesianCoordinates[3]) const;
+    	(vedo::vedo_int_t latticeIndices[3],
+    	 const vedo::vedo_float_t cartesianCoordinates[3]) const;
 
     void ClosestAtomCartesianCoordinates
-    	(double atomCartesianCoordinates[3],
-    	 const double position[3]) const;
+    	(vedo::vedo_float_t atomCartesianCoordinates[3],
+    	 const vedo::vedo_float_t position[3]) const;
 
     //! Rotate the current lattice vectors using \a rotation as a rotation matrix.
     /*! Note that we check that \a rotation is really a rotation matrix, namely
     that \a det \a rotation = +1 , and the norm of its colums and rows is 1.
     */
-    void RotateLatticeVectors(double rotation[3][3]);
+    void RotateLatticeVectors(vedo::vedo_float_t rotation[3][3]);
 
     //! aligns the 1st lattice std::vector along the 1st coordinate, the 2nd std::vector in the 1-2 plane etc...
     virtual void ResetOrientation();
 
-    void RescaleLatticeVectors(double a);
+    void RescaleLatticeVectors(vedo::vedo_float_t a);
 
-	void RescaleLatticeVectors(double a[3]);
+	void RescaleLatticeVectors(vedo::vedo_float_t a[3]);
 
-    double GetVolumeOfCell() const{ return volumeOfCell;}
+    vedo::vedo_float_t GetVolumeOfCell() const{ return volumeOfCell;}
 
-    inline int GetNAtomsPerCell() const
+    inline vedo::vedo_int_t GetNAtomsPerCell() const
     {
     	return atomsCoordinatesInCell.size();
     }
 
-    inline double GetLatticeSpacing() const
+    inline vedo::vedo_float_t GetLatticeSpacing() const
     {
     	return latticeSpacing;
     }
 
-    inline double GetMaxIntraCellDistance() const
+    inline vedo::vedo_float_t GetMaxIntraCellDistance() const
     {
     	return maxIntraCellDistance;
     }
 
     //! the minimal distance separating equivalent atoms
-    inline double GetMinInteratomicSpacing() const
+    inline vedo::vedo_float_t GetMinInteratomicSpacing() const
     {
     	return minInteratomicSpacing;
     }
@@ -104,7 +105,7 @@ public:
 
     virtual void AddAtomInCell(njr::Vector3d atomCoord, std::string name="");
 
-    inline const njr::Vector3d &GetAtomsCoordinatesInCell(int atom) const
+    inline const njr::Vector3d &GetAtomsCoordinatesInCell(vedo::vedo_int_t atom) const
     {
     	return atomsCoordinatesInCell[atom];
     }
@@ -115,7 +116,7 @@ public:
     }
 
 protected:
-    double origin[3];
+    vedo::vedo_float_t origin[3];
 
     //! lattice vectors: first index is which std::vector, second is component
     /*! First index is which std::vector, second is component
@@ -123,16 +124,16 @@ protected:
         is backwards from the point of view of thinking of the array of basis vectors
         as a transformation matrix.00
     */
-    double latticeVectors[3][3];
+    vedo::vedo_float_t latticeVectors[3][3];
 
     // The transpose of the transformation from real space to the lattice coordinate system
-    double inverseOfLatticeVectors[3][3];
+    vedo::vedo_float_t inverseOfLatticeVectors[3][3];
 
-    double latticeSpacing;  // this is the minimal distance separating two equivallent atoms.
-    double minInteratomicSpacing;
-    double maxIntraCellDistance;
+    vedo::vedo_float_t latticeSpacing;  // this is the minimal distance separating two equivallent atoms.
+    vedo::vedo_float_t minInteratomicSpacing;
+    vedo::vedo_float_t maxIntraCellDistance;
 
-    double volumeOfCell;
+    vedo::vedo_float_t volumeOfCell;
 //! The coordinates of the atoms in units of the lattice vectors (coordinates must be between 0 and 1)
     std::vector<njr::Vector3d> atomsCoordinatesInCell;
 //! The type name of the atoms in the basis
@@ -140,19 +141,19 @@ protected:
 
     void UpdateMemberVariables();  //called when we change the latticeVectors
 
-    double Determinant(const double M[3][3],const int dim);
-    double DotProduct(double const *v1 , double const *v2, int n);
+    vedo::vedo_float_t Determinant(const vedo::vedo_float_t M[3][3],const vedo::vedo_int_t dim);
+    vedo::vedo_float_t DotProduct(vedo::vedo_float_t const *v1 , vedo::vedo_float_t const *v2, vedo::vedo_int_t n);
 
-    virtual void SetLatticeVectors(const double latticeVectors[3][3]);
+    virtual void SetLatticeVectors(const vedo::vedo_float_t latticeVectors[3][3]);
 };
 
 class GeneralLattice:public BravaisLatticeWithBasis
 {
 public:
-    void SetLatticeVectors(const double latticeVectors[3][3])
+    void SetLatticeVectors(const vedo::vedo_float_t latticeVectors[3][3])
     {BravaisLatticeWithBasis::SetLatticeVectors(latticeVectors);};
-    GeneralLattice(double a = 1.0);  // by default, a simple cubic lattice of lattice constant a.
-    GeneralLattice(const double latticeVectors[3][3]);
+    GeneralLattice(vedo::vedo_float_t a = 1.0);  // by default, a simple cubic lattice of lattice constant a.
+    GeneralLattice(const vedo::vedo_float_t latticeVectors[3][3]);
     ~GeneralLattice() {};
 };
 

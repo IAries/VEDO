@@ -2,14 +2,14 @@
 #define _NJR_PARAMETER_SET_H
 
 #include <vedo/njr/interfaces/Utility.h>
-
+#include <vedo/constants/interfaces/Constants.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
-#include <map>
+#include <boost/unordered_map.hpp>
 
 namespace njr
 {
@@ -17,40 +17,42 @@ namespace njr
 template <typename TNAME, typename TVALUE>
 class ParameterSet
 {
+
 public:
 
 	ParameterSet()
 	{
-	};
+	}
 
 	ParameterSet(const ParameterSet& ps)
 	{
 		*this = ps;
-	};
+	}
 
 	const ParameterSet& operator = (const ParameterSet& ps)
 	{
-		_mttParameter.clear();
-		_mttParameter.insert(ps._mttParameter.begin(), ps._mttParameter.end());
-//		_mttParameter = ps._mttParameter;
+		//_mttParameter.clear();
+		//_mttParameter.insert(ps._mttParameter.begin(), ps._mttParameter.end());
+		_mttParameter = ps._mttParameter;
 		return *this;
-	};
+	}
 
 	~ParameterSet()
 	{
 		_mttParameter.clear();
-	};
+	}
 
-	ParameterSet(const TNAME* tpName, const TVALUE* tpValue, const unsigned uNum)
+	ParameterSet(const TNAME* tpName, const TVALUE* tpValue, const vedo::vedo_uint_t uNum)
 	{
-		for(unsigned u=0; u<uNum; u++)
+		for (vedo::vedo_uint_t u=0; u<uNum; u++)
+		{
 			_mttParameter[*(tpName+u)] = *(tpValue+u);
-	};
+		}
+	}
 
 	bool Erase(const TNAME& tName)
 	{
-		typename std::map<TNAME, TVALUE>::iterator
-			it = _mttParameter.find(tName);
+		typename boost::unordered_map<TNAME, TVALUE>::iterator it = _mttParameter.find(tName);
 
 		if(it != _mttParameter.end())
 		{
@@ -61,16 +63,14 @@ public:
 		{
 			return false;
 		}
-	};
+	}
 
 	const TVALUE& operator () (const TNAME& tName) const
 	{
 		return _mttParameter.at(tName);
 /*
-		for(typename std::map<TNAME, TVALUE>::const_iterator
-			_mIterator  = _mttParameter.begin();
-			_mIterator != _mttParameter.end()  ;
-			_mIterator++                         )
+		for (typename boost::unordered_map<TNAME, TVALUE>::const_iterator
+			 _mIterator = _mttParameter.begin(); _mIterator != _mttParameter.end(); _mIterator++)
 		{
 			if(_mIterator->first == tName)
 				return _mIterator->second;
@@ -83,26 +83,24 @@ public:
 			<< std::endl;
 		std::exit(-1);
 */
-	};
+	}
 
 	TVALUE& operator[] (const TNAME& tName)
 	{
 		return _mttParameter[tName];
-	};
+	}
 
-	inline unsigned long Size() const
+	inline vedo::vedo_uint_t Size() const
 	{
 		return _mttParameter.size();
-	};
+	}
 
 	bool operator > (const ParameterSet<TNAME, TVALUE>& pstTarget) const
 	{
-		for(typename std::map<TNAME, TVALUE>::const_iterator
-			_mIterator  = _mttParameter.begin();
-			_mIterator != _mttParameter.end()  ;
-			_mIterator++                        )
+		for (typename boost::unordered_map<TNAME, TVALUE>::const_iterator
+			 _mIterator = _mttParameter.begin(); _mIterator != _mttParameter.end(); _mIterator++)
 		{
-			if(pstTarget.Defined(_mIterator->first))
+			if (pstTarget.Defined(_mIterator->first))
 			{
 				if (abs(_mIterator->second) < abs(pstTarget(_mIterator->first)))
 				{
@@ -112,16 +110,14 @@ public:
 		}
 
 		return true;
-	};
+	}
 
 	bool operator < (const ParameterSet<TNAME, TVALUE>& pstTarget) const
 	{
-		for(typename std::map<TNAME, TVALUE>::const_iterator
-			_mIterator  = _mttParameter.begin();
-			_mIterator != _mttParameter.end()  ;
-			_mIterator++                        )
+		for (typename boost::unordered_map<TNAME, TVALUE>::const_iterator
+			 _mIterator = _mttParameter.begin(); _mIterator != _mttParameter.end(); _mIterator++)
 		{
-			if(pstTarget.Defined(_mIterator->first))
+			if (pstTarget.Defined(_mIterator->first))
 			{
 				if (abs(_mIterator->second) > abs(pstTarget(_mIterator->first)))
 				{
@@ -131,16 +127,15 @@ public:
 		}
 
 		return true;
-	};
+	}
 
-	const TNAME GetName(const unsigned& u) const
+	const TNAME GetName(const vedo::vedo_uint_t& u) const
 	{
 		if (u < _mttParameter.size())
 		{
-			typename std::map<TNAME, TVALUE>::const_iterator
-				_mIterator = _mttParameter.begin();
+			typename boost::unordered_map<TNAME, TVALUE>::const_iterator _mIterator = _mttParameter.begin();
 
-			for(unsigned uCounter=0; uCounter<u; uCounter++)
+			for (vedo::vedo_uint_t uCounter=0; uCounter<u; uCounter++)
 			{
 				_mIterator++;
 			}
@@ -151,16 +146,15 @@ public:
 		{
 			return TNAME();
 		}
-	};
+	}
 
-	const std::pair<TNAME, TVALUE> GetNameAndData(const unsigned& u) const
+	const std::pair<TNAME, TVALUE> GetNameAndData(const vedo::vedo_uint_t& u) const
 	{
 		if (u < _mttParameter.size())
 		{
-			typename std::map<TNAME, TVALUE>::const_iterator
-				_mIterator = _mttParameter.begin();
+			typename boost::unordered_map<TNAME, TVALUE>::const_iterator _mIterator = _mttParameter.begin();
 
-			for(unsigned uCounter=0; uCounter<u; uCounter++)
+			for (vedo::vedo_uint_t uCounter=0; uCounter<u; uCounter++)
 			{
 				_mIterator++;
 			}
@@ -171,31 +165,27 @@ public:
 		{
 			return std::make_pair(TNAME(), TVALUE());
 		}
-	};
+	}
 
 	ParameterSet<TNAME, TVALUE> Average(const ParameterSet<TNAME, TVALUE>& pstTarget) const
 	{
 		ParameterSet<TNAME, TVALUE> pstNew;
 
-		for(typename std::map<TNAME, TVALUE>::const_iterator
-			_mIterator  = _mttParameter.begin();
-			_mIterator != _mttParameter.end()  ;
-			_mIterator++                        )
+		for (typename boost::unordered_map<TNAME, TVALUE>::const_iterator
+			 _mIterator  = _mttParameter.begin(); _mIterator != _mttParameter.end(); _mIterator++)
 		{
-			if(pstTarget.Defined(_mIterator->first))
+			if (pstTarget.Defined(_mIterator->first))
 			{
-				pstNew._mttParameter[_mIterator->first]
-					= 0.5 * (_mIterator->second + pstTarget(_mIterator->first));
+				pstNew._mttParameter[_mIterator->first] = 0.5 * (_mIterator->second + pstTarget(_mIterator->first));
 			}
 		}
 		return pstNew;
-	};
+	}
 
 
 	bool Defined(const TNAME& tName) const
 	{
-		typename std::map<TNAME, TVALUE>::const_iterator
-			it = _mttParameter.find(tName);
+		typename boost::unordered_map<TNAME, TVALUE>::const_iterator it = _mttParameter.find(tName);
 
 		if(it != _mttParameter.end())
 		{
@@ -205,12 +195,12 @@ public:
 		{
 			return false;
 		}
-	};
+	}
 
-	const std::map<TNAME, TVALUE>* GetData() const
+	const boost::unordered_map<TNAME, TVALUE>* GetData() const
 	{
 		return &_mttParameter;
-	};
+	}
 
 	template <typename TVariable>
 	void CallFunctionInTVALUE(const TVariable& tv)
@@ -220,40 +210,32 @@ public:
 		Func_Type func_obj(&TVALUE::Update);
 		njr::binder2nd_refArg<Func_Type> binded_func(func_obj, tv);
 
-		for(typename std::map<TNAME, TVALUE>::iterator
-			_mIterator  = _mttParameter.begin();
-			_mIterator != _mttParameter.end()  ;
-			_mIterator++                         )
+		for (typename boost::unordered_map<TNAME, TVALUE>::iterator
+			 _mIterator  = _mttParameter.begin(); _mIterator != _mttParameter.end(); _mIterator++)
 		{
 			_mIterator->second.Update(tv);
 		}
-	};
+	}
 
 private:
 
-	std::map<TNAME, TVALUE> _mttParameter;
+	boost::unordered_map<TNAME, TVALUE> _mttParameter;
 };
 
-};   // namespace njr
+}   // namespace njr
+
+
 
 template <typename TNAME, typename TVALUE>
 std::ostream& operator << (std::ostream& os, const njr::ParameterSet<TNAME, TVALUE>& ps)
 {
-	const std::map<TNAME, TVALUE>* _Data = ps.GetData();
-	for(typename std::map<TNAME, TVALUE>::const_iterator
-		_mIterator  = _Data->begin();
-		_mIterator != _Data->end()  ;
-		_mIterator++                                    )
+	const boost::unordered_map<TNAME, TVALUE>* _Data = ps.GetData();
+	for (typename boost::unordered_map<TNAME, TVALUE>::const_iterator
+		 _mIterator  = _Data->begin(); _mIterator != _Data->end(); _mIterator++)
 	{
-		os
-			<< "["
-			<< _mIterator->first
-			<< "]: "
-			<< _mIterator->second
-			<< std::endl;
+		os << "[" << _mIterator->first << "]: " << _mIterator->second << std::endl;
 	}
-
 	return os;
-};
+}
 
 #endif // _PARAMETER_SET_H

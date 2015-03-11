@@ -16,18 +16,17 @@ public:
 	TimeControlVariable()
 	{
 		_TimeHistory = 0;
-	};
+	}
 
-	TimeControlVariable
-		(const T& NewValue, njr::EFSTimeHistory<double>* TimeHistory):
-			_BaseValue(NewValue), Value(NewValue), _TimeHistory(TimeHistory)
+	TimeControlVariable(const T& NewValue, njr::EFSTimeHistory<vedo::vedo_float_t>* TimeHistory):
+		_BaseValue(NewValue), Value(NewValue), _TimeHistory(TimeHistory)
 	{
-	};
+	}
 
 	TimeControlVariable(const TimeControlVariable& tcv)
 	{
 		*this = tcv;
-	};
+	}
 
 	const TimeControlVariable& operator = (const TimeControlVariable& tcv)
 	{
@@ -35,43 +34,43 @@ public:
 		_BaseValue   = tcv._BaseValue;
 		_TimeHistory = tcv._TimeHistory;
 		return *this;
-	};
+	}
 
 	const TimeControlVariable& operator = (const T& tv)
 	{
 		_BaseValue = Value = tv;
 		_TimeHistory = 0;
 		return *this;
-	};
+	}
 
 	const TimeControlVariable& operator += (const T& tv)
 	{
 		_BaseValue += tv;
 		Value      += tv;
 		return *this;
-	};
+	}
 
 	const TimeControlVariable& operator -= (const T& tv)
 	{
 		_BaseValue -= tv;
 		Value      -= tv;
 		return *this;
-	};
+	}
 
 	const TimeControlVariable& operator *= (const T& tv)
 	{
 		_BaseValue *= tv;
 		Value      *= tv;
 		return *this;
-	};
+	}
 
 	~TimeControlVariable()
 	{
-	};
+	}
 
-	T TimeValue(const double& dTime) const
+	T TimeValue(const vedo::vedo_float_t& dTime) const
 	{
-		if(_TimeHistory)
+		if (_TimeHistory)
 		{
 			return (*_TimeHistory)(dTime) * _BaseValue;
 		}
@@ -79,25 +78,25 @@ public:
 		{
 			return _BaseValue;
 		}
-	};
+	}
 
-	void Update(const double& dTime)
+	void Update(const vedo::vedo_float_t& dTime)
 	{
-		if(_TimeHistory)
+		if (_TimeHistory)
 		{
 			Value = (*_TimeHistory)(dTime) * _BaseValue;
 		}
-	};
+	}
 
 	const T GetBaseValue() const
 	{
 		return _BaseValue;
-	};
+	}
 
-	const njr::EFSTimeHistory<double>* GetTimeHistory() const
+	const njr::EFSTimeHistory<vedo::vedo_float_t>* GetTimeHistory() const
 	{
 		return _TimeHistory;
-	};
+	}
 
 	T Value;
 
@@ -105,10 +104,10 @@ private:
 
 	T _BaseValue;
 
-	njr::EFSTimeHistory<double>* _TimeHistory;
+	njr::EFSTimeHistory<vedo::vedo_float_t>* _TimeHistory;
 };
 
-};   // namespace njr
+}   // namespace njr
 
 
 
@@ -116,11 +115,11 @@ template <typename T>
 std::ostream& operator << (std::ostream& os, const njr::TimeControlVariable<T> & tcv)
 {
 	os << tcv.GetBaseValue() << std::endl;
-	if(tcv.GetTimeHistory())
+	if (tcv.GetTimeHistory())
 	{
 		os << "Time history (file: " << tcv.GetTimeHistory()->GetFileName() << ")" << std::endl;
 	}
 	return os;
-};
+}
 
 #endif // _NJR_TIME_CONTROL_VARIABLE_H

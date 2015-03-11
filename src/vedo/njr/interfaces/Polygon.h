@@ -2,6 +2,7 @@
 #define _NJR_POLYGON_H
 
 #include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vector>
 
 namespace njr
@@ -20,33 +21,36 @@ public:
 
 	const NJRpolygon & operator = (const NJRpolygon &p);
 
-	inline double area() const
+	inline vedo::vedo_float_t area() const
 	{
 		return _area;
-	};
+	}
 
-	inline double edge_length() const
+	inline vedo::vedo_float_t edge_length() const
 	{
 		return _edge_length;
-	};
+	}
 
 	inline const std::vector<Vector3d>& vertexes () const
 	{
 		return _vertexes;
-	};
+	}
 
 	inline Vector3d center() const
 	{
 		return _center;
-	};
+	}
 
 	void print() const;
 
 private:
 
 	Vector3d _center;
-	double _area  ;
-	double _edge_length;
+
+	vedo::vedo_float_t _area ;
+
+	vedo::vedo_float_t _edge_length;
+
 	std::vector<Vector3d> _vertexes;
 
 	// Remove the one of vertexs from two nearly vertexs
@@ -57,11 +61,12 @@ private:
 	 * legnth of edge; call by pure_vertex()
 	 **************************************************************************/
 	void CalArea();
-	void CalEdgeLength();
-	void CalCenter();
 
+	void CalEdgeLength();
+
+	void CalCenter();
 };
 
-};   // namespace njr
+}   // namespace njr
 
 #endif // _NJR_POLYGON_H

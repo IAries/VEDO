@@ -6,9 +6,9 @@ namespace vedo
 
 void DOWorld::DumpDOStatus(const char* filename) const
 {
-    std::ofstream oCSVFile(filename, std::ios::out);
+	std::ofstream oCSVFile(filename, std::ios::out);
 
-    oCSVFile
+	oCSVFile
 		<< "Time, DOStatusSN, DOStatusID, DOName, "
 		<< "Position-X, PositionY, PositionZ, "
 		<< "Velocity-X, VelocityY, VelocityZ, "
@@ -22,7 +22,7 @@ void DOWorld::DumpDOStatus(const char* filename) const
     const DOStatus* dosp;
     njr::Vector3d vV;
 
-    for(unsigned long ul=0; ul<cDOStatus.size(); ul++)
+    for (vedo::vedo_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{
 	    dosp = cDOStatus[ul];
 	    oCSVFile
@@ -31,29 +31,29 @@ void DOWorld::DumpDOStatus(const char* filename) const
 			<< dosp->GetID()                      << ", "
 			<< dosp->GetDOName()                  << ", ";
 
-	    vV = dosp->GetPosition();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
+		vV = dosp->GetPosition();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
 
-	    vV = dosp->GetVelocity();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
+		vV = dosp->GetVelocity();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
 
-	    vV = dosp->GetAngularVelocity();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
+		vV = dosp->GetAngularVelocity();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
 
-	    vV = dosp->GetOrientationX();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
+		vV = dosp->GetOrientationX();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
 
-	    vV = dosp->GetOrientationZ();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
+		vV = dosp->GetOrientationZ();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
 
-	    vV = dosp->GetImpact();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
+		vV = dosp->GetImpact();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << ", ";
 
-	    vV = dosp->GetAngularImpact();
-        oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
+		vV = dosp->GetAngularImpact();
+		oCSVFile << vV.x() << ", " << vV.y() << ", " << vV.z() << std::endl;
 	}
 
     oCSVFile.close();
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

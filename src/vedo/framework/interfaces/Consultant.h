@@ -1,7 +1,7 @@
 #ifndef _CONSULTANT_H
 #define _CONSULTANT_H
 
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/framework/interfaces/DOContainer.h>
 #include <vedo/framework/interfaces/DOMap.h>
 #include <vedo/framework/interfaces/DOModel.h>
@@ -15,18 +15,15 @@ namespace vedo
 {
 
 // The EnsureLength function
-void EnsureLength
-	(unsigned int base,
-	 unsigned long target,
-	 unsigned long& length,
-	 double*& array        );
+void EnsureLength(vedo_uint_t base, vedo_uint_t target, vedo_uint_t& length, vedo_float_t*& array);
 
 
 
-typedef std::pair<unsigned long, unsigned long> IactPair;
+typedef std::pair<vedo_uint_t, vedo_uint_t> IactPair;
 
 class X_Comp
 {
+
 public:
 
 	X_Comp(const std::vector<DOMap>&);
@@ -37,13 +34,15 @@ private:
 
 	std::vector<DOMap> map;
 
-	double CalcIactCoordinate(const IactPair&);
+	vedo_float_t CalcIactCoordinate(const IactPair&);
+
 };
 
 
 
 class Y_Comp
 {
+
 public:
 
 	Y_Comp(const std::vector<DOMap>& vDOMap);
@@ -54,13 +53,15 @@ private:
 
 	std::vector<DOMap> map;
 
-	double CalcIactCoordinate(const IactPair&);
+	vedo_float_t CalcIactCoordinate(const IactPair&);
+
 };
 
 
 
 class Z_Comp
 {
+
 public:
 
 	Z_Comp(const std::vector<DOMap>& vDOMap);
@@ -71,7 +72,8 @@ private:
 
 	std::vector<DOMap> map;
 
-	double CalcIactCoordinate(const IactPair&);
+	vedo_float_t CalcIactCoordinate(const IactPair&);
+
 };
 
 
@@ -81,41 +83,34 @@ class Consultant
 
 public:
 
-	Consultant
-		(DOWorld* DOWorld,
-		IactRecordTab* pIactRecordTab,
-		char filename[],
-		unsigned long ulwrite);
+	Consultant(DOWorld* DOWorld, IactRecordTab* pIactRecordTab, std::string filename, vedo_uint_t ulwrite);
 
 	// Retrieves the number of active Discrete Objects
-	virtual unsigned long GetDONum() const;
+	virtual vedo_uint_t GetDONum() const;
 
 	// Retrieves the number of active Interactions
-	virtual unsigned long GetIactNum() const;
+	virtual vedo_uint_t GetIactNum() const;
 
 	// Retrieves the ith active Discrete Objects
-	virtual unsigned long GetDO(unsigned long i) const;
+	virtual vedo_uint_t GetDO(vedo_uint_t i) const;
 
 	// Retrieves the Master Discrete Object of the ith active Interaction
-	virtual unsigned long GetIactMaster(unsigned long i) const;
+	virtual vedo_uint_t GetIactMaster(vedo_uint_t i) const;
 
 	// Retrieves the slave Discrete Object of the ith active Interaction
-	virtual unsigned long GetIactSlave(unsigned long i) const;
+	virtual vedo_uint_t GetIactSlave(vedo_uint_t i) const;
 
 	// Retireves the current Simulation Problem
 	virtual const DOWorld* GetDOWorld() const;
 
 	virtual const IactRecordTab* GetIactRecordTab() const;
 
-	inline unsigned long ContactNumber() const
+	inline vedo_uint_t ContactNumber() const
 	{
 		return pIRTbl->ContactNumber();
-	};
+	}
 
-	/**************************************************************************
-	 * Synchronize the external impact of each Discrete Object inside this
-	 * DOContainer;
-	 **************************************************************************/
+	// Synchronize the external impact of each Discrete Object inside this DOContainer;
 	virtual void SyncDOContainer(DOContainer& cDO);
 
 	// DO all kernel instances need to be rebuilt?
@@ -125,35 +120,31 @@ public:
 	inline bool ISRecord()
 	{
 		return ((ulRoundCount % culRecord) == 0);
-	};
+	}
 
-	/**************************************************************************
-	 * Updates the data of Consultant and updates DOWorld and then make DOWorld
-	 * include the last status of each Discrete Objects
-	 **************************************************************************/
+	// Updates the data of Consultant and updates DOWorld and then make DOWorld include the last status of each Discrete Objects
 	virtual bool NextStep(DOContainer& cDO, IactContainer& cIact);
 
 	virtual bool Reset();
 
 	virtual void RecordIDO();
 
-	virtual const ImpactStatus* RetrieveImpactStatus
-		(unsigned long lcMaster, unsigned long lcSlave) const;
+	virtual const ImpactStatus* RetrieveImpactStatus(vedo_uint_t lcMaster, vedo_uint_t lcSlave) const;
 
 	virtual ~Consultant();
 
-	inline void SetRankNP(const int r, const int np)
+	inline void SetRankNP(const vedo_uint_t r, const vedo_uint_t np)
 	{
 		rank = r;
 		NP   = np;
-	};
+	}
 
 	inline void ResetTimePartitioning()
 	{
 		timePartitioning = 0.0;
-	};
+	}
 
-	bool InBoundary(unsigned long) const;
+	bool InBoundary(vedo_uint_t) const;
 
 	virtual bool CleanUp(DOContainer& cDO, IactContainer& cIact);
 
@@ -161,61 +152,72 @@ public:
 
 	virtual void RebuildIactRecordTab(IactContainer& cIact);
 
-	std::time_t starttime;          // Starting time
-	std::time_t endtime;            // Endind time
-	double      timePartitioning;   // Time of partitioning
+	std::time_t  starttime;          // Starting time
+
+	std::time_t  endtime;            // Endind time
+
+	vedo_float_t timePartitioning;   // Time of partitioning
 
 	inline void FreezeAllElements()
 	{
 		pDOWorld->FreezeAllElements();
-	};
+	}
 
-	bool EraseSingleElement(const unsigned long& ulID);
+	bool EraseSingleElement(const vedo_uint_t& ulID);
 
-	bool EraseElements(const std::vector<unsigned long>& ulIDList);
+	bool EraseElements(const std::vector<vedo_uint_t>& ulIDList);
 
 	inline void CalculateSystemEnergy()
 	{
 		pDOWorld->CalculateSystemEnergy();
-	};
+	}
 
-	double GetUserDefinedValue(unsigned) const;
+	vedo_float_t GetUserDefinedValue(vedo_uint_t) const;
 
 protected:
 
-	DOWorld*                   pDOWorld;
-	IactRecordTab*             pIRTbl;
-	std::vector<unsigned long> vcDO;
-	std::vector<unsigned long> vcIactMaster;
-	std::vector<unsigned long> vcIactSlave;
+	DOWorld*                 pDOWorld;
 
-	const unsigned long        culRecord;
-	unsigned long              culUpIact;
-	unsigned long              ulRecordCount;
-	unsigned long              ulRoundCount;
+	IactRecordTab*           pIRTbl;
 
-	std::string                sfilename;
+	std::vector<vedo_uint_t> vcDO;
 
-	unsigned int               rank;   // Rank   of processores
-	unsigned int               NP;     // Number of processores
+	std::vector<vedo_uint_t> vcIactMaster;
 
-	unsigned long              ImpactBufferSize;
+	std::vector<vedo_uint_t> vcIactSlave;
 
-	std::vector<IactPair>      IactPairTab;
+	const vedo_uint_t        culRecord;
+
+	vedo_uint_t              culUpIact;
+
+	vedo_uint_t              ulRecordCount;
+
+	vedo_uint_t              ulRoundCount;
+
+	std::string              sfilename;
+
+	vedo_uint_t              rank;   // Rank   of processores
+
+	vedo_uint_t              NP;     // Number of processores
+
+	vedo_uint_t              ImpactBufferSize;
+
+	std::vector<IactPair>    IactPairTab;
 
 	virtual void BuildIactTab(std::vector<DOMap>& v1, std::vector<DOMap>& v2);
+
 	virtual void BuildIactTab(std::vector<DOMap>& v);
 
-	double* dpUDVIS;   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
-	//double dUDVIS[2*uNumUDDImpactStatus];   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
+	vedo_float_t* dpUDVIS;   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
+	//vedo_float_t dUDVIS[2*uNumUDDImpactStatus];   // 0 ~ uNumUDDImpactStatus: Accumulative user-defined value in ImpactStatus
                                             // uNumUDDImpactStatus ~ 2*uNumUDDImpactStatus-1: User-defined value in ImpactStatus
 
-//	double dUDVDS[2*uNumUDDDOStatus];       // 0 ~ uNumUDDDOStatus: Accumulative user-defined value in DOStatus
+//	vedo_float_t dUDVDS[2*uNumUDDDOStatus];       // 0 ~ uNumUDDDOStatus: Accumulative user-defined value in DOStatus
                                             // uNumUDDDOStatus ~ 2*uNumUDDImpactStatus-1: User-defined value in DOStatus
 
 	virtual void CollectUserDefinedData(IactContainer&);
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _CONSULTANT_H

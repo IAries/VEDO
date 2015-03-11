@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="vedo">
-		<Project filename="njr.cbp" />
+		<Project filename="constants.cbp" />
+		<Project filename="njr.cbp">
+			<Depends filename="constants.cbp" />
+		</Project>
 		<Project filename="framework.cbp">
-			<Depends filename="njr.cbp" />
+			<Depends filename="constants.cbp" />
 		</Project>
 		<Project filename="common.cbp">
-			<Depends filename="njr.cbp" />
-			<Depends filename="framework.cbp" />
+			<Depends filename="constants.cbp" />
 		</Project>
 		<Project filename="knight.cbp">
+			<Depends filename="constants.cbp" />
 			<Depends filename="njr.cbp" />
 			<Depends filename="framework.cbp" />
 			<Depends filename="common.cbp" />
 		</Project>
 		<Project filename="anne.cbp">
+			<Depends filename="constants.cbp" />
 			<Depends filename="njr.cbp" />
 			<Depends filename="framework.cbp" />
 			<Depends filename="common.cbp" />
 		</Project>
 		<Project filename="iris-gm.cbp">
+			<Depends filename="constants.cbp" />
 			<Depends filename="njr.cbp" />
 			<Depends filename="framework.cbp" />
 			<Depends filename="common.cbp" />

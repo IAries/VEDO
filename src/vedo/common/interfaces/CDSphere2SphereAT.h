@@ -6,16 +6,15 @@
 namespace vedo
 {
 
-class CDSphere_SphereAT : public CDSphere_Sphere
+class CDSphere_SphereAT: public CDSphere_Sphere
 {
 
 public:
 
-	void Detect
-		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _CDSPHERE_2_SPHEREAT_H

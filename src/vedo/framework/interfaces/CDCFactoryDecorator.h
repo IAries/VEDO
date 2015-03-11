@@ -18,10 +18,8 @@ public:
 
 	void AddCDCFactory(CDFactory* pcdf);
 
- 	ContactDetector* Create
-	 	(const DiscreteObject* cpdoslave,
-		const DiscreteObject* cpdomaster,
-		const IactModel* cpiactmodel) const;
+	ContactDetector* Create
+		(const DiscreteObject* cpdoslave, const DiscreteObject* cpdomaster, const IactModel* cpiactmodel) const;
 
 private:
 
@@ -29,6 +27,6 @@ private:
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _CONTACT_DETECTOR_FACTORY_DECORATOR_H

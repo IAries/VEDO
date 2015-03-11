@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="constants" />
+		<Option pch_mode="2" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../../lib/vedo/CodeBlocks/vedo-constants-debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../../obj/vedo/CodeBlocks/debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_VEDO_DEBUG" />
+					<Add option="-D_VEDO_INT32" />
+					<Add option="-D_VEDO_FLOAT64" />
+				</Compiler>
+			</Target>
+			<Target title="Debug32">
+				<Option output="../../../lib/vedo/CodeBlocks/vedo-constants-debug32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../../obj/vedo/CodeBlocks/debug32" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_VEDO_DEBUG" />
+					<Add option="-D_VEDO_INT32" />
+					<Add option="-D_VEDO_FLOAT32" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../../../lib/vedo/CodeBlocks/vedo-constants" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../../obj/vedo/CodeBlocks/release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-D_VEDO_INT32" />
+					<Add option="-D_VEDO_FLOAT64" />
+				</Compiler>
+			</Target>
+			<Target title="Release32">
+				<Option output="../../../lib/vedo/CodeBlocks/vedo-constants32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../../obj/vedo/CodeBlocks/release32" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-D_VEDO_INT32" />
+					<Add option="-D_VEDO_FLOAT32" />
+				</Compiler>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Debug32;Release;Release32;" />
+			<Add alias="64-bits" targets="Debug;Release;" />
+			<Add alias="32-bits" targets="Debug32;Release32;" />
+			<Add alias="Debug" targets="Debug;Debug32;" />
+			<Add alias="Release" targets="Release;Release32;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-D_STD_CPP_11" />
+			<Add option="-D_MS_WINDOWS" />
+			<Add directory="../../../src" />
+		</Compiler>
+		<Linker>
+			<Add option="-r" />
+		</Linker>
+		<Unit filename="../../../src/vedo/constants/implementation/Constants.cpp" />
+		<Unit filename="../../../src/vedo/constants/interfaces/Constants.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

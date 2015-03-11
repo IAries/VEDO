@@ -1,9 +1,11 @@
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/njr/interfaces/Utility.h>
 #include <vedo/framework/interfaces/Assembler.h>
 #include <vedo/framework/interfaces/Consultant.h>
 #include <vedo/framework/interfaces/DOModel.h>
 #include <vedo/framework/interfaces/DOWorld.h>
 #include <vedo/framework/interfaces/GeometricShape.h>
+#include <vedo/framework/interfaces/IactRecordTab.h>
 #include <vedo/framework/interfaces/SimMediator.h>
 #include <vedo/common/interfaces/LeapConsultant.h>
 #include <vedo/common/interfaces/NBSConsultant.h>
@@ -16,63 +18,70 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <string>
 
-void usage (int g)
+vedo::Constants* vedo_cp = vedo::Constants::Instance();
+vedo::vedo_float_t SafetyFactor = vedo_cp->SafetyFactor();
+
+void usage (vedo::vedo_int_t g)
 {
 	std::cout
-		<< "anne " << vedo::sVersion << std::endl
+		<< "Anne " << vedo::sVersion << " " << vedo_cp->SysInfo()   << std::endl
 		<< std::endl
-		<< '\t' << "Usage:" << std::endl
-		<< '\t' << "anne <Mode> <IDO file> <Type> <Record> <UpIact>" << std::endl
-		<< std::endl
-		<< '\t' << "Mode                 : analysis/redistribute"    << std::endl
-		<< '\t' << "Type                 : (I)  safe/near"           << std::endl
-		<< '\t' << "                       (II) nbs/leap"            << std::endl
-		<< '\t' << "Record               : integer"                  << std::endl
-		<< '\t' << "UpIact (for Type II) : integer"                  << std::endl
-		<< std::endl
-		<< '\t' << "Error Condition      : " << g << std::endl;
+		<< "Usage: anne <Mode> <IDO file> <Type> <Record> <UpIact>" << std::endl
+		<< "Mode                : analysis/redistribute"            << std::endl
+		<< "Type                : (I)  safe/near"                   << std::endl
+		<< "                      (II) nbs/leap"                    << std::endl
+		<< "Record              : integer"                          << std::endl
+		<< "UpIact (for Type II): integer"                          << std::endl;
 	exit(0);
 }
 
-int main (int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	if (argc < 5)
+	{
 		usage(1);
+	}
+
+	std::vector<std::string> arg;
+	for (int i=0; i<argc; i++)
+	{
+		arg.push_back(argv[i]);
+	}
 
 	time_t starttime;   // Starting time
 	time_t endtime;     // Endind time
 	time(&starttime);
 
-	double timeSystem           = 0.0;   // Time of system preparing, starting and ending
-	double timeImpactSolving    = 0.0;   // Time of impact solving
-	double timeSyncDOContainer  = 0.0;   // Time of "SyncDOContainer"
-	double timeFieldForceAdding = 0.0;   // Time of field force adding
-	double timeResponseUpdating = 0.0;   // Time of response updating
-	double timeContactDetection = 0.0;   // Time of contact detection
-	double timeNextStep         = 0.0;   // Time of "NextStep"
+	vedo::vedo_float_t timeSystem           = 0.0;   // Time of system preparing, starting and ending
+	vedo::vedo_float_t timeImpactSolving    = 0.0;   // Time of impact solving
+	vedo::vedo_float_t timeSyncDOContainer  = 0.0;   // Time of "SyncDOContainer"
+	vedo::vedo_float_t timeFieldForceAdding = 0.0;   // Time of field force adding
+	vedo::vedo_float_t timeResponseUpdating = 0.0;   // Time of response updating
+	vedo::vedo_float_t timeContactDetection = 0.0;   // Time of contact detection
+	vedo::vedo_float_t timeNextStep         = 0.0;   // Time of "NextStep"
 
-	char     mode[256];
-	char*    idofilename;
-	char     type[256];
-	unsigned RecordStep;
-	unsigned UpIact;
-
-	sscanf(argv[1], "%s", mode);
-	sscanf(argv[3], "%s", type);
-	sscanf(argv[4], "%d", &RecordStep);
-	if (argc >= 6)
-		sscanf(argv[5], "%d", &UpIact);
+	std::string mode = arg[1];
+	std::string type = arg[3];
+	std::string s = arg[4];
+	vedo::vedo_uint_t RecordStep = vedo_cp->String2T<vedo::vedo_uint_t>(arg[4]);
+	vedo::vedo_uint_t UpIact = 1;
+	if (arg.size() >= 6)
+	{
+		UpIact = vedo_cp->String2T<vedo::vedo_uint_t>(arg[5]);
+	}
 
 	vedo::DOWorld*       pDOWorld;
 	vedo::Consultant*    pConsultant;
 	vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 	vedo::Assembler*     pAssembler = vedo::CreateNewAssembler();
 
-	if ( !strcmp (strlen(argv[2]) - 4 + argv[2], ".ido") )
+	std::string idofilename;
+	if (njr::CheckSubName(arg[2], ".ido"))
 	{
 		pDOWorld    = new vedo::DOWorld;
-		idofilename = argv[2];
+		idofilename = arg[2];
 		pDOWorld->ReadIDO(idofilename, pIactRecordTab);
 	}
 	else
@@ -80,15 +89,15 @@ int main (int argc, char* argv[])
 		usage(2);
 	}
 
-	if (!strcmp(type, "safe"))
+	if (type == "safe")
 	{
 		pConsultant = new vedo::SafeConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
 	}
-    else if (!strcmp(type, "near"))
+    else if (type == "near")
     {
 		pConsultant = new vedo::NearConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep);
 	}
-	else if (!strcmp(type, "nbs"))
+	else if (type == "nbs")
 	{
 		if (argc < 6)
 		{
@@ -96,7 +105,7 @@ int main (int argc, char* argv[])
 		}
 	  	pConsultant = new vedo::NBSConsultant(pDOWorld, pIactRecordTab, idofilename, RecordStep, UpIact);
 	}
-	else if (!strcmp(type, "leap"))
+	else if (type == "leap")
 	{
 	    if (argc < 6)
 	    {
@@ -116,11 +125,11 @@ int main (int argc, char* argv[])
 	time(&endtime);
 	timeSystem += (endtime - starttime);
 
-	if (!strcmp(mode, "analysis"))
+	if (mode == "analysis")
 	{
 		while (sm.Run());
 	}
-	else if (!strcmp(mode, "redistribute"))
+	else if (mode == "redistribute")
 	{
 		while (sm.ReDistribute());
 	}
@@ -151,20 +160,14 @@ int main (int argc, char* argv[])
 	timeNextStep          = (sm.timeNextStep);
 
 	time(&endtime);
-	timeSystem += (endtime - starttime);
+	timeSystem           += (endtime - starttime);
 
-	double timeComputing
-		= timeSystem
-		+ timeImpactSolving
-		+ timeFieldForceAdding
-		+ timeResponseUpdating
-		+ timeContactDetection
-		+ timeNextStep;
+	vedo::vedo_float_t timeComputing
+		= timeSystem + timeImpactSolving + timeFieldForceAdding + timeResponseUpdating + timeContactDetection + timeNextStep;
 
-	double timeCommunication
-		= timeSyncDOContainer;
+	vedo::vedo_float_t timeCommunication = timeSyncDOContainer;
 
-	double timeTotal = timeComputing + timeCommunication;
+	vedo::vedo_float_t timeTotal = timeComputing + timeCommunication;
 
 	std::ofstream FileLog("time.txt", std::ios::out);
 	FileLog
@@ -216,4 +219,4 @@ int main (int argc, char* argv[])
 
 	exit(0);
 	return true;
-};
+}

@@ -12,18 +12,13 @@ class NBSConsultant : public Consultant
 
 public:
 
-	NBSConsultant
-		(DOWorld* DOWorld,
-		IactRecordTab* pIactRecordTab,
-		char filename[],
-		unsigned long ulwrite ,
-		unsigned long ulupdate);
+	NBSConsultant(DOWorld* DOWorld, IactRecordTab* pIactRecordTab, std::string filename, vedo_uint_t ulwrite, vedo_uint_t ulupdate);
 
-	virtual unsigned long GetIactNum() const;
+	virtual vedo_uint_t GetIactNum() const;
 
-	virtual unsigned long GetIactMaster (unsigned long i) const;
+	virtual vedo_uint_t GetIactMaster (vedo_uint_t i) const;
 
-	virtual unsigned long GetIactSlave (unsigned long i) const;
+	virtual vedo_uint_t GetIactSlave (vedo_uint_t i) const;
 
 	virtual bool ISReset();
 
@@ -32,7 +27,7 @@ public:
 	virtual bool NextStep(DOContainer& cDO, IactContainer& cIact);
 
 	// The time spent on reset
-	double timeReset;
+	vedo_float_t timeReset;
 
 	virtual void RebuildIactRecordTab(IactContainer& cIact);
 
@@ -50,13 +45,15 @@ class Trir
 
 public:
 
-	Trir(int _xidx,int _yidx,int _zidx) : xIdx(_xidx), yIdx(_yidx), zIdx(_zidx)
+	Trir(vedo_int_t _xidx,vedo_int_t _yidx,vedo_int_t _zidx) : xIdx(_xidx), yIdx(_yidx), zIdx(_zidx)
 	{
 	}
 
-	int xIdx;
-	int yIdx;
-	int zIdx;
+	vedo_int_t xIdx;
+
+	vedo_int_t yIdx;
+
+	vedo_int_t zIdx;
 
 };
 
@@ -127,6 +124,6 @@ public:
 	}
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _NBS_CONSULTANT_H

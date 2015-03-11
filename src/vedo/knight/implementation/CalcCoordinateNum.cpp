@@ -1,17 +1,18 @@
-#include <vedo/njr/interfaces/RandomGenerator.h>
-#include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/knight/interfaces/CalcCoordinateNum.h>
 #include <vedo/framework/interfaces/DOWorld_WriteVTK.h>
 #include <vedo/framework/interfaces/DOMap.h>
-#include <vedo/knight/interfaces/CalcCoordinateNum.h>
+#include <vedo/njr/interfaces/RandomGenerator.h>
+#include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/constants/interfaces/Constants.h>
 
-double CalcCoordinateNum::computeAvgCoordinateNum
+vedo::vedo_float_t CalcCoordinateNum::computeAvgCoordinateNum
 	(const vedo::DOWorld* pWorld,
-	double xmin,
-	double xmax,
-	double ymin,
-	double ymax,
-	double zmin,
-	double zmax ) const
+	vedo::vedo_float_t xmin,
+	vedo::vedo_float_t xmax,
+	vedo::vedo_float_t ymin,
+	vedo::vedo_float_t ymax,
+	vedo::vedo_float_t zmin,
+	vedo::vedo_float_t zmax ) const
 {
 	/**************************************************************************
 	 * Intent: to contain all particles whose center lies in the range
@@ -21,9 +22,9 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 	std::vector<vedo::DOMap> vDOMap;
 	std::vector<vedo::DOMap> wholeMap = vedo::DOMap::GetDOMap(pWorld);
 
-	double xp, yp, zp, radius;
+	vedo::vedo_float_t xp, yp, zp, radius;
 
-	for (unsigned int i=0; i<(pWorld->GetSystemParameter()->GetDONumber()); ++i)
+	for (vedo::vedo_uint_t i=0; i<(pWorld->GetSystemParameter()->GetDONumber()); ++i)
 	{
 		const vedo::DOStatus* pdos = pWorld->GetDOStatus(i);
 		const vedo::DOModel* pmodel = pWorld->GetDOModel(pdos->GetDOName());
@@ -47,12 +48,12 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 		}
 	}
 
-	long total = 0;
-	int count = 0;
-	for (unsigned int i=0; i<vDOMap.size(); ++i)
+	vedo::vedo_int_t total = 0;
+	vedo::vedo_int_t count = 0;
+	for (vedo::vedo_uint_t i=0; i<vDOMap.size(); ++i)
 	{
 		count=0;
-		for (unsigned int j=0; j<wholeMap.size(); ++j)
+		for (vedo::vedo_uint_t j=0; j<wholeMap.size(); ++j)
 		{
 			vedo::DOMap m1 = vDOMap[i];
 			vedo::DOMap m2 = wholeMap[j];
@@ -74,16 +75,16 @@ double CalcCoordinateNum::computeAvgCoordinateNum
 		}
 		total += count;
 	}
-	return total/static_cast<double>(vDOMap.size());
+	return total/static_cast<vedo::vedo_float_t>(vDOMap.size());
 }
 
 void CalcCoordinateNum::outputCoordinateNumVTK
 	(const vedo::DOWorld* pWorld, const std::string& filename) const
 {
 	std::vector<vedo::DOMap> wholeMap = vedo::DOMap::GetDOMap(pWorld);
-	std::vector<double> coordNumArr;
+	std::vector<vedo::vedo_float_t> coordNumArr;
 
-	for (unsigned int i=0; i<wholeMap.size(); ++i)
+	for (vedo::vedo_uint_t i=0; i<wholeMap.size(); ++i)
 	{
 		vedo::DOMap m1 = wholeMap[i];
 		if (m1.cpdoml()->GetShapeType() != vedo::Sphere)
@@ -91,13 +92,13 @@ void CalcCoordinateNum::outputCoordinateNumVTK
 		coordNumArr.push_back(0);
 	}
 
-	for (unsigned int i=0; i<wholeMap.size(); ++i)
+	for (vedo::vedo_uint_t i=0; i<wholeMap.size(); ++i)
 	{
 		vedo::DOMap m1 = wholeMap[i];
 		if (m1.cpdoml()->GetShapeType() != vedo::Sphere)
 			continue;
 
-		for (unsigned int j=i+1; j<wholeMap.size(); ++j)
+		for (vedo::vedo_uint_t j=i+1; j<wholeMap.size(); ++j)
 		{
 			vedo::DOMap m2 = wholeMap[j];
 

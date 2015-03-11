@@ -12,14 +12,12 @@ class ISCFactoryDecorator : public ISFactory
 public:
 
 	ISCFactoryDecorator();
+
 	~ISCFactoryDecorator();
 
 	void AddISCFactory(ISFactory* pisf);
 
-	ImpactSolver* Create
-		(const DiscreteObject* cpdoslave,
-		const DiscreteObject* cpdomaster,
-		const IactModel* cpiactmodel) const;
+	ImpactSolver* Create(const DiscreteObject* cpdoslave, const DiscreteObject* cpdomaster, const IactModel* cpiactmodel) const;
 
 private:
 
@@ -27,6 +25,6 @@ private:
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _IMPACT_SOLVER_FACTORY_DECORATOR_H

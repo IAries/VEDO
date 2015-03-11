@@ -12,42 +12,32 @@ class ISwBtSDBF : public ImpactSolver
 
 public:
 
-	ISwBtSDBF
-		(const DiscreteObject* cpdoSlave,
-		const DiscreteObject* cpdoMaster,
-		const IactModel* cpiactml        );
+	ISwBtSDBF(const DiscreteObject* cpdoSlave, const DiscreteObject* cpdoMaster, const IactModel* cpiactml);
 
-	njr::Vector3d NextStep
-		(const ContactDetector* pcd,
-		DiscreteObject* pdoSlave,
-		DiscreteObject* pdoMaster,
-		double dt                   );
+	njr::Vector3d NextStep(const ContactDetector* pcd, DiscreteObject* pdoSlave, DiscreteObject* pdoMaster, vedo_float_t dt);
 
-	virtual bool InitialStep
-		(const ContactDetector* pcd,
-		DiscreteObject* pdoSlave,
-		DiscreteObject* pdoMaster   );
+	virtual bool InitialStep(const ContactDetector* pcd, DiscreteObject* pdoSlave, DiscreteObject* pdoMaster);
 
 	virtual std::string type () const
 	{
 		return "ISwBtSDBF";
-	};
+	}
 
 private:
 
 	// Spring of Mechanism
-	double kn, ks;
+	vedo_float_t kn, ks;
 
 	// Dashpot of Mechanism
-	double cn, cs;
+	vedo_float_t cn, cs;
 
 	// Binding force
-	double bn, bs;
+	vedo_float_t bn, bs;
 
 	// Friction coefficient
-	double fc;
+	vedo_float_t fc;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _ISwBSDBF_H

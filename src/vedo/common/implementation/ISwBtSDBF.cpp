@@ -4,47 +4,32 @@
 namespace vedo
 {
 
-ISwBtSDBF::ISwBtSDBF
-	(const DiscreteObject* cpdoSlave,
-	const DiscreteObject* cpdoMaster,
-	const IactModel* cpiactml) : ImpactSolver(cpiactml)
+ISwBtSDBF::ISwBtSDBF(const DiscreteObject* cpdoSlave, const DiscreteObject* cpdoMaster, const IactModel* cpiactml):
+	ImpactSolver(cpiactml)
 {
 	kn = cpiactml->GetIactMechanism("NormalStiffness");
 	ks = cpiactml->GetIactMechanism("ShearStiffness");
-	std::pair<double, double> CriticalDamping
-		= ism
-			->CriticalDamping
-				(cpdoSlave->GetSudoMass(), cpdoMaster->GetSudoMass(), kn, ks);
+	std::pair<vedo_float_t, vedo_float_t> CriticalDamping
+		= ism->CriticalDamping(cpdoSlave->GetSudoMass(), cpdoMaster->GetSudoMass(), kn, ks);
 	cn = (cpiactml->GetIactMechanism("NormalDampingRatio")) * CriticalDamping.first;
 	cs = (cpiactml->GetIactMechanism("ShearDampingRatio")) * CriticalDamping.second;
 	bn = cpiactml->GetIactMechanism("NormalBondStrength");
 	bs = cpiactml->GetIactMechanism("ShearBondStrength");
 	fc = cpiactml->GetIactMechanism("FrictionCoefficient");
-};
+}
 
-bool ISwBtSDBF::InitialStep
-	(const ContactDetector *CInfo,
-	DiscreteObject *pdoSlave,
-	DiscreteObject *pdoMaster)
+bool ISwBtSDBF::InitialStep(const ContactDetector *CInfo, DiscreteObject *pdoSlave, DiscreteObject *pdoMaster)
 {
 	return true;
-};
+}
 
-njr::Vector3d ISwBtSDBF::NextStep
-	(const ContactDetector* CInfo,
-	DiscreteObject* A,
-	DiscreteObject* B,
-	double dt                     )
+njr::Vector3d ISwBtSDBF::NextStep(const ContactDetector* CInfo, DiscreteObject* A, DiscreteObject* B, vedo_float_t dt)
 {
-	/**********************************************************************
-	 * CInfo->GetContactInfo() -> vImpactDirection
-	 * represents direction of (Position B - Position A)
-	 **********************************************************************/
-	const double      dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
+	// CInfo->GetContactInfo() -> vImpactDirection represents direction of (Position B - Position A)
+	const vedo_float_t  dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
 	const njr::Vector3d vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
 
-	if (   (!(CInfo->GetContactInfo()->bActive))
-		&& (!(ism->NormalBond(kn, cn, bn, dImpDepth))) )
+	if ((!(CInfo->GetContactInfo()->bActive)) && (!(ism->NormalBond(kn, cn, bn, dImpDepth))))
 	{
 		// Normal bond break
 		//ImStatus.stage = 2;
@@ -54,11 +39,11 @@ njr::Vector3d ISwBtSDBF::NextStep
 
     ImStatus.SetContactInformation(CInfo->GetContactInfo());
 
-	const DOStatus*   dosA = A->GetDOStatus();
-	const DOStatus*   dosB = B->GetDOStatus();
+	const DOStatus*     dosA = A->GetDOStatus();
+	const DOStatus*     dosB = B->GetDOStatus();
 
-	const njr::Vector3d vIa  = A->GetMassMomentInertia();
-	const njr::Vector3d vIb  = B->GetMassMomentInertia();
+	//const njr::Vector3d vIa  = A->GetMassMomentInertia();
+	//const njr::Vector3d vIb  = B->GetMassMomentInertia();
 
 	const njr::Vector3d vVa  = dosA->GetVelocity();
 	const njr::Vector3d vVb  = dosB->GetVelocity();
@@ -87,17 +72,15 @@ njr::Vector3d ISwBtSDBF::NextStep
 			this->pBC->DifferenceBoundaryConditions(&vDepthRadiusB);
 		}
 
-		vRelativeV
-			= vVa - vVb + vAVa.Cross(vDepthRadiusA) - vAVb.Cross(vDepthRadiusB);
-		vRelativeVn   = (vRelativeV % vImpDirection) * vImpDirection;
-		vRelativeVs   = vRelativeV - vRelativeVn;
+		vRelativeV  = vVa - vVb + vAVa.Cross(vDepthRadiusA) - vAVb.Cross(vDepthRadiusB);
+		vRelativeVn = (vRelativeV % vImpDirection) * vImpDirection;
+		vRelativeVs = vRelativeV - vRelativeVn;
 
-		vForceAn
-			= ism->NormalForce(kn, cn, dImpDepth, vImpDirection, vRelativeVn);
+		vForceAn    = ism->NormalForce(kn, cn, dImpDepth, vImpDirection, vRelativeVn);
 
 		// Default model: contact-bond model
-		vForceAs = - ks * dt * vRelativeVs - cs * vRelativeVs;
-		double dForceAsMax = fc * kn * dImpDepth;
+		vForceAs    = - ks * dt * vRelativeVs - cs * vRelativeVs;
+		vedo_float_t dForceAsMax = fc * kn * dImpDepth;
 		if (bs == 0.0)
 		{
 			if (vForceAs.length() > dForceAsMax)
@@ -136,11 +119,11 @@ njr::Vector3d ISwBtSDBF::NextStep
 		vForceAn    = ism->NormalForce(kn, cn, dImpDepth, vImpDirection, vRelativeVn);
 		vForceAs.Set(0.0, 0.0, 0.0);
 		ImStatus.CleanContactStatusAndImpact();
-	};
+	}
 
 	// Calculate the Impact force
-	vForceA     = vForceAn + vForceAs;
-	ImpactA     = vForceA  * dt;
+	vForceA         = vForceAn + vForceAs;
+	ImpactA         = vForceA  * dt;
 	// Calculate the Angular impact
 	vAngularImpactA =  dt * vDepthRadiusA.Cross(vForceA);
 	vAngularImpactB = -dt * vDepthRadiusB.Cross(vForceA);
@@ -151,6 +134,6 @@ njr::Vector3d ISwBtSDBF::NextStep
 	B->AddImpact(-1.0 * ImpactA, vAngularImpactB);
 
 	return ImpactA;
-};
+}
 
-};   // namespace vedo
+}   // namespace vedo

@@ -1,8 +1,9 @@
-#include <vedo/Constants.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vedo/njr/interfaces/Utility.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <string>
 #include <time.h>
 //#include <ctime>
 #include <iostream>
@@ -13,52 +14,67 @@ namespace njr
 
 void ReadString(std::string& os, std::ifstream &idof)
 {
-	unsigned int ssize;
+	vedo::vedo_uint_t sLength;
+	idof.read ((char*) &sLength, sizeof(vedo::vedo_uint_t));
+	char* cpBuffer = new char[sLength];
+	idof.read(cpBuffer, sLength);
+	os.assign(cpBuffer, 0, sLength);
+	delete cpBuffer;
+}
+
+/*
+void ReadString(std::string& os, std::ifstream &idof)
+{
+	vedo_uint_t ssize;
 	char buffer [256];
-	idof.read ((char *)&ssize,	sizeof(vedo::vedo_unsigned_long));
+	idof.read ((char *)&ssize,	sizeof(vedo::vedo_uint_t));
 	idof.read ((char *)buffer, ssize);
-//	os.assign(buffer, 0, ssize);
+	os.assign(buffer, 0, ssize);
 	buffer[(ssize>255) ? 255 : ssize]='\0';
 	os = buffer;
-};
+}
+*/
 
 void WriteString(const std::string& ostring, std::ofstream &idof)
 {
-	unsigned int ssize = (unsigned int) ostring.length();
-	idof.write ((char*)& ssize,	sizeof(vedo::vedo_unsigned_long));
+	vedo::vedo_uint_t sLength = (vedo::vedo_uint_t) ostring.length();
+	idof.write ((char*) &sLength, sizeof(vedo::vedo_uint_t));
+	idof.write (ostring.c_str(), sLength);
+}
+
+/*
+void WriteString(const std::string& ostring, std::ofstream &idof)
+{
+	vedo_uint_t ssize = (vedo_uint_t) ostring.length();
+	idof.write ((char*)& ssize,	sizeof(vedo::vedo_uint_t));
 	idof.write (ostring.c_str(), ssize);
-};
+}
+*/
 
 bool CheckSubName (std::string FileName, std::string SubName)
 {
-	return (FileName.rfind(SubName)
-		 == (FileName.size() - SubName.size()) );
-};
+	return (FileName.rfind(SubName) == (FileName.size() - SubName.size()));
+}
 
 std::string RunTime(const std::string& message)
 {
-	static unsigned long iteration = 0;
+	static vedo::vedo_uint_t iteration = 0;
 	static time_t start = time(0);
 	static time_t last  = time(0);
 
 	time_t now = time(0);
 
-	char *Mon[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-				   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+	std::string Mon[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
 	if (iteration == 0)
 	{
 		tm* t = localtime(&start);
 		std::cout
 			<< std::endl
-			<< "Time Counter Initiation {" << message << "}"
-			<< std::endl
-			<< "Now !!! ("
-			<< 1900 + t->tm_year << "-" << Mon[t->tm_mon] << "-" << t->tm_mday
+			<< "Time Counter Initiation {" << message << "}" << std::endl
+			<< "Now !!! (" << 1900 + t->tm_year << "-" << Mon[t->tm_mon] << "-" << t->tm_mday
 			<< ") (Hour:" << t->tm_hour << ",Min:" << t->tm_min << ')'
-			<< std::endl
-			<< std::endl
-			<< std::endl;
+			<< std::endl << std::endl << std::endl;
 	}
 	else
 	{
@@ -67,20 +83,16 @@ std::string RunTime(const std::string& message)
 			<< "{" << message << "}"
 			<< std::endl
 			<< "Now !!! ("
-			<< 1900 + t->tm_year
-			<< "-" << Mon[t->tm_mon]
-			<< "-" << t->tm_mday
-			<< " " << t->tm_hour
-			<< ":" << t->tm_min << ')'
-			<< "(RunTime: " << (double)(difftime(now, start)) << " s) "
-			<< "(Since Last: " << (double)(difftime(now, last)) << " s)"
+			<< 1900 + t->tm_year << "-" << Mon[t->tm_mon] << "-" << t->tm_mday << " " << t->tm_hour << ":" << t->tm_min << ')'
+			<< "(RunTime: " << (vedo::vedo_float_t)(difftime(now, start)) << " s) "
+			<< "(Since Last: " << (vedo::vedo_float_t)(difftime(now, last)) << " s)"
 			<< std::endl;
 	}
 
 	iteration ++;
 	last = now;
 	return message;
-};
+}
 
 
 void WriteFile(const std::string& FileName, const std::vector<char>& vWord)
@@ -97,7 +109,7 @@ void WriteFile(const std::string& FileName, const std::vector<char>& vWord)
 
 	copy(vWord.begin(), vWord.end(), std::ostream_iterator<char>(of));
 	of.close();
-};
+}
 
 std::vector<char> ReadFile (const std::string& FileName)
 {
@@ -122,14 +134,14 @@ std::vector<char> ReadFile (const std::string& FileName)
 
 	f.close();
 	return vcword;
-};
+}
 
 void dos2unix(const std::string& ifile, const std::string& ofile)
 {
 	std::vector<char> vcword = ReadFile(ifile);
 	vcword.erase(remove(vcword.begin(), vcword.end(), 13), vcword.end());
 	WriteFile(ofile, vcword);
-};
+}
 
 void unix2dos(const std::string& ifile, const std::string& ofile)
 {
@@ -146,19 +158,19 @@ void unix2dos(const std::string& ifile, const std::string& ofile)
 		hexdata.push_back (*ic);
 	}
 	WriteFile(ofile, hexdata);
-};
+}
 
 void bin2hex(const std::string& ifile, const std::string& ofile)
 {
 	std::vector<char> vcword = ReadFile(ifile);
 	std::vector<char>::iterator ic;
 	std::vector<char> hexdata;
-	unsigned int i = 1;
+	vedo::vedo_uint_t i = 1;
 
 	for (ic=vcword.begin(); ic!=vcword.end(); ic++)
 	{
-		unsigned int first  = *ic/16;
-		unsigned int second = *ic%16;
+		vedo::vedo_uint_t first  = *ic/16;
+		vedo::vedo_uint_t second = *ic%16;
 		hexdata.push_back((first < 10)? first + 48: first + 55);
 		hexdata.push_back((second < 10)? second + 48: second + 55);
 		hexdata.push_back(':');
@@ -172,28 +184,28 @@ void bin2hex(const std::string& ifile, const std::string& ofile)
 		}
 	}
 	WriteFile(ofile, hexdata);
-};
+}
 
-double NewtonApproach
-	(double (*F)(double),
-	double (*DF)(double),
-	const double& dV,
-	const double& dIG)
+vedo::vedo_float_t NewtonApproach
+	(vedo::vedo_float_t (*F)(vedo::vedo_float_t),
+	 vedo::vedo_float_t (*DF)(vedo::vedo_float_t),
+	 const vedo::vedo_float_t& dV,
+	 const vedo::vedo_float_t& dIG                )
 {
-	double x = dIG;
-	double xs;
-	unsigned int uic = 0;
+	vedo::vedo_float_t x   = dIG;
+	vedo::vedo_float_t xs;
+	vedo::vedo_uint_t  uic = 0;
 
 oncemore:
 
 	xs = x - (F(x)-dV) / DF(x);
 
-	if ( (fabs((F(xs)-dV)/dV)) < 1e-6 )
+	if ((fabs((F(xs)-dV)/dV)) < 1e-6)
 	{
 		return xs;
 	}
 
-	if ( (uic++) > 50)
+	if ((uic++) > 50)
 	{
 		return xs;
 		std::cerr
@@ -204,6 +216,6 @@ oncemore:
 
 	x = xs;
 	goto oncemore;
-};
+}
 
-};   // namespace njr
+}   // namespace njr

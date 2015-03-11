@@ -4,6 +4,7 @@
 #include <vedo/njr/interfaces/HalfSpace.h>
 #include <vedo/njr/interfaces/Polygon.h>
 #include <vedo/njr/interfaces/Vector3d.h>
+#include <vedo/constants/interfaces/Constants.h>
 #include <vector>
 
 namespace njr
@@ -21,31 +22,31 @@ public:
 	inline const Vector3d& center() const
 	{
 		return _center;
-	};
+	}
 
 	inline const std::vector<njr::HalfSpace>& constrains() const
 	{
 		return _constrains;
-	};
+	}
 
 	NJRpolyhedra& operator = (const NJRpolyhedra &poly3d);
 
 	NJRpolyhedra operator + (const NJRpolyhedra &poly3d) const;
 
-	void SetCubic(Vector3d center, double length);
+	void SetCubic(Vector3d center, vedo::vedo_float_t length);
 
-	void SetIcosahedron(Vector3d center, double radius);
+	void SetIcosahedron(Vector3d center, vedo::vedo_float_t radius);
 
-	void SetRandom(Vector3d center, unsigned int n, double radius);
+	void SetRandom(Vector3d center, vedo::vedo_uint_t n, vedo::vedo_float_t radius);
 
-	void SetPlane(double eqa, double eqb, double eqc, Sense sense, double eqd);
+	void SetPlane(vedo::vedo_float_t eqa, vedo::vedo_float_t eqb, vedo::vedo_float_t eqc, Sense sense, vedo::vedo_float_t eqd);
 
-	void SetRetangular(Vector3d center, double lx, double ly, double lz);
+	void SetRetangular(Vector3d center, vedo::vedo_float_t lx, vedo::vedo_float_t ly, vedo::vedo_float_t lz);
 
 	inline void SetCenter(const Vector3d& c)
 	{
 		_center = c;
-	};
+	}
 
 	void Normalize();
 
@@ -53,10 +54,7 @@ public:
 
 	void Translate(const Vector3d&);
 
-	NJRpolyhedra Mapping
-		(const Vector3d& center,
-		const Vector3d& Ox,
-		const Vector3d& Oz) const;
+	NJRpolyhedra Mapping(const Vector3d& center, const Vector3d& Ox, const Vector3d& Oz) const;
 
 	NJRpolyhedra CoverPolyhedra () const;
 
@@ -70,7 +68,7 @@ public:
 
 	bool Check();
 
-	void print() const ;
+	void print() const;
 
 private:
 
@@ -80,6 +78,6 @@ private:
 
 };
 
-};   // namespace njr
+}   // namespace njr
 
 #endif // _NJR_POLYHEDRA_H

@@ -11,29 +11,29 @@
 namespace njrdxf
 {
 
-Group::Group(const  Code& code) : _code(code)
+Group::Group(const Code& code): _code(code)
 {
-	_length= 0;
-};
+	_length = 0;
+}
 
 Group::~Group()
 {
-	if (_length !=0)
+	if(_length != 0)
 	{
 		delete _value;
 	}
-};
+}
 
-bool  Group::SetValue(const void* value)
+bool Group::SetValue(const void* value)
 {
-	if (_length !=0)
+	if (_length != 0)
 	{
 		delete _value;
 	}
 
-	if ( _code >=0 && _code <=9 )
+	if (_code >= 0 && _code <= 9)
 	{
-		_length = (unsigned int)(strlen((const char*)value)) + 2;
+		_length = (vedo::vedo_uint_t)(strlen((const char*)value)) + 2;
 	}
 	else if ( (_code >= 10) && (_code <= 59) )
 	{
@@ -57,16 +57,16 @@ bool  Group::SetValue(const void* value)
 	std::memcpy(_value+1, value, _length-1);
 
 	return true;
-};
+}
 
 // member function of class  Entitity
-Entitity::Entitity() : lconGroup(0)
+Entitity::Entitity(): lconGroup(0)
 {
 	Entitity::AddGroup(type);
 	Entitity::AddGroup(layer);
 	Entitity::AddGroup(color);
 	Entitity::AddGroup(handle);
-};
+}
 
 Entitity::~Entitity()
 {
@@ -75,32 +75,33 @@ Entitity::~Entitity()
 	{
 		delete *iGroup;
 	}
-};
+}
+
+
 
 class CodeEQ
 {
 public:
 
-	explicit CodeEQ(const Code key) : code(key)
+	explicit CodeEQ(const Code key): code(key)
 	{
-	};
+	}
 
 	bool operator () (const  Group* group)
 	{
 		return (group->code() == code);
-	};
+	}
 
 private:
 
 	const Code code;
-
 };
+
+
 
 bool Entitity::AddGroup(const Code& code)
 {
-	std::list< Group* >::iterator iGroup
-		= std::find_if
-			(lconGroup.begin(), lconGroup.end(), njrdxf::CodeEQ(code));
+	std::list< Group* >::iterator iGroup = std::find_if(lconGroup.begin(), lconGroup.end(), njrdxf::CodeEQ(code));
 
 	if (iGroup != lconGroup.end())
 	{
@@ -110,13 +111,11 @@ bool Entitity::AddGroup(const Code& code)
 	lconGroup.push_back(new Group(code));
 
 	return true;
-};
+}
 
 bool  Entitity::SetValue(const Code& code, const void* value)
 {
-	std::list< Group* >::iterator iGroup
-		= std::find_if
-		(lconGroup.begin(), lconGroup.end(), njrdxf::CodeEQ(code));
+	std::list< Group* >::iterator iGroup = std::find_if(lconGroup.begin(), lconGroup.end(), njrdxf::CodeEQ(code));
 
 	if (iGroup == lconGroup.end())
 	{
@@ -126,30 +125,30 @@ bool  Entitity::SetValue(const Code& code, const void* value)
 	(*iGroup)->SetValue(value);
 
 	return true;
-};
+}
 
-void  Entitity::SetHandle(const long& value)
+void Entitity::SetHandle(const vedo::vedo_uint_t& value)
 {
 	char hand[32];
 	std::sprintf(hand, "%X", value);
 	SetValue(handle, hand);
-};
+}
 
 void Entitity::SetColor(const Color& value)
 {
-	short val = (short) value;
+	vedo::vedo_int_t val = (vedo::vedo_int_t) value;
 	SetValue(color,&val);
-};
+}
 
 void Entitity::SetLayer(const char* value)
 {
 	SetValue(layer, value);
-};
+}
 
 const std::list< Group* >& Entitity::GetGroupContainer() const
 {
 	return lconGroup;
-};
+}
 
 Line:: Line()
 {
@@ -160,35 +159,31 @@ Line:: Line()
 	Entitity::AddGroup(px1);
 	Entitity::AddGroup(py1);
 	Entitity::AddGroup(pz1);
-};
+}
 
-void Line::Set
-	(const njr::Vector3d& p1,
-	const njr::Vector3d& p2,
-	const char* layer,
-	const Color& color)
+void Line::Set(const njr::Vector3d& p1, const njr::Vector3d& p2, const char* layer, const Color& color)
 {
 	Line::SetPoint1(p1);
 	Line::SetPoint2(p2);
 	Entitity::SetColor(color);
 	Entitity::SetLayer(layer);
-};
+}
 
 void Line::SetPoint1(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
 	Entitity::SetValue(py0, p+1);
 	Entitity::SetValue(pz0, p+2);
-};
+}
 
 void Line::SetPoint2(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
 	Entitity::SetValue(py1, p+1);
 	Entitity::SetValue(pz1, p+2);
-};
+}
 
 Face::Face()
 {
@@ -205,15 +200,11 @@ Face::Face()
 	Entitity::AddGroup(px3);
 	Entitity::AddGroup(py3);
 	Entitity::AddGroup(pz3);
-};
+}
 
 void Face::Set
-	(const njr::Vector3d& p1,
-	const njr::Vector3d& p2,
-	const njr::Vector3d& p3,
-	const njr::Vector3d& p4,
-	const char* layer,
-	const Color& color)
+	(const njr::Vector3d& p1, const njr::Vector3d& p2, const njr::Vector3d& p3, const njr::Vector3d& p4,
+	 const char* layer, const Color& color)
 {
 	Face::SetPoint1(p1);
 	Face::SetPoint2(p2);
@@ -221,39 +212,39 @@ void Face::Set
 	Face::SetPoint4(p4);
 	Entitity::SetColor(color);
 	Entitity::SetLayer(layer);
-};
+}
 
 void Face::SetPoint1(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px0, p);
 	Entitity::SetValue(py0, p+1);
 	Entitity::SetValue(pz0, p+2);
-};
+}
 
 void Face::SetPoint2(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px1, p);
 	Entitity::SetValue(py1, p+1);
 	Entitity::SetValue(pz1, p+2);
-};
+}
 
 void Face::SetPoint3(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px2, p);
 	Entitity::SetValue(py2, p+1);
 	Entitity::SetValue(pz2, p+2);
-};
+}
 
 void Face::SetPoint4(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px3, p);
 	Entitity::SetValue(py3, p+1);
 	Entitity::SetValue(pz3, p+2);
-};
+}
 
 Text:: Text()
 {
@@ -267,39 +258,35 @@ Text:: Text()
 }
 
 void Text::Set
-	(const njr::Vector3d& p1,
-	const char* text,
-	const double& dheight,
-	const double& dangle,
-	const char* layer,
-	const Color& color)
+	(const njr::Vector3d& p1, const char* text,
+	 const vedo::vedo_float_t& dheight, const vedo::vedo_float_t& dangle, const char* layer, const Color& color)
 {
 	 Text::SetPoint(p1);
 	 Text::SetText(text, dheight, dangle);
 	 Entitity::SetColor(color);
 	 Entitity::SetLayer(layer);
-};
+}
 
 void Text::SetPoint(const njr::Vector3d& point)
 {
-	double p[3] = { point.x(), point.y(), point.z() };
+	vedo::vedo_float_t p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
 	Entitity::SetValue(py0, p+1);
 	Entitity::SetValue(pz0, p+2);
-};
+}
 
-void Text::SetText(const char* t, const double& h, const double& a)
+void Text::SetText(const char* t, const vedo::vedo_float_t& h, const vedo::vedo_float_t& a)
 {
-	double p[2] = {h, a};
+	vedo::vedo_float_t p[2] = {h, a};
 	Entitity::SetValue(pheight, p);
 	Entitity::SetValue(pangle, p+1);
 	Entitity::SetValue(ptext, t);
-};
+}
 
 ofstream::ofstream(const char* filename)
 {
 	ofstream::open(filename);
-};
+}
 
 void ofstream::open(const char* filename)
 {
@@ -317,7 +304,7 @@ void ofstream::open(const char* filename)
 	bdxf.write("\000SECTION\000", 9);
 	bdxf.write("\002ENTITIES\000", 10);
 	hand = 0;
-};
+}
 
 ofstream::~ofstream()
 {
@@ -334,7 +321,7 @@ ofstream::~ofstream()
 		bdxf.write("\000EOF\000", 5);
 	}
 	bdxf.close();
-};
+}
 
 ofstream& njrdxf::ofstream::operator << (Entitity* entitity)
 {
@@ -359,6 +346,6 @@ ofstream& njrdxf::ofstream::operator << (Entitity* entitity)
 		}
 	}
 	return *this;
-};
+}
 
-}; // njrdxf namespace
+} // njrdxf namespace

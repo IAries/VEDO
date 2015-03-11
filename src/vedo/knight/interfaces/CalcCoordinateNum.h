@@ -13,14 +13,14 @@ public:
 	{
 	};
 
-	double computeAvgCoordinateNum
+	vedo::vedo_float_t computeAvgCoordinateNum
 		(const vedo::DOWorld* pWorld,
-		 double xmin,
-		 double xmax,
-		 double ymin,
-		 double ymax,
-		 double zmin,
-		 double zmax ) const;
+		 vedo::vedo_float_t xmin,
+		 vedo::vedo_float_t xmax,
+		 vedo::vedo_float_t ymin,
+		 vedo::vedo_float_t ymax,
+		 vedo::vedo_float_t zmin,
+		 vedo::vedo_float_t zmax ) const;
 
 	void outputCoordinateNumVTK
 		(const vedo::DOWorld* pWorld, const std::string& filename) const;

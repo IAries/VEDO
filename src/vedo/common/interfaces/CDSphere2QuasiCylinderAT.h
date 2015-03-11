@@ -6,16 +6,15 @@
 namespace vedo
 {
 
-class CDSphere_QuasiCylinderAT : public CDSphere_QuasiCylinder
+class CDSphere_QuasiCylinderAT: public CDSphere_QuasiCylinder
 {
 
 public:
 
-	void Detect
-		(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _CDSPHERE_2_QUASICYLINDERAT_H

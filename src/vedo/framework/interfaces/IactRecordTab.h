@@ -16,11 +16,9 @@ public:
 
 	IactRecordTab();
 
-	IactRecordTab
-		(const std::map<std::pair<unsigned long, unsigned long>,
-		ImpactStatus>& m);
+	IactRecordTab(const std::map<std::pair<vedo::vedo_uint_t, vedo::vedo_uint_t>, ImpactStatus>& m);
 
-	inline unsigned long GetTabSize() const
+	inline vedo::vedo_uint_t GetTabSize() const
 	{
 		return mapImStatus.size();
 	}
@@ -32,29 +30,28 @@ public:
 
 	void print() const;
 
-	inline const std::map< std::pair<unsigned long, unsigned long>, ImpactStatus >&
-		GetData() const
+	inline const std::map< std::pair<vedo::vedo_uint_t, vedo::vedo_uint_t>, ImpactStatus >& GetData() const
 	{
 		return mapImStatus;
 	}
 
-	const ImpactStatus* GetImpactStatus
-		(unsigned long master, unsigned long slave);
+	const ImpactStatus* GetImpactStatus(vedo::vedo_uint_t master, vedo::vedo_uint_t slave);
 
 	void CleanUserDefinedValueInImpactStatus();
 
-	void PushRecord
-		(unsigned long master, unsigned long slave, const ImpactStatus& s);
+	void PushRecord(vedo::vedo_uint_t master, vedo::vedo_uint_t slave, const ImpactStatus& s);
 
-	void ModifyPair(std::map<unsigned long, long> mNewPairList);
+	void ModifyPair(std::map<vedo::vedo_uint_t, vedo::vedo_int_t> mNewPairList);
 
-	unsigned long ContactNumber() const;
+	vedo::vedo_uint_t ContactNumber() const;
 
-	void EraseElement(const unsigned long& ulID);
+	vedo::vedo_uint_t BondNumber() const;
 
-	void EraseElements(const std::vector<unsigned long>& ulIDList, const unsigned long& ulDONum);
+	void EraseElement(const vedo::vedo_uint_t& ulID);
 
-    void DumpIactStatus(const double& time, const char* filename) const;
+	void EraseElements(const std::vector<vedo::vedo_uint_t>& ulIDList, const vedo::vedo_uint_t& ulDONum);
+
+    void DumpIactStatus(const vedo_float_t& time, const char* filename) const;
 
 	//binary output
 	std::ofstream& operator >> (std::ofstream& idof) const;
@@ -64,9 +61,9 @@ public:
 
 private:
 
-	std::map<std::pair<unsigned long, unsigned long>, ImpactStatus> mapImStatus;
+	std::map<std::pair<vedo::vedo_uint_t, vedo::vedo_uint_t>, ImpactStatus> mapImStatus;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _IACT_RECORD_TAB_H

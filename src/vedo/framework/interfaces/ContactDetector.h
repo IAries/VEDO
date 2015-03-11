@@ -14,9 +14,9 @@ struct ContactInfo
 	njr::Vector3d vSlideDirection;
 	njr::Vector3d vCenterToCenter;
 	njr::Vector3d vImpactPoint;
-	double        dImpactDepth;
-	double        dDistance;
-	double        dOverlapArea;
+	vedo_float_t  dImpactDepth;
+	vedo_float_t  dDistance;
+	vedo_float_t  dOverlapArea;
 	bool          bActive;
 	bool          bUnBalance;
 };
@@ -32,28 +32,26 @@ public:
 
 	virtual ~ContactDetector()
 	{
-	};
+	}
 
 	inline const ContactInfo* GetContactInfo() const
 	{
 		return &cInfo;
-	};
+	}
 
 	inline void SetPeriodicBoundaryConditions(const Boundary* bc)
 	{
 		pBC = bc;
-	};
+	}
 
-	virtual void Detect
-		(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster) = 0;
+	virtual void Detect(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster) = 0;
 
-	virtual void CalDistance
-		(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster) = 0;
+	virtual void CalDistance(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster) = 0;
 
 	virtual std::string type () const
 	{
 		return "ContactDetector";
-	};
+	}
 
 protected:
 
@@ -62,6 +60,6 @@ protected:
 	ContactInfo cInfo;
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 #endif // _CONTACT_DETECTOR_H

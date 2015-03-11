@@ -11,11 +11,7 @@ class NearConsultant : public Consultant
 
 public:
 
-	NearConsultant
-		(DOWorld* DOWorld,
-		IactRecordTab* pIactRecordTab,
-		char filename[],
-		unsigned long ulwrite);
+	NearConsultant(DOWorld* DOWorld, IactRecordTab* pIactRecordTab, std::string filename, vedo_uint_t ulwrite);
 
 	virtual bool ISReset();
 
@@ -24,7 +20,7 @@ public:
 	virtual void RebuildIactRecordTab(IactContainer& cIact);
 };
 
-};   // namespace vedo
+}   // namespace vedo
 
 
 #endif //_NEAR_CONSULTANT_H
