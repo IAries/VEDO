@@ -9,8 +9,8 @@
 namespace vedo
 {
 
-static const std::string sVersion     = "X5 build 311";
-static const std::string sReleaseDate = "2015-03-11";
+static const std::string sVersion     = "X5 build 312";
+static const std::string sReleaseDate = "2015-03-12";
 
 #ifdef _VEDO_DEBUG
 	static const bool bDebugMode = true;

@@ -46,6 +46,18 @@ void usage()
 		<< std::endl
 		<< "Usage:" << std::endl
 		<< std::endl
+		<< "* Knight -add_elements_in_body-centered_cubic_style"     << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
+		<< "* Knight -add_elements_in_face-centered_cubic_style"     << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
 		<< "* Knight -add_elements_in_simple_cubic_style"            << std::endl
 		<< "         <element name>"                                 << std::endl
 		<< "         <xmin> <xmax> <ymin> <ymax> <zmin> <zmax>"      << std::endl
@@ -815,7 +827,137 @@ void AssmListHEX()
 	}
 }
 
-void AddDOInSpace(njr::Vector3d* LowerBoundary, njr::Vector3d* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
+void AddDOInSpaceBCC(njr::Vector3d* LowerBoundary, njr::Vector3d* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
+{
+	vedo::vedo_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
+	vedo::DOStatus dos(DOName, njr::ZERO, njr::ZERO, njr::AXIALX, njr::AXIALZ, njr::ZERO, njr::ZERO, njr::ZERO);
+	*LowerBoundary += njr::Vector3d(R, R, R);
+	*UpperBoundary -= njr::Vector3d(R, R, R);
+	vedo::vedo_float_t fCellSize = 4.0 * R / std::sqrt(3.0);
+
+	bool bLayer    = true;
+	bool bContinue = true;
+	vedo::vedo_float_t x, y;
+	vedo::vedo_float_t z = LowerBoundary->z();
+	while (bContinue)
+	{
+		if(bLayer)
+		{
+			for (y=(LowerBoundary->y()); y<=(UpperBoundary->y()); y+=fCellSize)
+			{
+				for (x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=fCellSize)
+				{
+					dos.SetPosition(njr::Vector3d(x, y, z));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+				}
+			}
+			bLayer = false;
+			if ((z + fCellSize) <= UpperBoundary->z())
+			{
+				z += 0.5 * fCellSize;
+			}
+			else
+			{
+				bContinue = false;
+			}
+		}
+		else
+		{
+			for (y=(LowerBoundary->y())+0.5*fCellSize; y<=(UpperBoundary->y()); y+=fCellSize)
+			{
+				for (x=(LowerBoundary->x())+0.5*fCellSize; x<=(UpperBoundary->x()); x+=fCellSize)
+				{
+					dos.SetPosition(njr::Vector3d(x, y, z));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+				}
+			}
+			bLayer = true;
+			if ((z + fCellSize) <= UpperBoundary->z())
+			{
+				z += 0.5 * fCellSize;
+			}
+			else
+			{
+				bContinue = false;
+			}
+		}
+	}
+}
+
+void AddDOInSpaceFCC(njr::Vector3d* LowerBoundary, njr::Vector3d* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
+{
+	vedo::vedo_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
+	vedo::DOStatus dos(DOName, njr::ZERO, njr::ZERO, njr::AXIALX, njr::AXIALZ, njr::ZERO, njr::ZERO, njr::ZERO);
+	*LowerBoundary += njr::Vector3d(R, R, R);
+	*UpperBoundary -= njr::Vector3d(R, R, R);
+	vedo::vedo_float_t fCellSize = 2.0 * std::sqrt(2.0) * R;
+
+	bool bLayer    = true;
+	bool bContinue = true;
+	vedo::vedo_float_t x, y;
+	vedo::vedo_float_t z = LowerBoundary->z();
+	while (bContinue)
+	{
+		if(bLayer)
+		{
+			for (y=(LowerBoundary->y()); y<=(UpperBoundary->y()); y+=fCellSize)
+			{
+				for (x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=fCellSize)
+				{
+					dos.SetPosition(njr::Vector3d(x, y, z));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+				}
+			}
+			for (y=(LowerBoundary->y())+0.5*fCellSize; y<=(UpperBoundary->y()); y+=fCellSize)
+			{
+				for (x=(LowerBoundary->x())+0.5*fCellSize; x<=(UpperBoundary->x()); x+=fCellSize)
+				{
+					dos.SetPosition(njr::Vector3d(x, y, z));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+				}
+			}
+			bLayer = false;
+			if ((z + fCellSize) <= UpperBoundary->z())
+			{
+				z += 0.5 * fCellSize;
+			}
+			else
+			{
+				bContinue = false;
+			}
+		}
+		else
+		{
+			for (y=(LowerBoundary->y()); y<=(UpperBoundary->y()); y+=fCellSize)
+			{
+				for (x=(LowerBoundary->x())+0.5*fCellSize; x<=(UpperBoundary->x()); x+=fCellSize)
+				{
+					dos.SetPosition(njr::Vector3d(x, y, z));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+				}
+			}
+			for (y=(LowerBoundary->y())+0.5*fCellSize; y<=(UpperBoundary->y()); y+=fCellSize)
+			{
+				for (x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=fCellSize)
+				{
+					dos.SetPosition(njr::Vector3d(x, y, z));
+					oWorld->AddDOStatus(new vedo::DOStatus(dos));
+				}
+			}
+			bLayer = true;
+			if ((z + fCellSize) <= UpperBoundary->z())
+			{
+				z += 0.5 * fCellSize;
+			}
+			else
+			{
+				bContinue = false;
+			}
+		}
+	}
+}
+
+void AddDOInSpaceSC(njr::Vector3d* LowerBoundary, njr::Vector3d* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
 {
 	vedo::vedo_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
 	vedo::DOStatus dos(DOName, njr::ZERO, njr::ZERO, njr::AXIALX, njr::AXIALZ, njr::ZERO, njr::ZERO, njr::ZERO);
@@ -1119,6 +1261,42 @@ int main(int argc, char* argv[])
 	{
 		usage();
 	}
+	else if ((arg[1] == "-add_elements_in_body-centered_cubic_style") && (arg.size() == 11))
+	{
+		vedo::vedo_float_t xmin, xmax, ymin, ymax, zmin, zmax;
+		std::string DOName = arg[2];
+		xmin = vedo_cp->String2T<vedo::vedo_float_t>(arg[3]);
+		xmax = vedo_cp->String2T<vedo::vedo_float_t>(arg[4]);
+		ymin = vedo_cp->String2T<vedo::vedo_float_t>(arg[5]);
+		ymax = vedo_cp->String2T<vedo::vedo_float_t>(arg[6]);
+		zmin = vedo_cp->String2T<vedo::vedo_float_t>(arg[7]);
+		zmax = vedo_cp->String2T<vedo::vedo_float_t>(arg[8]);
+		njr::Vector3d LowerBoundary(xmin, ymin, zmin);
+		njr::Vector3d UpperBoundary(xmax, ymax, zmax);
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
+		AddDOInSpaceBCC(&LowerBoundary, &UpperBoundary, DOName, oWorld);
+		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-add_elements_in_face-centered_cubic_style") && (arg.size() == 11))
+	{
+		vedo::vedo_float_t xmin, xmax, ymin, ymax, zmin, zmax;
+		std::string DOName = arg[2];
+		xmin = vedo_cp->String2T<vedo::vedo_float_t>(arg[3]);
+		xmax = vedo_cp->String2T<vedo::vedo_float_t>(arg[4]);
+		ymin = vedo_cp->String2T<vedo::vedo_float_t>(arg[5]);
+		ymax = vedo_cp->String2T<vedo::vedo_float_t>(arg[6]);
+		zmin = vedo_cp->String2T<vedo::vedo_float_t>(arg[7]);
+		zmax = vedo_cp->String2T<vedo::vedo_float_t>(arg[8]);
+		njr::Vector3d LowerBoundary(xmin, ymin, zmin);
+		njr::Vector3d UpperBoundary(xmax, ymax, zmax);
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
+		AddDOInSpaceFCC(&LowerBoundary, &UpperBoundary, DOName, oWorld);
+		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
 	else if ((arg[1] == "-add_elements_in_simple_cubic_style") && (arg.size() == 11))
 	{
 		vedo::vedo_float_t xmin, xmax, ymin, ymax, zmin, zmax;
@@ -1133,7 +1311,7 @@ int main(int argc, char* argv[])
 		njr::Vector3d UpperBoundary(xmax, ymax, zmax);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
-		AddDOInSpace(&LowerBoundary, &UpperBoundary, DOName, oWorld);
+		AddDOInSpaceSC(&LowerBoundary, &UpperBoundary, DOName, oWorld);
 		delete WriteDOWorld (arg[10], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
