@@ -1,26 +1,27 @@
+PROJECT = vedo
+TARGET  = ${notdir ${PWD}}
+
 include ../../Makefile.in
 
-TMP_TARGET=${patsubst %/,%,${patsubst ${VEDO_SRC}vedo/%,%,${PWD}}}
+TMP_DEBUG=${patsubst ${PREFIX}src/%,${PROJECT_OBJ_DEBUG}%,${PWD}}/
+TMP_RELEASE=${patsubst ${PREFIX}src/%,${PROJECT_OBJ_RELEASE}%,${PWD}}/
 
-TMP_DEBUG=${patsubst ${VEDO_SRC}vedo/%,${VEDO_OBJ_DEBUG}%,${PWD}}/
-TMP_RELEASE=${patsubst ${VEDO_SRC}vedo/%,${VEDO_OBJ_RELEASE}%,${PWD}}/
-
-TMP_OBJS_DEBUG=${patsubst ${IMP}%,${TMP_DEBUG}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
-TMP_OBJS_RELEASE=${patsubst ${IMP}%,${TMP_RELEASE}%,${patsubst %.cpp,%.o,${wildcard ${IMP}*.cpp}}}
+TMP_OBJS_DEBUG=${patsubst %,${TMP_DEBUG}%,${patsubst %.cpp,%.o,${wildcard *.cpp}}}
+TMP_OBJS_RELEASE=${patsubst %,${TMP_RELEASE}%,${patsubst %.cpp,%.o,${wildcard *.cpp}}}
 
 all: debug release
-debug: ${VEDO_BIN}${TMP_TARGET}-debug
-release: ${VEDO_BIN}${TMP_TARGET}
+debug: ${PROJECT_BIN}${TARGET}-debug
+release: ${PROJECT_BIN}${TARGET}
 
-${VEDO_BIN}${TMP_TARGET}-debug: ${TMP_OBJS_DEBUG}
+${PROJECT_BIN}${TARGET}-debug: ${TMP_OBJS_DEBUG}
 	${LNK} -o $@ $^ ${LNK_FLAGd}
 
-${TMP_DEBUG}%.o: ${IMP}%.cpp
+${TMP_DEBUG}%.o: %.cpp
 	${CXX} -o $@ ${CXX_FLAGd} -c $<
 
-${VEDO_BIN}${TMP_TARGET}: ${TMP_OBJS_RELEASE}
+${PROJECT_BIN}${TARGET}: ${TMP_OBJS_RELEASE}
 	${LNK} -o $@ $^ ${LNK_FLAG}
 
-${TMP_RELEASE}%.o: ${IMP}%.cpp
+${TMP_RELEASE}%.o: %.cpp
 	${CXX} -o $@ ${CXX_FLAG} -c $<
 

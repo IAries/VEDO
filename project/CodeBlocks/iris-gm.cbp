@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="iris-gm" />
+		<Option pch_mode="2" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../bin/CodeBlocks64/iris-gm-debug" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/CodeBlocks64/debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_DEBUG" />
+					<Add directory="C:/usr/mpich2-64/include" />
+				</Compiler>
+				<Linker>
+					<Add library="C:/usr/mpich2-64/lib/mpi.lib" />
+					<Add library="../../lib/CodeBlocks64/libvedo-common-debug.a" />
+					<Add library="../../lib/CodeBlocks64/libvedo-framework-debug.a" />
+					<Add library="../../lib/CodeBlocks64/libnjr-debug.a" />
+					<Add library="../../lib/CodeBlocks64/libaries-utility-debug.a" />
+					<Add library="C:/usr/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/libstdc++.a" />
+				</Linker>
+			</Target>
+			<Target title="Debug32">
+				<Option output="../../bin/CodeBlocks32/iris-gm-debug32" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/CodeBlocks32/debug" />
+				<Option type="1" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_DEBUG" />
+					<Add directory="C:/usr/mpich2-32/include" />
+				</Compiler>
+				<Linker>
+					<Add library="C:/usr/mpich2-32/lib/mpi.lib" />
+					<Add library="../../lib/CodeBlocks32/libvedo-common-debug32.a" />
+					<Add library="../../lib/CodeBlocks32/libvedo-framework-debug32.a" />
+					<Add library="../../lib/CodeBlocks32/libnjr-debug32.a" />
+					<Add library="../../lib/CodeBlocks32/libaries-utility-debug32.a" />
+					<Add library="C:/usr/mingw-w64/i686-4.9.2-posix-sjlj-rt_v3-rev1/mingw32/lib/gcc/i686-w64-mingw32/4.9.2/libstdc++.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="../../bin/CodeBlocks64/iris-gm" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/CodeBlocks64/release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add directory="C:/usr/mpich2-64/include" />
+				</Compiler>
+				<Linker>
+					<Add library="C:/usr/mpich2-64/lib/mpi.lib" />
+					<Add library="../../lib/CodeBlocks64/libvedo-common.a" />
+					<Add library="../../lib/CodeBlocks64/libvedo-framework.a" />
+					<Add library="../../lib/CodeBlocks64/libnjr.a" />
+					<Add library="../../lib/CodeBlocks64/libaries-utility.a" />
+					<Add library="C:/usr/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/libstdc++.a" />
+				</Linker>
+			</Target>
+			<Target title="Release32">
+				<Option output="../../bin/CodeBlocks32/iris-gm32" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../obj/CodeBlocks32/release" />
+				<Option type="1" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add directory="C:/usr/mpich2-32/include" />
+				</Compiler>
+				<Linker>
+					<Add library="C:/usr/mpich2-32/lib/mpi.lib" />
+					<Add library="../../lib/CodeBlocks32/libvedo-common32.a" />
+					<Add library="../../lib/CodeBlocks32/libvedo-framework32.a" />
+					<Add library="../../lib/CodeBlocks32/libnjr32.a" />
+					<Add library="../../lib/CodeBlocks32/libaries-utility32.a" />
+					<Add library="C:/usr/mingw-w64/i686-4.9.2-posix-sjlj-rt_v3-rev1/mingw32/lib/gcc/i686-w64-mingw32/4.9.2/libstdc++.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Debug32;Release;Release32;" />
+			<Add alias="64-bits" targets="Debug;Release;" />
+			<Add alias="32-bits" targets="Debug32;Release32;" />
+			<Add alias="Debug" targets="Debug;Debug32;" />
+			<Add alias="Release" targets="Release;Release32;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-D_FLOAT64" />
+			<Add option="-D_INT32" />
+			<Add option="-D_STD_CPP_11" />
+			<Add option="-D_MS_WINDOWS" />
+			<Add directory="../../src" />
+		</Compiler>
+		<Linker>
+			<Add option="-fexceptions" />
+			<Add option="-static" />
+			<Add option="-static-libgcc" />
+			<Add option="-static-libstdc++" />
+		</Linker>
+		<Unit filename="../../src/vedo/iris-gm/Iris-GM.cpp" />
+		<Unit filename="../../src/vedo/iris-gm/NBSParallelConsultant.cpp" />
+		<Unit filename="../../src/vedo/iris-gm/NBSParallelConsultant.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

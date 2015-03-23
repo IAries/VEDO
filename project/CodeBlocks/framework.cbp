@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="framework" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../lib/CodeBlocks64/vedo-framework-debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks64/debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Debug32">
+				<Option output="../../lib/CodeBlocks32/vedo-framework-debug32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks32/debug" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../../lib/CodeBlocks64/vedo-framework" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks64/release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+				</Compiler>
+			</Target>
+			<Target title="Release32">
+				<Option output="../../lib/CodeBlocks32/vedo-framework32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks32/release" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+				</Compiler>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="32-bits" targets="Debug32;Release32;" />
+			<Add alias="64-bits" targets="Debug;Release;" />
+			<Add alias="All" targets="Debug;Debug32;Release;Release32;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-D_FLOAT64" />
+			<Add option="-D_INT32" />
+			<Add option="-D_STD_CPP_11" />
+			<Add option="-D_MS_WINDOWS" />
+			<Add directory="../../src" />
+		</Compiler>
+		<Linker>
+			<Add option="-r" />
+		</Linker>
+		<Unit filename="../../src/vedo/framework/Assembler.cpp" />
+		<Unit filename="../../src/vedo/framework/Boundary.cpp" />
+		<Unit filename="../../src/vedo/framework/CDCFactoryDecorator.cpp" />
+		<Unit filename="../../src/vedo/framework/Consultant.cpp" />
+		<Unit filename="../../src/vedo/framework/ContactDetector.cpp" />
+		<Unit filename="../../src/vedo/framework/DOCFactoryDecorator.cpp" />
+		<Unit filename="../../src/vedo/framework/DOContainer.cpp" />
+		<Unit filename="../../src/vedo/framework/DOMap.cpp" />
+		<Unit filename="../../src/vedo/framework/DOModel.cpp" />
+		<Unit filename="../../src/vedo/framework/DOStatus.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld_DrawDxf.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld_DumpDOStatus.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld_RWIDO.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld_ReadXML.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld_WriteVPF.cpp" />
+		<Unit filename="../../src/vedo/framework/DOWorld_WriteXML.cpp" />
+		<Unit filename="../../src/vedo/framework/DiscreteObject.cpp" />
+		<Unit filename="../../src/vedo/framework/GeometricShape.cpp" />
+		<Unit filename="../../src/vedo/framework/ISCFactoryDecorator.cpp" />
+		<Unit filename="../../src/vedo/framework/ISwModels.cpp" />
+		<Unit filename="../../src/vedo/framework/IactContainer.cpp" />
+		<Unit filename="../../src/vedo/framework/IactModel.cpp" />
+		<Unit filename="../../src/vedo/framework/IactRecordTab.cpp" />
+		<Unit filename="../../src/vedo/framework/ImpactSolver.cpp" />
+		<Unit filename="../../src/vedo/framework/ImpactStatus.cpp" />
+		<Unit filename="../../src/vedo/framework/Interaction.cpp" />
+		<Unit filename="../../src/vedo/framework/SimMediator.cpp" />
+		<Unit filename="../../src/vedo/framework/SystemParameter.cpp" />
+		<Unit filename="../../src/vedo/framework/Assembler.h" />
+		<Unit filename="../../src/vedo/framework/Boundary.h" />
+		<Unit filename="../../src/vedo/framework/CDCFactoryDecorator.h" />
+		<Unit filename="../../src/vedo/framework/CDFactory.h" />
+		<Unit filename="../../src/vedo/framework/Consultant.h" />
+		<Unit filename="../../src/vedo/framework/ContactDetector.h" />
+		<Unit filename="../../src/vedo/framework/DataType.h" />
+		<Unit filename="../../src/vedo/framework/DOCFactoryDecorator.h" />
+		<Unit filename="../../src/vedo/framework/DOContainer.h" />
+		<Unit filename="../../src/vedo/framework/DOFactory.h" />
+		<Unit filename="../../src/vedo/framework/DOMap.h" />
+		<Unit filename="../../src/vedo/framework/DOModel.h" />
+		<Unit filename="../../src/vedo/framework/DOStatus.h" />
+		<Unit filename="../../src/vedo/framework/DOWorld.h" />
+		<Unit filename="../../src/vedo/framework/DOWorld_WriteVTK.h" />
+		<Unit filename="../../src/vedo/framework/DiscreteObject.h" />
+		<Unit filename="../../src/vedo/framework/GeometricShape.h" />
+		<Unit filename="../../src/vedo/framework/ISCFactoryDecorator.h" />
+		<Unit filename="../../src/vedo/framework/ISFactory.h" />
+		<Unit filename="../../src/vedo/framework/ISwModels.h" />
+		<Unit filename="../../src/vedo/framework/IactContainer.h" />
+		<Unit filename="../../src/vedo/framework/IactModel.h" />
+		<Unit filename="../../src/vedo/framework/IactRecordTab.h" />
+		<Unit filename="../../src/vedo/framework/ImpactSolver.h" />
+		<Unit filename="../../src/vedo/framework/ImpactStatus.h" />
+		<Unit filename="../../src/vedo/framework/Interaction.h" />
+		<Unit filename="../../src/vedo/framework/SimMediator.h" />
+		<Unit filename="../../src/vedo/framework/SystemParameter.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

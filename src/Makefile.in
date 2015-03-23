@@ -1,99 +1,62 @@
+# Switch of environment and compiler
+
 ENVIRONMENT_MODE = MS-Win64-Adm-GCC
-# (ORG-Machine-User-Compiler)
+# (Rule of "ENVIRONMENT_MODE": ORG-Machine/OS-User-Compiler)
 
-OPTIMIZE_FLAG  = -O3
-OPTIMIZE_FLAGd = -O0
-
-ifeq ($(ENVIRONMENT_MODE), MyLab-MyWorkstation-MyID-MyCompiler)
-    PREFIX            = ${HOME}/usr/local/vedo/
-    MAKE              = gmake
-    COMPILER_MODE     = GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = MS_WINDOWS
-    CPP11_SUPPORT     = YES
-else
+# (Rule of "CXX_MODE": ORG-Machine/OS-Compiler)
 ifeq ($(ENVIRONMENT_MODE), MacOS-root-GCC)
-    PREFIX            = ${HOME}/vedo/
-    MAKE              = gmake
-    COMPILER_MODE     = GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = MAC_OS
-    CPP11_SUPPORT     = YES
+	PREFIX   = ${HOME}/vedo/
+    MAKE     = gmake
+    CXX_MODE = GCC
+    PLATFORM = MAC_OS
 else
 ifeq ($(ENVIRONMENT_MODE), MS-Win64-Adm-GCC)
-    PREFIX            = /d/DataCenter/Code/VEDO/VEDO/
-    MAKE              = /bin/make.exe
-    COMPILER_MODE     = MS-Win64-Adm-GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = MS_WINDOWS
-    CPP11_SUPPORT     = YES
+	PREFIX   = /opt/vedo/vedo/
+    MAKE     = /bin/make.exe
+    CXX_MODE = MS-Win64-Adm-GCC
+    PLATFORM = MS_WINDOWS
 else
 ifeq ($(ENVIRONMENT_MODE), MS-Win32-Adm-GCC)
-    PREFIX            = /d/DataCenter/Code/VEDO/VEDO/
-    MAKE              = /bin/make.exe
-    COMPILER_MODE     = MS-Win32-Adm-GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = MS_WINDOWS
-    CPP11_SUPPORT     = YES
+	PREFIX   = /opt/vedo/vedo/
+    MAKE     = /bin/make.exe
+    CXX_MODE = MS-Win32-Adm-GCC
+    PLATFORM = MS_WINDOWS
 else
-ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-VEDO-Intel)
-    PREFIX            = /pkg/mech/vedo/vedo/
-    MAKE              = /usr/bin/gmake
-    COMPILER_MODE     = NCHC-ALPS-Intel
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = UNIX_LIKE
-    CPP11_SUPPORT     = NO
+ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-Aries-Intel)
+	PREFIX   = /pkg/mech/vedo/
+    MAKE     = /usr/bin/gmake
+    CXX_MODE = NCHC-ALPS-Intel
+    PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-User-Intel)
-    PREFIX            = ${HOME}/usr/local/vedo/
-    MAKE              = /usr/bin/gmake
-    COMPILER_MODE     = NCHC-ALPS-Intel
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = UNIX_LIKE
-    CPP11_SUPPORT     = NO
+	PREFIX   = ${HOME}/usr/local/vedo/
+    MAKE     = /usr/bin/gmake
+    CXX_MODE = NCHC-ALPS-Intel
+    PLATFORM = UNIX_LIKE
 else
-ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-VEDO-GCC)
-    PREFIX            = /pkg/mech/vedo/vedo/
-    MAKE              = /usr/bin/gmake
-    COMPILER_MODE     = NCHC-ALPS-GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = UNIX_LIKE
-    CPP11_SUPPORT     = YES
+ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-Aries-GCC)
+	PREFIX   = /pkg/mech/vedo/
+    MAKE     = /usr/bin/gmake
+    CXX_MODE = NCHC-ALPS-GCC
+    PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-User-GCC)
-    PREFIX            = ${HOME}/usr/local/vedo/
-    MAKE              = /usr/bin/gmake
-    COMPILER_MODE     = NCHC-ALPS-GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = UNIX_LIKE
-    CPP11_SUPPORT     = YES
+	PREFIX   = ${HOME}/usr/local/vedo/
+    MAKE     = /usr/bin/gmake
+    CXX_MODE = NCHC-ALPS-GCC
+    PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), CAECE-Cluster-User-Intel)
-    PREFIX            = ${HOME}/usr/local/vedo/
-    MAKE              = /usr/bin/gmake
-    COMPILER_MODE     = CAECE-Cluster-Intel
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = UNIX_LIKE
-    CPP11_SUPPORT     = YES
+	PREFIX   = ${HOME}/usr/local/vedo/
+    MAKE     = /usr/bin/gmake
+    CXX_MODE = CAECE-Cluster-Intel
+    PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), CAECE-Cluster-User-GCC)
-    PREFIX            = ${HOME}/usr/local/vedo/
-    MAKE              = /usr/bin/gmake
-    COMPILER_MODE     = CAECE-Cluster-GCC
-    INTEGER_BITS      = 32
-    FLOAT_BITS        = 64
-    PLATFORM          = UNIX_LIKE
-    CPP11_SUPPORT     = YES
-endif
+	PREFIX   = ${HOME}/usr/local/vedo/
+    MAKE     = /usr/bin/gmake
+    CXX_MODE = CAECE-Cluster-GCC
+    PLATFORM = UNIX_LIKE
 endif
 endif
 endif
@@ -106,205 +69,134 @@ endif
 
 
 
-# Common information of system
+# Datatype
+INTEGER_BITS   =  32
+FLOAT_BITS     =  64
 
-VEDO_BIN          = ${PREFIX}bin/vedo/${COMPILER_MODE}/
-VEDO_OBJ          = ${PREFIX}obj/vedo/${COMPILER_MODE}/
-VEDO_OBJ_DEBUG    = ${PREFIX}obj/vedo/${COMPILER_MODE}/debug/
-VEDO_OBJ_RELEASE  = ${PREFIX}obj/vedo/${COMPILER_MODE}/release/
-VEDO_SRC          = ${PREFIX}src/
-VEDO_INC          = ${VEDO_SRC}
-VEDO_CXX_FLAG     = -D_${PLATFORM} -D_VEDO_INT${INTEGER_BITS} -D_VEDO_FLOAT${FLOAT_BITS} -I${VEDO_INC} ${OPTIMIZE_FLAG}
-VEDO_CXX_FLAGd    = -D_${PLATFORM} -D_VEDO_INT${INTEGER_BITS} -D_VEDO_FLOAT${FLOAT_BITS} -I${VEDO_INC} ${OPTIMIZE_FLAGd} -D_VEDO_DEBUG
-VEDO_LIB          = ${PREFIX}lib/vedo/${COMPILER_MODE}/
-VEDO_LNK_FLAG     = -L${VEDO_LIB} -lvedo-common       -lvedo-framework       -lvedo-njr       -lvedo-constants
-VEDO_LNK_FLAGd    = -L${VEDO_LIB} -lvedo-common-debug -lvedo-framework-debug -lvedo-njr-debug -lvedo-constants-debug
-IMP               = implementation/
-INC               = interfaces/
+# Optimal flag
+OPTIMIZE_FLAG  = -O3
+OPTIMIZE_FLAGd = -O0 -D_DEBUG
+
+
+
+# Project information
+PROJECT_BIN         = ${PREFIX}bin/${CXX_MODE}/
+PROJECT_OBJ         = ${PREFIX}obj/${CXX_MODE}/
+PROJECT_OBJ_DEBUG   = ${PROJECT_OBJ}debug/
+PROJECT_OBJ_RELEASE = ${PROJECT_OBJ}release/
+PROJECT_LIB         = ${PREFIX}lib/${CXX_MODE}/
 
 
 
 # Compiler
 # (ORG-Machine-User-Compiler)
-
-ifeq ($(COMPILER_MODE), GCC)
-    COMPILER_ROOT = /usr/
-    COMPILER_INC  = ${COMPILER_ROOT}include/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/
-    CXX           = ${COMPILER_ROOT}bin/g++
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
-    AR            = /usr/bin/ar
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -static -static-libgcc -static-libstdc++
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -static -static-libgcc -static-libstdc++
-    MPI_ROOT      = /opt/mpich/
-    MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
-    MPI_LIB       = ${MPI_ROOT}lib/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -lmpi
-    mCXX          = ${CXX}
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
-else
-ifeq ($(COMPILER_MODE), MS-Win64-Adm-GCC)
-    COMPILER_ROOT = /mingw64/
-    COMPILER_INC  = ${COMPILER_ROOT}include/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/gcc/x86_64-w64-mingw32/4.9.2/
-    CXX           = ${COMPILER_ROOT}bin/g++
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11 -Wall
-    AR            = ${COMPILER_ROOT}bin/ar.exe
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+ifeq ($(CXX_MODE), MS-Win64-Adm-GCC)
+    CXX_ROOT      = /mingw64/
+    CXX_INC       = ${CXX_ROOT}include/
+    CXX_LIB       = ${CXX_ROOT}lib/gcc/x86_64-w64-mingw32/4.9.2/
+    CXX           = ${CXX_ROOT}bin/g++
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+    CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
+    GCC_FLAGd     = -Wall
+    AR            = ${CXX_ROOT}bin/ar.exe
     MPI_ROOT      = /c/usr/mpich2-64/
     MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
     MPI_LIB       = ${MPI_ROOT}lib/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++ -lmpi
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lmpicxx -lmpi
     mCXX          = ${CXX}
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
 else
-ifeq ($(COMPILER_MODE), MS-Win32-Adm-GCC)
-    COMPILER_ROOT = /mingw32/
-    COMPILER_INC  = ${COMPILER_ROOT}include/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/gcc/i686-w64-mingw32/4.9.2/
-    CXX           = ${COMPILER_ROOT}bin/g++
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11 -Wall
-    AR            = ${COMPILER_ROOT}bin/ar.exe
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+ifeq ($(CXX_MODE), MS-Win32-Adm-GCC)
+    CXX_ROOT      = /mingw32/
+    CXX_INC       = ${CXX_ROOT}include/
+    CXX_LIB       = ${CXX_ROOT}lib/gcc/i686-w64-mingw32/4.9.2/
+    CXX           = ${CXX_ROOT}bin/g++
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+    CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
+    GCC_FLAGd     = -Wall
+    AR            = ${CXX_ROOT}bin/ar.exe
     MPI_ROOT      = /c/usr/mpich2-32/
     MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
     MPI_LIB       = ${MPI_ROOT}lib/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++ -lmpi
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lmpicxx -lmpi
     mCXX          = ${CXX}
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
 else
-ifeq ($(COMPILER_MODE), NCHC-ALPS-Intel)
-    COMPILER_ROOT = /pkg/intel/12/
-    COMPILER_INC  = ${COMPILER_ROOT}include/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/intel64/
-    CXX           = ${COMPILER_ROOT}bin/icpc
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC}
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC}
+ifeq ($(CXX_MODE), NCHC-ALPS-Intel)
+    CXX_ROOT      = /pkg/intel/12/
+    CXX_INC       = ${CXX_ROOT}include/
+    CXX_LIB       = ${CXX_ROOT}lib/intel64/
+    CXX           = ${CXX_ROOT}bin/icpc
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -limf
     AR            = /usr/bin/ar
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -limf
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -limf
     MPI_ROOT      = /pkg/mpi/intel/12/mvapich2-1.8/
     MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
     MPI_LIB       = ${MPI_ROOT}lib/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -lmpichcxx -lmpich
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lmpichcxx -lmpich
     mCXX          = ${MPI_ROOT}bin/mpicxx
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
 else
-ifeq ($(COMPILER_MODE), NCHC-ALPS-GCC)
-    COMPILER_ROOT = /usr/
-    COMPILER_INC  = ${COMPILER_ROOT}include/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/
-    CXX           = ${COMPILER_ROOT}bin/g++
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
+ifeq ($(CXX_MODE), NCHC-ALPS-GCC)
+    CXX_ROOT      = /usr/
+    CXX_INC       = ${CXX_ROOT}include/
+    CXX_LIB       = ${CXX_ROOT}lib/
+    CXX           = ${CXX_ROOT}bin/g++
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -limf
+    CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
+    GCC_FLAGd     = -Wall
     AR            = /usr/bin/ar
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -limf
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -limf
     MPI_ROOT      = /opt/platform_mpi/
     MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
     MPI_LIB       = ${MPI_ROOT}lib/linux_amd64/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -lmpiCC
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lmpiCC
     mCXX          = ${MPI_ROOT}bin/mpiCC
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
 else
-ifeq ($(COMPILER_MODE), CAECE-Cluster-Intel)
-    COMPILER_ROOT = /opt/intel/Compiler/11.0/074/
-    COMPILER_INC  = ${COMPILER_ROOT}include/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/intel64/
-    CXX           = ${COMPILER_ROOT}bin/intel64/icpc
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC}
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC}
+ifeq ($(CXX_MODE), CAECE-Cluster-Intel)
+    CXX_ROOT      = /opt/intel/Compiler/11.0/074/
+    CXX_INC       = ${CXX_ROOT}include/
+    CXX_LIB       = ${CXX_ROOT}lib/intel64/
+    CXX           = ${CXX_ROOT}bin/intel64/icpc
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -limf
     AR            = /usr/bin/ar
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -limf
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -limf
     MPI_ROOT      = /opt/openmpi/1.6.5/intel/
     MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
     MPI_LIB       = ${MPI_ROOT}lib/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -lvt-mpi
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lvt-mpi
     mCXX          = ${MPI_ROOT}bin/mpicxx
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
 else
-ifeq ($(COMPILER_MODE), CAECE-Cluster-GCC)
-    COMPILER_ROOT = /usr/local/
-    COMPILER_INC  = ${COMPILER_ROOT}include/c++/4.8.2/
-    COMPILER_LIB  = ${COMPILER_ROOT}lib/gcc/x86_64-unknown-linux-gnu/4.8.2/
-    CXX           = ${COMPILER_ROOT}bin/gcc
-    CXX_FLAG      = ${VEDO_CXX_FLAG}  -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
-    CXX_FLAGd     = ${VEDO_CXX_FLAGd} -I${COMPILER_INC} -D_STD_CPP_11 -std=c++11
+ifeq ($(CXX_MODE), CAECE-Cluster-GCC)
+    CXX_ROOT      = /usr/local/
+    CXX_INC       = ${CXX_ROOT}include/c++/4.8.2/
+    CXX_LIB       = ${CXX_ROOT}lib/gcc/x86_64-unknown-linux-gnu/4.8.2/
+    CXX           = ${CXX_ROOT}bin/gcc
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+    CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
+    GCC_FLAGd     = -Wall
     AR            = /usr/bin/ar
-    AR_FLAG       = -r
-    AR_FLAGd      = -r
-    LNK           = ${CXX}
-    LNK_FLAG      = ${VEDO_LNK_FLAG}  -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lpthread -lstdc++
-    LNK_FLAGd     = ${VEDO_LNK_FLAGd} -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lpthread -lstdc++
     MPI_ROOT      = /opt/openmpi/1.6.5/gnu482/
     MPI_INC       = ${MPI_ROOT}include/
-    MPI_CXX_FLAG  = -I${MPI_INC}
     MPI_LIB       = ${MPI_ROOT}lib/
-    MPI_LNK_FLAG  = -L${MPI_LIB} -L${COMPILER_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lpthread -lstdc++ -lvt-mpi
+    MPI_LNK_FLAG  = -L${MPI_LIB} -lvt-mpi
     mCXX          = ${MPI_ROOT}bin/mpicxx
-    mCXX_FLAG     = ${MPI_CXX_FLAG} ${CXX_FLAG}
-    mCXX_FLAGd    = ${MPI_CXX_FLAG} ${CXX_FLAGd}
-    mLNK          = ${mCXX}
-    mLNK_FLAG     = ${MPI_LNK_FLAG} ${LNK_FLAG}
-    mLNK_FLAGd    = ${MPI_LNK_FLAG} ${LNK_FLAGd}
 endif
 endif
 endif
 endif
 endif
 endif
-endif
+
+
+
+CXX_FLAG   = -D_${PLATFORM} -D_INT${INTEGER_BITS} -D_FLOAT${FLOAT_BITS} ${OPTIMIZE_FLAG}  -I${PREFIX}src/ -I${CXX_INC} ${CXX11_FLAG}
+CXX_FLAGd  = -D_${PLATFORM} -D_INT${INTEGER_BITS} -D_FLOAT${FLOAT_BITS} ${OPTIMIZE_FLAGd} -I${PREFIX}src/ -I${CXX_INC} ${CXX11_FLAG} ${GCC_FLAGd}
+
+LNK        = ${CXX}
+LNK_FLAG   = ${CXX_LNK_FLAG} -lvedo-common       -lvedo-framework       -lnjr       -laries-utility
+LNK_FLAGd  = ${CXX_LNK_FLAG} -lvedo-common-debug -lvedo-framework-debug -lnjr-debug -laries-utility-debug
+
+mCXX_FLAG  = -I${MPI_INC} ${CXX_FLAG}
+mCXX_FLAGd = -I${MPI_INC} ${CXX_FLAGd}
+
+AR_FLAG    = -r
+AR_FLAGd   = ${AR_FLAG}
+
+mLNK       = ${mCXX}
+mLNK_FLAG  = ${MPI_LNK_FLAG} ${LNK_FLAG}
+mLNK_FLAGd = ${MPI_LNK_FLAG} ${LNK_FLAGd}

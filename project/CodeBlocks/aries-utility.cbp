@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="aries-utility" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../lib/CodeBlocks64/aries-utility-debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks64/debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Debug32">
+				<Option output="../../lib/CodeBlocks32/aries-utility-debug32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks32/debug" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O0" />
+					<Add option="-Wall" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../../lib/CodeBlocks64/aries-utility" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks64/release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+				</Compiler>
+			</Target>
+			<Target title="Release32">
+				<Option output="../../lib/CodeBlocks32/aries-utility32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../../obj/CodeBlocks32/release" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_32bits" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+				</Compiler>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="32-bits" targets="Debug32;Release32;" />
+			<Add alias="64-bits" targets="Debug;Release;" />
+			<Add alias="All" targets="Debug;Debug32;Release;Release32;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-D_FLOAT64" />
+			<Add option="-D_INT32" />
+			<Add option="-D_STD_CPP_11" />
+			<Add option="-D_MS_WINDOWS" />
+			<Add directory="../../src" />
+		</Compiler>
+		<Linker>
+			<Add option="-r" />
+		</Linker>
+		<Unit filename="../../src/aries/utility/Array3d.h" />
+		<Unit filename="../../src/aries/utility/BinaryIO.cpp" />
+		<Unit filename="../../src/aries/utility/BinaryIO.h" />
+		<Unit filename="../../src/aries/utility/binder2nd_refArg.h" />
+		<Unit filename="../../src/aries/utility/Constants.cpp" />
+		<Unit filename="../../src/aries/utility/Constants.h" />
+		<Unit filename="../../src/aries/utility/DataType.h" />
+		<Unit filename="../../src/aries/utility/EFPathDependent.cpp" />
+		<Unit filename="../../src/aries/utility/EFPathDependent.h" />
+		<Unit filename="../../src/aries/utility/EFScatter.h" />
+		<Unit filename="../../src/aries/utility/EFSExtrapolation.h" />
+		<Unit filename="../../src/aries/utility/EFSTimeHistory.h" />
+		<Unit filename="../../src/aries/utility/ExplicitFunction.h" />
+		<Unit filename="../../src/aries/utility/Matrix.h" />
+		<Unit filename="../../src/aries/utility/ParameterSet.h" />
+		<Unit filename="../../src/aries/utility/Polygon.cpp" />
+		<Unit filename="../../src/aries/utility/Polygon.h" />
+		<Unit filename="../../src/aries/utility/Random.h" />
+		<Unit filename="../../src/aries/utility/TimeControlVariable.h" />
+		<Unit filename="../../src/aries/utility/VariationRecord.cpp" />
+		<Unit filename="../../src/aries/utility/VariationRecord.h" />
+		<Unit filename="../../src/aries/utility/Vector3d.h" />
+		<Unit filename="../../src/aries/utility/Vector3df.cpp" />
+		<Unit filename="../../src/aries/utility/Vector3df.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

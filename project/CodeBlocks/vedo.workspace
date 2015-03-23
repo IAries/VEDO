@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="vedo">
+		<Project filename="aries-utility.cbp" />
+		<Project filename="njr.cbp" />
+		<Project filename="framework.cbp" />
+		<Project filename="common.cbp" />
+		<Project filename="anne.cbp">
+			<Depends filename="aries-utility.cbp" />
+			<Depends filename="njr.cbp" />
+			<Depends filename="framework.cbp" />
+			<Depends filename="common.cbp" />
+		</Project>
+		<Project filename="knight.cbp">
+			<Depends filename="aries-utility.cbp" />
+			<Depends filename="njr.cbp" />
+			<Depends filename="framework.cbp" />
+			<Depends filename="common.cbp" />
+		</Project>
+		<Project filename="iris-gm.cbp">
+			<Depends filename="aries-utility.cbp" />
+			<Depends filename="njr.cbp" />
+			<Depends filename="framework.cbp" />
+			<Depends filename="common.cbp" />
+		</Project>
+	</Workspace>
+</CodeBlocks_workspace_file>
