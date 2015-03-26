@@ -35,7 +35,7 @@ void DOWorld::WriteXMLPrefix(const std::string filename) const
 	ofXML
 		<< "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl
 		<< "<DOWorld xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"DOWorldSchema.xsd\">" << std::endl
-		<< "\t<Version>" << aries_cp->Version() << "</Version>" << std::endl
+		<< "\t<Version>" << aries::information::_Version << "</Version>" << std::endl
 		<< "\t<SimParameter>" << std::endl
 		<< "\t\t<SimConstant>" << std::endl
 		<< "\t\t\t<Constant Name=\"ContactDetectSafetyFactor\" Value=\"" << aries_cp->SafetyFactor() << "\"/>" << std::endl

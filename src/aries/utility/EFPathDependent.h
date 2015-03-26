@@ -31,47 +31,47 @@ public:
 
 	inline void SetBoolParameterSet(const ParameterSet<std::string, bool>& psb)
 	{
-		_bParameters = psb;
+		_BoolParameters = psb;
 	}
 
 	inline bool GetBoolParameter(const std::string& pn)
 	{
-		return _bParameters(pn);
+		return _BoolParameters(pn);
 	}
 
 	inline _uint_t GetBoolParameterSize()
 	{
-		return _bParameters.size();
+		return _BoolParameters.size();
 	}
 
 	inline void SetFloatParameterSet(const ParameterSet<std::string, _float_t>& psf)
 	{
-		_fParameters = psf;
+		_FloatParameters = psf;
 	}
 
 	inline _float_t GetFloatParameter(const std::string& pn)
 	{
-		return _fParameters(pn);
+		return _FloatParameters(pn);
 	}
 
 	inline _uint_t GetFloarParameterSize()
 	{
-		return _fParameters.size();
+		return _FloatParameters.size();
 	}
 
 	inline void SetIntParameterSet(const ParameterSet<std::string, _int_t>& psi)
 	{
-		_iParameters = psi;
+		_IntParameters = psi;
 	}
 
 	inline _int_t GetIntParameter(const std::string& pn)
 	{
-		return _iParameters(pn);
+		return _IntParameters(pn);
 	}
 
 	inline _uint_t GetIntParameterSize()
 	{
-		return _iParameters.size();
+		return _IntParameters.size();
 	}
 
 	virtual inline const std::string GetName() const
@@ -90,11 +90,11 @@ public:
 
 protected:
 
-	ParameterSet<std::string, bool    > _bParameters;
+	ParameterSet<std::string, bool    > _BoolParameters;
 
-	ParameterSet<std::string, _float_t> _fParameters;
+	ParameterSet<std::string, _float_t> _FloatParameters;
 
-	ParameterSet<std::string, _int_t  > _iParameters;
+	ParameterSet<std::string, _int_t  > _IntParameters;
 };
 
 }   // namespace aries

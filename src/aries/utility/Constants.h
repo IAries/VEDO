@@ -12,21 +12,89 @@
 namespace aries
 {
 
+namespace math
+{
+
 // Common math constants
 //#define _USE_MATH_DEFINES
 //#include <math.h>
-//static const _float_t fPI             = M_PI;
-static const _float_t fPI             = 4.0 * std::atan(1.0);
-static const _float_t fOneTwelfthPI   = fPI / 12.0;
-static const _float_t fOneEighthPI    = 0.125 * fPI;   // dPI/8
-static const _float_t fOneSixthPI     = fPI / 6.0;
-static const _float_t fQuarterPI      = 0.25 * fPI;    // dPI/4
-static const _float_t fOneThirdPI     = fPI / 3.0;
-static const _float_t fHalfPI         = 0.5 * fPI;     // dPI/2
-static const _float_t fOneAndHalfPI   = 1.5 * fPI;     // dPI*3/2
-static const _float_t fDoublePI       = 2.0 * fPI;
-static const _float_t fFourthThirdsPI = 4.0 / 3.0 * fPI;
-static const _float_t fDegree2PI      = 1.0 / 180.0 * fPI;
+//static const _float_t _PI             = M_PI;
+static const _float_t _PI             = 4.0 * std::atan(1.0);
+static const _float_t _OneTwelfthPI   = _PI / 12.0;
+static const _float_t _OneEighthPI    = 0.125 * _PI;   // _PI/8
+static const _float_t _OneSixthPI     = _PI / 6.0;
+static const _float_t _QuarterPI      = 0.25 * _PI;    // _PI/4
+static const _float_t _OneThirdPI     = _PI / 3.0;
+static const _float_t _HalfPI         = 0.5 * _PI;     // _PI/2
+static const _float_t _OneAndHalfPI   = 1.5 * _PI;     // _PI*3/2
+static const _float_t _DoublePI       = 2.0 * _PI;
+static const _float_t _FourthThirdsPI = 4.0 / 3.0 * _PI;
+static const _float_t _Degree2PI      = 1.0 / 180.0 * _PI;
+
+}
+
+
+
+namespace information
+{
+
+static const std::string _ReleaseDate = "2015-03-26";
+
+static const std::string _Version     = "X5 build 326";
+
+#ifdef _DEBUG
+	static const std::string _DebugMode = "debug";
+#else
+	static const std::string _DebugMode = "release";
+#endif   // _DEBUG
+
+#ifdef _STD_CPP_11
+	static const std::string _CPP11 = " with C++11 standard";
+#else
+	static const std::string _CPP11 = "";
+#endif   // _STD_CPP_11
+
+#ifdef _MS_WINDOWS
+	static const std::string _Platform = "Microsoft Windows";
+#else
+	#ifdef _UNIX_LIKE
+		static const std::string _Platform = "UNIX-like";
+	#else
+		static const std::string _Platform = "";
+	#endif   // _UNIX_LIKE
+#endif   // _MS_WINDOWS
+
+#ifdef _INT32
+	static const std::string _INT_BITS = "32";
+#else
+	#ifdef _INT64
+		static const std::string _INT_BITS = "64";
+	#else
+		// Default type
+		static const std::string _INT_BITS = "64";
+	#endif   // _INT64
+#endif   // _INT32
+
+#ifdef _FLOAT32
+	static const std::string _FLOAT_BITS = "32";
+#else
+	#ifdef _FLOAT64
+		static const std::string _FLOAT_BITS = "64";
+	#else
+		#ifdef _FLOAT80
+			static const std::string _FLOAT_BITS = "80";
+		#else
+			// Default type
+			static const std::string _FLOAT_BITS = "64";
+		#endif   // _FLOAT80
+	#endif   // _FLOAT64
+#endif   // _FLOAT32
+
+static const std::string _Information
+	= "(released in " + _ReleaseDate + ", " + _DebugMode + " mode" + _CPP11 + ", built for " + _Platform + " platform, "
+	+ _INT_BITS + "-bit integer & " + _FLOAT_BITS + "-bit float)";
+
+}
 
 
 
@@ -59,18 +127,6 @@ public:
 	~Constants()
 	{
 	}
-
-	/*
-	inline _float_t SampleData() const
-	{
-		return _fSampleData;
-	}
-
-	inline void SetSampleData(const _float_t& f)
-	{
-		_fSampleData = f;
-	}
-	*/
 
 	inline _float_t SafetyFactor() const
 	{
@@ -112,32 +168,7 @@ public:
 		_uParameterSet["NumUDDImpactStatus"] = u;
 	}
 
-	inline std::string ReleaseDate() const
-	{
-		return _sParameterSet("ReleaseDate");
-	}
-
-	inline void SetReleaseDate(const std::string& s)
-	{
-		_sParameterSet["ReleaseDate"] = s;
-	}
-
-	inline std::string Version() const
-	{
-		return _sParameterSet("Version");
-	}
-
-	inline void SetVersion(const std::string& s)
-	{
-		_sParameterSet["Version"] = s;
-	}
-
-	inline std::string Information() const
-	{
-		return _sParameterSet("Information");
-	}
-
-private:
+protected:
 
 	static Constants*                      _Constants;
 
@@ -149,61 +180,11 @@ private:
 
 	void SetDefaultValue()
 	{
-		_sParameterSet["ReleaseDate"]        = "2015-03-23";
-		_sParameterSet["Version"]            = "X5 build 323";
 		_fParameterSet["SafetyFactor"      ] = 1.1;
 		_uParameterSet["NumUDDDOStatus"    ] = 0;
 		_uParameterSet["NumUDDImpactStatus"] = 0;
 		_uParameterSet["ImpactBufferSize"  ] = 65535;
 		// in VEDO, _uParameterSet["ImpactBufferSize"] ~= 18,000 for 60,000 elements / 4 processors; ~= 60,000 for 60,000 elements / 8 processors
-
-		std::string sInformation = "(released in " + _sParameterSet["ReleaseDate"] + ", ";
-		if (bDebugMode)
-		{
-			sInformation.append("debug");
-		}
-		else
-		{
-			sInformation.append("release");
-		}
-		sInformation.append(" mode");
-
-		if (bCPP11)
-		{
-			sInformation.append(" with C++11 standard");
-		}
-
-		if(sPlatform != "")
-		{
-			sInformation.append(", built for ");
-			sInformation.append(sPlatform);
-			sInformation.append(" platform");
-		}
-
-		sInformation.append(", ");
-		if (uINT_BITS == 32)
-		{
-			sInformation.append("32");
-		}
-		else if (uINT_BITS == 64)
-		{
-			sInformation.append("64");
-		}
-		sInformation.append("-bit integer & ");
-		if (uFLOAT_BITS == 32)
-		{
-			sInformation.append("32");
-		}
-		else if (uFLOAT_BITS == 64)
-		{
-			sInformation.append("64");
-		}
-		else if (uFLOAT_BITS == 80)
-		{
-			sInformation.append("80");
-		}
-		sInformation.append("-bit float)");
-		_sParameterSet["Information"] = sInformation;
 	}
 
 	Constants()

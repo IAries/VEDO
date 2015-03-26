@@ -11,26 +11,25 @@
 namespace aries
 {
 
-template <typename TType, typename TRecord>
 class VariationRecord
 {
 public:
 
-	static VariationRecord<TType, TRecord>* Instance()
+	static VariationRecord* Instance()
 	{
 		if (_VariationRecord == 0)
 		{
-			_VariationRecord = new VariationRecord<TType, TRecord>;
+			_VariationRecord = new VariationRecord;
 		}
 		return _VariationRecord;
 	}
 
-	VariationRecord<TType, TRecord>(const VariationRecord<TType, TRecord>& vr)
+	VariationRecord(const VariationRecord& vr)
 	{
 		*this = vr;
 	}
 
-	const VariationRecord<TType, TRecord>& operator = (const VariationRecord<TType, TRecord>& vr)
+	const VariationRecord& operator = (const VariationRecord& vr)
 	{
 		this->Instance();
 		return *this;
@@ -40,27 +39,28 @@ public:
 	{
 	}
 
-	void AddRecord(const TType& type, const _float_t& time, const std::vector<TRecord>& records)
+	void AddRecord(const std::string& type, const _float_t& time, const std::vector<std::string>& records)
 	{
-		_Records[type][time] = records;
+		//_Records[type][time] = records;
+		_Records[type].insert(std::make_pair(time, records));
 	}
 
-	void AddRecord(const TType& type, const std::vector<TRecord>& records)
+	void AddRecord(const std::string& type, const std::vector<std::string>& records)
 	{
 		_Records[type].insert(std::make_pair(_CurrentTime, records));
 	}
 
-	std::multimap<_float_t, std::vector<TRecord> > GetRecord(const TType& type)
+	std::multimap<_float_t, std::vector<std::string> > GetRecord(const std::string& type)
 	{
 		return _Records[type];
 	}
 
-	std::map<TType, std::multimap<_float_t, std::vector<TRecord> > > * GetRecord() const
+	const std::map<std::string, std::multimap<_float_t, std::vector<std::string> > > * GetRecord() const
 	{
 		return &_Records;
 	}
 
-	_uint_t size(const TType& type)
+	_uint_t size(const std::string& type)
 	{
 		return _Records[type].size();
 	}
@@ -70,22 +70,22 @@ public:
 		_CurrentTime = time;
 	}
 
-	inline _float_t GetCurrentTime() const
+	inline _float_t CurrentTime() const
 	{
 		return _CurrentTime;
 	}
 
-private:
+protected:
 
-	VariationRecord<TType, TRecord>()
+	VariationRecord()
 	{
 	}
 
-	static VariationRecord<TType, TRecord>* _VariationRecord;
+	static VariationRecord* _VariationRecord;
 
 	_float_t _CurrentTime;
 
-	std::map<TType, std::multimap<_float_t, std::vector<TRecord> > > _Records;
+	std::map<std::string, std::multimap<_float_t, std::vector<std::string> > > _Records;
 };
 
 }   // namespace aries

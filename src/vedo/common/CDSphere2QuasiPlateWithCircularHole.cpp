@@ -96,7 +96,7 @@ void CDSphere_QuasiPlateWithCircularHole::CalDistance(const DiscreteObject* pdoS
 	if (cInfo.dImpactDepth > 0.0)
 	{
 		_float_t dS = dRa - cInfo.dImpactDepth;
-		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * aries::fPI;
+		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * aries::math::_PI;
 	}
 	else
 	{

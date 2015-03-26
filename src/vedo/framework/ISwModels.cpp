@@ -7,7 +7,7 @@ namespace vedo
 
 _float_t ISwModels::CriticalTimeStep(const _float_t& dMeff, const _float_t& dK)
 {
-	return aries::fDoublePI * sqrt(dMeff / dK);
+	return aries::math::_DoublePI * sqrt(dMeff / dK);
 }
 
 _float_t ISwModels::CriticalTimeStep(const _float_t& dMeff, const _float_t& dKn, const _float_t& dKt)
@@ -20,18 +20,18 @@ _float_t ISwModels::CriticalTimeStep(const _float_t& dMeff, const _float_t& dKn,
 		}
 		else
 		{
-			return aries::fDoublePI * sqrt(dMeff / dKt);
+			return aries::math::_DoublePI * sqrt(dMeff / dKt);
 		}
 	}
 	else
 	{
 		if (dKt == 0.0)
 		{
-			return aries::fDoublePI * sqrt(dMeff / dKn);
+			return aries::math::_DoublePI * sqrt(dMeff / dKn);
 		}
 		else
 		{
-			return aries::fDoublePI * sqrt(dMeff / std::max(dKn, dKt));
+			return aries::math::_DoublePI * sqrt(dMeff / std::max(dKn, dKt));
 		}
 	}
 }
@@ -258,7 +258,7 @@ _float_t ISwModels::WetDampingRatioLegendre2006(_float_t dDryRestitutionCoeffici
 		return 1.0;
 	}
 
-	_float_t beta_c = log(dWetRestitutionCoefficient) / aries::fPI;
+	_float_t beta_c = log(dWetRestitutionCoefficient) / aries::math::_PI;
 	return (-beta_c / sqrt(1.0 + beta_c * beta_c));
 }
 

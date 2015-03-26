@@ -21,14 +21,11 @@
 #include <iostream>
 #include <string>
 
-aries::Constants* aries_cp = aries::Constants::Instance();
-vedo::_float_t SafetyFactor = aries_cp->SafetyFactor();
-
 void usage (vedo::_uint_t g)
 {
 	std::cout
-		<< "Anne " << aries_cp->Version() << " " << aries_cp->Information() << std::endl
-		<< std::endl
+		<< "Anne " << aries::information::_Version                  << std::endl
+		<< aries::information::_Information                         << std::endl << std::endl
 		<< "Usage: anne <Mode> <IDO file> <Type> <Record> <UpIact>" << std::endl
 		<< "Mode                : analysis/redistribute"            << std::endl
 		<< "Type                : (I)  safe/near"                   << std::endl

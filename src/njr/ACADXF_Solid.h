@@ -69,7 +69,7 @@ class Ellipsoid : public Solid
 
 public:
 
-	Ellipsoid(const _float_t& fpa = aries::fOneTwelfthPI);
+	Ellipsoid(const _float_t& fpa = aries::math::_OneTwelfthPI);
 
 	void Set
 		(const _float_t& dlx, const _float_t& dly, const _float_t& dlz,
@@ -91,7 +91,7 @@ class Sphere : public Ellipsoid
 
 public:
 
-	Sphere(const _float_t& fpa = aries::fOneTwelfthPI);
+	Sphere(const _float_t& fpa = aries::math::_OneTwelfthPI);
 
 	void Set
 		(const _float_t& dRadius,
@@ -113,7 +113,7 @@ class Cylinder : public Solid
 
 public:
 
-	Cylinder(const _float_t& fpa = aries::fOneTwelfthPI);
+	Cylinder(const _float_t& fpa = aries::math::_OneTwelfthPI);
 
 	void Set
 		(const _float_t& dRadius, const _float_t& dHeight,
@@ -135,7 +135,7 @@ class QuasiCylinder: public Solid
 
 public:
 
-	QuasiCylinder(const _float_t& fpa = aries::fOneTwelfthPI);
+	QuasiCylinder(const _float_t& fpa = aries::math::_OneTwelfthPI);
 
 	void Set
 		(const _float_t& dRadius, const _float_t& dHeight,
@@ -157,7 +157,7 @@ class QuasiPlate: public Solid
 
 public:
 
-	QuasiPlate(const _float_t& fpa = aries::fOneTwelfthPI);
+	QuasiPlate(const _float_t& fpa = aries::math::_OneTwelfthPI);
 
 	void Set
 		(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
@@ -180,7 +180,7 @@ class QuasiPlateWithCircularHole: public Solid
 
 public:
 
-	QuasiPlateWithCircularHole(const _float_t& fpa = aries::fOneTwelfthPI);
+	QuasiPlateWithCircularHole(const _float_t& fpa = aries::math::_OneTwelfthPI);
 
 	void Set
 		(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,

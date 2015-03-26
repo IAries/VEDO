@@ -40,10 +40,20 @@ public:
 		return *this;
 	}
 
+	const Vector3d& Set(const T& x, const T& y, const T& z)
+	{
+		this->set(x, y, z);
+	}
+
 	const Vector3d& set_x(const T& x)
 	{
 		_v[0] = x;
 		return *this;
+	}
+
+	const Vector3d& SetX(const T& x)
+	{
+		this->set_x(x);
 	}
 
 	const Vector3d& set_y(const T& y)
@@ -52,10 +62,20 @@ public:
 		return *this;
 	}
 
+	const Vector3d& SetY(const T& y)
+	{
+		this->set_y(y);
+	}
+
 	const Vector3d& set_z(const T& z)
 	{
 		_v[2] = z;
 		return *this;
+	}
+
+	const Vector3d& SetZ(const T& z)
+	{
+		this->set_z(z);
 	}
 
 	const Vector3d& set_cylinder(const T& radius, const T& thita, const T& z)
@@ -129,7 +149,7 @@ public:
 	 *
 	 * EFERENCE: Computer Graphics 2th Donald. Hearn and M. Pauline Baker page 419-420
 	 **************************************************************************************************************************/
-	Vector3d RotateAround(const Vector3d& va) const
+	Vector3d rotate_around(const Vector3d& va) const
 	{
 		Vector3d u   = va.direction();
 		T        a   = va.length();
@@ -157,10 +177,20 @@ public:
 		*/
 	}
 
+	Vector3d RotateAround(const Vector3d& va) const
+	{
+		return this->rotate_around(va);
+	}
+
 	// Retrieves the new position of this std::vector after axial x/z/y have been replaced by nx/nz/ny
 	Vector3d trans(const Vector3d& nx, const Vector3d& ny, const Vector3d& nz) const
 	{
 	   return (_v[0] * nx + _v[1] * ny + _v[2] * nz);
+	}
+
+	Vector3d Trans(const Vector3d& nx, const Vector3d& ny, const Vector3d& nz) const
+	{
+		return this->trans(nx, ny, nz);
 	}
 
 	// Retrieves the projected Vector3d on v of this Vector3d
@@ -169,29 +199,40 @@ public:
 		return ((this->dot(v)) / v.length()) * v.direction();
 	}
 
+	Vector3d ProjectOn(const Vector3d& v) const
+	{
+		return this->project_on(v);
+	}
+
 	T dot(const Vector3d& v) const
 	{
 		return ( (_v[0]*v._v[0]) + (_v[1]*v._v[1]) + (_v[2]*v._v[2]) );
 	}
 
-	/*
+	T Dot(const Vector3d& v) const
+	{
+		return this->dot(v);
+	}
+
 	T operator % (const Vector3d& v) const
 	{
 		return this->dot(v);
 	}
-	*/
 
 	Vector3d cross(const Vector3d& v) const
 	{
 		return Vector3d((_v[1]*v._v[2])-(_v[2]*v._v[1]), (_v[2]*v._v[0])-(_v[0]*v._v[2]), (_v[0]*v._v[1])-(_v[1]*v._v[0]));
 	}
 
-	/*
+	Vector3d Cross(const Vector3d& v) const
+	{
+		return this->cross(v);
+	}
+
 	Vector3d operator * (const Vector3d& v) const
 	{
 		return this->cross(v);
 	}
-	*/
 
 	const Vector3d& operator = (const Vector3d& v)
 	{

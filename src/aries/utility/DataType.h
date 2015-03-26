@@ -6,35 +6,6 @@
 
 namespace aries
 {
-
-#ifdef _DEBUG
-	static const bool bDebugMode = true;
-#else
-	static const bool bDebugMode = false;
-#endif   // _ARIES_DEBUG
-
-
-
-#ifdef _STD_CPP_11
-	static const bool bCPP11 = true;
-#else
-	static const bool bCPP11 = false;
-#endif   // _STD_CPP_11
-
-
-
-#ifdef _MS_WINDOWS
-	static const std::string sPlatform = "Microsoft Windows";
-#else
-	#ifdef _UNIX_LIKE
-		static const std::string sPlatform = "UNIX-like";
-	#else
-		static const std::string sPlatform = "";
-	#endif   // _UNIX_LIKE
-#endif   // _MS_WINDOWS
-
-
-
 // The following data type make a system consistent in both LLP64 (Microsoft Windows) & LP64 (UNIX-like OS) platforms
 // (Wikipedia: 64-bit computing, http://en.wikipedia.org/wiki/64-bit_computing)
 // (Fundamental types, http://en.cppreference.com/w/cpp/language/types)
@@ -55,17 +26,14 @@ typedef               long double _float80_t;   // Range: 1e-4931 ~ 1e4932
 #ifdef _INT32
 	typedef _int32_t  _int_t;
 	typedef _uint32_t _uint_t;
-	static const _uint_t uINT_BITS = 32;
 #else
 	#ifdef _INT64
 		typedef _int64_t  _int_t;
 		typedef _uint64_t _uint_t;
-		static const _uint_t uINT_BITS = 64;
 	#else
 		// Default type
 		typedef _int64_t  _int_t;
 		typedef _uint64_t _uint_t;
-		static const _uint_t uINT_BITS = 64;
 	#endif   // _INT64
 #endif   // _INT32
 
@@ -74,19 +42,15 @@ typedef               long double _float80_t;   // Range: 1e-4931 ~ 1e4932
 // Instead of float/double, please use "_float_t" in whole system
 #ifdef _FLOAT32
 	typedef _float32_t _float_t;
-	static const _uint_t uFLOAT_BITS = 32;
 #else
 	#ifdef _FLOAT64
 		typedef _float64_t _float_t;
-		static const _uint_t uFLOAT_BITS = 64;
 	#else
 		#ifdef _FLOAT80
 			typedef _float80_t _float_t;
-			static const _uint_t uFLOAT_BITS = 80;
 		#else
 			// Default type
 			typedef _float64_t _float_t;
-			static const _uint_t uFLOAT_BITS = 64;
 		#endif   // _FLOAT80
 	#endif   // _FLOAT64
 #endif   // _FLOAT32

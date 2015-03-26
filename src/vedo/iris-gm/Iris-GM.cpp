@@ -19,11 +19,9 @@
 
 void usage (vedo::_uint_t g)
 {
-	//aries::Constants* aries_cp = aries::Constants::Instance();
 	std::cout
-		//<< "Iris-GM " << aries_cp->Version() << " " << aries_cp->Information() << std::endl
-		<< "Iris-GM "                                           << std::endl
-		<< std::endl
+		<< "Iris-GM " << aries::information::_Version           << std::endl
+		<< aries::information::_Information                     << std::endl << std::endl
 		<< "Usage: iris-gm <Mode> <IDO file> <Record> <UpIact>" << std::endl
 		<< "Mode  : analysis/redistribute"                      << std::endl
 		<< "Record: integer"                                    << std::endl

@@ -79,6 +79,11 @@ public:
 		_mttParameter.clear();
 	}
 
+	inline void Clear()
+	{
+		_mttParameter.clear();
+	}
+
 	const TVALUE& operator () (const TNAME& tName) const
 	{
 		return _mttParameter.at(tName);
@@ -111,6 +116,11 @@ public:
 	inline _uint_t size() const
 	{
 		return _mttParameter.size();
+	}
+
+	inline _uint_t Size() const
+	{
+		return this->size();
 	}
 
 	bool operator > (const ParameterSet<TNAME, TVALUE>& pstTarget) const

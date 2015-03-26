@@ -22,7 +22,7 @@ void DOModel::Analysis()
 		case Sphere:
 			r                        = uAttributes.sphere.radius;
 			dRange                   = r;
-			dVolume                  = aries::fFourthThirdsPI * r * r * r;
+			dVolume                  = aries::math::_FourthThirdsPI * r * r * r;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 			dmmi                     = 0.4 * dMass * r * r;
@@ -33,7 +33,7 @@ void DOModel::Analysis()
 			y                        = uAttributes.ellipsoid.ylength;
 			z                        = uAttributes.ellipsoid.zlength;
 			dRange                   = 0.5 * std::max(std::max(x, y), z);
-			dVolume		             = aries::fOneSixthPI * x * y * z;
+			dVolume		             = aries::math::_OneSixthPI * x * y * z;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 			vMassMomentInertia       = 0.05 * dMass * aries::Vector3df(y * y + z * z, z * z + x * x, x * x + y * y);
@@ -47,7 +47,7 @@ void DOModel::Analysis()
             else
                 dRange               = r;
 
-			dVolume                  = aries::fPI * r * r * h;
+			dVolume                  = aries::math::_PI * r * r * h;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 			dmmi                     = dMass * (3.0 * r * r + h * h) / 12.0;
@@ -91,7 +91,7 @@ void DOModel::Analysis()
 
             if ((std::abs(hxo) <= (0.5 * w - hr)) && (std::abs(hyo) <= (0.5 * l - hr)))
             {
-                dVolume              = w * h * l - hr * hr * aries::fPI * h;
+                dVolume              = w * h * l - hr * hr * aries::math::_PI * h;
             }
             else
             {
@@ -362,7 +362,7 @@ _float_t DOModel::CrossAreaToSurface
 			}
 			else
 			{
-				return (r * r - dSphere2Surface * dSphere2Surface) * aries::fPI;
+				return (r * r - dSphere2Surface * dSphere2Surface) * aries::math::_PI;
 			}
 			break;
 		case Ellipsoid:
@@ -604,7 +604,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
-				return std::make_pair(R * R * aries::fPI, vP);
+				return std::make_pair(R * R * aries::math::_PI, vP);
 			}
 			else
 			{
@@ -726,7 +726,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
-				return std::make_pair(R * R * aries::fPI, vP);
+				return std::make_pair(R * R * aries::math::_PI, vP);
 			}
 			else
 			{
@@ -849,7 +849,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
-				return std::make_pair(R * R * aries::fPI, vP);
+				return std::make_pair(R * R * aries::math::_PI, vP);
 			}
 			else
 			{

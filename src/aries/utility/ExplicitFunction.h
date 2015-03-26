@@ -1,6 +1,7 @@
 #ifndef _ARIES_EXPLICIT_FUNCTION_H
 #define _ARIES_EXPLICIT_FUNCTION_H
 
+#include <aries/utility/DataType.h>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>

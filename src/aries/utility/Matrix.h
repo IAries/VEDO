@@ -18,32 +18,48 @@ class Matrix
 
 public:
 
-	Matrix(): _rows(0), _columns(0), _matrix(0), _matval(0)
+	Matrix(const _uint_t& rows, const _uint_t& columns, const T& tvalue): Matrix(rows, columns)
 	{
-	}
-
-	Matrix(const _uint_t& rows, const _uint_t& columns, const T& tvalue): _rows(rows), _columns(columns)
-	{
-		_matrix = new T* [_rows];
-		_matval = new T  [_rows*_columns];
-		for (_uint_t u=0; u<_rows; ++u)
-		{
-			_matrix[u] = _matval + _columns * u;
-		}
 		*this = tvalue;
 	}
 
-	Matrix(const Matrix& m)
+	Matrix(const _uint_t& rows, const _uint_t& columns, const T* tpvalue): Matrix(rows, columns)
 	{
-		_rows    = m._rows;
-		_columns = m._columns;
-		_matrix  = new T* [_rows];
-		_matval  = new T  [_rows*_columns];
-		for (_uint_t u=0; u<_rows; ++u)
+		memcpy(_matval, tpvalue, sizeof(T) * _rows * _columns);
+	}
+
+	Matrix(const Matrix& m): Matrix()
+	{
+		(*this) = m;
+	}
+
+	const Matrix& operator = (const Matrix& m)
+	{
+		if ((_rows != m._rows) || (_columns != m._columns))
 		{
-			_matrix[u] = _matval + _columns * u;
+			if (_matval != 0)
+			{
+				delete [] _matval;
+			}
+
+			if (_matrix != 0)
+			{
+				delete [] _matrix;
+			}
+
+			_rows    = m._rows;
+			_columns = m._columns;
+			_matrix  = new T* [_rows];
+			_matval  = new T  [_rows*_columns];
+
+			for (_uint_t u=0; u<_rows; ++u)
+			{
+				_matrix[u] = _matval + _columns * u;
+			}
 		}
-		memcpy(_matval, m._matval, sizeof(T) * _rows * _columns);
+
+		memcpy (_matval, m._matval, sizeof(T) * _rows * _columns);
+		return *this;
 	}
 
 	~Matrix()
@@ -84,6 +100,11 @@ public:
 		*this = tvalue;
 	}
 
+	void Resize(const _uint_t& rows, const _uint_t& columns, const T& tvalue)
+	{
+		this->resize(rows, columns, tvalue);
+	}
+
 	inline _uint_t rows() const
 	{
 		return _rows;
@@ -94,33 +115,9 @@ public:
 		return _columns;
 	}
 
-	const Matrix& operator = (const Matrix& m)
+	inline const T* Reference() const
 	{
-		if ((_rows != m._rows) || (_columns != m._columns))
-		{
-			if (_matval != 0)
-			{
-				delete [] _matval;
-			}
-
-			if (_matrix != 0)
-			{
-				delete [] _matrix;
-			}
-
-			_rows    = m._rows;
-			_columns = m._columns;
-			_matrix  = new T* [_rows];
-			_matval  = new T  [_rows*_columns];
-
-			for (_uint_t u=0; u<_rows; ++u)
-			{
-				_matrix[u] = _matval + _columns * u;
-			}
-		}
-
-		memcpy (_matval, m._matval, sizeof(T) * _rows * _columns);
-		return *this;
+		return _matval;
 	}
 
 	const Matrix& operator = (const T& tvalue)
@@ -137,23 +134,23 @@ public:
 
 	Matrix operator + (const Matrix& m) const
 	{
-		Matrix c(_rows, _columns);
-
 		if ((_columns != m._columns) || (_rows != m._rows))
 		{
 			std::cerr << "Error!! Code: aries::Matrix::operator + (const Matrix&)" << std::endl;
 			exit(-1);
 		}
-
-		for (_uint_t i=0; i<c._rows; ++i)
+		else
 		{
-			for (_uint_t j=0; j<c._columns; ++j)
+			Matrix m2(*this);
+			for (_uint_t i=0; i<m2._rows; ++i)
 			{
-				c._matrix[i][j] = _matrix[i][j] + m._matrix[i][j];
+				for (_uint_t j=0; j<m2._columns; ++j)
+				{
+					m2._matrix[i][j] += m._matrix[i][j];
+				}
 			}
+			return m2;
 		}
-
-		return c;
 	}
 
 	Matrix operator + (const T& tvalue) const
@@ -183,23 +180,23 @@ public:
 
 	Matrix operator - (const Matrix& m) const
 	{
-		Matrix c(_rows, _columns);
-
 		if ((_columns != m._columns) || (_rows != m._rows))
 		{
 			std::cerr << "Error!! Code: aries::Matrix::operator - (const Matrix&)" << std::endl;
 			exit(-1);
 		}
-
-		for (_uint_t i=0; i<c._rows; ++i)
+		else
 		{
-			for (_uint_t j=0; j<c._columns; ++j)
+			Matrix m2(*this);
+			for (_uint_t i=0; i<m2._rows; ++i)
 			{
-				c._matrix[i][j] = _matrix[i][j] - m._matrix[i][j];
+				for (_uint_t j=0; j<m2._columns; ++j)
+				{
+					m2._matrix[i][j] -= m._matrix[i][j];
+				}
 			}
+			return m2;
 		}
-
-		return c;
 	}
 
 	Matrix operator - (const T& tvalue) const
@@ -230,8 +227,7 @@ public:
 	Matrix operator * (const Matrix& M) const
 	{
 		_uint_t i, j, k, m;
-		T tDefault;
-		Matrix c(_rows, M._columns, tDefault);
+		Matrix c(_rows, M._columns);
 
 		if (_columns != M._rows)
 		{
@@ -243,7 +239,14 @@ public:
 			m = _columns;
 		}
 
-		for (k=0; k<m; ++k)
+		for (i=0; i<c._rows; ++i)
+		{
+			for (j=0; j<c._columns; ++j)
+			{
+				c._matrix[i][j] = _matrix[i][0] * M._matrix[0][j];
+			}
+		}
+		for (k=1; k<m; ++k)
 		{
 			for (i=0; i<c._rows; ++i)
 			{
@@ -361,42 +364,61 @@ public:
 		}
    	}
 
-	const Matrix& transpose()
+	Matrix transpose() const
 	{
-		Matrix t(_columns, _rows);
-		for (_uint_t i=0; i<_rows; ++i)
+		Matrix m(_columns, _rows);
+		for (_uint_t ui=0; ui<_columns; ui++)
 		{
-			for (_uint_t j=0; j<_columns; ++j)
+			for (_uint_t uj=0; uj<_rows; uj++)
 			{
-				t._matrix[j][i] = _matrix[i][j];
+				m(ui, uj) = _matrix[uj][ui];
 			}
 		}
-		return (*this = t);
+		return m;
+	}
+
+	const Matrix& Transpose()
+	{
+		return this->transpose();
 	}
 
 	T determine() const
 	{
 		if (_rows == _columns)
 		{
-			if (_rows == 1)
+			switch (_rows)
 			{
-				return _matval[0];
+				case 1:
+					return _matval[0];
+					break;
+				case 2:
+					return _matrix[0][0] * _matrix[1][1] - _matrix[0][1] * _matrix[1][0];
+					break;
+				case 3:
+					return
+						  _matrix[0][0] * _matrix[1][1] * _matrix[2][2]
+						+ _matrix[0][1] * _matrix[1][2] * _matrix[2][0]
+						+ _matrix[0][2] * _matrix[1][0] * _matrix[2][1]
+						- _matrix[0][2] * _matrix[1][1] * _matrix[2][0]
+						- _matrix[0][1] * _matrix[1][0] * _matrix[2][2]
+						- _matrix[0][0] * _matrix[1][2] * _matrix[2][1];
+					break;
+				default:
+					T tdetermine = 0.0;
+					for (_uint_t ui=0; ui<_rows; ui++)
+					{
+						if (ui%2 == 0)
+						{
+							tdetermine += _matrix[ui][0] * (this->SubMatrix(ui, 0).determine());
+						}
+						else
+						{
+							tdetermine -= _matrix[ui][0] * (this->SubMatrix(ui, 0).determine());
+						}
+					}
+					return tdetermine;
+					break;
 			}
-
-			T tdetermine = 0.0;
-			for (_uint_t u=0; u<_rows; u++)
-			{
-				if (u%2 == 0)
-				{
-					tdetermine += _matrix[0][u] * (this->adjoint(0, u).determine());
-				}
-				else
-				{
-					tdetermine -= _matrix[0][u] * (this->adjoint(0, u).determine());
-				}
-			}
-
-			return tdetermine;
 		}
 		else
 		{
@@ -466,49 +488,26 @@ public:
 		}
 	}
 
-	Matrix adjoint(const _uint_t& row, const _uint_t& column) const
+	Matrix adjoint() const
 	{
 		if (_rows == _columns)
 		{
-			if ((row<_rows) && (column<_columns))
+			Matrix m(_rows, _columns);
+			for (_uint_t ui=0; ui<_rows; ui++)
 			{
-				T tDefault;
-				Matrix m(_rows-1, _columns-1, tDefault);
-				_uint_t source_row, source_column;
-				for (_uint_t ur=0; ur<=_rows-2; ur++)
+				for (_uint_t uj=0; uj<_columns; uj++)
 				{
-					for (_uint_t uc=0; uc<=_columns-2; uc++)
+					if ((ui+uj)%2 == 0)
 					{
-						if (ur < row)
-						{
-							source_row = ur;
-						}
-						else
-						{
-							source_row = ur + 1;
-						}
-
-						if (uc < column)
-						{
-							source_column = uc;
-						}
-						else
-						{
-							source_column = uc + 1;
-						}
-
-						m(ur, uc) = _matrix[source_row][source_column];
+						m(ui, uj) =   SubMatrix(uj, ui).determine();
+					}
+					else
+					{
+						m(ui, uj) = -(SubMatrix(uj, ui).determine());
 					}
 				}
-				return m;
 			}
-			else
-			{
-				std::cerr
-					<< "Error!! Code: Matrix aries::Matrix::adjoint(const _uint_t&, const _uint_t&)" << std::endl
-					<< "        Note: Selected row/column out of range"                              << std::endl;
-				exit(-1);
-			}
+			return m;
 		}
 		else
 		{
@@ -519,13 +518,56 @@ public:
 		}
 	}
 
+	Matrix Adjoint() const
+	{
+		return this->adjoint();
+	}
+
+	Matrix SubMatrix(const _uint_t& row, const _uint_t& column) const
+	{
+		if ((row<_rows) && (column<_columns))
+		{
+			Matrix m(_rows-1, _columns-1);
+			_uint_t source_row, source_column;
+			for (_uint_t ur=0; ur<_rows-1; ur++)
+			{
+				for (_uint_t uc=0; uc<_columns-1; uc++)
+				{
+					if (ur < row)
+					{
+						source_row = ur;
+					}
+					else
+					{
+						source_row = ur + 1;
+					}
+						if (uc < column)
+					{
+						source_column = uc;
+					}
+					else
+					{
+						source_column = uc + 1;
+					}
+						m(ur, uc) = _matrix[source_row][source_column];
+				}
+			}
+			return m;
+		}
+		else
+		{
+			std::cerr
+				<< "Error!! Code: Matrix aries::Matrix::SubMatrix(const _uint_t&, const _uint_t&)" << std::endl
+				<< "        Note: Selected row/column out of range"                                << std::endl;
+			exit(-1);
+		}
+	}
+
 	Matrix inverse() const
 	{
 		if (_rows == _columns)
 		{
 			_float_t det = this->determine();
-			T tDefault;
-			Matrix mi(_rows, _columns, tDefault);
 			if (det == 0.0)
 			{
 				std::cout
@@ -535,21 +577,13 @@ public:
 			}
 			else
 			{
-				for (_uint_t ui=0; ui<_rows; ui++)
-				{
-					for (_uint_t uj=0; uj<_columns; uj++)
-					{
-						if ((ui+uj)%2 == 0)
-						{
-							mi(uj, ui) =  (this->adjoint(ui, uj).determine());
-						}
-						else
-						{
-							mi(uj, ui) = -(this->adjoint(ui, uj).determine());
-						}
-					}
-				}
-				return mi / det;
+				std::cout << "¦ñÀH¯x°}¡G" << std::endl;
+				this->adjoint().print();
+				std::cout << "¦æ¦C¦¡¡G" << det << std::endl;
+				std::cout << "¤Ï¯x°}¡G" << std::endl;
+				((this->adjoint()) / det).print();
+
+				return (this->adjoint()) / det;
 			}
 		}
 		else
@@ -559,6 +593,11 @@ public:
 				<< "        Note: Nonsquare matrix has no inverse matrix" << std::endl;
 			exit(-1);
 		}
+	}
+
+	Matrix Inverse() const
+	{
+		return this->inverse();
 	}
 
 	T& operator () (const _uint_t& r, const _uint_t& c)
@@ -587,7 +626,7 @@ public:
 		}
 	}
 
-private:
+protected:
 
 	_uint_t _rows;
 
@@ -596,6 +635,41 @@ private:
 	T**     _matrix;
 
 	T*      _matval;
+
+	Matrix(): _rows(0), _columns(0), _matrix(0), _matval(0)
+	{
+	}
+
+	Matrix(const _uint_t& rows, const _uint_t& columns): _rows(rows), _columns(columns)
+	{
+		_matrix = new T* [_rows];
+		_matval = new T  [_rows*_columns];
+		for (_uint_t u=0; u<_rows; ++u)
+		{
+			_matrix[u] = _matval + _columns * u;
+		}
+	}
+
+	void print() const
+	{
+		std::cout << "aries::Matrix (" << _rows << " x " << _columns << ") (" << characteristic() << ")" << std::endl;
+		for (_uint_t i=0; i<_rows; ++i)
+		{
+			for (_uint_t j=0; j<_columns; ++j)
+			{
+				std::cout << std::setiosflags(std::ios::scientific) << std::setprecision(6) << _matrix[i][j];
+				if (j == _columns-1)
+				{
+					std::cout << std::endl;
+				}
+				else
+				{
+					std::cout << '\t';
+				}
+			}
+		}
+		std::cout << std::resetiosflags(std::ios::scientific);
+	}
 };
 
 }   // namespace aries

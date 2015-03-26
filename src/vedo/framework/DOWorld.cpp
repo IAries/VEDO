@@ -769,18 +769,18 @@ std::pair<_float_t, _float_t> Rotate1Axis(_float_t Axis1, _float_t Axis2, _float
 
 		if ((Axis1 < 0.0) && (Axis2 > 0.0))
 		{
-			dAngle += aries::fPI;
+			dAngle += aries::math::_PI;
 		}
 		else if ((Axis1 < 0.0) && (Axis2 < 0.0))
 		{
-			dAngle += aries::fPI;
+			dAngle += aries::math::_PI;
 		}
 
 		dAngle += dAnglePlus;
 
-		if (dAngle >= aries::fDoublePI)
+		if (dAngle >= aries::math::_DoublePI)
 		{
-			dAngle -= aries::fDoublePI;
+			dAngle -= aries::math::_DoublePI;
 		}
 
 		return std::make_pair(dRadius*cos(dAngle), dRadius*sin(dAngle));

@@ -60,9 +60,9 @@ const SystemParameter& SystemParameter::operator = (const SystemParameter& sp)
 
 std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 {
-	aries::Constants* aries_cp = aries::Constants::Instance();
-	aries::WriteString(aries_cp->ReleaseDate(), idof);
+	aries::WriteString(aries::information::_ReleaseDate, idof);
 
+	aries::Constants* aries_cp = aries::Constants::Instance();
 	_uint_t uNumUnsigned = 3;   // aries_cp->NumUDDDOStatus(), aries_cp->NumUDDImpactStatus(), ulMaxIDofDO
 	idof.write((char*) &uNumUnsigned, sizeof(_uint_t));
 	_uint_t uTemp = aries_cp->NumUDDDOStatus();

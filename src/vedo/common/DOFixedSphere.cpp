@@ -33,7 +33,7 @@ _float_t DOFixedSphere::CrossAreaToSurface(_float_t& a, _float_t& b, _float_t& c
 	}
 	else
 	{
-		return (r * r - dSphere2Surface * dSphere2Surface) * aries::fPI;
+		return (r * r - dSphere2Surface * dSphere2Surface) * aries::math::_PI;
 	}
 }
 

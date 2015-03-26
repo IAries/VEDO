@@ -3,7 +3,6 @@
 namespace aries
 {
 
-template <typename TType, typename TRecord>
-VariationRecord<TType, TRecord>* VariationRecord<TType, TRecord>::_VariationRecord = 0;
+VariationRecord* VariationRecord::_VariationRecord = 0;
 
 }   // namespace aries

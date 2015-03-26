@@ -1,8 +1,7 @@
 #ifndef _NJR_DATATYPE_H
 #define _NJR_DATATYPE_H
 
-#include <aries/utility/DataType.h>
-#include <aries/utility/Vector3df.h>
+#include <aries/utility/Utility.h>
 //#include <inttypes.h>
 
 namespace njr

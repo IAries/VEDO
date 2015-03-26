@@ -1,6 +1,6 @@
 #include <njr/ACADXF_Solid.h>
 #include <njr/Utility.h>
-#include <aries/utility/Vector3df.h>
+#include <aries/utility/Utility.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
@@ -83,9 +83,9 @@ Ellipsoid::Ellipsoid (const _float_t& vfpa)
 
 	fpa = vfpa;
 
-	for (alpha=0.0; alpha<aries::fPI; alpha+=fpa)
+	for (alpha=0.0; alpha<aries::math::_PI; alpha+=fpa)
 	{
-		for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+		for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 		{
 			lcon3dFace.push_back (new Face);
 		}
@@ -108,9 +108,9 @@ void Ellipsoid::Set
 	_float_t alpha;
 	_float_t thita;
 
-	for (alpha=0.0; alpha<aries::fPI; alpha+=fpa)
+	for (alpha=0.0; alpha<aries::math::_PI; alpha+=fpa)
 	{
-		for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+		for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 		{
 			Co[0].set_sphere(1.0, alpha         , thita         );
 			Co[1].set_sphere(1.0, alpha+fpa*1.05, thita         );
@@ -145,7 +145,7 @@ Cylinder::Cylinder(const _float_t& vfpa )
 	_float_t thita;
 	fpa = vfpa;
 
-	for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+	for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 	{
 		lcon3dFace.push_back (new Face);
 	}
@@ -165,7 +165,7 @@ void Cylinder::Set
 	aries::Vector3df Co[4];
 
 	_float_t thita;
-	for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+	for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 	{
 	    Co[0].set_cylinder(dR, thita         ,  dH*0.5);
 	    Co[1].set_cylinder(dR, thita+fpa*1.05,  dH*0.5);
@@ -187,14 +187,14 @@ QuasiCylinder::QuasiCylinder (const _float_t& vfpa)
 	_float_t thita;
 	fpa = vfpa;
 
-	for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+	for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 	{
 		lcon3dFace.push_back(new Face);
 	}
 
-	for (alpha=0.0; alpha<aries::fPI; alpha+=fpa)
+	for (alpha=0.0; alpha<aries::math::_PI; alpha+=fpa)
 	{
-		for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+		for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 		{
 			lcon3dFace.push_back(new Face);
 		}
@@ -217,7 +217,7 @@ void QuasiCylinder::Set
 
 	_float_t alpha;
 	_float_t thita;
-	for (thita=0.0; thita<aries::fDoublePI; thita+=fpa)
+	for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
 	{
 		Co[0].set_cylinder(dRadius, thita         ,  dHeight*0.5);
 		Co[1].set_cylinder(dRadius, thita+fpa*1.05,  dHeight*0.5);
@@ -232,16 +232,16 @@ void QuasiCylinder::Set
 			 layer, color               );
 	}
 
-	for (alpha=0.0; alpha<aries::fPI; alpha+= fpa)
+	for (alpha=0.0; alpha<aries::math::_PI; alpha+= fpa)
 	{
-		for (thita=0.0; thita<aries::fDoublePI;thita+= fpa)
+		for (thita=0.0; thita<aries::math::_DoublePI;thita+= fpa)
 		{
 			Co[0].set_sphere(dRadius, alpha         ,thita         );
 			Co[1].set_sphere(dRadius, alpha+fpa*1.05,thita         );
 			Co[2].set_sphere(dRadius, alpha+fpa*1.05,thita+fpa*1.05);
 			Co[3].set_sphere(dRadius, alpha         ,thita+fpa*1.05);
 
-			bottom = vP + vOZ * dHeight * ((alpha<aries::fHalfPI) ? 0.5 : -0.5);
+			bottom = vP + vOZ * dHeight * ((alpha<aries::math::_HalfPI) ? 0.5 : -0.5);
 
 			(*i3dFace ++)->Set
 				(Co[0].trans(LX,LY,LZ) + bottom,
@@ -283,16 +283,16 @@ void QuasiPlate::Set
 
 	_float_t Bc[9]
 		= { 0.0                     ,
-			aries::fHalfPI-0.001      ,
-			aries::fHalfPI            ,
-			aries::fPI-0.001          ,
-			aries::fPI                ,
-			aries::fOneAndHalfPI-0.001,
-			aries::fOneAndHalfPI      ,
-			aries::fDoublePI-0.001    ,
+			aries::math::_HalfPI-0.001      ,
+			aries::math::_HalfPI            ,
+			aries::math::_PI-0.001          ,
+			aries::math::_PI                ,
+			aries::math::_OneAndHalfPI-0.001,
+			aries::math::_OneAndHalfPI      ,
+			aries::math::_DoublePI-0.001    ,
 			0.0                      };
 
-	_float_t Qc[6] = {0.0, 0.18*aries::fPI, 0.41*aries::fPI, 0.59*aries::fPI, 0.82*aries::fPI, aries::fPI};
+	_float_t Qc[6] = {0.0, 0.18*aries::math::_PI, 0.41*aries::math::_PI, 0.59*aries::math::_PI, 0.82*aries::math::_PI, aries::math::_PI};
 
 	_float_t Lx[9] = {Hwidth, Hwidth, -Hwidth, -Hwidth, -Hwidth, -Hwidth, Hwidth, Hwidth, Hwidth};
 
@@ -377,16 +377,16 @@ void QuasiPlateWithCircularHole::Set
 
 	_float_t Bc[9]
 		= { 0.0                     ,
-			aries::fHalfPI-0.001      ,
-			aries::fHalfPI            ,
-			aries::fPI-0.001          ,
-			aries::fPI                ,
-			aries::fOneAndHalfPI-0.001,
-			aries::fOneAndHalfPI      ,
-			aries::fDoublePI-0.001    ,
+			aries::math::_HalfPI-0.001      ,
+			aries::math::_HalfPI            ,
+			aries::math::_PI-0.001          ,
+			aries::math::_PI                ,
+			aries::math::_OneAndHalfPI-0.001,
+			aries::math::_OneAndHalfPI      ,
+			aries::math::_DoublePI-0.001    ,
 			0.0                      };
 
-	_float_t Qc[6] = {0.0, 0.18*aries::fPI, 0.41*aries::fPI ,0.59*aries::fPI , 0.82*aries::fPI, aries::fPI};
+	_float_t Qc[6] = {0.0, 0.18*aries::math::_PI, 0.41*aries::math::_PI ,0.59*aries::math::_PI , 0.82*aries::math::_PI, aries::math::_PI};
 
 	_float_t Lx[9] = {Hwidth, Hwidth, -Hwidth, -Hwidth, -Hwidth, -Hwidth, Hwidth, Hwidth, Hwidth};
 

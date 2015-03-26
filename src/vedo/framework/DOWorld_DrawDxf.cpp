@@ -20,11 +20,11 @@ void DOWorld::Draw(const char* filename)  const
 	std::vector<njr::NJRpolygon> faces;
 	njrdxf::Polygon	polygon;
 
-    njrdxf::Ellipsoid                  ellipsoid(aries::fQuarterPI);
-	njrdxf::Sphere                     sphere(aries::fOneThirdPI);
+    njrdxf::Ellipsoid                  ellipsoid(aries::math::_QuarterPI);
+	njrdxf::Sphere                     sphere(aries::math::_OneThirdPI);
 	njrdxf::QuasiPlate                 cuboid;
 	njrdxf::QuasiPlateWithCircularHole cuboid2;
-	njrdxf::Cylinder                   cylinder(aries::fQuarterPI);
+	njrdxf::Cylinder                   cylinder(aries::math::_QuarterPI);
 	njrdxf::Text                       text;
 
 	for (idos = cDOStatus.begin(); idos != cDOStatus.end(); ++idos)
@@ -126,7 +126,7 @@ void DOWorld::HighDraw(const char* filename) const
 	njrdxf::Polygon polygon;
 
     njrdxf::Ellipsoid ellipsoid;
-	njrdxf::Sphere sphere(aries::fOneEighthPI);
+	njrdxf::Sphere sphere(aries::math::_OneEighthPI);
 	njrdxf::QuasiPlate qplate;
 	njrdxf::QuasiPlateWithCircularHole qplate2;
 	njrdxf::QuasiCylinder qcylinder;

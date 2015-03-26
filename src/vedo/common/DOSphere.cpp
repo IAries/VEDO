@@ -62,7 +62,7 @@ _float_t DOSphere::CrossAreaToSurface(_float_t& a, _float_t& b, _float_t& c, _fl
 	}
 	else
 	{
-		return (r * r - dSphere2Surface * dSphere2Surface) * aries::fPI;
+		return (r * r - dSphere2Surface * dSphere2Surface) * aries::math::_PI;
 	}
 }
 

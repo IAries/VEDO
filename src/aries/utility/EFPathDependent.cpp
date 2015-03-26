@@ -14,11 +14,11 @@ EFPathDependent::EFPathDependent
 	(ParameterSet<std::string, bool    >& psb,
 	 ParameterSet<std::string, _float_t>& psf,
 	 ParameterSet<std::string, _int_t  >& psi ):
-	 	_bParameters(psb), _fParameters(psf), _iParameters(psi)
+	 	_BoolParameters(psb), _FloatParameters(psf), _IntParameters(psi)
 	{
 	}
 
-EFPathDependent::EFPathDependent(ParameterSet<std::string, _float_t>& psf): _fParameters(psf)
+EFPathDependent::EFPathDependent(ParameterSet<std::string, _float_t>& psf): _FloatParameters(psf)
 {
 }
 
@@ -29,17 +29,17 @@ EFPathDependent::EFPathDependent(const EFPathDependent& ef)
 
 const EFPathDependent& EFPathDependent::operator = (const EFPathDependent& ef)
 {
-	_bParameters = ef._bParameters;
-	_fParameters = ef._fParameters;
-	_iParameters = ef._iParameters;
+	_BoolParameters  = ef._BoolParameters;
+	_FloatParameters = ef._FloatParameters;
+	_IntParameters   = ef._IntParameters;
 	return *this;
 }
 
 EFPathDependent::~EFPathDependent()
 {
-	_bParameters.~ParameterSet();
-	_fParameters.~ParameterSet();
-	_iParameters.~ParameterSet();
+	_BoolParameters.~ParameterSet();
+	_FloatParameters.~ParameterSet();
+	_IntParameters.~ParameterSet();
 }
 
 void EFPathDependent::Initialize()

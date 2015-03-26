@@ -85,6 +85,8 @@
 		<Unit filename="../../src/aries/utility/EFSTimeHistory.h" />
 		<Unit filename="../../src/aries/utility/ExplicitFunction.h" />
 		<Unit filename="../../src/aries/utility/Matrix.h" />
+		<Unit filename="../../src/aries/utility/Matrixf.cpp" />
+		<Unit filename="../../src/aries/utility/Matrixf.h" />
 		<Unit filename="../../src/aries/utility/ParameterSet.h" />
 		<Unit filename="../../src/aries/utility/Polygon.cpp" />
 		<Unit filename="../../src/aries/utility/Polygon.h" />
@@ -95,6 +97,10 @@
 		<Unit filename="../../src/aries/utility/Vector3d.h" />
 		<Unit filename="../../src/aries/utility/Vector3df.cpp" />
 		<Unit filename="../../src/aries/utility/Vector3df.h" />
+		<Unit filename="../../src/aries/utility/Utility.h" />
+		<Unit filename="../../src/aries/utility/XSolver.h" />
+		<Unit filename="../../src/aries/utility/XSAdjoint.cpp" />
+		<Unit filename="../../src/aries/utility/XSAdjoint.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

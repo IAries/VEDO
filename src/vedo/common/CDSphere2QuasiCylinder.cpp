@@ -43,7 +43,7 @@ void CDSphere_QuasiCylinder::CalDistance(const DiscreteObject* pdoSlave, const D
 	if (cInfo.dImpactDepth > 0.0)
 	{
 		_float_t dS = dRs - cInfo.dImpactDepth * dRc / (dRs + dRc);
-		cInfo.dOverlapArea = (dRs * dRs - dS * dS) * aries::fPI;
+		cInfo.dOverlapArea = (dRs * dRs - dS * dS) * aries::math::_PI;
 	}
 	else
 	{

@@ -41,12 +41,13 @@ void usage()
 	std::ofstream ofMessageFile("knight.txt", std::ios::out);
 
 	std::cout
-		<< "Knight " << aries_cp->Version() << " " << aries_cp->Information() << std::endl << std::endl
+		<< "Knight " << aries::information::_Version                 << std::endl
+		<< aries::information::_Information                          << std::endl << std::endl
 		<< "Unknown command, please read the file \"knight.txt\" for more information." << std::endl;
 
 	ofMessageFile
-		<< "knight " << aries_cp->Version() << std::endl
-		<< std::endl
+		<< "Knight " << aries::information::_Version                 << std::endl
+		<< aries::information::_Information                          << std::endl << std::endl
 		<< "Usage:" << std::endl
 		<< std::endl
 		<< "* Knight -add_elements_in_body-centered_cubic_style"     << std::endl
@@ -1112,8 +1113,8 @@ void AddRandomDOInSphericalSpace
 	for (vedo::_uint_t ul=0; ul<(*num); ul++)
 	{
 		temp_radius  = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * (*r);
-		temp_angle_1 = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * aries::fDoublePI;
-		temp_angle_2 = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * aries::fDoublePI;
+		temp_angle_1 = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * aries::math::_DoublePI;
+		temp_angle_2 = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * aries::math::_DoublePI;
 		temp_x       = Center->x() + temp_radius * cos(temp_angle_1) * cos(temp_angle_2);
 		temp_y       = Center->y() + temp_radius * cos(temp_angle_1) * sin(temp_angle_2);
 		temp_z       = Center->z() + temp_radius * sin(temp_angle_1);
@@ -1362,9 +1363,9 @@ int main(int argc, char* argv[])
 			aries::Vector3df(),
             aries::Vector3df(),
             aries::Vector3df()              );
-		vedo::_float_t dAngleRange = (dAngleEnded - dAngleStarted) * aries::fDegree2PI;
+		vedo::_float_t dAngleRange = (dAngleEnded - dAngleStarted) * aries::math::_Degree2PI;
 		vedo::_float_t dAngleIncremental = dAngleRange / (vedo::_float_t)uElementNumber;
-		vedo::_float_t dAngle = dAngleStarted * aries::fDegree2PI;
+		vedo::_float_t dAngle = dAngleStarted * aries::math::_Degree2PI;
 		vedo::_float_t dCosineAngle, dSineAngle;
 		aries::Vector3df vLocalX, vLocalZ, vRotatedLocalX, vRotatedLocalZ;
 
@@ -1401,7 +1402,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			dInclinedAngle *= aries::fDegree2PI;
+			dInclinedAngle *= aries::math::_Degree2PI;
 			vedo::_float_t dInclinedCosineAngle = cos(dInclinedAngle);
 			vedo::_float_t dInclinedSineAngle   = sin(dInclinedAngle);
 			dR += dR * dInclinedSineAngle;

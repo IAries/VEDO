@@ -24,7 +24,7 @@ void CDSphere_Sphere::CalDistance(const DiscreteObject* pdoSlave, const Discrete
 	if(cInfo.dImpactDepth > 0.0)
 	{
 		_float_t dS = dRa - cInfo.dImpactDepth * dRb / (dRa + dRb);
-		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * aries::fPI;
+		cInfo.dOverlapArea = (dRa * dRa - dS * dS) * aries::math::_PI;
 	}
 	else
 	{

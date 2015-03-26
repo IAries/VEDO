@@ -58,7 +58,7 @@ public:
 
 	inline _uint_t size() const
 	{
-		return _KeyPoints.size();
+		return (_uint_t)_KeyPoints.size();
 	}
 
 	inline std::string FileNote() const
@@ -96,6 +96,11 @@ public:
 	void clear()
 	{
 		_KeyPoints.clear();
+	}
+
+	void Clear()
+	{
+		this->clear();
 	}
 
 	virtual bool AddValue(TX tX, TY tY)
