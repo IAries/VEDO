@@ -3,11 +3,17 @@
 namespace vedo
 {
 
+CDSphere_QuasiCylinderAT::CDSphere_QuasiCylinderAT(): CDSphere_QuasiCylinder()
+{
+	cInfo.uShapeTypeSlave  = DOShapeType::Sphere;
+	cInfo.uShapeTypeMaster = DOShapeType::QuasiCylinder;
+}
+
 void CDSphere_QuasiCylinderAT::Detect(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	CDSphere_QuasiCylinder::CalDistance(pdoSlave, pdoMaster);
 
-	aries::Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
+	Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Radius of Slave
 	_float_t dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;

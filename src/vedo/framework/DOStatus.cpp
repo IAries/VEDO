@@ -14,9 +14,9 @@ DOStatus::DOStatus():
 }
 
 DOStatus::DOStatus
-	(const std::string& doname, const aries::Vector3df& position, const aries::Vector3df& velocity,
-	 const aries::Vector3df& orientationX, const aries::Vector3df& orientationZ,
-	 const aries::Vector3df& angularvelocity, const aries::Vector3df& impact, const aries::Vector3df& angularimpact): ulID(0)
+	(const std::string& doname, const Vector3df& position, const Vector3df& velocity,
+	 const Vector3df& orientationX, const Vector3df& orientationZ,
+	 const Vector3df& angularvelocity, const Vector3df& impact, const Vector3df& angularimpact): ulID(0)
 {
 	sDOName	         = doname;
 	vPosition        = position;
@@ -71,7 +71,7 @@ bool DOStatus::operator () (const DOStatus* p) const
 	return (sDOName == (p->sDOName));
 }
 
-void DOStatus::SetOrientation(const aries::Vector3df& OrientationX, const aries::Vector3df& OrientationZ)
+void DOStatus::SetOrientation(const Vector3df& OrientationX, const Vector3df& OrientationZ)
 {
 	vOrientationX = OrientationX;
 	vOrientationZ = OrientationZ;
@@ -177,13 +177,13 @@ std::ofstream& vedo::DOStatus::operator >> (std::ofstream& idof) const
 {
 	aries::WriteString(sDOName, idof);
 	idof.write((char*) &ulID            , sizeof(_uint_t));
-	idof.write((char*) &vPosition       , sizeof(aries::Vector3df));
-	idof.write((char*) &vVelocity       , sizeof(aries::Vector3df));
-	idof.write((char*) &vOrientationX   , sizeof(aries::Vector3df));
-	idof.write((char*) &vOrientationZ   , sizeof(aries::Vector3df));
-	idof.write((char*) &vAngularVelocity, sizeof(aries::Vector3df));
-	idof.write((char*) &vImpact         , sizeof(aries::Vector3df));
-	idof.write((char*) &vAngularImpact  , sizeof(aries::Vector3df));
+	idof.write((char*) &vPosition       , sizeof(Vector3df));
+	idof.write((char*) &vVelocity       , sizeof(Vector3df));
+	idof.write((char*) &vOrientationX   , sizeof(Vector3df));
+	idof.write((char*) &vOrientationZ   , sizeof(Vector3df));
+	idof.write((char*) &vAngularVelocity, sizeof(Vector3df));
+	idof.write((char*) &vImpact         , sizeof(Vector3df));
+	idof.write((char*) &vAngularImpact  , sizeof(Vector3df));
 //	idof.write((char*) &dUDV[0]         , 4*uNumUDDDOStatus*sizeof(_float_t));
 	return idof;
 }
@@ -192,13 +192,13 @@ std::ifstream& vedo::DOStatus::operator << (std::ifstream& idof)
 {
 	aries::ReadString(sDOName, idof);
 	idof.read((char*) &ulID            , sizeof(_uint_t));
-	idof.read((char*) &vPosition       , sizeof(aries::Vector3df));
-	idof.read((char*) &vVelocity       , sizeof(aries::Vector3df));
-	idof.read((char*) &vOrientationX   , sizeof(aries::Vector3df));
-	idof.read((char*) &vOrientationZ   , sizeof(aries::Vector3df));
-	idof.read((char*) &vAngularVelocity, sizeof(aries::Vector3df));
-	idof.read((char*) &vImpact         , sizeof(aries::Vector3df));
-	idof.read((char*) &vAngularImpact  , sizeof(aries::Vector3df));
+	idof.read((char*) &vPosition       , sizeof(Vector3df));
+	idof.read((char*) &vVelocity       , sizeof(Vector3df));
+	idof.read((char*) &vOrientationX   , sizeof(Vector3df));
+	idof.read((char*) &vOrientationZ   , sizeof(Vector3df));
+	idof.read((char*) &vAngularVelocity, sizeof(Vector3df));
+	idof.read((char*) &vImpact         , sizeof(Vector3df));
+	idof.read((char*) &vAngularImpact  , sizeof(Vector3df));
 //	idof.read((char*) &dUDV[0]         , 4*uNumUDDDOStatus*sizeof(_float_t));
 	return idof;
 }

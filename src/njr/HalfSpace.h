@@ -79,11 +79,11 @@ public:
 
 	void AbsRhs();
 
-	void Translate(const aries::Vector3df&);
+	void Translate(const Vector3df&);
 
 	void Normalize();
 
-	void RotateAround(const aries::Vector3df&);
+	void RotateAround(const Vector3df&);
 
 	void Set(_float_t a, _float_t b, _float_t c, Sense sense, _float_t d);
 

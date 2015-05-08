@@ -11,7 +11,14 @@ class CDSphere_QuasiCylinderAT: public CDSphere_QuasiCylinder
 
 public:
 
+	CDSphere_QuasiCylinderAT();
+
 	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
+
+	virtual std::string type () const
+	{
+		return "CDSphere_QuasiCylinderAT";
+	}
 
 };
 

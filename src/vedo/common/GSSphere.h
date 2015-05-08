@@ -19,7 +19,7 @@ public:
 		return _dRadius;
 	}
 
-	inline bool Inside(const aries::Vector3df& p)
+	inline bool Inside(const Vector3df& p)
 	{
 		return ((p - _Status->GetPosition()).length() <= _dRadius);
 	}

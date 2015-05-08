@@ -10,7 +10,7 @@ NJRpolygon::NJRpolygon() : _vertexes(0)
 	_center.set(0.0, 0.0, 0.0);
 }
 
-NJRpolygon::NJRpolygon (const std::vector<aries::Vector3df>& vertexes)
+NJRpolygon::NJRpolygon (const std::vector<Vector3df>& vertexes)
 {
 	_vertexes = vertexes;
 
@@ -51,7 +51,7 @@ void NJRpolygon::CalCenter()
 {
 	register _uint_t i;
 
-	aries::Vector3df w;
+	Vector3df w;
 
 	for (i=0; i<_vertexes.size(); ++i)
 	{
@@ -81,7 +81,7 @@ void NJRpolygon::CalArea()
 	register _uint_t i;
 	register _uint_t j;
 	register _uint_t size;
-	aries::Vector3df vec;
+	Vector3df vec;
 	_area = 0.0;
 
 	size = (_uint_t)(_vertexes.size()) - 2;
@@ -99,10 +99,10 @@ void NJRpolygon::PureVertex()
 	register _uint_t i;
 	register _uint_t j;
 	register _uint_t numvertex;
-    aries::Vector3df v1;
+    Vector3df v1;
 	numvertex = (_uint_t)(_vertexes.size());
 
-	std::vector<aries::Vector3df> tmpvec(0);
+	std::vector<Vector3df> tmpvec(0);
 
 	if (numvertex < 2)
 	{

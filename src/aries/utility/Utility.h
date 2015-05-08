@@ -13,6 +13,7 @@
 #include <aries/utility/ExplicitFunction.h>
 #include <aries/utility/Matrix.h>
 #include <aries/utility/Matrixf.h>
+#include <aries/utility/MatrixFs.h>
 #include <aries/utility/ParameterSet.h>
 #include <aries/utility/Polygon.h>
 #include <aries/utility/Random.h>

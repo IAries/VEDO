@@ -53,7 +53,7 @@ public:
 
 	virtual GeometricShape* GetGeometricShape(std::string&);
 
-	virtual bool Inside(const aries::Vector3df&) = 0;
+	virtual bool Inside(const Vector3df&) = 0;
 
 protected:
 

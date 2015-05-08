@@ -50,7 +50,7 @@ vedo::_float_t CalcDensity::computeDensity
 		vedo::_float_t ranX = RA.GeneratingDouble(xmin, xmax);
 		vedo::_float_t ranY = RA.GeneratingDouble(ymin, ymax);
         vedo::_float_t ranZ = RA.GeneratingDouble(zmin, zmax);
-		aries::Vector3df ranV(ranX, ranY, ranZ);
+		vedo::Vector3df ranV(ranX, ranY, ranZ);
 
 		bool hasHit = false;
 		for (vedo::_uint_t j=0; j<vDOMap.size(); ++j)

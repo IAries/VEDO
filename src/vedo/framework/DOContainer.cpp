@@ -1,7 +1,7 @@
 #include <vedo/framework/DOContainer.h>
 #include <njr/Utility.h>
 #include <aries/utility/Vector3d.h>
-#include <aries/utility/Binder2nd_RefArg.h>
+#include <aries/utility/binder2nd_refArg.h>
 #include <algorithm>
 #include <functional>
 
@@ -17,7 +17,7 @@ DOContainer::~DOContainer()
 	DOContainer::Clear();
 }
 
-void DOContainer::AddFieldImpact(const aries::Vector3df& vFieldImpact)
+void DOContainer::AddFieldImpact(const Vector3df& vFieldImpact)
 {
 	std::vector<DiscreteObject *>::iterator ido;
 	for (ido=lcDO.begin(); ido!=lcDO.end(); ++ido)
@@ -26,16 +26,16 @@ void DOContainer::AddFieldImpact(const aries::Vector3df& vFieldImpact)
 	}
 }
 
-void DOContainer::AddImpact(const _uint_t& ul, const aries::Vector3df& vImpact, const aries::Vector3df& vAngularImpact)
+void DOContainer::AddImpact(const _uint_t& ul, const Vector3df& vImpact, const Vector3df& vAngularImpact)
 {
 	lcDO[ul]->AddImpact(vImpact, vAngularImpact);
 }
 
 /*
-void DOContainer::AddExternalImpact(const std::vector<std::pair<aries::Vector3df, aries::Vector3df> >& vvExternalImpact)
+void DOContainer::AddExternalImpact(const std::vector<std::pair<Vector3df, Vector3df> >& vvExternalImpact)
 {
 	std::vector<DiscreteObject*>::iterator ido;
-	std::vector<std::pair<aries::Vector3df, aries::Vector3df> >::iterator iExternalImpact;
+	std::vector<std::pair<Vector3df, Vector3df> >::iterator iExternalImpact;
 	_uint_t ul = 0;
 	for(ido=lcDO.begin(); ido!=lcDO.end(), ul<vvExternalImpact.size(); ++ido, ++ul)
 	{

@@ -5,10 +5,16 @@
 namespace vedo
 {
 
+CDSphere_Sphere::CDSphere_Sphere(): ContactDetector()
+{
+	cInfo.uShapeTypeSlave  = DOShapeType::Sphere;
+	cInfo.uShapeTypeMaster = DOShapeType::Sphere;
+}
+
 void CDSphere_Sphere::CalDistance(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Impact std::vector form slave to master
-	aries::Vector3df vIm = pdoMaster->GetDOStatus()->GetPosition() - pdoSlave->GetDOStatus()->GetPosition();
+	Vector3df vIm = pdoMaster->GetDOStatus()->GetPosition() - pdoSlave->GetDOStatus()->GetPosition();
 
 	if(this->pBC)
 	{
@@ -38,11 +44,11 @@ void CDSphere_Sphere::Detect(const DiscreteObject* pdoSlave, const DiscreteObjec
 {
 	CDSphere_Sphere::CalDistance(pdoSlave, pdoMaster);
 
+    cInfo.vImpactPoint
+		= pdoSlave->GetDOStatus()->GetPosition()
+		+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 	if (cInfo.dImpactDepth > 0)
 	{
-	    cInfo.vImpactPoint
-			= pdoSlave->GetDOStatus()->GetPosition()
-			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 		cInfo.bUnBalance = (cInfo.bActive == false);
 		cInfo.bActive = true;
 	}

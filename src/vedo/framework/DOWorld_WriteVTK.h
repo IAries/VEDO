@@ -124,7 +124,7 @@ private:
 	template<typename ExtFieldWriterT>
 	void DOWorld::WriteVTK(const std::string filename) const
 	{
-		std::ofstream ofVTK(filename, std::ios::out);
+		std::ofstream ofVTK(filename.c_str(), std::ios::out);
 		if (!ofVTK)
 		{
 			std::cerr

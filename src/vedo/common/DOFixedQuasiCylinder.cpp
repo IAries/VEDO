@@ -10,7 +10,7 @@ DOFixedQuasiCylinder::DOFixedQuasiCylinder(const DOStatus* cpdos, const DOModel*
 	dVolume             = cpdoml->GetVolume();
 	dMass               = cpdoml->GetMass();
 	dSudoMass           = 0.0;
-	vMassMomentInertia  = aries::Vector3df();
+	vMassMomentInertia  = Vector3df();
 }
 
 }   // namespace vedo

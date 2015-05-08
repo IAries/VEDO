@@ -16,7 +16,7 @@ Boundary::Boundary()
 	Correct();
 }
 
-Boundary::Boundary(std::string sN, const bool* bS, const aries::Vector3df vLP, const aries::Vector3df vUP): sName(sN)
+Boundary::Boundary(std::string sN, const bool* bS, const Vector3df vLP, const Vector3df vUP): sName(sN)
 {
 	for (_uint_t i=0; i<3; i++)
 	{
@@ -27,7 +27,7 @@ Boundary::Boundary(std::string sN, const bool* bS, const aries::Vector3df vLP, c
 	Correct();
 }
 
-Boundary::Boundary(const bool* bS, const aries::Vector3df vLP, const aries::Vector3df vUP)
+Boundary::Boundary(const bool* bS, const Vector3df vLP, const Vector3df vUP)
 {
 	sName = "Boundary";
 	for (_uint_t i=0; i<3; i++)
@@ -39,14 +39,14 @@ Boundary::Boundary(const bool* bS, const aries::Vector3df vLP, const aries::Vect
 	Correct();
 }
 
-Boundary::Boundary(std::string sN, const aries::Vector3df vLP, const aries::Vector3df vUP): sName(sN)
+Boundary::Boundary(std::string sN, const Vector3df vLP, const Vector3df vUP): sName(sN)
 {
 	vLowerPoint = vLP;
 	vUpperPoint = vUP;
 	Correct();
 }
 
-Boundary::Boundary(const aries::Vector3df vLP, const aries::Vector3df vUP)
+Boundary::Boundary(const Vector3df vLP, const Vector3df vUP)
 {
 	sName       = "Boundary";
 	vLowerPoint = vLP;
@@ -128,26 +128,26 @@ void Boundary::Correct()
 	}
 }
 
-void Boundary::SetLowerPoint(const aries::Vector3df* point)
+void Boundary::SetLowerPoint(const Vector3df* point)
 {
 	vLowerPoint = *point;
 	Correct();
 }
 
-void Boundary::SetUpperPoint(const aries::Vector3df* point)
+void Boundary::SetUpperPoint(const Vector3df* point)
 {
 	vUpperPoint = *point;
 	Correct();
 }
 
-void Boundary::SetCenter(const aries::Vector3df* cNewCenter)
+void Boundary::SetCenter(const Vector3df* cNewCenter)
 {
-	aries::Vector3df vShift = (*cNewCenter) - vCenter;
+	Vector3df vShift = (*cNewCenter) - vCenter;
 	vLowerPoint += vShift;
 	vUpperPoint += vShift;
 }
 
-void Boundary::SetRange(const aries::Vector3df* vNewRange)
+void Boundary::SetRange(const Vector3df* vNewRange)
 {
 	_float_t dX = fabs(vNewRange->x());
 	_float_t dY = fabs(vNewRange->y());
@@ -158,7 +158,7 @@ void Boundary::SetRange(const aries::Vector3df* vNewRange)
 	Correct();
 }
 
-bool Boundary::InBoundary(const aries::Vector3df v) const
+bool Boundary::InBoundary(const Vector3df v) const
 {
 	if (Active())
 	{
@@ -190,7 +190,7 @@ bool Boundary::InBoundary(const aries::Vector3df v) const
 	return true;
 }
 
-bool Boundary::InBoundary(const aries::Vector3df v, const _float_t r) const
+bool Boundary::InBoundary(const Vector3df v, const _float_t r) const
 {
 	if (Active())
 	{
@@ -222,7 +222,7 @@ bool Boundary::InBoundary(const aries::Vector3df v, const _float_t r) const
 	return true;
 }
 
-void Boundary::EnforceBoundaryConditions(aries::Vector3df* vPosition) const
+void Boundary::EnforceBoundaryConditions(Vector3df* vPosition) const
 {
 	_float_t dPx = vPosition->x();
 	_float_t dPy = vPosition->y();
@@ -300,7 +300,7 @@ void Boundary::EnforceBoundaryConditions(aries::Vector3df* vPosition) const
 	vPosition->set(dPx, dPy, dPz);
 }
 
-void Boundary::DifferenceBoundaryConditions(aries::Vector3df* vDisplacement) const
+void Boundary::DifferenceBoundaryConditions(Vector3df* vDisplacement) const
 {
 	_float_t dPx = vDisplacement->x();
 	_float_t dPy = vDisplacement->y();

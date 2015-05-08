@@ -20,7 +20,7 @@ void DOWorld::DumpDOStatus(const char* filename) const
 		<< std::endl;
 
     const DOStatus* dosp;
-    aries::Vector3df vV;
+    Vector3df vV;
 
     for (_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{

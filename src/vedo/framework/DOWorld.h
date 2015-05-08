@@ -50,7 +50,7 @@ public:
 	void SetDOStatus(const _uint_t&, const DOStatus&);
 
 	void SetDOStatusVelocityAndAngularVelocity
-		(const _uint_t& ulID, const aries::Vector3df& vVelocity, const aries::Vector3df& vAngularVelocity);
+		(const _uint_t& ulID, const Vector3df& vVelocity, const Vector3df& vAngularVelocity);
 
 	void EraseDOStatus(const std::vector<_uint_t>&);
 
@@ -108,7 +108,7 @@ public:
 		pSystemParameter->SetTime(dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent);
 	}
 
-	void SetFieldAcceleration(const aries::Vector3df&);
+	void SetFieldAcceleration(const Vector3df&);
 
 	bool UpdateDOStatus(const std::vector<const DOStatus *>& nDOStatus);
 
@@ -185,15 +185,15 @@ public:
 //	void CalculateSystemEnergy(const IactRecordTab*);
 	void CalculateSystemEnergy();
 
-	//const std::pair<aries::Vector3df, aries::Vector3df> Distribution(_float_t& dMeshLength) const;
+	//const std::pair<Vector3df, Vector3df> Distribution(_float_t& dMeshLength) const;
 
-	void Shift(const aries::Vector3df& shift);
+	void Shift(const Vector3df& shift);
 
-	void Shift(const aries::Vector3df& shift, const std::string& DOName);
+	void Shift(const Vector3df& shift, const std::string& DOName);
 
 	void Rotate(const _float_t& Angle2XAxis, const _float_t& Angle2YAxis, const _float_t& Angle2ZAxis);
 
-	void Rotate(const aries::Vector3df& eX, const aries::Vector3df& eZ, const std::string& DOName);
+	void Rotate(const Vector3df& eX, const Vector3df& eZ, const std::string& DOName);
 
 	const DOStatus GetDOStatus(const std::string& DOName, const _uint_t ulSerialNumber) const;
 

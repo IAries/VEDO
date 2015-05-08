@@ -274,6 +274,17 @@ public:
 		return ((_v[0]==vR._v[0]) && (_v[1]==vR._v[1]) && (_v[2]==vR._v[2]));
 	}
 
+	// Transform a Vector3d from local coordinate to global coordinate
+	void CoordinateTransformation
+		(const Vector3d& LocalOrentationX, const Vector3d& LocalOrentationY, const Vector3d& LocalOrentationZ)
+	{
+		Vector3d NewVector3d
+			(LocalOrentationX.x() * _v[0] + LocalOrentationY.x() * _v[1] + LocalOrentationZ.x() * _v[2],
+			 LocalOrentationX.y() * _v[0] + LocalOrentationY.y() * _v[1] + LocalOrentationZ.y() * _v[2],
+			 LocalOrentationX.z() * _v[0] + LocalOrentationY.z() * _v[1] + LocalOrentationZ.z() * _v[2] );
+		*this = NewVector3d;
+	}
+
 protected:
 
 	T _v[3];

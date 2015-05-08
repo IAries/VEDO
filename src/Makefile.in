@@ -121,13 +121,14 @@ ifeq ($(CXX_MODE), MS-Win32-Adm-GCC)
     mCXX          = ${CXX}
 else
 ifeq ($(CXX_MODE), NCHC-ALPS-Intel)
-    CXX_ROOT      = /pkg/intel/12/
+    CXX_ROOT      = /pkg/intel/2015/
     CXX_INC       = ${CXX_ROOT}include/
     CXX_LIB       = ${CXX_ROOT}lib/intel64/
     CXX           = ${CXX_ROOT}bin/icpc
     CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -limf
+    CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
     AR            = /usr/bin/ar
-    MPI_ROOT      = /pkg/mpi/intel/12/mvapich2-1.8/
+    MPI_ROOT      = /pkg/mpi/intel/2013/mvapich2/2.0/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/
     MPI_LNK_FLAG  = -L${MPI_LIB} -lmpichcxx -lmpich

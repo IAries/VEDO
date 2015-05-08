@@ -11,6 +11,8 @@ class CDQuasiCylinder_QuasiCylinder : public ContactDetector
 
 public:
 
+	CDQuasiCylinder_QuasiCylinder();
+
 	void CalDistance(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);

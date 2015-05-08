@@ -5,7 +5,7 @@
 namespace vedo
 {
 
-_float_t DOMap::CalSafeDistance(DOMap m, aries::Vector3df vFF, _float_t dt)
+_float_t DOMap::CalSafeDistance(DOMap m, Vector3df vFF, _float_t dt)
 {
 	aries::Constants* aries_cp = aries::Constants::Instance();
 	_float_t SafetyFactor = aries_cp->SafetyFactor();
@@ -36,7 +36,7 @@ _float_t DOMap::CalSafeDistance(DOMap m, aries::Vector3df vFF, _float_t dt)
 				 + (m._cpdoml->GetShapeAttributes().sphere.radius * SafetyFactor);
 		default:
 			std::cerr
-				<< "Error!! Code: DOMap::CalSafeDistance(DOMap, aries::Vector3df, _float_t)" << std::endl
+				<< "Error!! Code: DOMap::CalSafeDistance(DOMap, Vector3df, _float_t)" << std::endl
 				<< "        Note: DOShape is not in the std::list of LeapConsultant"          << std::endl;
 			exit(-1);
 	}
@@ -53,19 +53,19 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2)
 	if (   (m1._cpdoml->GetShapeType() == Sphere)
 		&& (m2._cpdoml->GetShapeType() == Sphere) )
 	{
-		aries::Vector3df vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
+		Vector3df vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
 		return vIm.length();
 	}
 
 	if (   (m1._cpdoml->GetShapeType() == Sphere    )
 		&& (m2._cpdoml->GetShapeType() == QuasiPlate) )
 	{
-		aries::Vector3df vCa  = m1._cpdos->GetPosition();
-		aries::Vector3df vCb  = m2._cpdos->GetPosition();
-		aries::Vector3df vOz  = m2._cpdos->GetOrientationZ();
-		aries::Vector3df vOx  = m2._cpdos->GetOrientationX();
-		aries::Vector3df vOy  = vOz * vOx;
-		aries::Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
+		Vector3df vCa  = m1._cpdos->GetPosition();
+		Vector3df vCb  = m2._cpdos->GetPosition();
+		Vector3df vOz  = m2._cpdos->GetOrientationZ();
+		Vector3df vOx  = m2._cpdos->GetOrientationX();
+		Vector3df vOy  = vOz * vOx;
+		Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
 
 		_float_t dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		_float_t dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
@@ -91,8 +91,8 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2)
 			Dapy = dHLb;
 		}
 
-		aries::Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		aries::Vector3df vIm   =  vCaps - vCa;
+		Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		Vector3df vIm   =  vCaps - vCa;
 		return vIm.length();
 	}
 
@@ -101,15 +101,15 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2)
 	{
 		_float_t dHHb
 			= 0.5 * (m2._cpdoml->GetShapeAttributes().quasicylinder.height);
-		aries::Vector3df Ca     = m1._cpdos->GetPosition();
-		aries::Vector3df Cb     = m2._cpdos->GetPosition();
-		aries::Vector3df Vaxial = m2._cpdos->GetOrientationZ();
+		Vector3df Ca     = m1._cpdos->GetPosition();
+		Vector3df Cb     = m2._cpdos->GetPosition();
+		Vector3df Vaxial = m2._cpdos->GetOrientationZ();
 
 		_float_t Dap = (Ca - Cb)%Vaxial;
 
-		aries::Vector3df Cap    = Cb + (Vaxial * Dap);
+		Vector3df Cap    = Cb + (Vaxial * Dap);
 
-		aries::Vector3df vIm;
+		Vector3df vIm;
 
 		if ( (Dap < dHHb) && (Dap > -dHHb) )
 		{
@@ -143,7 +143,7 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 
 	if ((m1._cpdoml->GetShapeType() == Sphere) && (m2._cpdoml->GetShapeType() == Sphere))
 	{
-		aries::Vector3df vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
+		Vector3df vIm = m1._cpdos->GetPosition() - m2._cpdos ->GetPosition();
 		if (pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -153,12 +153,12 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 
 	if ((m1._cpdoml->GetShapeType() == Sphere) && (m2._cpdoml->GetShapeType() == QuasiPlate))
 	{
-		aries::Vector3df vCa  = m1._cpdos->GetPosition();
-		aries::Vector3df vCb  = m2._cpdos->GetPosition();
-		aries::Vector3df vOz  = m2._cpdos->GetOrientationZ();
-		aries::Vector3df vOx  = m2._cpdos->GetOrientationX();
-		aries::Vector3df vOy  = vOz.cross(vOx);
-		aries::Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
+		Vector3df vCa  = m1._cpdos->GetPosition();
+		Vector3df vCb  = m2._cpdos->GetPosition();
+		Vector3df vOz  = m2._cpdos->GetOrientationZ();
+		Vector3df vOx  = m2._cpdos->GetOrientationX();
+		Vector3df vOy  = vOz.cross(vOx);
+		Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
 
 		_float_t dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.width );
 		_float_t dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplate.length);
@@ -184,8 +184,8 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 			Dapy = dHLb;
 		}
 
-		aries::Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		aries::Vector3df vIm   =  vCaps - vCa;
+		Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		Vector3df vIm   =  vCaps - vCa;
 		if (pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -195,12 +195,12 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 
 	if ((m1._cpdoml->GetShapeType() == Sphere) && (m2._cpdoml->GetShapeType() == QuasiPlateWithCircularHole))
 	{
-		aries::Vector3df vCa  = m1._cpdos->GetPosition();
-		aries::Vector3df vCb  = m2._cpdos->GetPosition();
-		aries::Vector3df vOz  = m2._cpdos->GetOrientationZ();
-		aries::Vector3df vOx  = m2._cpdos->GetOrientationX();
-		aries::Vector3df vOy  = vOz.cross(vOx);
-		aries::Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
+		Vector3df vCa  = m1._cpdos->GetPosition();
+		Vector3df vCb  = m2._cpdos->GetPosition();
+		Vector3df vOz  = m2._cpdos->GetOrientationZ();
+		Vector3df vOx  = m2._cpdos->GetOrientationX();
+		Vector3df vOy  = vOz.cross(vOx);
+		Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
 
 		_float_t dHWb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplatewithcircularhole.width );
 		_float_t dHLb = 0.5*(m2._cpdoml->GetShapeAttributes().quasiplatewithcircularhole.length);
@@ -226,8 +226,8 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 			Dapy = dHLb;
 		}
 
-		aries::Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-		aries::Vector3df vIm   =  vCaps - vCa;
+		Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+		Vector3df vIm   =  vCaps - vCa;
 		if (pbc)
 		{
 			pbc->DifferenceBoundaryConditions(&vIm);
@@ -238,13 +238,13 @@ _float_t DOMap::CalDistance(DOMap m1, DOMap m2, const Boundary* pbc)
 	if ((m1._cpdoml->GetShapeType() == Sphere) && (m2._cpdoml->GetShapeType() == QuasiCylinder))
 	{
 		_float_t  dHHb   = 0.5 * (m2._cpdoml->GetShapeAttributes().quasicylinder.height);
-		aries::Vector3df Ca     = m1._cpdos->GetPosition();
-		aries::Vector3df Cb     = m2._cpdos->GetPosition();
-		aries::Vector3df Vaxial = m2._cpdos->GetOrientationZ();
+		Vector3df Ca     = m1._cpdos->GetPosition();
+		Vector3df Cb     = m2._cpdos->GetPosition();
+		Vector3df Vaxial = m2._cpdos->GetOrientationZ();
 		_float_t Dap     = (Ca - Cb).dot(Vaxial);
-		aries::Vector3df Cap    = Cb + (Vaxial * Dap);
+		Vector3df Cap    = Cb + (Vaxial * Dap);
 
-		aries::Vector3df vIm;
+		Vector3df vIm;
 
 		if ((Dap < dHHb) && (Dap > -dHHb))
 		{

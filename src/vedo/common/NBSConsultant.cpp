@@ -95,7 +95,7 @@ bool NBSConsultant::Reset()
 
 	const SystemParameter* csp = pDOWorld->GetSystemParameter();
 	_uint_t numberDO = csp->GetDONumber();
-	aries::Vector3df vFieldAcceleration = csp->GetFieldAcceleration();
+	Vector3df vFieldAcceleration = csp->GetFieldAcceleration();
 	_float_t dt = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
@@ -164,7 +164,7 @@ bool NBSConsultant::Reset()
 	{
 		if (vDOMap[ul].cpdoml()->GetScope() == local)
 		{
-			aries::Vector3df p = vDOMap[ul].cpdos()->GetPosition();
+			Vector3df p = vDOMap[ul].cpdos()->GetPosition();
 			Trir zone
 				(static_cast<_uint_t>((p.x()-xmin)/ZoneRange),
 				 static_cast<_uint_t>((p.y()-ymin)/ZoneRange),

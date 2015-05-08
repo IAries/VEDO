@@ -36,7 +36,7 @@ static bool Detect(const DOStatus* dos1, const DOStatus* dos2, const DOModel* do
 
 	if ((doml1->GetShapeType() == Sphere) && (doml2->GetShapeType() == Sphere))
 	{
-		aries::Vector3df vIm = dos1->GetPosition() - dos2->GetPosition();
+		Vector3df vIm = dos1->GetPosition() - dos2->GetPosition();
 		return
 			(vIm.length() <= ( (doml1->GetShapeAttributes().sphere.radius + doml2->GetShapeAttributes().sphere.radius) * 1.05));
 	}
@@ -44,13 +44,13 @@ static bool Detect(const DOStatus* dos1, const DOStatus* dos2, const DOModel* do
 	if ((doml1->GetShapeType() == Sphere) && (doml2->GetShapeType() == QuasiCylinder))
 	{
 		_float_t  dHHb   = 0.5 * doml2->GetShapeAttributes().quasicylinder.height;
-		aries::Vector3df Ca     = dos1->GetPosition();
-		aries::Vector3df Cb     = dos2->GetPosition();
-		aries::Vector3df Vaxial = dos2->GetOrientationZ();
-		aries::Vector3df Cap;
+		Vector3df Ca     = dos1->GetPosition();
+		Vector3df Cb     = dos2->GetPosition();
+		Vector3df Vaxial = dos2->GetOrientationZ();
+		Vector3df Cap;
 		_float_t  Dap    = (Ca - Cb).dot(Vaxial);
 		Cap = Cb + (Vaxial * Dap);
-		aries::Vector3df vIm;
+		Vector3df vIm;
 
 		if ((Dap < dHHb) && (Dap > -dHHb))
 		{
@@ -78,7 +78,7 @@ static bool Detect(const DOStatus* dos1, const DOStatus* dos2, const DOModel* do
 
 static bool DetectSphere(const DOStatus* dos1, const DOStatus* dos2, const DOModel* doml1, const DOModel* doml2)
 {
-	aries::Vector3df vIm = dos1->GetPosition() - dos2 ->GetPosition();
+	Vector3df vIm = dos1->GetPosition() - dos2 ->GetPosition();
 	return (vIm.length() <= ((doml1->GetShapeAttributes().sphere.radius + doml2->GetShapeAttributes().sphere.radius) * 3.0));
 }
 

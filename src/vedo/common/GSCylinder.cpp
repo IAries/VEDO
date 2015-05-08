@@ -11,9 +11,9 @@ GSCylinder::GSCylinder(const std::string& nm, const _float_t& r, const _float_t&
 	_Status = new DOStatus("No Name");
 }
 
-bool GSCylinder::Inside(const aries::Vector3df& p)
+bool GSCylinder::Inside(const Vector3df& p)
 {
-	aries::Vector3df localP(p);
+	Vector3df localP(p);
 	localP = localP - _Status->GetPosition();
 	_float_t localX = localP.dot(_Status->GetOrientationX());
 	_float_t localY = localP.dot(_Status->GetOrientationZ().cross(_Status->GetOrientationX()));

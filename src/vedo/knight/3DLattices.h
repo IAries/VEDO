@@ -39,7 +39,7 @@ public:
 
     ~FCCLattice(){}
 
-    void AddAtomInCell(aries::Vector3df atomCoord, std::string name="");
+    void AddAtomInCell(vedo::Vector3df atomCoord, std::string name="");
 };
 
 class PrimitiveFCCLattice:public BravaisLatticeWithBasis
@@ -72,7 +72,7 @@ public:
 
     BCCLattice(vedo::_float_t a=1.0);
 
-    void AddAtomInCell(aries::Vector3df atomCoord, std::string name="");
+    void AddAtomInCell(vedo::Vector3df atomCoord, std::string name="");
 };
 
 class DiamondLattice: public FCCLattice
@@ -86,7 +86,7 @@ public:
 	{
 	}
 
-    void AddAtomInCell(aries::Vector3df atomCoord, std::string name="");
+    void AddAtomInCell(vedo::Vector3df atomCoord, std::string name="");
 };
 
 class TriclinicLattice:public GeneralLattice

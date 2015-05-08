@@ -161,7 +161,7 @@ Line:: Line()
 	Entitity::AddGroup(pz1);
 }
 
-void Line::Set(const aries::Vector3df& p1, const aries::Vector3df& p2, const char* layer, const Color& color)
+void Line::Set(const Vector3df& p1, const Vector3df& p2, const char* layer, const Color& color)
 {
 	Line::SetPoint1(p1);
 	Line::SetPoint2(p2);
@@ -169,7 +169,7 @@ void Line::Set(const aries::Vector3df& p1, const aries::Vector3df& p2, const cha
 	Entitity::SetLayer(layer);
 }
 
-void Line::SetPoint1(const aries::Vector3df& point)
+void Line::SetPoint1(const Vector3df& point)
 {
 	_float_t p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);
@@ -177,7 +177,7 @@ void Line::SetPoint1(const aries::Vector3df& point)
 	Entitity::SetValue(pz0, p+2);
 }
 
-void Line::SetPoint2(const aries::Vector3df& point)
+void Line::SetPoint2(const Vector3df& point)
 {
 	_float_t p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px1, p);
@@ -203,7 +203,7 @@ Face::Face()
 }
 
 void Face::Set
-	(const aries::Vector3df& p1, const aries::Vector3df& p2, const aries::Vector3df& p3, const aries::Vector3df& p4, const char* layer, const Color& color)
+	(const Vector3df& p1, const Vector3df& p2, const Vector3df& p3, const Vector3df& p4, const char* layer, const Color& color)
 {
 	Face::SetPoint1(p1);
 	Face::SetPoint2(p2);
@@ -213,7 +213,7 @@ void Face::Set
 	Entitity::SetLayer(layer);
 }
 
-void Face::SetPoint1(const aries::Vector3df& point)
+void Face::SetPoint1(const Vector3df& point)
 {
 	_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px0, p);
@@ -221,7 +221,7 @@ void Face::SetPoint1(const aries::Vector3df& point)
 	Entitity::SetValue(pz0, p+2);
 }
 
-void Face::SetPoint2(const aries::Vector3df& point)
+void Face::SetPoint2(const Vector3df& point)
 {
 	_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px1, p);
@@ -229,7 +229,7 @@ void Face::SetPoint2(const aries::Vector3df& point)
 	Entitity::SetValue(pz1, p+2);
 }
 
-void Face::SetPoint3(const aries::Vector3df& point)
+void Face::SetPoint3(const Vector3df& point)
 {
 	_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px2, p);
@@ -237,7 +237,7 @@ void Face::SetPoint3(const aries::Vector3df& point)
 	Entitity::SetValue(pz2, p+2);
 }
 
-void Face::SetPoint4(const aries::Vector3df& point)
+void Face::SetPoint4(const Vector3df& point)
 {
 	_float_t p[3] = {point.x(), point.y(), point.z()};
 	Entitity::SetValue(px3, p);
@@ -256,7 +256,7 @@ Text:: Text()
 	 Entitity::AddGroup(ptext);
 }
 
-void Text::Set(const aries::Vector3df& p1, const char* text, const _float_t& dheight, const _float_t& dangle, const char* layer, const Color& color)
+void Text::Set(const Vector3df& p1, const char* text, const _float_t& dheight, const _float_t& dangle, const char* layer, const Color& color)
 {
 	 Text::SetPoint(p1);
 	 Text::SetText(text, dheight, dangle);
@@ -264,7 +264,7 @@ void Text::Set(const aries::Vector3df& p1, const char* text, const _float_t& dhe
 	 Entitity::SetLayer(layer);
 }
 
-void Text::SetPoint(const aries::Vector3df& point)
+void Text::SetPoint(const Vector3df& point)
 {
 	_float_t p[3] = { point.x(), point.y(), point.z() };
 	Entitity::SetValue(px0, p);

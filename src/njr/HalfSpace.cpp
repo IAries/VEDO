@@ -88,15 +88,15 @@ void HalfSpace::AbsRhs()
 	}
 }
 
-void HalfSpace::Translate(const aries::Vector3df& dp)
+void HalfSpace::Translate(const Vector3df& dp)
 {
 	_d += (_a*dp.x() + _b*dp.y() + _c * dp.z());
 }
 
-void HalfSpace::RotateAround(const aries::Vector3df &dw)
+void HalfSpace::RotateAround(const Vector3df &dw)
 {
 
-	aries::Vector3df gradient(_a, _b, _c);
+	Vector3df gradient(_a, _b, _c);
 
 	gradient = gradient.RotateAround(dw);
 

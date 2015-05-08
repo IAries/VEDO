@@ -14,7 +14,7 @@ void DOWorld::WriteVPF(const std::string filename) const
 	std::vector<DOStatus *>::const_iterator idos;
 	njr::NJRpolyhedra polyhedra;
 	std::vector<njr::NJRpolygon> faces;
-	aries::Vector3df Vt;
+	Vector3df Vt;
 
 	std::ofstream ofVPF(filename.c_str(), std::ios::out);
 	if (!ofVPF)
@@ -38,9 +38,9 @@ void DOWorld::WriteVPF(const std::string filename) const
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
 	if(ZoneOfInterest.Active())
 	{
-		aries::Vector3df	vLowerPoint = ZoneOfInterest.GetLowerPoint();
-		aries::Vector3df	vUpperPoint = ZoneOfInterest.GetUpperPoint();
-		aries::Vector3df	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+		Vector3df	vLowerPoint = ZoneOfInterest.GetLowerPoint();
+		Vector3df	vUpperPoint = ZoneOfInterest.GetUpperPoint();
+		Vector3df	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
 		dX                      = vUpperPoint.x() - vLowerPoint.x();
 		dY                      = vUpperPoint.y() - vLowerPoint.y();
 		dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -81,9 +81,9 @@ void DOWorld::WriteVPF(const std::string filename) const
 
 	if(PeriodicBoundaryConditions.Active())
 	{
-		aries::Vector3df	vLowerPoint = PeriodicBoundaryConditions.GetLowerPoint();
-		aries::Vector3df	vUpperPoint = PeriodicBoundaryConditions.GetUpperPoint();
-		aries::Vector3df	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+		Vector3df	vLowerPoint = PeriodicBoundaryConditions.GetLowerPoint();
+		Vector3df	vUpperPoint = PeriodicBoundaryConditions.GetUpperPoint();
+		Vector3df	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
 		dX                      = vUpperPoint.x() - vLowerPoint.x();
 		dY                      = vUpperPoint.y() - vLowerPoint.y();
 		dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -295,7 +295,7 @@ void DOWorld::WriteVPF (const std::string filename, const DOWorld* opw) const
 	std::vector<DOStatus *>::const_iterator oidos;
 	njr::NJRpolyhedra polyhedra;
 	std::vector<njr::NJRpolygon> faces;
-	aries::Vector3df Vt;
+	Vector3df Vt;
 
 	std::ofstream ofVPF(filename.c_str(), std::ios::out);
 	if (!ofVPF)
@@ -317,10 +317,10 @@ void DOWorld::WriteVPF (const std::string filename, const DOWorld* opw) const
 
 /*
 	Boundary ZoneOfInterest = DOWorld::GetSystemParameter()->GetZoneOfInterest();
-	aries::Vector3df	vLowerPoint = ZoneOfInterest.GetLowerPoint();
-	aries::Vector3df	vUpperPoint = ZoneOfInterest.GetUpperPoint();
-	aries::Vector3df	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
-	aries::Vector3df	vRedundant  = vCenter + aries::Vector3df(0.0, dY, 0.0);
+	Vector3df	vLowerPoint = ZoneOfInterest.GetLowerPoint();
+	Vector3df	vUpperPoint = ZoneOfInterest.GetUpperPoint();
+	Vector3df	vCenter     = 0.5 * (vUpperPoint + vLowerPoint);
+	Vector3df	vRedundant  = vCenter + Vector3df(0.0, dY, 0.0);
 	dX                      = vUpperPoint.x() - vLowerPoint.x();
 	dY                      = vUpperPoint.y() - vLowerPoint.y();
 	dZ                      = vUpperPoint.z() - vLowerPoint.z();
@@ -503,7 +503,7 @@ void DOWorld::WriteVPF (const std::string filename, const DOWorld* opw) const
 			oidos++;
 		}
 		// Add redundant DiscreteObjects
-		aries::Vector3df vRedundant;
+		Vector3df vRedundant;
 		if (gap != 0)
 		{
 			switch (GetDOModel((*oidos)->GetDOName())->GetShapeType())

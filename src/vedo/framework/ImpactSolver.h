@@ -19,7 +19,7 @@ public:
 
 	virtual ~ImpactSolver();
 
-	virtual aries::Vector3df NextStep
+	virtual Vector3df NextStep
 		(const ContactDetector* pcd, DiscreteObject* pdoSlave, DiscreteObject* pdoMaster, _float_t dt) = 0;
 
 	virtual bool InitialStep(const ContactDetector* pcd, DiscreteObject* pdoSlave, DiscreteObject* pdoMaster) = 0;

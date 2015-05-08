@@ -119,22 +119,22 @@ public:
 
 	DOModel
 		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-		 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+		 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 		 const DOShapeType&, const DOShapeAttributes&, const DOShapeColor&                                               );
 
 	DOModel
 		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-		 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+		 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 		 const DOShapeType&, const DOShapeAttributes&, const DOShapeColor&, const std::vector<DOMaterialAttribute>&      );
 
 	DOModel
 		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-		 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+		 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 		 const njr::NJRpolyhedra&, const DOShapeColor&                                                                   );
 
 	DOModel
 		(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-		const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+		const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 		const njr::NJRpolyhedra&, const DOShapeColor&, const std::vector<DOMaterialAttribute>&                           );
 
 	DOModel(const DOModel& doml);
@@ -173,7 +173,7 @@ public:
 		return dDensityFactor;
 	}
 
-	inline aries::Vector3df GetExternalForce() const
+	inline Vector3df GetExternalForce() const
 	{
 		return vExternalForce;
 	}
@@ -197,7 +197,7 @@ public:
 	}
 
 	// Only used when DiscreteObject (DOSphere) Initialization
-	inline aries::Vector3df GetMassMomentInertia() const
+	inline Vector3df GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	}
@@ -236,20 +236,20 @@ public:
 
 	// cross area to surface ax+by+cz=d;
 	_float_t CrossAreaToSurface
-		(const aries::Vector3df& vP,
+		(const Vector3df& vP,
 		 const _float_t& a, const _float_t& b, const _float_t& c, const _float_t& d ) const;
 
-	std::pair<_float_t, aries::Vector3df> VolumeInsideBoundary
-		(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
+	std::pair<_float_t, Vector3df> VolumeInsideBoundary
+		(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
 
-	std::pair<_float_t, aries::Vector3df> ProjectedAreaOnXYPlane
-		(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
+	std::pair<_float_t, Vector3df> ProjectedAreaOnXYPlane
+		(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
 
-	std::pair<_float_t, aries::Vector3df> ProjectedAreaOnYZPlane
-		(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
+	std::pair<_float_t, Vector3df> ProjectedAreaOnYZPlane
+		(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
 
-	std::pair<_float_t, aries::Vector3df> ProjectedAreaOnXZPlane
-		(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
+	std::pair<_float_t, Vector3df> ProjectedAreaOnXZPlane
+		(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const;
 
 	const DOModel& operator = (const DOModel& doml);
 
@@ -272,12 +272,12 @@ private:
 	DOScopeType	                     eScope;
 	_float_t                     dDensity;
 	_float_t                     dDensityFactor;
-	aries::Vector3df                    vExternalForce;
+	Vector3df                    vExternalForce;
 	_float_t                     dMass;
 	_float_t                     dSudoMass;
 	_float_t                     dVolume;
 	_float_t                     dRange;
-	aries::Vector3df                    vMassMomentInertia;
+	Vector3df                    vMassMomentInertia;
 	DOShapeColor                     eColor;
 	DOShapeType	                     eType;
 	DOShapeAttributes                uAttributes;

@@ -12,7 +12,7 @@ DOFixedQuasiPlate::DOFixedQuasiPlate(const DOStatus* cpdos, const DOModel* cpdom
 	dVolume             = cpdoml->GetVolume();
 	dMass               = cpdoml->GetMass();
 	dSudoMass           = 0.0;
-	vMassMomentInertia  = aries::Vector3df();
+	vMassMomentInertia  = Vector3df();
 }
 
 }   // namespace vedo

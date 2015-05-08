@@ -14,7 +14,7 @@ public:
 
 	GSComplexShape(const std::string&);
 
-	bool Inside(const aries::Vector3df&);
+	bool Inside(const Vector3df&);
 };
 
 }   // namespace vedo

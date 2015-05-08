@@ -32,32 +32,32 @@ Cuboid::Cuboid()
 
 	this->Set
 		(1, 1, 1,
-		 aries::Vector3df(),
-		 aries::Vector3df(1.0, 0.0, 0.0),
-		 aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
+		 Vector3df(),
+		 Vector3df(1.0, 0.0, 0.0),
+		 Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
 }
 
 void Cuboid::Set
 	(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
-	 const aries::Vector3df& vP, const aries::Vector3df &vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color)
+	 const Vector3df& vP, const Vector3df &vOX, const Vector3df& vOZ, const char* layer, const Color& color)
 {
  	std::list<Face *>::iterator i3dFace = lcon3dFace.begin();
 
-	aries::Vector3df LX =            vOX.direction() * dWidth  * 0.5;
-    aries::Vector3df LZ =            vOZ.direction() * dHeight * 0.5;
-    aries::Vector3df LY = (LZ.cross(LX)).direction() * dLength * 0.5;
+	Vector3df LX =            vOX.direction() * dWidth  * 0.5;
+    Vector3df LZ =            vOZ.direction() * dHeight * 0.5;
+    Vector3df LY = (LZ.cross(LX)).direction() * dLength * 0.5;
 
-	aries::Vector3df v(1.0, 1.0, 1.0);
+	Vector3df v(1.0, 1.0, 1.0);
 
 	// The four vertexes on the top of this ApproximatePlate
-    aries::Vector3df Ft[4];
+    Vector3df Ft[4];
 	Ft[0] = v.trans( LX, LY, LZ) + vP;
 	Ft[1] = v.trans(-LX, LY, LZ) + vP;
 	Ft[2] = v.trans(-LX,-LY, LZ) + vP;
 	Ft[3] = v.trans( LX,-LY, LZ) + vP;
 
 	// The four vertexes on the bottom of this ApproximatePlate
-	aries::Vector3df Fb[4];
+	Vector3df Fb[4];
 	Fb[0] = v.trans( LX, LY,-LZ) + vP;
 	Fb[1] = v.trans(-LX, LY,-LZ) + vP;
 	Fb[2] = v.trans(-LX,-LY,-LZ) + vP;
@@ -91,19 +91,19 @@ Ellipsoid::Ellipsoid (const _float_t& vfpa)
 		}
 	}
 
-	this->Set(1.0, 2.0, 3.0, aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", bylayer);
+	this->Set(1.0, 2.0, 3.0, Vector3df(), Vector3df(1.0, 0.0, 0.0), Vector3df(0.0, 0.0, 1.0), "NJRdefault", bylayer);
 }
 
 void Ellipsoid::Set
 	(const _float_t& dlx, const _float_t& dly, const _float_t& dlz,
-	 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color)
+	 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
 
-	aries::Vector3df LX =            vOX.direction() * dlx;
-    aries::Vector3df LZ =            vOZ.direction() * dly;
-    aries::Vector3df LY = (LZ.cross(LX)).direction() * dlz;
-	aries::Vector3df Co[4];
+	Vector3df LX =            vOX.direction() * dlx;
+    Vector3df LZ =            vOZ.direction() * dly;
+    Vector3df LY = (LZ.cross(LX)).direction() * dlz;
+	Vector3df Co[4];
 
 	_float_t alpha;
 	_float_t thita;
@@ -129,12 +129,12 @@ void Ellipsoid::Set
 
 Sphere::Sphere(const _float_t& vfpa) : Ellipsoid(vfpa)
 {
-	this->Set(1.0, aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
+	this->Set(1.0, Vector3df(), Vector3df(1.0, 0.0, 0.0), Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
 }
 
 void Sphere::Set
 	(const _float_t &dR,
-	 const aries::Vector3df &vP, const aries::Vector3df &vOX, const aries::Vector3df &vOZ, const char *layer, const Color &color)
+	 const Vector3df &vP, const Vector3df &vOX, const Vector3df &vOZ, const char *layer, const Color &color)
 {
 	this->Ellipsoid::Set(dR, dR, dR, vP, vOX, vOZ, layer, color);
 }
@@ -150,19 +150,19 @@ Cylinder::Cylinder(const _float_t& vfpa )
 		lcon3dFace.push_back (new Face);
 	}
 
-	this->Set(1.0, 10.0, aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
+	this->Set(1.0, 10.0, Vector3df(), Vector3df(1.0, 0.0, 0.0), Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
 }
 
 void Cylinder::Set
 	(const _float_t& dR, const _float_t& dH,
-	 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color)
+	 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin() ;
 
-	aries::Vector3df LX = vOX.direction();
-    aries::Vector3df LZ = vOZ.direction();
-    aries::Vector3df LY = LZ.cross(LX);
-	aries::Vector3df Co[4];
+	Vector3df LX = vOX.direction();
+    Vector3df LZ = vOZ.direction();
+    Vector3df LY = LZ.cross(LX);
+	Vector3df Co[4];
 
 	_float_t thita;
 	for (thita=0.0; thita<aries::math::_DoublePI; thita+=fpa)
@@ -200,20 +200,20 @@ QuasiCylinder::QuasiCylinder (const _float_t& vfpa)
 		}
 	}
 
-	this->Set(1.0, 10.0, aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
+	this->Set(1.0, 10.0, Vector3df(), Vector3df(1.0, 0.0, 0.0), Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
 }
 
 void QuasiCylinder::Set
 	(const _float_t& dRadius, const _float_t& dHeight,
-	 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color)
+	 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
 
-	aries::Vector3df LX = vOX.direction();
-    aries::Vector3df LZ = vOZ.direction();
-    aries::Vector3df LY = LZ.cross(LX);
-	aries::Vector3df Co[4];
-    aries::Vector3df bottom;
+	Vector3df LX = vOX.direction();
+    Vector3df LZ = vOZ.direction();
+    Vector3df LY = LZ.cross(LX);
+	Vector3df Co[4];
+    Vector3df bottom;
 
 	_float_t alpha;
 	_float_t thita;
@@ -261,12 +261,12 @@ QuasiPlate::QuasiPlate(const _float_t& vfpa)
 		lcon3dFace.push_back (new Face);
 	}
 
-	this->Set(10.0, 10.0, 1.0, aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
+	this->Set(10.0, 10.0, 1.0, Vector3df(), Vector3df(1.0, 0.0, 0.0), Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
 }
 
 void QuasiPlate::Set
 	(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
-	 const aries::Vector3df &vP, const aries::Vector3df& vOX, const aries::Vector3df &vOZ, const char* layer, const Color &color)
+	 const Vector3df &vP, const Vector3df& vOX, const Vector3df &vOZ, const char* layer, const Color &color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
 	register _int_t i;
@@ -276,10 +276,10 @@ void QuasiPlate::Set
 	_float_t Hlength = dLength * 0.5;
 	_float_t Hheight = dHeight * 0.5;
 
-	aries::Vector3df PlateVertex[54] ;
-	aries::Vector3df LX = vOX.direction() ;
-	aries::Vector3df LZ = vOZ.direction() ;
-	aries::Vector3df LY = LZ.cross(LX);
+	Vector3df PlateVertex[54] ;
+	Vector3df LX = vOX.direction() ;
+	Vector3df LZ = vOZ.direction() ;
+	Vector3df LY = LZ.cross(LX);
 
 	_float_t Bc[9]
 		= { 0.0                     ,
@@ -355,12 +355,12 @@ QuasiPlateWithCircularHole::QuasiPlateWithCircularHole(const _float_t& vfpa)
 		lcon3dFace.push_back (new Face);
 	}
 
-	this->Set(10.0, 10.0, 1.0, aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
+	this->Set(10.0, 10.0, 1.0, Vector3df(), Vector3df(1.0, 0.0, 0.0), Vector3df(0.0, 0.0, 1.0), "NJRdefault", red);
 }
 
 void QuasiPlateWithCircularHole::Set
 	(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
-	 const aries::Vector3df &vP, const aries::Vector3df& vOX, const aries::Vector3df &vOZ, const char* layer, const Color &color)
+	 const Vector3df &vP, const Vector3df& vOX, const Vector3df &vOZ, const char* layer, const Color &color)
 {
  	std::list< Face* >::iterator i3dFace = lcon3dFace.begin();
 	register _int_t i;
@@ -370,10 +370,10 @@ void QuasiPlateWithCircularHole::Set
 	_float_t Hlength = dLength * 0.5;
 	_float_t Hheight = dHeight * 0.5;
 
-	aries::Vector3df PlateVertex[54] ;
-	aries::Vector3df LX = vOX.direction() ;
-	aries::Vector3df LZ = vOZ.direction() ;
-	aries::Vector3df LY = LZ.cross(LX);
+	Vector3df PlateVertex[54] ;
+	Vector3df LX = vOX.direction() ;
+	Vector3df LZ = vOZ.direction() ;
+	Vector3df LY = LZ.cross(LX);
 
 	_float_t Bc[9]
 		= { 0.0                     ,
@@ -444,7 +444,7 @@ Polygon::Polygon()
 
 void Polygon::Set
 	(const njr::NJRpolygon& polygon,
-	 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color &color)
+	 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color &color)
 {
 	if (polygon.area() == 0.0)
 	{
@@ -457,11 +457,11 @@ void Polygon::Set
 
 	lcon3dFace.clear();
 
-	aries::Vector3df LX = vOX.direction();
-    aries::Vector3df LZ = vOZ.direction();
-    aries::Vector3df LY = LZ.cross(LX);
+	Vector3df LX = vOX.direction();
+    Vector3df LZ = vOZ.direction();
+    Vector3df LY = LZ.cross(LX);
 
-	std::vector<aries::Vector3df> vertexes = polygon.vertexes();
+	std::vector<Vector3df> vertexes = polygon.vertexes();
 	_uint_t num = (_uint_t)(vertexes.size());
 
 	for (_uint_t i=0; i<num; i++)

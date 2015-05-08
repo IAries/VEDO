@@ -150,7 +150,7 @@ public:
 		 _float_t& maxZ, _float_t& minZ,
 		 _float_t& maxR, _float_t& maxV, _float_t& maxS);
 
-	static _float_t CalSafeDistance(DOMap m, aries::Vector3df vFF, _float_t dt);
+	static _float_t CalSafeDistance(DOMap m, Vector3df vFF, _float_t dt);
 
 //	static _float_t CalDistance(DOMap m1, DOMap m2);
 

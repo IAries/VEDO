@@ -29,7 +29,7 @@ ImpactStatus::ImpactStatus():
 
 ImpactStatus::ImpactStatus
     (const bool& Contact, const bool& Bond, const _float_t& Kn,
-     const _float_t& InitialVelocity, const aries::Vector3df& ShearForce, const _float_t* UDVp):
+     const _float_t& InitialVelocity, const Vector3df& ShearForce, const _float_t* UDVp):
 		bContact(Contact), bLastContact(Contact), bBond(Bond), bLastBond(Bond),
 		dOverlap(0.0), dKn(Kn), dInitialVelocity(InitialVelocity),
 		vShearForce(ShearForce), vImpactPoint(), vImpactDirection(), vImpactToMaster(), vAngularImpactToMaster()
@@ -50,7 +50,7 @@ ImpactStatus::ImpactStatus
 
 ImpactStatus::ImpactStatus
     (const bool& Contact, const bool& Bond,
-     const _float_t& Kn, const _float_t& InitialVelocity, const aries::Vector3df& ShearForce):
+     const _float_t& Kn, const _float_t& InitialVelocity, const Vector3df& ShearForce):
     	bContact(Contact), bLastContact(Contact), bBond(Bond), bLastBond(Bond),
     	dOverlap(0.0), dKn(Kn), dInitialVelocity(InitialVelocity),
     	vShearForce(ShearForce), vImpactPoint(), vImpactDirection(), vImpactToMaster(), vAngularImpactToMaster()
@@ -60,9 +60,9 @@ ImpactStatus::ImpactStatus
 
 ImpactStatus::ImpactStatus
     (const bool& Contact, const bool& Bond, const _float_t& Kn,
-	 const _float_t& InitialVelocity, const aries::Vector3df& ShearForce,
-	 const aries::Vector3df& ImpactPoint, const aries::Vector3df& ImpactDirection,
-	 const aries::Vector3df& ImpactToMaster, const aries::Vector3df& AngularImpactToMaster,
+	 const _float_t& InitialVelocity, const Vector3df& ShearForce,
+	 const Vector3df& ImpactPoint, const Vector3df& ImpactDirection,
+	 const Vector3df& ImpactToMaster, const Vector3df& AngularImpactToMaster,
      const _float_t& Overlap, const _float_t* UDVp                           ):
     	bContact(Contact), bLastContact(Contact), bBond(Bond), bLastBond(Bond),
     	dOverlap(Overlap), dKn(Kn), dInitialVelocity(InitialVelocity),
@@ -85,8 +85,8 @@ ImpactStatus::ImpactStatus
 
 ImpactStatus::ImpactStatus
     (const bool& Contact, const bool& Bond, const _float_t& Kn, const _float_t& InitialVelocity,
-	 const aries::Vector3df& ShearForce, const aries::Vector3df& ImpactPoint, const aries::Vector3df& ImpactDirection,
-     const aries::Vector3df& ImpactToMaster, const aries::Vector3df& AngularImpactToMaster, const _float_t& Overlap):
+	 const Vector3df& ShearForce, const Vector3df& ImpactPoint, const Vector3df& ImpactDirection,
+     const Vector3df& ImpactToMaster, const Vector3df& AngularImpactToMaster, const _float_t& Overlap):
     	bContact(Contact), bLastContact(Contact), bBond(Bond), bLastBond(Bond),
     	dOverlap(Overlap), dKn(Kn), dInitialVelocity(InitialVelocity),
     	vShearForce(ShearForce), vImpactPoint(ImpactPoint), vImpactDirection(ImpactDirection),
@@ -144,7 +144,7 @@ void ImpactStatus::SetContactInformation(const ContactInfo* cInfo)
     dOverlap         = cInfo->dImpactDepth;
 }
 
-void ImpactStatus::SetImpactInformation (const aries::Vector3df& ImpactToMaster, const aries::Vector3df& AngularImpactToMaster)
+void ImpactStatus::SetImpactInformation (const Vector3df& ImpactToMaster, const Vector3df& AngularImpactToMaster)
 {
 	vImpactToMaster        = ImpactToMaster;
 	vAngularImpactToMaster = AngularImpactToMaster;

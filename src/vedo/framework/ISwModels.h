@@ -24,25 +24,25 @@ public:
 	bool NormalBond
 		(const _float_t& dKn, const _float_t& dCn, const _float_t& dBn, const _float_t& dImpactDepth);
 
-	aries::Vector3df NormalForceHertzSpring
+	Vector3df NormalForceHertzSpring
 		(const _float_t& dKn, const _float_t& dCn, const _float_t& dImpactDepth,
-		 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vInitialRelativeNormalVelocity);
+		 const Vector3df& vImpactDirection, const Vector3df& vInitialRelativeNormalVelocity);
 
-	aries::Vector3df NormalForce
+	Vector3df NormalForce
 		(const _float_t& dKn, const _float_t& dCn, const _float_t& dImpactDepth,
-		 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity);
+		 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity);
 
-	aries::Vector3df NormalForceNoTension
+	Vector3df NormalForceNoTension
 		(const _float_t& dKn, const _float_t& dCn, const _float_t& dImpactDepth,
-		 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity);
+		 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity);
 
-	aries::Vector3df NormalForce
+	Vector3df NormalForce
 		(const _float_t& dKn, const _float_t& dCn, const _float_t& dBn,
-		 const _float_t& dImpactDepth, const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity);
+		 const _float_t& dImpactDepth, const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity);
 
-	aries::Vector3df NormalForceNoTension
+	Vector3df NormalForceNoTension
 		(const _float_t& dKn, const _float_t& dCn, const _float_t& dBn,
-		 const _float_t& dImpactDepth, const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity);
+		 const _float_t& dImpactDepth, const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity);
 
 	_float_t ElasticModules2EquivalentStiffness
 		(const _float_t& dEa, const _float_t& dEb, const _float_t& dRa, const _float_t& dRb,
@@ -61,7 +61,7 @@ public:
 		 const _float_t& dRelativeShearVelocity,
 		 const _float_t& dNormalForce                );
 
-	aries::Vector3df ShearForceRotation(const aries::Vector3df&, const aries::Vector3df&);
+	Vector3df ShearForceRotation(const Vector3df&, const Vector3df&);
 
 	_float_t WetDampingRatioLegendre2006(_float_t dDryRestitutionCoefficient, _float_t dBinaryStokesNumber);
 /*

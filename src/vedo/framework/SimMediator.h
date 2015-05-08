@@ -27,7 +27,7 @@ public:
 
 	virtual bool Run();
 
-	virtual bool Run(const std::vector<std::pair<aries::Vector3df, aries::Vector3df> >&);
+	virtual bool Run(const std::vector<std::pair<Vector3df, Vector3df> >&);
 
 	virtual bool ReDistribute();
 
@@ -57,7 +57,7 @@ public:
 
 //	void ShowInteraction();
 
-	void WriteInteractionForce(const char* filename, const std::vector<std::pair<aries::Vector3df, aries::Vector3df> >* extImpact=0);
+	void WriteInteractionForce(const char* filename, const std::vector<std::pair<Vector3df, Vector3df> >* extImpact=0);
 
 	void CalculateSystemEnergy();
 
@@ -86,6 +86,8 @@ public:
 	_float_t timeCommunication;      // Time of communication
 
 	_float_t timeTotal;              // Total time
+
+	void SetDOStatus(const _uint_t&, const DOStatus&);
 
 private:
 

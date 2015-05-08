@@ -334,8 +334,8 @@ void NBSParallelConsultant::SyncDOContainer(DOContainer & vDO)
         {
 			idx = G2LTab[ overlapTab[i][j] ];
 			vDO[idx]->AddImpact
-				(aries::Vector3df(impactRecBuf[6*j  ], impactRecBuf[6*j+1], impactRecBuf[6*j+2]),
-				 aries::Vector3df(impactRecBuf[6*j+3], impactRecBuf[6*j+4], impactRecBuf[6*j+5]) );
+				(vedo::Vector3df(impactRecBuf[6*j  ], impactRecBuf[6*j+1], impactRecBuf[6*j+2]),
+				 vedo::Vector3df(impactRecBuf[6*j+3], impactRecBuf[6*j+4], impactRecBuf[6*j+5]) );
 		}
 	}
 }
@@ -525,23 +525,23 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 				continue;
 			}
 			(pDOWorld->GetDOStatus())[ridx]->SetPosition
-				(aries::Vector3df(recStatus[21*j   ], recStatus[21*j+ 1], recStatus[21*j+ 2]));
+				(vedo::Vector3df(recStatus[21*j   ], recStatus[21*j+ 1], recStatus[21*j+ 2]));
 
 			(pDOWorld->GetDOStatus())[ridx]->SetVelocity
-				(aries::Vector3df(recStatus[21*j+ 3], recStatus[21*j+ 4], recStatus[21*j+ 5]));
+				(vedo::Vector3df(recStatus[21*j+ 3], recStatus[21*j+ 4], recStatus[21*j+ 5]));
 
 			(pDOWorld->GetDOStatus())[ridx]->SetOrientation
-				(aries::Vector3df(recStatus[21*j+ 6], recStatus[21*j+ 7], recStatus[21*j+ 8]),
-				 aries::Vector3df(recStatus[21*j+ 9], recStatus[21*j+10], recStatus[21*j+11]) );
+				(vedo::Vector3df(recStatus[21*j+ 6], recStatus[21*j+ 7], recStatus[21*j+ 8]),
+				 vedo::Vector3df(recStatus[21*j+ 9], recStatus[21*j+10], recStatus[21*j+11]) );
 
 			(pDOWorld->GetDOStatus())[ridx]->SetAngularVelocity
-				(aries::Vector3df(recStatus[21*j+12], recStatus[21*j+13], recStatus[21*j+14]));
+				(vedo::Vector3df(recStatus[21*j+12], recStatus[21*j+13], recStatus[21*j+14]));
 
 			(pDOWorld->GetDOStatus())[ridx]->SetImpact
-				(aries::Vector3df(recStatus[21*j+15], recStatus[21*j+16], recStatus[21*j+17]));
+				(vedo::Vector3df(recStatus[21*j+15], recStatus[21*j+16], recStatus[21*j+17]));
 
 			(pDOWorld->GetDOStatus())[ridx]->SetAngularImpact
-				(aries::Vector3df(recStatus[21*j+18], recStatus[21*j+19], recStatus[21*j+20]));
+				(vedo::Vector3df(recStatus[21*j+18], recStatus[21*j+19], recStatus[21*j+20]));
 		}
 	}
 	delete[] recCnt;
@@ -1027,7 +1027,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	const std::map<std::pair<_uint_t, _uint_t>, ImpactStatus>& m = pIRTbl->GetData();
 
 	_uint_t u = 0;
-	aries::Vector3df vTemp;
+	vedo::Vector3df vTemp;
 	const _float_t* cdpudv;
 	for (iter=m.begin(); iter!=m.end(); ++iter)
     {
@@ -1123,7 +1123,7 @@ void NBSParallelConsultant::RebuildIactRecordTab(IactContainer& cIact)
 	#endif   // _INT32
 
 	ImpactStatus s;
-	aries::Vector3df NewVector;
+	vedo::Vector3df NewVector;
 	bool bTemp;
 	for (_uint_t u=0; u<NP; ++u)
 	{

@@ -12,10 +12,10 @@ GSEllipsoid::GSEllipsoid(const std::string& nm, const _float_t& xl, const _float
 	_Status = new DOStatus("No Name");
 }
 
-bool GSEllipsoid::Inside(const aries::Vector3df& p)
+bool GSEllipsoid::Inside(const Vector3df& p)
 {
 	// Aries: Need to be modified.
-	//aries::Vector3df localP(p);
+	//Vector3df localP(p);
 	//localP = localP - _Status->GetPosition();
 	//_float_t localX = localP % (_Status->GetOrientationX());
 	//_float_t localY = localP % (_Status->GetOrientationZ() * _Status->GetOrientationX());

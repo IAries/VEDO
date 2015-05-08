@@ -18,11 +18,11 @@ public:
 
 	~DOContainer();
 
-	void AddFieldImpact(const aries::Vector3df& vFieldImpact);
+	void AddFieldImpact(const Vector3df& vFieldImpact);
 
-	void AddImpact(const _uint_t& ul, const aries::Vector3df& vImpact, const aries::Vector3df& vAngularImpact);
+	void AddImpact(const _uint_t& ul, const Vector3df& vImpact, const Vector3df& vAngularImpact);
 
-	//void AddExternalImpact(const std::vector<std::pair<aries::Vector3df, aries::Vector3df> >& vvExternalImpact);
+	//void AddExternalImpact(const std::vector<std::pair<Vector3df, Vector3df> >& vvExternalImpact);
 
 	void Response(const _float_t dt);
 
@@ -50,6 +50,11 @@ public:
 	inline const DOStatus* GetDOStatus(_uint_t ul) const
 	{
 		return lcDOS[ul];
+	}
+
+	inline void SetDOStatus(_uint_t ul, const DOStatus& dos)
+	{
+		lcDO[ul]->SetDOStatus(dos);
 	}
 
 	inline _uint_t size() const

@@ -23,12 +23,12 @@ DiscreteObject::~DiscreteObject ()
 	delete pDOStatus;
 }
 
-void DiscreteObject::ModifyVelocity(const aries::Vector3df& vdv)
+void DiscreteObject::ModifyVelocity(const Vector3df& vdv)
 {
 	pDOStatus->SetVelocity ( (pDOStatus->GetVelocity()) + vdv);
 }
 
-void DiscreteObject::ModifyPosition(const aries::Vector3df& vdp)
+void DiscreteObject::ModifyPosition(const Vector3df& vdp)
 {
 	pDOStatus->SetPosition ( (pDOStatus->GetPosition()) + vdp);
 }
@@ -41,13 +41,13 @@ void DiscreteObject::ClearImpact()
 	vAngularImpact.set(0.0, 0.0, 0.0);
 }
 
-void DiscreteObject::AddImpact(const aries::Vector3df& impact, const aries::Vector3df& angularimpact)
+void DiscreteObject::AddImpact(const Vector3df& impact, const Vector3df& angularimpact)
 {
 	vImpact        = vImpact        + impact;
 	vAngularImpact = vAngularImpact + angularimpact;
 }
 
-void DiscreteObject::AddImpact(const aries::Vector3df& impact)
+void DiscreteObject::AddImpact(const Vector3df& impact)
 {
 	vImpact        = vImpact        + impact;
 }
@@ -59,7 +59,7 @@ void DiscreteObject::AddConstrainedImpact(_float_t dt)
 
 void DiscreteObject::EnforcePeriodicBoundaryConditions(const Boundary& bc)
 {
-	aries::Vector3df pos = pDOStatus->GetPosition();
+	Vector3df pos = pDOStatus->GetPosition();
 	bc.EnforceBoundaryConditions(&pos);
 	pDOStatus->SetPosition(pos);
 }

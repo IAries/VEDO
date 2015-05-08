@@ -3,7 +3,7 @@
 #include <vedo/framework/DOMap.h>
 #include <vedo/framework/DOWorld.h>
 #include <vedo/framework/DOModel.h>
-#include <njr/utility.h>
+#include <njr/Utility.h>
 #include <cmath>
 #include <iostream>
 #include <iterator>
@@ -87,7 +87,7 @@ void DOWorld::SetDOStatus(const _uint_t& odo, const DOStatus& dos)
 }
 
 void DOWorld::SetDOStatusVelocityAndAngularVelocity
-	(const _uint_t& odo, const aries::Vector3df& vVelocity, const aries::Vector3df& vAngularVelocity)
+	(const _uint_t& odo, const Vector3df& vVelocity, const Vector3df& vAngularVelocity)
 {
 	if (odo < pSystemParameter->GetDONumber())
 	{
@@ -343,7 +343,7 @@ bool DOWorld::DelDOModel(const std::string& DOName)
 	return DOWorld::Check();
 }
 
-void DOWorld::SetFieldAcceleration(const aries::Vector3df& ff)
+void DOWorld::SetFieldAcceleration(const Vector3df& ff)
 {
 	pSystemParameter->SetFieldAcceleration(ff);
 }
@@ -379,9 +379,9 @@ void DOWorld::FreezeAllElements()
 {
 	for (_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{
-//		cDOStatus[ul]->SetOrientation(aries::Vector3df(AXIALX), aries::Vector3df(AXIALZ));
-		cDOStatus[ul]->SetVelocity(aries::Vector3df());
-		cDOStatus[ul]->SetAngularVelocity(aries::Vector3df());
+//		cDOStatus[ul]->SetOrientation(Vector3df(AXIALX), Vector3df(AXIALZ));
+		cDOStatus[ul]->SetVelocity(Vector3df());
+		cDOStatus[ul]->SetAngularVelocity(Vector3df());
 	}
 }
 
@@ -392,8 +392,8 @@ void DOWorld::FreezeElements(std::string& sDOName)
 		if (cDOStatus[ul]->GetDOName() == sDOName)
 		{
 //			cDOStatus[ul]->SetOrientation(njr::AXIALX, njr::AXIALZ));
-			cDOStatus[ul]->SetVelocity(aries::Vector3df());
-			cDOStatus[ul]->SetAngularVelocity(aries::Vector3df());
+			cDOStatus[ul]->SetVelocity(Vector3df());
+			cDOStatus[ul]->SetAngularVelocity(Vector3df());
 		}
 	}
 }
@@ -477,8 +477,8 @@ void DOWorld::CalculateSystemEnergy()
 	_float_t    dEnergyKinetic;
 	_float_t    dEnergyTranslation;
 	_float_t    dEnergyRotation;
-	aries::Vector3df   vMomentumAvg;
-	aries::Vector3df   vAngularMomentumAvg;
+	Vector3df   vMomentumAvg;
+	Vector3df   vAngularMomentumAvg;
 	_float_t    dMomentumNorm        = 0.0;
 	_float_t    dAngularMomentumNorm = 0.0;
 	_float_t    dVelocityMax;
@@ -486,9 +486,9 @@ void DOWorld::CalculateSystemEnergy()
 	_float_t    dAngularVelocityMax;
 	_float_t    dAngularVelocityMin;
 	_float_t    m;
-	aries::Vector3df   mmi;
+	Vector3df   mmi;
 	_float_t    v;
-	aries::Vector3df   av;
+	Vector3df   av;
 	_float_t    dav;
 	bool            StartPoint           = true;
 	bool            NoMobileElements     = false;
@@ -631,7 +631,7 @@ void DOWorld::CalculateSystemEnergy()
 }
 
 /*
-const std::pair<aries::Vector3df, aries::Vector3df>
+const std::pair<Vector3df, Vector3df>
 	DOWorld::Distribution(_float_t& dMeshLength) const
 {
 	const Boundary      pZOI    = pSystemParameter->GetZoneOfInterest();
@@ -663,7 +663,7 @@ const std::pair<aries::Vector3df, aries::Vector3df>
 	_float_t        dRadius;
 	_uint_t ulCounter;
 	bool          bMeshFilled;
-	aries::Vector3df   vMeshCenter;
+	Vector3df   vMeshCenter;
 	for(_float_t dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength;
 		dX<pZOI.GetUpperPoint().x();
 		dX+=dMeshLength                                   )
@@ -717,12 +717,12 @@ const std::pair<aries::Vector3df, aries::Vector3df>
 
 	return
 		std::make_pair
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(Vector3df(dXMin, dYMin, dZMin),
+			 Vector3df(dXMax, dYMax, dZMax) );
 }
 */
 
-void DOWorld::Shift(const aries::Vector3df& shift)
+void DOWorld::Shift(const Vector3df& shift)
 {
 	for (_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -730,7 +730,7 @@ void DOWorld::Shift(const aries::Vector3df& shift)
 	}
 }
 
-void DOWorld::Shift(const aries::Vector3df& shift, const std::string& DOName)
+void DOWorld::Shift(const Vector3df& shift, const std::string& DOName)
 {
 	for (_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -787,8 +787,8 @@ std::pair<_float_t, _float_t> Rotate1Axis(_float_t Axis1, _float_t Axis2, _float
 	}
 }
 
-aries::Vector3df Rotate3Axis
-	(aries::Vector3df vTarget, const _float_t& Angle2XAxis, const _float_t& Angle2YAxis, const _float_t& Angle2ZAxis)
+Vector3df Rotate3Axis
+	(Vector3df vTarget, const _float_t& Angle2XAxis, const _float_t& Angle2YAxis, const _float_t& Angle2ZAxis)
 {
 	std::pair<_float_t, _float_t> pNewAxisValues;
 
@@ -806,7 +806,7 @@ aries::Vector3df Rotate3Axis
 
 void DOWorld::Rotate(const _float_t& Angle2XAxis, const _float_t& Angle2YAxis, const _float_t& Angle2ZAxis)
 {
-	aries::Vector3df vV1, vV2;
+	Vector3df vV1, vV2;
 	std::pair<_float_t, _float_t> pNewPosition, pNewVelocity, pNewAngularVelocity;
 	for (_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{
@@ -819,21 +819,21 @@ void DOWorld::Rotate(const _float_t& Angle2XAxis, const _float_t& Angle2YAxis, c
 	}
 }
 
-void DOWorld::Rotate(const aries::Vector3df& eX, const aries::Vector3df& eZ, const std::string& DOName)
+void DOWorld::Rotate(const Vector3df& eX, const Vector3df& eZ, const std::string& DOName)
 {
-	aries::Vector3df eY(eZ.cross(eX));
-	aries::Vector3df position, orientationX, orientationZ;
+	Vector3df eY(eZ.cross(eX));
+	Vector3df position, orientationX, orientationZ;
 	for (_uint_t ul=0; ul<cDOStatus.size(); ul++)
 	{
 		if (cDOStatus[ul]->GetDOName() == DOName)
 		{
 			position = cDOStatus[ul]->GetPosition();
-			cDOStatus[ul]->SetPosition(aries::Vector3df(position.dot(eX), position.dot(eY), position.dot(eZ)));
+			cDOStatus[ul]->SetPosition(Vector3df(position.dot(eX), position.dot(eY), position.dot(eZ)));
 			orientationX = cDOStatus[ul]->GetOrientationX();
 			orientationZ = cDOStatus[ul]->GetOrientationZ();
 			cDOStatus[ul]->SetOrientation
-				(aries::Vector3df(orientationX.dot(eX), orientationX.dot(eY), orientationX.dot(eZ)),
-				 aries::Vector3df(orientationZ.dot(eX), orientationZ.dot(eY), orientationZ.dot(eZ)) );
+				(Vector3df(orientationX.dot(eX), orientationX.dot(eY), orientationX.dot(eZ)),
+				 Vector3df(orientationZ.dot(eX), orientationZ.dot(eY), orientationZ.dot(eZ)) );
 		}
 	}
 }
@@ -888,7 +888,7 @@ _float_t DOWorld::Volume(_float_t& dMeshLength) const
 	_float_t      dRadius;
 	_uint_t ulCounter;
 	bool              bVolumeFilled;
-	aries::Vector3df     vMeshCenter;
+	Vector3df     vMeshCenter;
 	for (_float_t dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength; dX<pZOI.GetUpperPoint().x(); dX+=dMeshLength)
 	{
 		for (_float_t dY=pZOI.GetLowerPoint().y()+0.5*dMeshLength; dY<pZOI.GetUpperPoint().y(); dY+=dMeshLength)
@@ -935,7 +935,7 @@ _float_t DOWorld::ProjectedAreaX(_float_t& dMeshLength) const
 			if (pZOI.InBoundary(pdos->GetPosition(), pdoml->GetRange()) )
 			{
 				TargetedSerialNumber.push_back(ul);
-				pdos->SetPosition(aries::Vector3df(0.0, pdos->GetPosition().y(), pdos->GetPosition().z()));
+				pdos->SetPosition(Vector3df(0.0, pdos->GetPosition().y(), pdos->GetPosition().z()));
 			}
 		}
 	}
@@ -945,7 +945,7 @@ _float_t DOWorld::ProjectedAreaX(_float_t& dMeshLength) const
 	_float_t      dRadius;
 	_uint_t ulCounter;
 	bool              bAreaFilled;
-	aries::Vector3df     vMeshCenter;
+	Vector3df     vMeshCenter;
 	for (_float_t dY=pZOI.GetLowerPoint().y()+0.5*dMeshLength; dY<pZOI.GetUpperPoint().y(); dY+=dMeshLength)
 	{
 		for (_float_t dZ=pZOI.GetLowerPoint().z()+0.5*dMeshLength; dZ<pZOI.GetUpperPoint().z(); dZ+=dMeshLength)
@@ -989,7 +989,7 @@ _float_t DOWorld::ProjectedAreaY(_float_t& dMeshLength) const
 			if (pZOI.InBoundary(pdos->GetPosition(), pdoml->GetRange()) )
 			{
 				TargetedSerialNumber.push_back(ul);
-				pdos->SetPosition(aries::Vector3df(pdos->GetPosition().x(), 0.0, pdos->GetPosition().z()));
+				pdos->SetPosition(Vector3df(pdos->GetPosition().x(), 0.0, pdos->GetPosition().z()));
 			}
 		}
 	}
@@ -999,7 +999,7 @@ _float_t DOWorld::ProjectedAreaY(_float_t& dMeshLength) const
 	_float_t        dRadius;
 	_uint_t ulCounter;
 	bool          bAreaFilled;
-	aries::Vector3df   vMeshCenter;
+	Vector3df   vMeshCenter;
 	for(_float_t dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength; dX<pZOI.GetUpperPoint().x(); dX+=dMeshLength)
 	{
 		for(_float_t dZ=pZOI.GetLowerPoint().z()+0.5*dMeshLength; dZ<pZOI.GetUpperPoint().z(); dZ+=dMeshLength)
@@ -1043,7 +1043,7 @@ _float_t DOWorld::ProjectedAreaZ(_float_t& dMeshLength) const
 			if (pZOI.InBoundary(pdos->GetPosition(), pdoml->GetRange()) )
 			{
 				TargetedSerialNumber.push_back(ul);
-				pdos->SetPosition(aries::Vector3df(pdos->GetPosition().x(), pdos->GetPosition().y(), 0.0));
+				pdos->SetPosition(Vector3df(pdos->GetPosition().x(), pdos->GetPosition().y(), 0.0));
 			}
 		}
 	}
@@ -1053,7 +1053,7 @@ _float_t DOWorld::ProjectedAreaZ(_float_t& dMeshLength) const
 	_float_t      dRadius;
 	_uint_t ulCounter;
 	bool              bAreaFilled;
-	aries::Vector3df     vMeshCenter;
+	Vector3df     vMeshCenter;
 	for (_float_t dX=pZOI.GetLowerPoint().x()+0.5*dMeshLength; dX<pZOI.GetUpperPoint().x(); dX+=dMeshLength)
 	{
 		for (_float_t dY=pZOI.GetLowerPoint().y()+0.5*dMeshLength; dY<pZOI.GetUpperPoint().y(); dY+=dMeshLength)

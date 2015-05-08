@@ -18,9 +18,9 @@ public:
     DOStatus();
 
 	DOStatus
-		(const std::string& DOName, const aries::Vector3df& Position, const aries::Vector3df& Velocity,
-		 const aries::Vector3df& OrientationX, const aries::Vector3df& OrientationZ,
-		 const aries::Vector3df& AngularVelocity, const aries::Vector3df& Impact, const aries::Vector3df& AngularImpact);
+		(const std::string& DOName, const Vector3df& Position, const Vector3df& Velocity,
+		 const Vector3df& OrientationX, const Vector3df& OrientationZ,
+		 const Vector3df& AngularVelocity, const Vector3df& Impact, const Vector3df& AngularImpact);
 
 	// Function for algorithm std::find_if
 	explicit DOStatus(const std::string& DOname);
@@ -40,37 +40,37 @@ public:
 		return ulID;
 	}
 
-	inline aries::Vector3df GetPosition() const
+	inline Vector3df GetPosition() const
 	{
 		return vPosition;
 	}
 
-	inline aries::Vector3df GetVelocity() const
+	inline Vector3df GetVelocity() const
 	{
 		return vVelocity;
 	}
 
-	inline aries::Vector3df GetOrientationX() const
+	inline Vector3df GetOrientationX() const
 	{
 		return vOrientationX;
 	}
 
-	inline aries::Vector3df GetOrientationZ() const
+	inline Vector3df GetOrientationZ() const
 	{
 		return vOrientationZ;
 	}
 
-	inline aries::Vector3df GetAngularVelocity() const
+	inline Vector3df GetAngularVelocity() const
 	{
 		return vAngularVelocity;
 	}
 
-	inline aries::Vector3df GetImpact() const
+	inline Vector3df GetImpact() const
 	{
 		return vImpact;
 	}
 
-	inline aries::Vector3df GetAngularImpact() const
+	inline Vector3df GetAngularImpact() const
 	{
 		return vAngularImpact;
 	}
@@ -85,39 +85,39 @@ public:
 		ulID = id;
 	}
 
-	inline void SetPosition(const aries::Vector3df& position)
+	inline void SetPosition(const Vector3df& position)
 	{
 		vPosition = position;
 	}
 
-	inline void SetVelocity(const aries::Vector3df& velocity)
+	inline void SetVelocity(const Vector3df& velocity)
 	{
 		vVelocity = velocity;
 	}
 
-	void SetOrientation(const aries::Vector3df& OrientationX, const aries::Vector3df& OrientationZ);
+	void SetOrientation(const Vector3df& OrientationX, const Vector3df& OrientationZ);
 
-	inline void SetOrientationX(const aries::Vector3df& OrientationX)
+	inline void SetOrientationX(const Vector3df& OrientationX)
 	{
 		vOrientationX = OrientationX;
 	}
 
-	inline void SetOrientationZ(const aries::Vector3df& OrientationZ)
+	inline void SetOrientationZ(const Vector3df& OrientationZ)
 	{
 		vOrientationZ = OrientationZ;
 	}
 
-	inline void SetAngularVelocity(const aries::Vector3df& angularvelocity)
+	inline void SetAngularVelocity(const Vector3df& angularvelocity)
 	{
 		vAngularVelocity = angularvelocity;
 	}
 
-	inline void SetImpact(const aries::Vector3df& impact)
+	inline void SetImpact(const Vector3df& impact)
 	{
 		vImpact = impact;
 	}
 
-	inline void SetAngularImpact(const aries::Vector3df& angularimpact)
+	inline void SetAngularImpact(const Vector3df& angularimpact)
 	{
 		vAngularImpact = angularimpact;
 	}
@@ -145,12 +145,12 @@ public:
 */
 
 /*
-	inline aries::Vector3df GetFieldImpact() const
+	inline Vector3df GetFieldImpact() const
 	{
 		return vFieldImpact;
 	};
 
-	inline void SetFieldImpact(const aries::Vector3df vi)
+	inline void SetFieldImpact(const Vector3df vi)
 	{
 		vFieldImpact = vi;
 	};
@@ -198,19 +198,19 @@ private:
 
 	_uint_t ulID;   // ID during simulation (not equals to the serial number in DOContainer
 
-	aries::Vector3df vPosition;
+	Vector3df vPosition;
 
-	aries::Vector3df vVelocity;
+	Vector3df vVelocity;
 
-	aries::Vector3df vOrientationX;
+	Vector3df vOrientationX;
 
-	aries::Vector3df vOrientationZ;
+	Vector3df vOrientationZ;
 
-	aries::Vector3df vAngularVelocity;
+	Vector3df vAngularVelocity;
 
-	aries::Vector3df vImpact;
+	Vector3df vImpact;
 
-	aries::Vector3df vAngularImpact;
+	Vector3df vAngularImpact;
 
 	_float_t  dGranularTemperatureV;    // Granular Temperature (Velocity)
 
@@ -218,7 +218,7 @@ private:
 
 	bool          beMonitored;              // Should be monotored or not;
 
-	//aries::Vector3df vFieldImpact;           // Field Impact
+	//Vector3df vFieldImpact;           // Field Impact
 
 //	_float_t        dUDV[uNumUDDDOStatus];    // User-defined value
                                             // 0 ~ uNumUDDDOStatus: Accumulative user-defined value

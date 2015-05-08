@@ -149,9 +149,65 @@ void Polygon::AddFaceVertexSN(const _uint_t& ui, const _uint_t& uj, const _uint_
 	_FaceVertexSN.push_back(SingleFace);
 }
 
+void Polygon::CoordinateTransformation(const Vector3df& LocalX, const Vector3df& LocalY, const Vector3df& LocalZ)
+{
+	for (_uint_t u=0; u<(_uint_t)_Vertex.size(); u++)
+	{
+		_Vertex[u].CoordinateTransformation(LocalX, LocalY, LocalZ);
+	}
+}
+
+void Polygon::CoordinateTransformation
+	(const Vector3df& LocalX, const Vector3df& LocalY, const Vector3df& LocalZ, const Vector3df& Translation)
+{
+	CoordinateTransformation(LocalX, LocalY, LocalZ);
+	for (_uint_t u=0; u<(_uint_t)_Vertex.size(); u++)
+	{
+		_Vertex[u] += Translation;
+	}
+}
+
+void Polygon::Clear()
+{
+	_Vertex.clear();
+	_Edge.clear();
+	_EdgeVertexSN.clear();
+	_Face.clear();
+	_FaceVertexSN.clear();
+}
+
 Polygon::Polygon(const Polygon& p)
 {
 	*this = p;
 }
 
 }   // namespace aries
+
+
+
+std::ostream& operator << (std::ostream& os, const aries::Polygon& p)
+{
+	aries::_uint_t VertexNumber = p.VertexNumber();
+	for (aries::_uint_t u=0; u<VertexNumber; u++)
+	{
+		os << "Vertex " << u << "/" << VertexNumber << ": " << *p.GetVertex(u);
+	}
+
+	aries::_uint_t EdgeNumber = p.EdgeNumber();
+	std::pair<aries::_uint_t, aries::_uint_t> uuev;
+	for (aries::_uint_t u=0; u<EdgeNumber; u++)
+	{
+		uuev = p.GetEdgeVertexSN(u);
+		os << "Edge " << u << "/" << EdgeNumber << ": Vertex " << uuev.first << "-" << uuev.second << std::endl;
+	}
+
+	aries::_uint_t FaceNumber = p.FaceNumber();
+	const aries::_uint_t* ufv;
+	for (aries::_uint_t u=0; u<FaceNumber; u++)
+	{
+		ufv = p.GetFaceVertexSN(u);
+		os << "Face " << u << "/" << FaceNumber << ": Vertex " << *ufv << "-" << *(ufv+1) << "-" << *(ufv+2) << std::endl;
+	}
+
+	return os;
+}

@@ -27,16 +27,16 @@ bool ISwH::InitialStep(const ContactDetector *CInfo, DiscreteObject *pdoSlave, D
 	return true;
 }
 
-aries::Vector3df ISwH::NextStep(const ContactDetector* CInfo, DiscreteObject* A, DiscreteObject* B, _float_t dt)
+Vector3df ISwH::NextStep(const ContactDetector* CInfo, DiscreteObject* A, DiscreteObject* B, _float_t dt)
 {
 	// CInfo->GetContactInfo() -> vImpactDirection represents direction of (Position B - Position A)
 	const _float_t  dImpDepth     = CInfo->GetContactInfo()->dImpactDepth;
-	const aries::Vector3df vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
+	const Vector3df vImpDirection = CInfo->GetContactInfo()->vImpactDirection;
 
 	if (!(CInfo->GetContactInfo()->bActive))
 	{
 		ImStatus.Clean();
-		return aries::Vector3df();
+		return Vector3df();
 	}
 
 	ImStatus.SetContactInformation(CInfo->GetContactInfo());
@@ -44,21 +44,21 @@ aries::Vector3df ISwH::NextStep(const ContactDetector* CInfo, DiscreteObject* A,
 	const DOStatus*     dosA = A->GetDOStatus();
 	const DOStatus*     dosB = B->GetDOStatus();
 
-	//const aries::Vector3df vIa  = A->GetMassMomentInertia();
-	//const aries::Vector3df vIb  = B->GetMassMomentInertia();
+	//const Vector3df vIa  = A->GetMassMomentInertia();
+	//const Vector3df vIb  = B->GetMassMomentInertia();
 
-	const aries::Vector3df vVa  = dosA->GetVelocity();
-	const aries::Vector3df vVb  = dosB->GetVelocity();
-	const aries::Vector3df vAVa = dosA->GetAngularVelocity();
-	const aries::Vector3df vAVb = dosB->GetAngularVelocity();
+	const Vector3df vVa  = dosA->GetVelocity();
+	const Vector3df vVb  = dosB->GetVelocity();
+	const Vector3df vAVa = dosA->GetAngularVelocity();
+	const Vector3df vAVb = dosB->GetAngularVelocity();
 
-	aries::Vector3df vImpPoint;
-	aries::Vector3df vDepthRadiusA, vDepthRadiusB;
-	aries::Vector3df vRelativeV;                         // The relative velocity std::vector of A respect to B in the contact point
-	aries::Vector3df vRelativeVn, vRelativeVs;           // Normal and tangential component of vRelativeV
-	aries::Vector3df vForceAn, vForceAs;                 // The force in normal/shear component of A
-	aries::Vector3df vForceA, ImpactA;                   // The total "impact force" and "impact" on A
-	aries::Vector3df vAngularImpactA, vAngularImpactB;   // Angular impact
+	Vector3df vImpPoint;
+	Vector3df vDepthRadiusA, vDepthRadiusB;
+	Vector3df vRelativeV;                         // The relative velocity std::vector of A respect to B in the contact point
+	Vector3df vRelativeVn, vRelativeVs;           // Normal and tangential component of vRelativeV
+	Vector3df vForceAn, vForceAs;                 // The force in normal/shear component of A
+	Vector3df vForceA, ImpactA;                   // The total "impact force" and "impact" on A
+	Vector3df vAngularImpactA, vAngularImpactB;   // Angular impact
 
 	if (dImpDepth > 0.0)
 	{
@@ -127,12 +127,12 @@ aries::Vector3df ISwH::NextStep(const ContactDetector* CInfo, DiscreteObject* A,
 		_float_t FrictionForce = fk * kn * dImpDepth;
 
 		vForceAs = ism->ShearForceRotation(ImStatus.ShearForce(), vRelativeVs) - ks * dt * vRelativeVs;
-		ImStatus.SetShearForce(vForceAs);
 		if (vForceAs.length() >= FrictionForce)
 		{
 			// Sliding
 			vForceAs = FrictionForce * vForceAs.direction();
 		}
+		ImStatus.SetShearForce(vForceAs);
 	}
 	else
 	{

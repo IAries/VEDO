@@ -10,7 +10,7 @@ namespace vedo
 SystemParameter::SystemParameter
 	(const _float_t& timestart, const _float_t& timestop,
 	 const _float_t& timeinterval, const _float_t& timecurrent,
-	 const aries::Vector3df& fieldacceleration, const Boundary& ZOI, const Boundary& PBC):
+	 const Vector3df& fieldacceleration, const Boundary& ZOI, const Boundary& PBC):
 	 ZoneOfInterest(ZOI), PeriodicBoundaryConditions(PBC),
 	 ulDONumber(0), ulIactNumber(0), dEnergyPotential(0.0), dEnergyTranslation(0.0), dEnergyRotation(0.0),
 	 dVelocityMax(0.0), dVelocityMin(0.0), dAngularVelocityMax(0.0), dAngularVelocityMin(0.0)
@@ -80,13 +80,13 @@ std::ofstream& SystemParameter::operator >> (std::ofstream& idof) const
 	idof.write((char*) &dTimeStop, sizeof(_float_t));
 	idof.write((char*) &dTimeCurrent, sizeof(_float_t));
 	idof.write((char*) &dTimeInterval, sizeof(_float_t));
-	idof.write((char*) &vFieldAcceleration, sizeof(aries::Vector3df));
+	idof.write((char*) &vFieldAcceleration, sizeof(Vector3df));
 	idof.write((char*) &(ZoneOfInterest.GetSwitch()), 3*sizeof(bool));
-	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(aries::Vector3df));
-	idof.write((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(aries::Vector3df));
+	idof.write((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(Vector3df));
+	idof.write((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(Vector3df));
 	idof.write((char*) &(PeriodicBoundaryConditions.GetSwitch()), 3*sizeof(bool));
-	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(aries::Vector3df));
-	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(aries::Vector3df));
+	idof.write((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(Vector3df));
+	idof.write((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(Vector3df));
 	return idof;
 }
 
@@ -128,14 +128,14 @@ std::ifstream& SystemParameter::operator << (std::ifstream& idof)
 	idof.read((char*) &dTimeStop, sizeof(_float_t));
 	idof.read((char*) &dTimeCurrent, sizeof(_float_t));
 	idof.read((char*) &dTimeInterval, sizeof(_float_t));
-	idof.read((char*) &vFieldAcceleration, sizeof(aries::Vector3df));
+	idof.read((char*) &vFieldAcceleration, sizeof(Vector3df));
 	idof.read((char*) &(ZoneOfInterest.GetSwitch()), sizeof(bool)*3);
-	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(aries::Vector3df));
-	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(aries::Vector3df));
+	idof.read((char*) &(ZoneOfInterest.GetLowerPoint()), sizeof(Vector3df));
+	idof.read((char*) &(ZoneOfInterest.GetUpperPoint()), sizeof(Vector3df));
 	ZoneOfInterest.Correct();
 	idof.read((char*) &(PeriodicBoundaryConditions.GetSwitch()), sizeof(bool)*3);
-	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(aries::Vector3df));
-	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(aries::Vector3df));
+	idof.read((char*) &(PeriodicBoundaryConditions.GetLowerPoint()), sizeof(Vector3df));
+	idof.read((char*) &(PeriodicBoundaryConditions.GetUpperPoint()), sizeof(Vector3df));
 	PeriodicBoundaryConditions.Correct();
 
 	return idof;

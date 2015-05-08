@@ -100,12 +100,12 @@ public:
 
     //! This function is swigged in BravaisLatticeWithBasis.i
     void SetAtomsCoordinatesInCell
-    	(std::vector<aries::Vector3df> atomsCoord,
+    	(std::vector<vedo::Vector3df> atomsCoord,
     	 std::vector<std::string> *atomTypes=0);
 
-    virtual void AddAtomInCell(aries::Vector3df atomCoord, std::string name="");
+    virtual void AddAtomInCell(vedo::Vector3df atomCoord, std::string name="");
 
-    inline const aries::Vector3df &GetAtomsCoordinatesInCell(vedo::_uint_t atom) const
+    inline const vedo::Vector3df &GetAtomsCoordinatesInCell(vedo::_uint_t atom) const
     {
     	return atomsCoordinatesInCell[atom];
     }
@@ -136,7 +136,7 @@ protected:
 
     vedo::_float_t volumeOfCell;
 //! The coordinates of the atoms in units of the lattice vectors (coordinates must be between 0 and 1)
-    std::vector<aries::Vector3df> atomsCoordinatesInCell;
+    std::vector<vedo::Vector3df> atomsCoordinatesInCell;
 //! The type name of the atoms in the basis
     std::vector<std::string> atomTypes;
 

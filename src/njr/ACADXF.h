@@ -180,12 +180,12 @@ public:
 
 	// Sets attributes of this Entitity
 	void Set
-		(const aries::Vector3df& p1, const aries::Vector3df& p2, const char* layer = "NJRDXFdefault", const Color& color = Color::bylayer);
+		(const Vector3df& p1, const Vector3df& p2, const char* layer = "NJRDXFdefault", const Color& color = Color::bylayer);
 
 	// Set two endpoints of this line
-	void SetPoint1(const aries::Vector3df& point);
+	void SetPoint1(const Vector3df& point);
 
-	void SetPoint2(const aries::Vector3df& point);
+	void SetPoint2(const Vector3df& point);
 
 private:
 
@@ -212,17 +212,17 @@ public:
 
 	// Sets attributes of this Entititty
 	void Set
-		(const aries::Vector3df& p1, const aries::Vector3df& p2, const aries::Vector3df& p3, const aries::Vector3df& p4,
+		(const Vector3df& p1, const Vector3df& p2, const Vector3df& p3, const Vector3df& p4,
 		 const char* layer = "NJRDXFdefault", const Color& color = Color::bylayer);
 
 	// Sets four corners of this 3d face
-	void SetPoint1(const aries::Vector3df &point);
+	void SetPoint1(const Vector3df &point);
 
-	void SetPoint2(const aries::Vector3df &point);
+	void SetPoint2(const Vector3df &point);
 
-	void SetPoint3(const aries::Vector3df &point);
+	void SetPoint3(const Vector3df &point);
 
-	void SetPoint4(const aries::Vector3df &point);
+	void SetPoint4(const Vector3df &point);
 
 private:
 
@@ -249,11 +249,11 @@ public:
 
 	// Sets attributes of this Entitity
 	void Set
-		(const aries::Vector3df& p1, const char* text, const _float_t& dheight=2.0, const _float_t& dangle=0.0,
+		(const Vector3df& p1, const char* text, const _float_t& dheight=2.0, const _float_t& dangle=0.0,
 		 const char* layer = "NJRDXFdefault", const Color& color = Color::bylayer                                                      );
 
 	// Sets the position of this Text
-	void SetPoint(const aries::Vector3df& point);
+	void SetPoint(const Vector3df& point);
 
 	// Sets the size , angle, and content of this Text
 	void SetText(const char* text, const _float_t& dheight = 2.0, const _float_t& dangle = 0.0);

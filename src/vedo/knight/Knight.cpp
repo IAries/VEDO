@@ -763,7 +763,7 @@ void assm(std::string& f1, std::string& f2, std::string& des)
 			5e-6,
 			0.0,
 			vcd3.size(),
-			aries::Vector3df(0.0, 0.0, -980.0),
+			vedo::Vector3df(0.0, 0.0, -980.0),
 			vedo::Boundary()                    );
 
 	vedo::DOWorld* pw3 = new vedo::DOWorld(pSystemParameter, cDOModel, cIactModel, vcd3);
@@ -831,12 +831,12 @@ void AssmListHEX()
 	}
 }
 
-void AddDOInSpaceBCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
+void AddDOInSpaceBCC(vedo::Vector3df* LowerBoundary, vedo::Vector3df* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
 {
 	vedo::_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
-	*LowerBoundary += aries::Vector3df(R, R, R);
-	*UpperBoundary -= aries::Vector3df(R, R, R);
+	vedo::DOStatus dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
+	*LowerBoundary += vedo::Vector3df(R, R, R);
+	*UpperBoundary -= vedo::Vector3df(R, R, R);
 	vedo::_float_t fCellSize = 4.0 * R / std::sqrt(3.0);
 
 	bool bLayer    = true;
@@ -851,7 +851,7 @@ void AddDOInSpaceBCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 			{
 				for (x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=fCellSize)
 				{
-					dos.SetPosition(aries::Vector3df(x, y, z));
+					dos.SetPosition(vedo::Vector3df(x, y, z));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 				}
 			}
@@ -871,7 +871,7 @@ void AddDOInSpaceBCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 			{
 				for (x=(LowerBoundary->x())+0.5*fCellSize; x<=(UpperBoundary->x()); x+=fCellSize)
 				{
-					dos.SetPosition(aries::Vector3df(x, y, z));
+					dos.SetPosition(vedo::Vector3df(x, y, z));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 				}
 			}
@@ -888,12 +888,12 @@ void AddDOInSpaceBCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 	}
 }
 
-void AddDOInSpaceFCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
+void AddDOInSpaceFCC(vedo::Vector3df* LowerBoundary, vedo::Vector3df* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
 {
 	vedo::_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
-	*LowerBoundary += aries::Vector3df(R, R, R);
-	*UpperBoundary -= aries::Vector3df(R, R, R);
+	vedo::DOStatus dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
+	*LowerBoundary += vedo::Vector3df(R, R, R);
+	*UpperBoundary -= vedo::Vector3df(R, R, R);
 	vedo::_float_t fCellSize = 2.0 * std::sqrt(2.0) * R;
 
 	bool bLayer    = true;
@@ -908,7 +908,7 @@ void AddDOInSpaceFCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 			{
 				for (x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=fCellSize)
 				{
-					dos.SetPosition(aries::Vector3df(x, y, z));
+					dos.SetPosition(vedo::Vector3df(x, y, z));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 				}
 			}
@@ -916,7 +916,7 @@ void AddDOInSpaceFCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 			{
 				for (x=(LowerBoundary->x())+0.5*fCellSize; x<=(UpperBoundary->x()); x+=fCellSize)
 				{
-					dos.SetPosition(aries::Vector3df(x, y, z));
+					dos.SetPosition(vedo::Vector3df(x, y, z));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 				}
 			}
@@ -936,7 +936,7 @@ void AddDOInSpaceFCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 			{
 				for (x=(LowerBoundary->x())+0.5*fCellSize; x<=(UpperBoundary->x()); x+=fCellSize)
 				{
-					dos.SetPosition(aries::Vector3df(x, y, z));
+					dos.SetPosition(vedo::Vector3df(x, y, z));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 				}
 			}
@@ -944,7 +944,7 @@ void AddDOInSpaceFCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 			{
 				for (x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=fCellSize)
 				{
-					dos.SetPosition(aries::Vector3df(x, y, z));
+					dos.SetPosition(vedo::Vector3df(x, y, z));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 				}
 			}
@@ -961,30 +961,30 @@ void AddDOInSpaceFCC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBou
 	}
 }
 
-void AddDOInSpaceSC(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
+void AddDOInSpaceSC(vedo::Vector3df* LowerBoundary, vedo::Vector3df* UpperBoundary, std::string DOName, vedo::DOWorld* oWorld)
 {
 	vedo::_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
-	*LowerBoundary += aries::Vector3df(R, R, R);
-	*UpperBoundary -= aries::Vector3df(R, R, R);
+	vedo::DOStatus dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
+	*LowerBoundary += vedo::Vector3df(R, R, R);
+	*UpperBoundary -= vedo::Vector3df(R, R, R);
 	for (vedo::_float_t y=(LowerBoundary->y()); y<=(UpperBoundary->y()); y+=(2.0*R))
     {
 	    for (vedo::_float_t z=(LowerBoundary->z()); z<=(UpperBoundary->z()); z+=(2.0*R))
     	{
 		    for (vedo::_float_t x=(LowerBoundary->x()); x<=(UpperBoundary->x()); x+=(2.0*R))
     		{
-				dos.SetPosition(aries::Vector3df(x, y, z));
+				dos.SetPosition(vedo::Vector3df(x, y, z));
 				oWorld->AddDOStatus(new vedo::DOStatus(dos));
 	    	}
 	    }
     }
 }
 
-void AddPotentialEnergy(aries::Vector3df* SourcePoint, std::string DOName, vedo::DOWorld* oWorld)
+void AddPotentialEnergy(vedo::Vector3df* SourcePoint, std::string DOName, vedo::DOWorld* oWorld)
 {
-	aries::Vector3df vel;
-	const aries::Vector3df ff = oWorld->GetSystemParameter()->GetFieldAcceleration();
-	vedo::DOStatus new_dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+	vedo::Vector3df vel;
+	const vedo::Vector3df ff = oWorld->GetSystemParameter()->GetFieldAcceleration();
+	vedo::DOStatus new_dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 	const vedo::DOStatus* dos = 0;
     vedo::_float_t TempVelocitySquare;
 	for (vedo::_uint_t ul=0; ul<oWorld->GetSystemParameter()->GetDONumber(); ul++)
@@ -1008,10 +1008,10 @@ void AddPotentialEnergy(aries::Vector3df* SourcePoint, std::string DOName, vedo:
 	}
 }
 
-void AddExternalVelocity(aries::Vector3df* pExternalVelocity, std::string DOName, vedo::DOWorld* oWorld)
+void AddExternalVelocity(vedo::Vector3df* pExternalVelocity, std::string DOName, vedo::DOWorld* oWorld)
 {
-	aries::Vector3df vel;
-	vedo::DOStatus new_dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+	vedo::Vector3df vel;
+	vedo::DOStatus new_dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 	const vedo::DOStatus* dos = 0;
 	for (vedo::_uint_t ul=0; ul<oWorld->GetSystemParameter()->GetDONumber(); ul++)
 	{
@@ -1026,10 +1026,10 @@ void AddExternalVelocity(aries::Vector3df* pExternalVelocity, std::string DOName
 	}
 }
 
-void AddExternalAngularVelocity(aries::Vector3df* pExternalAngularVelocity, std::string DOName, vedo::DOWorld* oWorld)
+void AddExternalAngularVelocity(vedo::Vector3df* pExternalAngularVelocity, std::string DOName, vedo::DOWorld* oWorld)
 {
-	aries::Vector3df avel;
-	vedo::DOStatus new_dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+	vedo::Vector3df avel;
+	vedo::DOStatus new_dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 	const vedo::DOStatus* dos = 0;
 	for (vedo::_uint_t ul=0; ul<oWorld->GetSystemParameter()->GetDONumber(); ul++)
 	{
@@ -1045,13 +1045,13 @@ void AddExternalAngularVelocity(aries::Vector3df* pExternalAngularVelocity, std:
 }
 
 void AddRandomDOInCartesianSpace
-	(aries::Vector3df* LowerBoundary, aries::Vector3df* UpperBoundary,
+	(vedo::Vector3df* LowerBoundary, vedo::Vector3df* UpperBoundary,
 	 std::string DOName, vedo::_uint_t* num, vedo::DOWorld* oWorld)
 {
 	vedo::_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
-	*LowerBoundary += aries::Vector3df(R, R, R);
-	*UpperBoundary -= aries::Vector3df(R, R, R);
+	vedo::DOStatus dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
+	*LowerBoundary += vedo::Vector3df(R, R, R);
+	*UpperBoundary -= vedo::Vector3df(R, R, R);
 	vedo::_float_t xRange = (UpperBoundary->x()) - (LowerBoundary->x());
 	vedo::_float_t yRange = (UpperBoundary->y()) - (LowerBoundary->y());
 	vedo::_float_t zRange = (UpperBoundary->z()) - (LowerBoundary->z());
@@ -1062,17 +1062,17 @@ void AddRandomDOInCartesianSpace
 		temp_x = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * xRange;
 		temp_y = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * yRange;
 		temp_z = (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * zRange;
-		dos.SetPosition(*LowerBoundary + aries::Vector3df(temp_x, temp_y, temp_z));
+		dos.SetPosition(*LowerBoundary + vedo::Vector3df(temp_x, temp_y, temp_z));
 		oWorld->AddDOStatus(new vedo::DOStatus(dos));
 	}
 }
 
 void AddRandomDOInCylindricalSpace
-	(aries::Vector3df* Center, vedo::_float_t* r, vedo::_float_t* h, std::string DOName,
+	(vedo::Vector3df* Center, vedo::_float_t* r, vedo::_float_t* h, std::string DOName,
 	 vedo::_uint_t* num, vedo::DOWorld* oWorld                                           )
 {
 	vedo::_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+	vedo::DOStatus dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 
 	*r -= R;
 	vedo::_float_t dSquare_r = (*r) * (*r);
@@ -1095,7 +1095,7 @@ void AddRandomDOInCylindricalSpace
 		if (temp_x * temp_x + temp_y * temp_y <= dSquare_r)
 		{
 			temp_z = dZMin + (vedo::_float_t)(rand()) / (vedo::_float_t)RAND_MAX * (*h);
-			dos.SetPosition(aries::Vector3df(temp_x, temp_y, temp_z));
+			dos.SetPosition(vedo::Vector3df(temp_x, temp_y, temp_z));
 			oWorld->AddDOStatus(new vedo::DOStatus(dos));
 			ul++;
 		}
@@ -1103,10 +1103,10 @@ void AddRandomDOInCylindricalSpace
 }
 
 void AddRandomDOInSphericalSpace
-	(aries::Vector3df* Center, vedo::_float_t* r, std::string DOName, vedo::_uint_t* num, vedo::DOWorld* oWorld)
+	(vedo::Vector3df* Center, vedo::_float_t* r, std::string DOName, vedo::_uint_t* num, vedo::DOWorld* oWorld)
 {
 	vedo::_float_t R = oWorld->GetDOModel(DOName)->GetShapeAttributes().sphere.radius;
-	vedo::DOStatus dos(DOName, aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+	vedo::DOStatus dos(DOName, vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 	*r -= R;
 	vedo::_float_t temp_x, temp_y, temp_z, temp_radius, temp_angle_1, temp_angle_2;
 	srand(time(0));
@@ -1118,7 +1118,7 @@ void AddRandomDOInSphericalSpace
 		temp_x       = Center->x() + temp_radius * cos(temp_angle_1) * cos(temp_angle_2);
 		temp_y       = Center->y() + temp_radius * cos(temp_angle_1) * sin(temp_angle_2);
 		temp_z       = Center->z() + temp_radius * sin(temp_angle_1);
-		dos.SetPosition(aries::Vector3df(temp_x, temp_y, temp_z));
+		dos.SetPosition(vedo::Vector3df(temp_x, temp_y, temp_z));
 		oWorld->AddDOStatus(new vedo::DOStatus(dos));
 	}
 }
@@ -1127,7 +1127,7 @@ std::map<std::string, vedo::_float_t> CalculateGranularTemperature
 	(vedo::DOWorld* oWorld, vedo::GeometricShape& space, std::string DOName)
 {
 	const vedo::DOStatus* pDOS;
-	aries::Vector3df AvgV, AvgAV;
+	vedo::Vector3df AvgV, AvgAV;
 	vedo::_uint_t Counter = 0;
 
 	oWorld->TurnMonitor(false);
@@ -1193,7 +1193,7 @@ void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld)
 	//vedo::_uint_t rNum = rWorld->GetSystemParameter()->GetDONumber();
 	vedo::_uint_t oNum = oWorld->GetSystemParameter()->GetDONumber();
 	vedo::DOStatus dos
-		("NoName", aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+		("NoName", vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 	for (vedo::_uint_t ul=0; ul<oNum; ul++)
 	{
 		dos = *(oWorld->GetDOStatus(ul));
@@ -1215,7 +1215,7 @@ void CombineModels
 	//vedo::_uint_t rNum = rWorld->GetSystemParameter()->GetDONumber();
 	vedo::_uint_t oNum = oWorld->GetSystemParameter()->GetDONumber();
 	vedo::DOStatus dos
-		("NoName", aries::Vector3df(), aries::Vector3df(), aries::Vector3df(1.0, 0.0, 0.0), aries::Vector3df(0.0, 0.0, 1.0), aries::Vector3df(), aries::Vector3df(), aries::Vector3df());
+		("NoName", vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df(1.0, 0.0, 0.0), vedo::Vector3df(0.0, 0.0, 1.0), vedo::Vector3df(), vedo::Vector3df(), vedo::Vector3df());
 		vedo::_uint_t ulCounter = 0;
 	for (vedo::_uint_t ul=0; ul<oNum; ul++)
 	{
@@ -1236,13 +1236,13 @@ void CombineModels(vedo::DOWorld* rWorld, vedo::DOWorld* oWorld, const std::stri
 	vedo::_uint_t oNum = oWorld->GetSystemParameter()->GetDONumber();
 	vedo::DOStatus dos
 		("NoName",
-		aries::Vector3df(),
-		aries::Vector3df(),
-		aries::Vector3df(1.0, 0.0, 0.0),
-		aries::Vector3df(0.0, 0.0, 1.0),
-		aries::Vector3df(),
-		aries::Vector3df(),
-		aries::Vector3df() );
+		vedo::Vector3df(),
+		vedo::Vector3df(),
+		vedo::Vector3df(1.0, 0.0, 0.0),
+		vedo::Vector3df(0.0, 0.0, 1.0),
+		vedo::Vector3df(),
+		vedo::Vector3df(),
+		vedo::Vector3df() );
 	for (vedo::_uint_t ul=0; ul<oNum; ul++)
 	{
 		dos = *(oWorld->GetDOStatus(ul));
@@ -1275,8 +1275,8 @@ int main(int argc, char* argv[])
 		ymax = aries::String2T<vedo::_float_t>(arg[6]);
 		zmin = aries::String2T<vedo::_float_t>(arg[7]);
 		zmax = aries::String2T<vedo::_float_t>(arg[8]);
-		aries::Vector3df LowerBoundary(xmin, ymin, zmin);
-		aries::Vector3df UpperBoundary(xmax, ymax, zmax);
+		vedo::Vector3df LowerBoundary(xmin, ymin, zmin);
+		vedo::Vector3df UpperBoundary(xmax, ymax, zmax);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
 		AddDOInSpaceBCC(&LowerBoundary, &UpperBoundary, DOName, oWorld);
@@ -1293,8 +1293,8 @@ int main(int argc, char* argv[])
 		ymax = aries::String2T<vedo::_float_t>(arg[6]);
 		zmin = aries::String2T<vedo::_float_t>(arg[7]);
 		zmax = aries::String2T<vedo::_float_t>(arg[8]);
-		aries::Vector3df LowerBoundary(xmin, ymin, zmin);
-		aries::Vector3df UpperBoundary(xmax, ymax, zmax);
+		vedo::Vector3df LowerBoundary(xmin, ymin, zmin);
+		vedo::Vector3df UpperBoundary(xmax, ymax, zmax);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
 		AddDOInSpaceFCC(&LowerBoundary, &UpperBoundary, DOName, oWorld);
@@ -1311,8 +1311,8 @@ int main(int argc, char* argv[])
 		ymax = aries::String2T<vedo::_float_t>(arg[6]);
 		zmin = aries::String2T<vedo::_float_t>(arg[7]);
 		zmax = aries::String2T<vedo::_float_t>(arg[8]);
-		aries::Vector3df LowerBoundary(xmin, ymin, zmin);
-		aries::Vector3df UpperBoundary(xmax, ymax, zmax);
+		vedo::Vector3df LowerBoundary(xmin, ymin, zmin);
+		vedo::Vector3df UpperBoundary(xmax, ymax, zmax);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
 		AddDOInSpaceSC(&LowerBoundary, &UpperBoundary, DOName, oWorld);
@@ -1328,7 +1328,7 @@ int main(int argc, char* argv[])
 		z = aries::String2T<vedo::_float_t>(arg[5]);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[6], pIactRecordTab);
-		aries::Vector3df SourcePoint(x, y, z);
+		vedo::Vector3df SourcePoint(x, y, z);
 		AddPotentialEnergy(&SourcePoint, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
@@ -1356,18 +1356,18 @@ int main(int argc, char* argv[])
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[10], pIactRecordTab);
 		vedo::DOStatus dos
 			(sDOName,
-			aries::Vector3df(),
-			aries::Vector3df(),
-			aries::Vector3df(0.0, 0.0, 1.0),
-			aries::Vector3df(1.0, 0.0, 0.0),
-			aries::Vector3df(),
-            aries::Vector3df(),
-            aries::Vector3df()              );
+			vedo::Vector3df(),
+			vedo::Vector3df(),
+			vedo::Vector3df(0.0, 0.0, 1.0),
+			vedo::Vector3df(1.0, 0.0, 0.0),
+			vedo::Vector3df(),
+            vedo::Vector3df(),
+            vedo::Vector3df()              );
 		vedo::_float_t dAngleRange = (dAngleEnded - dAngleStarted) * aries::math::_Degree2PI;
 		vedo::_float_t dAngleIncremental = dAngleRange / (vedo::_float_t)uElementNumber;
 		vedo::_float_t dAngle = dAngleStarted * aries::math::_Degree2PI;
 		vedo::_float_t dCosineAngle, dSineAngle;
-		aries::Vector3df vLocalX, vLocalZ, vRotatedLocalX, vRotatedLocalZ;
+		vedo::Vector3df vLocalX, vLocalZ, vRotatedLocalX, vRotatedLocalZ;
 
 		dInclinedAngle          = aries::String2T<vedo::_float_t>(arg[5]);
 		dRevolutionsPerTimeUnit = aries::String2T<vedo::_float_t>(arg[9]);
@@ -1379,8 +1379,8 @@ int main(int argc, char* argv[])
 				{
 					dCosineAngle = cos(dAngle);
 					dSineAngle   = sin(dAngle);
-					dos.SetPosition(aries::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
-					dos.SetOrientationZ(aries::Vector3df(dCosineAngle, dSineAngle, 0.0));
+					dos.SetPosition(vedo::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
+					dos.SetOrientationZ(vedo::Vector3df(dCosineAngle, dSineAngle, 0.0));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 					dAngle += dAngleIncremental;
 				}
@@ -1392,9 +1392,9 @@ int main(int argc, char* argv[])
 				{
 					dCosineAngle = cos(dAngle);
 					dSineAngle   = sin(dAngle);
-					dos.SetPosition(aries::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
-					dos.SetOrientationZ(aries::Vector3df(dCosineAngle, dSineAngle, 0.0));
-					dos.SetVelocity(-dEdgeVelocity * dos.GetOrientationZ().cross(aries::Vector3df(0.0, 0.0, 1.0)));
+					dos.SetPosition(vedo::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
+					dos.SetOrientationZ(vedo::Vector3df(dCosineAngle, dSineAngle, 0.0));
+					dos.SetVelocity(-dEdgeVelocity * dos.GetOrientationZ().cross(vedo::Vector3df(0.0, 0.0, 1.0)));
 					oWorld->AddDOStatus(new vedo::DOStatus(dos));
 					dAngle += dAngleIncremental;
 				}
@@ -1412,7 +1412,7 @@ int main(int argc, char* argv[])
 				{
 					dCosineAngle = cos(dAngle);
 					dSineAngle   = sin(dAngle);
-					dos.SetPosition(aries::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
+					dos.SetPosition(vedo::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
 					vLocalX.set
 						(dInclinedSineAngle   * dCosineAngle,
 						 dInclinedSineAngle   * dSineAngle  ,
@@ -1434,7 +1434,7 @@ int main(int argc, char* argv[])
 				{
 					dCosineAngle = cos(dAngle);
 					dSineAngle   = sin(dAngle);
-					dos.SetPosition(aries::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
+					dos.SetPosition(vedo::Vector3df(dR*dCosineAngle, dR*dSineAngle, dZ));
 					vLocalX.set
 						(dInclinedSineAngle   * dCosineAngle,
 						 dInclinedSineAngle   * dSineAngle  ,
@@ -1478,13 +1478,13 @@ int main(int argc, char* argv[])
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[18], pIactRecordTab);
 		vedo::DOStatus dos
 			(sDOName,
-			aries::Vector3df(dPx , dPy , dPz ),
-			aries::Vector3df(dVx , dVy , dVz ),
-			aries::Vector3df(dOxx, dOxy, dOxz).direction(),
-			aries::Vector3df(dOzx, dOzy, dOzz).direction(),
-			aries::Vector3df(dAVx, dAVy, dAVz),
-            aries::Vector3df(),
-            aries::Vector3df());
+			vedo::Vector3df(dPx , dPy , dPz ),
+			vedo::Vector3df(dVx , dVy , dVz ),
+			vedo::Vector3df(dOxx, dOxy, dOxz).direction(),
+			vedo::Vector3df(dOzx, dOzy, dOzz).direction(),
+			vedo::Vector3df(dAVx, dAVy, dAVz),
+            vedo::Vector3df(),
+            vedo::Vector3df());
 		oWorld->AddDOStatus(new vedo::DOStatus(dos));
 		delete WriteDOWorld (arg[19], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
@@ -1498,7 +1498,7 @@ int main(int argc, char* argv[])
 		dVz = aries::String2T<vedo::_float_t>(arg[5]);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[6], pIactRecordTab);
-		aries::Vector3df vExternalVelocity(dVx, dVy, dVz);
+		vedo::Vector3df vExternalVelocity(dVx, dVy, dVz);
 		AddExternalVelocity(&vExternalVelocity, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
@@ -1512,7 +1512,7 @@ int main(int argc, char* argv[])
 		dAVz = aries::String2T<vedo::_float_t>(arg[5]);
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[6], pIactRecordTab);
-		aries::Vector3df vExternalAngularVelocity(dAVx, dAVy, dAVz);
+		vedo::Vector3df vExternalAngularVelocity(dAVx, dAVy, dAVz);
 		AddExternalAngularVelocity(&vExternalAngularVelocity, DOName, oWorld);
 		delete WriteDOWorld (arg[7], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
@@ -1529,8 +1529,8 @@ int main(int argc, char* argv[])
 		ymax = aries::String2T<vedo::_float_t>(arg[7]);
 		zmin = aries::String2T<vedo::_float_t>(arg[8]);
 		zmax = aries::String2T<vedo::_float_t>(arg[9]);
-		aries::Vector3df LowerBoundary(xmin, ymin, zmin);
-		aries::Vector3df UpperBoundary(xmax, ymax, zmax);
+		vedo::Vector3df LowerBoundary(xmin, ymin, zmin);
+		vedo::Vector3df UpperBoundary(xmax, ymax, zmax);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[10], pIactRecordTab);
 		AddRandomDOInCartesianSpace(&LowerBoundary, &UpperBoundary, DOName, &num, oWorld);
@@ -1548,7 +1548,7 @@ int main(int argc, char* argv[])
 		z   = aries::String2T<vedo::_float_t>(arg[6]);
 		r   = aries::String2T<vedo::_float_t>(arg[7]);
 		h   = aries::String2T<vedo::_float_t>(arg[8]);
-		aries::Vector3df Center(x, y, z);
+		vedo::Vector3df Center(x, y, z);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9], pIactRecordTab);
 		AddRandomDOInCylindricalSpace(&Center, &r, &h, DOName, &num, oWorld);
@@ -1565,7 +1565,7 @@ int main(int argc, char* argv[])
 		y   = aries::String2T<vedo::_float_t>(arg[5]);
 		z   = aries::String2T<vedo::_float_t>(arg[6]);
 		r   = aries::String2T<vedo::_float_t>(arg[7]);
-		aries::Vector3df Center(x, y, z);
+		vedo::Vector3df Center(x, y, z);
 		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[8], pIactRecordTab);
 		AddRandomDOInSphericalSpace(&Center, &r, DOName, &num, oWorld);
@@ -1592,8 +1592,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 		const vedo::DOStatus* pDOS;
@@ -1659,18 +1659,18 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the average information
 		vedo::_float_t dTotalVolume = 0.0;
 		std::vector<vedo::_float_t> vVolume;
 		vedo::_float_t dTotalMass   = 0.0;
-		aries::Vector3df vMassCenter, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vMassCenter, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
 		std::ofstream FileSphericalElementVolume;
 		FileSphericalElementVolume.open("SphericalElementVolume.csv", std::ios::out);
@@ -1682,7 +1682,7 @@ int main(int argc, char* argv[])
 			<< "Radius, InsideVolume, "
 			<< "MassCenterX, MassCenterY, MassCenterZ"
 			<< std::endl;
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -1690,7 +1690,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvVolume
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvVolume
 				 = dom
 				 	->VolumeInsideBoundary(pDOS->GetPosition(), &BC, dMeshSize);
 			if ((dom->GetShapeType() == vedo::Sphere) && (pdvVolume.first != 0.0))
@@ -1752,7 +1752,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dTotalVolume * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dTotalVolume * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vVolume.size(); ul++)
 			{
 				vVTemp1
@@ -1890,8 +1890,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
 		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
@@ -1961,18 +1961,18 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the average information
 		vedo::_float_t dTotalVolume = 0.0;
 		std::vector<vedo::_float_t> vVolume;
 		vedo::_float_t dTotalMass   = 0.0;
-		aries::Vector3df vMassCenter, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vMassCenter, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
 		std::ofstream FileSphericalElementVolume;
 		FileSphericalElementVolume.open("SphericalElementVolume.csv", std::ios::out);
@@ -1984,7 +1984,7 @@ int main(int argc, char* argv[])
 			<< "Radius, InsideVolume, "
 			<< "MassCenterX, MassCenterY, MassCenterZ"
 			<< std::endl;
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -1993,7 +1993,7 @@ int main(int argc, char* argv[])
 			pDOS         = oWorld->GetDOStatus(ul);
 			pDOSNextStep = oWorldNextStep->GetDOStatus(ul);
 			dom          = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvVolume
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvVolume
 				 = dom
 				 	->VolumeInsideBoundary(pDOS->GetPosition(), &BC, dMeshSize);
 			if ((dom->GetShapeType() == vedo::Sphere) && (pdvVolume.first != 0.0))
@@ -2063,7 +2063,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dTotalVolume * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dTotalVolume * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vVolume.size(); ul++)
 			{
 				vVTemp1
@@ -2201,8 +2201,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 
@@ -2269,20 +2269,20 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		vedo::_float_t dProjectedArea = 0.0;
 		std::vector<vedo::_float_t> vProjectedArea;
-		aries::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
 		vedo::_float_t dTotalWeighting = 0.0;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -2290,7 +2290,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvProjectedArea
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2338,7 +2338,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -2471,8 +2471,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
 		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
@@ -2543,20 +2543,20 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		vedo::_float_t dProjectedArea = 0.0;
 		std::vector<vedo::_float_t> vProjectedArea;
-		aries::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
 		vedo::_float_t dTotalWeighting = 0.0;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -2571,7 +2571,7 @@ int main(int argc, char* argv[])
 //				&& pDOS->GetPosition().z() < BC.GetUpperPoint().z() )
 //			{
 
-			std::pair<vedo::_float_t, aries::Vector3df> pdvProjectedArea
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2622,7 +2622,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -2755,8 +2755,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 
@@ -2823,20 +2823,20 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		vedo::_float_t dProjectedArea = 0.0;
 		std::vector<vedo::_float_t> vProjectedArea;
-		aries::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
 		vedo::_float_t dTotalWeighting = 0.0;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -2844,7 +2844,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvProjectedArea
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -2890,7 +2890,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -3023,8 +3023,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
 		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
@@ -3095,20 +3095,20 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		vedo::_float_t dProjectedArea = 0.0;
 		std::vector<vedo::_float_t> vProjectedArea;
-		aries::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
 		vedo::_float_t dTotalWeighting = 0.0;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -3117,7 +3117,7 @@ int main(int argc, char* argv[])
 			pDOS = oWorld->GetDOStatus(ul);
 			pDOSNextStep = oWorldNextStep->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvProjectedArea
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -3165,7 +3165,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -3298,8 +3298,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[9]);
 
@@ -3366,20 +3366,20 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		vedo::_float_t dProjectedArea = 0.0;
 		std::vector<vedo::_float_t> vProjectedArea;
-		aries::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
 		vedo::_float_t dTotalWeighting = 0.0;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -3387,7 +3387,7 @@ int main(int argc, char* argv[])
 		{
 			pDOS = oWorld->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvProjectedArea
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -3433,7 +3433,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -3566,8 +3566,8 @@ int main(int argc, char* argv[])
 		dZMin = aries::String2T<vedo::_float_t>(arg[6]);
 		dZMax = aries::String2T<vedo::_float_t>(arg[7]);
 		vedo::Boundary OriginalBC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 		dMeshSize = aries::String2T<vedo::_float_t>(arg[8]);
 		vedo::DOWorld* oWorld         = ReadDOWorld(arg[9]);
 		vedo::DOWorld* oWorldNextStep = ReadDOWorld(arg[10]);
@@ -3638,20 +3638,20 @@ int main(int argc, char* argv[])
 		if (dZMin < dNewZMin) dZMin = dNewZMin;
 		if (dZMax > dNewZMax) dZMax = dNewZMax;
 		vedo::Boundary BC
-			(aries::Vector3df(dXMin, dYMin, dZMin),
-			 aries::Vector3df(dXMax, dYMax, dZMax) );
+			(vedo::Vector3df(dXMin, dYMin, dZMin),
+			 vedo::Vector3df(dXMax, dYMax, dZMax) );
 
 		// Calculate the projected information
 		vedo::_float_t dProjectedArea = 0.0;
 		std::vector<vedo::_float_t> vProjectedArea;
-		aries::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
+		vedo::Vector3df vCentroid, vAverageVelocity, vAverageAngularVelocity;
 
 		const  vedo::DOModel* dom = 0;
 		vedo::_float_t dWeighting;
 		vedo::_float_t dTotalWeighting = 0.0;
-		std::vector<aries::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
+		std::vector<vedo::Vector3df> vvAverageVelocity, vvAverageAngularVelocity;
 
-		aries::Vector3df vTempVelocity, vTempAngularVelocity;
+		vedo::Vector3df vTempVelocity, vTempAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -3660,7 +3660,7 @@ int main(int argc, char* argv[])
 			pDOS = oWorld->GetDOStatus(ul);
 			pDOSNextStep = oWorldNextStep->GetDOStatus(ul);
 			dom  = oWorld->GetDOModel(pDOS->GetDOName());
-			std::pair<vedo::_float_t, aries::Vector3df> pdvProjectedArea
+			std::pair<vedo::_float_t, vedo::Vector3df> pdvProjectedArea
 				 = dom
 				 	->ProjectedAreaOnXYPlane
 				 		(pDOS->GetPosition(), &BC, dMeshSize);
@@ -3708,7 +3708,7 @@ int main(int argc, char* argv[])
 		{
 			vAverageVelocity        = 1.0 / dProjectedArea * vAverageVelocity;
 			vAverageAngularVelocity = 1.0 / dProjectedArea * vAverageAngularVelocity;
-			aries::Vector3df vVTemp1, vVTemp2;
+			vedo::Vector3df vVTemp1, vVTemp2;
 			for (vedo::_uint_t ul=0; ul<vProjectedArea.size(); ul++)
 			{
 				vVTemp1
@@ -3887,7 +3887,7 @@ int main(int argc, char* argv[])
 		vedo::_uint_t    counter       = 0;
 		vedo::_float_t      dArea         = 0.0;
 		vedo::_float_t      dAreaTemp;
-		aries::Vector3df vFluxVelocity, vFluxAngularVelocity;
+		vedo::Vector3df vFluxVelocity, vFluxAngularVelocity;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<oWorld->GetSystemParameter()->GetDONumber();
@@ -4047,7 +4047,7 @@ int main(int argc, char* argv[])
 		dX = aries::String2T<vedo::_float_t>(arg[2]);
 		dY = aries::String2T<vedo::_float_t>(arg[3]);
 		dZ = aries::String2T<vedo::_float_t>(arg[4]);
-		aries::Vector3df vP(dX, dY, dZ);
+		vedo::Vector3df vP(dX, dY, dZ);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[5]);
 		std::map<vedo::_float_t, vedo::_uint_t> mduDistance;
 
@@ -4078,9 +4078,9 @@ int main(int argc, char* argv[])
 		vedo::_float_t dX, dY;
 		dX = aries::String2T<vedo::_float_t>(arg[2]);
 		dY = aries::String2T<vedo::_float_t>(arg[3]);
-		aries::Vector3df vP(dX, dY, 0.0);
+		vedo::Vector3df vP(dX, dY, 0.0);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[4]);
-		aries::Vector3df vD;
+		vedo::Vector3df vD;
 		std::map<vedo::_float_t, vedo::_uint_t> mduDistance;
 
 		for (vedo::_uint_t u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
@@ -4114,9 +4114,9 @@ int main(int argc, char* argv[])
 		vedo::_float_t dY, dZ;
 		dY = aries::String2T<vedo::_float_t>(arg[2]);
 		dZ = aries::String2T<vedo::_float_t>(arg[3]);
-		aries::Vector3df vP(0.0, dY, dZ);
+		vedo::Vector3df vP(0.0, dY, dZ);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[4]);
-		aries::Vector3df vD;
+		vedo::Vector3df vD;
 		std::map<vedo::_float_t, vedo::_uint_t> mduDistance;
 
 		for (vedo::_uint_t u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
@@ -4150,9 +4150,9 @@ int main(int argc, char* argv[])
 		vedo::_float_t dX, dZ;
 		dX = aries::String2T<vedo::_float_t>(arg[2]);
 		dZ = aries::String2T<vedo::_float_t>(arg[3]);
-		aries::Vector3df vP(dX, 0.0, dZ);
+		vedo::Vector3df vP(dX, 0.0, dZ);
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[4]);
-		aries::Vector3df vD;
+		vedo::Vector3df vD;
 		std::map<vedo::_float_t, vedo::_uint_t> mduDistance;
 
 		for (vedo::_uint_t u=0; u<oWorld->GetSystemParameter()->GetDONumber(); u++)
@@ -4223,9 +4223,9 @@ int main(int argc, char* argv[])
 		oWorld
 			->SetBoundary
 			(vedo::Boundary
-				(aries::Vector3df(dXMin, dYMin, dZMin),
-				 aries::Vector3df(dXMax, dYMax, dZMax) ));
-		std::pair<aries::Vector3df, aries::Vector3df> pDistribution
+				(vedo::Vector3df(dXMin, dYMin, dZMin),
+				 vedo::Vector3df(dXMax, dYMax, dZMax) ));
+		std::pair<vedo::Vector3df, vedo::Vector3df> pDistribution
 			= oWorld->Distribution(dMeshSize);
  		std::ofstream FileDistribution;
 		FileDistribution.open("Distribution.csv", std::ios::out);
@@ -4285,7 +4285,7 @@ int main(int argc, char* argv[])
 			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
 		std::vector<vedo::_uint_t> ulIDList;
 		const vedo::DOStatus* dosp;
-		aries::Vector3df vPosition;
+		vedo::Vector3df vPosition;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<(pWorld->GetSystemParameter()->GetDONumber());
@@ -4316,7 +4316,7 @@ int main(int argc, char* argv[])
 			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
 		std::vector<vedo::_uint_t> ulIDList;
 		const vedo::DOStatus* dosp;
-		aries::Vector3df vPosition;
+		vedo::Vector3df vPosition;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<(pWorld->GetSystemParameter()->GetDONumber());
@@ -4350,7 +4350,7 @@ int main(int argc, char* argv[])
 			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
 		std::vector<vedo::_uint_t> ulIDList;
 		const vedo::DOStatus* dosp;
-		aries::Vector3df vPosition;
+		vedo::Vector3df vPosition;
 		for
 			(vedo::_uint_t ul=0;
 			 ul<(pWorld->GetSystemParameter()->GetDONumber());
@@ -4458,7 +4458,7 @@ int main(int argc, char* argv[])
 		{
 			StartNumber++;
 		}
-		aries::Vector3df PTemp(oWorld->GetDOStatus(StartNumber)->GetPosition());
+		vedo::Vector3df PTemp(oWorld->GetDOStatus(StartNumber)->GetPosition());
 		vedo::_float_t XMin = PTemp.x();
 		vedo::_float_t YMin = PTemp.y();
 		vedo::_float_t ZMin = PTemp.z();
@@ -4549,11 +4549,11 @@ int main(int argc, char* argv[])
 					space.SetStatus
 						(new vedo::DOStatus
 							("No Name",
-							 aries::Vector3df(x, y, z),
-							 aries::Vector3df(),
-							 aries::Vector3df(1.0, 0.0, 0.0),
-							 aries::Vector3df(0.0, 0.0, 1.0),
-							 aries::Vector3df()    ));
+							 vedo::Vector3df(x, y, z),
+							 vedo::Vector3df(),
+							 vedo::Vector3df(1.0, 0.0, 0.0),
+							 vedo::Vector3df(0.0, 0.0, 1.0),
+							 vedo::Vector3df()    ));
 					gt = CalculateGranularTemperature(oWorld, space, DOName);
 					FileGT
 						<< "Zone-"
@@ -4596,13 +4596,13 @@ int main(int argc, char* argv[])
 		space.SetStatus
 			(new vedo::DOStatus
 				("No Name",
-				 aries::Vector3df(x, y, z),
-				 aries::Vector3df(),
-				 aries::Vector3df(Xx, Xy, Xz),
-				 aries::Vector3df(Zx, Zy, Zz),
-				 aries::Vector3df(),
-				 aries::Vector3df(),
-				 aries::Vector3df()           ));
+				 vedo::Vector3df(x, y, z),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(Xx, Xy, Xz),
+				 vedo::Vector3df(Zx, Zy, Zz),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(),
+				 vedo::Vector3df()           ));
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[15]);
 		std::map<std::string, vedo::_float_t> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
@@ -4643,13 +4643,13 @@ int main(int argc, char* argv[])
 		space.SetStatus
 			(new vedo::DOStatus
 				("No Name",
-				 aries::Vector3df(x, y, z),
-				 aries::Vector3df(),
-				 aries::Vector3df(Xx, Xy, Xz),
-				 aries::Vector3df(Zx, Zy, Zz),
-				 aries::Vector3df(),
-				 aries::Vector3df(),
-				 aries::Vector3df()           ));
+				 vedo::Vector3df(x, y, z),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(Xx, Xy, Xz),
+				 vedo::Vector3df(Zx, Zy, Zz),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(),
+				 vedo::Vector3df()           ));
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[14]);
 		std::map<std::string, vedo::_float_t> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
@@ -4683,13 +4683,13 @@ int main(int argc, char* argv[])
 		space.SetStatus
 			(new vedo::DOStatus
 				("No Name",
-				 aries::Vector3df(x, y, z),
-				 aries::Vector3df(),
-				 aries::Vector3df(1.0, 0.0, 0.0),
-				 aries::Vector3df(0.0, 0.0, 1.0),
-				 aries::Vector3df(),
-				 aries::Vector3df(),
-				 aries::Vector3df()              ));
+				 vedo::Vector3df(x, y, z),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(1.0, 0.0, 0.0),
+				 vedo::Vector3df(0.0, 0.0, 1.0),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(),
+				 vedo::Vector3df()              ));
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[7]);
 		std::map<std::string, vedo::_float_t> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
@@ -4732,13 +4732,13 @@ int main(int argc, char* argv[])
 		space.SetStatus
 			(new vedo::DOStatus
 				("No Name",
-				 aries::Vector3df(x, y, z),
-				 aries::Vector3df(),
-				 aries::Vector3df(Xx, Xy, Xz),
-				 aries::Vector3df(Zx, Zy, Zz),
-				 aries::Vector3df(),
-				 aries::Vector3df(),
-				 aries::Vector3df()           ));
+				 vedo::Vector3df(x, y, z),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(Xx, Xy, Xz),
+				 vedo::Vector3df(Zx, Zy, Zz),
+				 vedo::Vector3df(),
+				 vedo::Vector3df(),
+				 vedo::Vector3df()           ));
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[15]);
 		std::map<std::string, vedo::_float_t> gt
 			= CalculateGranularTemperature(oWorld, space, DOName);
@@ -4780,7 +4780,7 @@ int main(int argc, char* argv[])
 
 		const vedo::DOStatus* pDOS;
 		vedo::_float_t dRadius;
-		aries::Vector3df vPosition;
+		vedo::Vector3df vPosition;
 		std::ofstream oFileElementInside;
 		oFileElementInside.open("ElementInside.txt", std::ios::out);
 
@@ -4840,7 +4840,7 @@ int main(int argc, char* argv[])
 		init.Create(DOName, oWorld);
 		oWorld
 			->Shift
-				(aries::Vector3df
+				(vedo::Vector3df
 					(rectCenter[0]-0.5*d,
 					 rectCenter[1]-0.5*d,
 					 rectCenter[2]-0.5*d), DOName);
@@ -4869,7 +4869,7 @@ int main(int argc, char* argv[])
 		init.Create(DOName, oWorld);
 		oWorld
 			->Shift
-				(aries::Vector3df
+				(vedo::Vector3df
 					(rectCenter[0]-0.5*d,
 					 rectCenter[1]-0.5*d,
 					 rectCenter[2]-0.5*d), DOName);
@@ -4898,7 +4898,7 @@ int main(int argc, char* argv[])
 		init.Create(DOName, oWorld);
 		oWorld
 			->Shift
-				(aries::Vector3df
+				(vedo::Vector3df
 					(rectCenter[0]-0.5*d,
 					 rectCenter[1]-0.5*d,
 					 rectCenter[2]-0.5*d), DOName);
@@ -5025,11 +5025,11 @@ int main(int argc, char* argv[])
 		const vedo::DOStatus* dosp = oWorld->GetDOStatus(uID);
 		vedo::DOStatus dos
 			(oWorld->GetDOName(uID),
-			aries::Vector3df(dPx , dPy , dPz ),
-			aries::Vector3df(dVx , dVy , dVz ),
-			aries::Vector3df(dOxx, dOxy, dOxz).direction(),
-			aries::Vector3df(dOzx, dOzy, dOzz).direction(),
-			aries::Vector3df(dAVx, dAVy, dAVz),
+			vedo::Vector3df(dPx , dPy , dPz ),
+			vedo::Vector3df(dVx , dVy , dVz ),
+			vedo::Vector3df(dOxx, dOxy, dOxz).direction(),
+			vedo::Vector3df(dOzx, dOzy, dOzz).direction(),
+			vedo::Vector3df(dAVx, dAVy, dAVz),
             dosp->GetImpact(),
             dosp->GetAngularImpact()                    );
 		oWorld->SetDOStatus(uID, dos);
@@ -5053,8 +5053,8 @@ int main(int argc, char* argv[])
 		oWorld
 			->SetDOStatusVelocityAndAngularVelocity
 				(uID,
-				 aries::Vector3df(dVx , dVy , dVz),
-				 aries::Vector3df(dAVx , dAVy , dAVz));
+				 vedo::Vector3df(dVx , dVy , dVz),
+				 vedo::Vector3df(dAVx , dAVy , dAVz));
 		delete WriteDOWorld(arg[10], oWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
@@ -5084,7 +5084,7 @@ int main(int argc, char* argv[])
 		z = aries::String2T<vedo::_float_t>(arg[5]);
         // We have noe deal with interactions. At here, we clear all of them.
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[6]);
-		oWorld->Shift(aries::Vector3df(x, y, z), DOName);
+		oWorld->Shift(vedo::Vector3df(x, y, z), DOName);
 		delete WriteDOWorld (arg[7], oWorld);
 	}
 	else if ((arg[1] == "-shift_all_elements") && (arg.size() == 7))
@@ -5095,7 +5095,7 @@ int main(int argc, char* argv[])
 		z = aries::String2T<vedo::_float_t>(arg[4]);
         vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[5], pIactRecordTab);
-		oWorld->Shift(aries::Vector3df(x, y, z));
+		oWorld->Shift(vedo::Vector3df(x, y, z));
 		delete WriteDOWorld (arg[6], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
@@ -5113,7 +5113,7 @@ int main(int argc, char* argv[])
 		dX = aries::String2T<vedo::_float_t>(arg[2]);
 		dY = aries::String2T<vedo::_float_t>(arg[3]);
 		dZ = aries::String2T<vedo::_float_t>(arg[4]);
-		aries::Vector3df vP(dX, dY, dZ);
+		vedo::Vector3df vP(dX, dY, dZ);
 	    // We have not deal with the interactions. At here, we clear all of them.
 		vedo::DOWorld* oWorld = ReadDOWorld(arg[5]);
 
@@ -5173,7 +5173,7 @@ int main(int argc, char* argv[])
 			<< "ID, Px, Py, Pz, Xx, Xy, Xz, Zx, Zy, Zz, Vx, Vy, Vz, AVx, AVy, AVz"
 			<< std::endl;
 		const vedo::DOStatus* dosp;
-		aries::Vector3df
+		vedo::Vector3df
 			vPosition, vOrientationX, vOrientationZ, vVelocity, vAngularVelocity;
 		for (vedo::_uint_t uID=0; uID<oWorld->GetSystemParameter()->GetDONumber(); uID++)
 		{

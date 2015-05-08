@@ -7,33 +7,33 @@
 namespace njr
 {
 
-_float_t Distance(const aries::Vector3df& v, const njr::HalfSpace& hf)
+_float_t Distance(const Vector3df& v, const njr::HalfSpace& hf)
 {
 	return Distance(hf, v);
 }
 
-_float_t Distance(const njr::HalfSpace& hf, const aries::Vector3df& v)
+_float_t Distance(const njr::HalfSpace& hf, const Vector3df& v)
 {
 	return fabs(hf.a()*v.x() + hf.b()*v.y() + hf.c()*v.z() - hf.d()) / sqrt(hf.a()*hf.a() + hf.b()*hf.b() + hf.c()*hf.c());
 }
 
-_float_t Volume(const njr::NJRpolygon& bottom, const aries::Vector3df& vertex)
+_float_t Volume(const njr::NJRpolygon& bottom, const Vector3df& vertex)
 {
 	if ((bottom.vertexes().size()) < 3)
 	{
 		return 0;
 	}
 
-	std::vector<aries::Vector3df> vertexes = bottom.vertexes();
+	std::vector<Vector3df> vertexes = bottom.vertexes();
 
-	aries::Vector3df n = (vertexes[1]-vertexes[0]).cross((vertexes[2]-vertexes[0]));
+	Vector3df n = (vertexes[1]-vertexes[0]).cross((vertexes[2]-vertexes[0]));
 
 	_float_t d = Distance(njr::HalfSpace(n.x(), n.y(), n.z(), E, n.dot(vertexes[0])), vertex);
 
 	return d*bottom.area()/3.0;
 }
 
-_float_t Volume(const njr::NJRpolygon& bottom, const aries::Vector3df& vertex, aries::Vector3df& MassCenter)
+_float_t Volume(const njr::NJRpolygon& bottom, const Vector3df& vertex, Vector3df& MassCenter)
 {
 
 	if ((bottom.vertexes().size()) < 3)
@@ -41,11 +41,11 @@ _float_t Volume(const njr::NJRpolygon& bottom, const aries::Vector3df& vertex, a
 		return 0;
 	}
 
-	aries::Vector3df center = bottom.center();
+	Vector3df center = bottom.center();
 
-	std::vector<aries::Vector3df> vertexes = bottom.vertexes();
+	std::vector<Vector3df> vertexes = bottom.vertexes();
 
-	aries::Vector3df mr;
+	Vector3df mr;
 
 	_float_t tm = 0;
 
@@ -73,11 +73,11 @@ _float_t Volume(const njr::NJRpolyhedra& poly)
 	return dVolume;
 }
 
-_float_t Volume(const njr::NJRpolyhedra& poly, aries::Vector3df& MassCenter)
+_float_t Volume(const njr::NJRpolyhedra& poly, Vector3df& MassCenter)
 {
 	std::vector<njr::NJRpolygon> faces = poly.faces();
 	_float_t dVolume = 0;
-	aries::Vector3df center, mr;
+	Vector3df center, mr;
 	for (_uint_t i=1; i<faces.size(); ++i)
 	{
 		_float_t vol = Volume(faces[i], faces[0].center(), center);
@@ -94,15 +94,15 @@ class maxCR
 {
 private:
 
-	const aries::Vector3df center;
+	const Vector3df center;
 
 public:
 
-	explicit maxCR(const aries::Vector3df& c): center (c)
+	explicit maxCR(const Vector3df& c): center (c)
 	{
 	}
 
-	bool operator() (const aries::Vector3df& a, const aries::Vector3df& b)
+	bool operator() (const Vector3df& a, const Vector3df& b)
 	{
 		return (((a-center).length()) < ((b-center).length()));
 	}
@@ -114,9 +114,9 @@ _float_t CoverRadius(const njr::NJRpolyhedra& p)
 {
 
 	std::vector<njr::NJRpolygon> faces = p.faces();
-	std::vector<aries::Vector3df> vertexes;
+	std::vector<Vector3df> vertexes;
 	std::vector<_float_t> MR(faces.size());
-	aries::Vector3df center = p.center();
+	Vector3df center = p.center();
 
 	for (_uint_t i=0; i<faces.size(); ++i)
 	{
@@ -126,7 +126,7 @@ _float_t CoverRadius(const njr::NJRpolyhedra& p)
 	return *( max_element(MR.begin(), MR.end() ) );
 }
 
-aries::Vector3df InertiaTensor(const njr::NJRpolyhedra& p)
+Vector3df InertiaTensor(const njr::NJRpolyhedra& p)
 {
 	njr::LinearProgramming lp;
 	njr::NJRpolyhedra a,b;
@@ -147,11 +147,11 @@ aries::Vector3df InertiaTensor(const njr::NJRpolyhedra& p)
 
 	if ((lp.GetExtremeValue(Ux, Lx, Uy, Ly, Uz, Lz)) == false)
 	{
-		return aries::Vector3df();
+		return Vector3df();
 	}
 
 	_float_t dVolume;
-	aries::Vector3df MassCenter;
+	Vector3df MassCenter;
 	_float_t Ix=0.0, Iy=0.0, Iz=0.0;
 
 	a = p;
@@ -178,7 +178,7 @@ aries::Vector3df InertiaTensor(const njr::NJRpolyhedra& p)
 				b.AddConstrain(njr::HalfSpace(0, 0, 1, G, z));
 				b.AddConstrain(njr::HalfSpace(0, 0, 1, L, z+Rz));
 
-				b.SetCenter(aries::Vector3df(x+0.5*Rx, y+0.5*Ry, z+0.5*Rz));
+				b.SetCenter(Vector3df(x+0.5*Rx, y+0.5*Ry, z+0.5*Rz));
 
 				dVolume = Volume(b,MassCenter);
 
@@ -192,7 +192,7 @@ aries::Vector3df InertiaTensor(const njr::NJRpolyhedra& p)
 		}
 	}
 
-	return aries::Vector3df(Iy+Iz, Ix+Iz, Ix+Iy);
+	return Vector3df(Iy+Iz, Ix+Iz, Ix+Iy);
 }
 
 }   // namespace njr

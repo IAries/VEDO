@@ -261,7 +261,7 @@ void SimMediator::ShowInteraction()
 	const Interaction*  iap = 0;
 	const ContactInfo*  cip = 0;
 	const ImpactStatus* isp = 0;
-	aries::Vector3df
+	Vector3df
 		vImpactMaster, vImpactSlave, vAngularImpactMaster, vAngularImpactSlave;
 	const _float_t* cdpudv;
 
@@ -476,7 +476,7 @@ void SimMediator::ShowInteraction()
 
 	const DiscreteObject* dop = 0;
 	const DOStatus*       dos = 0;
-	aries::Vector3df
+	Vector3df
 		vPosition, vVelocity, vAngularVelocity,
 		vOrientationX, vOrientationZ,
 		vImpact, vAngularImpact;
@@ -567,7 +567,7 @@ void SimMediator::ShowInteraction()
 */
 
 void SimMediator::WriteInteractionForce
-	(const char* filename, const std::vector<std::pair<aries::Vector3df, aries::Vector3df> >* vvExternalImpact)
+	(const char* filename, const std::vector<std::pair<Vector3df, Vector3df> >* vvExternalImpact)
 {
 	const SystemParameter* csp = pConsultant->GetDOWorld()->GetSystemParameter();
 	const _float_t     dt  = csp->GetTimeInterval();
@@ -588,10 +588,10 @@ void SimMediator::WriteInteractionForce
 			continue;
 		}
 
-		aries::Vector3df iactForce  = dop->GetImpact() * (1.0/dt);
-		aries::Vector3df fieldForce = csp->GetFieldAcceleration();
-		aries::Vector3df extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : aries::Vector3df();
-		aries::Vector3df totalForce = iactForce + fieldForce + extForce;
+		Vector3df iactForce  = dop->GetImpact() * (1.0/dt);
+		Vector3df fieldForce = csp->GetFieldAcceleration();
+		Vector3df extForce   = vvExternalImpact ? (*vvExternalImpact)[pConsultant->GetDO(ul)].first * (1./dt) : Vector3df();
+		Vector3df totalForce = iactForce + fieldForce + extForce;
 
 		iactForce_vec.push_back(iactForce.x());
 		iactForce_vec.push_back(iactForce.y());
@@ -619,6 +619,21 @@ void SimMediator::WriteInteractionForce
             pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
         }
     #endif   // _STD_CPP_11
+}
+
+void SimMediator::SetDOStatus(const _uint_t& odo, const DOStatus& dos)
+{
+	if (odo < cDO.size())
+	{
+		cDO.SetDOStatus(odo, dos);
+	}
+	else
+	{
+		std::cerr
+			<< "Error!! Code: void SimMediator::SetDOStatus(const _uint_t&, const DOStatus&)" << std::endl
+			<< "        Note: Element's ID wrong"                                             << std::endl;
+		exit(-1);
+	}
 }
 
 void SimMediator::Initiate()
@@ -825,7 +840,7 @@ bool SimMediator::Run()
 		 (pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop()   )   );
 }
 
-bool SimMediator::Run(const std::vector<std::pair<aries::Vector3df, aries::Vector3df> >& vvExternalImpact)
+bool SimMediator::Run(const std::vector<std::pair<Vector3df, Vector3df> >& vvExternalImpact)
 {
 	time(&starttime);
 
@@ -993,8 +1008,8 @@ bool SimMediator::ReDistribute()
 	// Freeze all elements
 	for (_uint_t ul=0; ul<cDO.size(); ul++)
 	{
-		cDO[ul]->SetVelocity(aries::Vector3df());
-		cDO[ul]->SetAngularVelocity(aries::Vector3df());
+		cDO[ul]->SetVelocity(Vector3df());
+		cDO[ul]->SetAngularVelocity(Vector3df());
 	}
 
 	// Check the number of contact pairs

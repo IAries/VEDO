@@ -19,8 +19,8 @@ BravaisLatticeWithBasis::BravaisLatticeWithBasis()
         for(vedo::_uint_t coord=0; coord<3; coord++)
             latticeVectors[vec][coord] = (vec==coord? 1. :0.);
 
-    std::vector<aries::Vector3df> atomsCoord;
-    atomsCoord.push_back(aries::Vector3df());
+    std::vector<vedo::Vector3df> atomsCoord;
+    atomsCoord.push_back(vedo::Vector3df());
     SetAtomsCoordinatesInCell(atomsCoord);
 }
 
@@ -419,7 +419,7 @@ void BravaisLatticeWithBasis::SetLatticeVectors
 }
 
 void BravaisLatticeWithBasis::SetAtomsCoordinatesInCell(
-                              std::vector<aries::Vector3df> atomsCoord,
+                              std::vector<vedo::Vector3df> atomsCoord,
                               std::vector<std::string> *pAtomTypes)
 {
     atomTypes.clear();
@@ -432,7 +432,7 @@ void BravaisLatticeWithBasis::SetAtomsCoordinatesInCell(
     }
 }
 
-void BravaisLatticeWithBasis::AddAtomInCell(aries::Vector3df atomCoord,
+void BravaisLatticeWithBasis::AddAtomInCell(vedo::Vector3df atomCoord,
                                             std::string name)
 {
     // make sure the atoms coordinates are between 0 and 1.
@@ -442,7 +442,7 @@ void BravaisLatticeWithBasis::AddAtomInCell(aries::Vector3df atomCoord,
     if(y < 0.) y += 1.;
     vedo::_float_t z = fmod(atomCoord.z(), 1.);
     if(z < 0.) z += 1.;
-    atomsCoordinatesInCell.push_back(aries::Vector3df(x,y,z));
+    atomsCoordinatesInCell.push_back(vedo::Vector3df(x,y,z));
     atomTypes.push_back(name);
     UpdateMemberVariables();
 }

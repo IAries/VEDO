@@ -7,7 +7,7 @@
 namespace njr
 {
 
-NJRpolyhedra::NJRpolyhedra(): _center(aries::Vector3df()), _constrains(0)
+NJRpolyhedra::NJRpolyhedra(): _center(Vector3df()), _constrains(0)
 {
 }
 
@@ -77,7 +77,7 @@ NJRpolyhedra& NJRpolyhedra::operator = (const NJRpolyhedra & poly3d)
 	return *this;
 }
 
-void NJRpolyhedra::Translate(const aries::Vector3df &dp)
+void NJRpolyhedra::Translate(const Vector3df &dp)
 {
 	register _uint_t i;
 
@@ -89,13 +89,13 @@ void NJRpolyhedra::Translate(const aries::Vector3df &dp)
 	_center += dp ;
 }
 
-NJRpolyhedra NJRpolyhedra::Mapping(const aries::Vector3df& center, const aries::Vector3df& vOX, const aries::Vector3df& vOZ) const
+NJRpolyhedra NJRpolyhedra::Mapping(const Vector3df& center, const Vector3df& vOX, const Vector3df& vOZ) const
 {
 	register _uint_t i;
-	aries::Vector3df LX = vOX.direction();
-    aries::Vector3df LZ = vOZ.direction();
-    aries::Vector3df LY = LZ.cross(LX);
-	aries::Vector3df g;
+	Vector3df LX = vOX.direction();
+    Vector3df LZ = vOZ.direction();
+    Vector3df LY = LZ.cross(LX);
+	Vector3df g;
 
 	NJRpolyhedra p(*this);
 
@@ -138,7 +138,7 @@ void NJRpolyhedra::Normalize()
 	for_each(_constrains.begin(), _constrains.end(), std::mem_fun_ref(&njr::HalfSpace::Normalize));
 }
 
-void NJRpolyhedra::RotateAround(const aries::Vector3df &dv)
+void NJRpolyhedra::RotateAround(const Vector3df &dv)
 {
 	register _uint_t i;
 
@@ -171,7 +171,7 @@ std::vector<NJRpolygon> NJRpolyhedra::faces() const
 	return faces;
 }
 
-void NJRpolyhedra::SetCubic(aries::Vector3df c, _float_t length)
+void NJRpolyhedra::SetCubic(Vector3df c, _float_t length)
 {
 	_center.set(0.0, 0.0, 0.0);
 	_constrains.clear();
@@ -194,7 +194,7 @@ void NJRpolyhedra::SetPlane
     _constrains.push_back(njr::HalfSpace(a, b, c, eqsense, d));
 }
 
-void NJRpolyhedra::SetRetangular(aries::Vector3df c, _float_t lx, _float_t ly, _float_t lz)
+void NJRpolyhedra::SetRetangular(Vector3df c, _float_t lx, _float_t ly, _float_t lz)
 {
 	_center.set(0.0, 0.0, 0.0);
 	_constrains.clear();
@@ -207,7 +207,7 @@ void NJRpolyhedra::SetRetangular(aries::Vector3df c, _float_t lx, _float_t ly, _
 	NJRpolyhedra::Translate(c);
 }
 
-void NJRpolyhedra::SetRandom(aries::Vector3df c, _uint_t n, _float_t radius)
+void NJRpolyhedra::SetRandom(Vector3df c, _uint_t n, _float_t radius)
 {
 	//_float_t scale = radius/1.732050807;
 	_center.set(0.0, 0.0, 0.0);
@@ -230,7 +230,7 @@ void NJRpolyhedra::SetRandom(aries::Vector3df c, _uint_t n, _float_t radius)
 		{
 			halfspace.Set (1.0, 0.0, 0.0, L, radius);
 			halfspace.RotateAround
-				(aries::Vector3df
+				(Vector3df
 					(random.GeneratingDouble(1.0, -1.0),
 					 random.GeneratingDouble(1.0, -1.0),
 					 random.GeneratingDouble(1.0, -1.0) ) );
@@ -239,7 +239,7 @@ void NJRpolyhedra::SetRandom(aries::Vector3df c, _uint_t n, _float_t radius)
 		{
 			halfspace.Set (1.0, 0.0, 0.0, G, -radius);
 			halfspace.RotateAround
-				(aries::Vector3df
+				(Vector3df
 					(random.GeneratingDouble(1.0, -1.0),
 					 random.GeneratingDouble(1.0, -1.0),
 					 random.GeneratingDouble(1.0, -1.0) ) );
@@ -250,7 +250,7 @@ void NJRpolyhedra::SetRandom(aries::Vector3df c, _uint_t n, _float_t radius)
 	NJRpolyhedra::Translate(c);
 }
 
-void NJRpolyhedra::SetIcosahedron(aries::Vector3df c, _float_t radius)
+void NJRpolyhedra::SetIcosahedron(Vector3df c, _float_t radius)
 {
 	_float_t scale;
 	scale = radius/11.18035;

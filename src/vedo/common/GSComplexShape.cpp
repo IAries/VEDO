@@ -4,7 +4,7 @@
 namespace vedo
 {
 
-bool GSComplexShape::Inside(const aries::Vector3df& p)
+bool GSComplexShape::Inside(const Vector3df& p)
 {
 	std::list<GeometricShape*>::iterator _lgsp;
 	for (_lgsp=_ListGS.begin(); _lgsp!=_ListGS.end(); _lgsp++)

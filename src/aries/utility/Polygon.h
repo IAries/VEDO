@@ -60,6 +60,13 @@ public:
 
 	void AddFaceVertexSN(const _uint_t& ui, const _uint_t& uj, const _uint_t& uk);
 
+	void CoordinateTransformation(const Vector3df& LocalX, const Vector3df& LocalY, const Vector3df& LocalZ);
+
+	void CoordinateTransformation
+		(const Vector3df& LocalX, const Vector3df& LocalY, const Vector3df& LocalZ, const Vector3df& Translation);
+
+	void Clear();
+
 protected:
 
 	Polygon(const Polygon& p);
@@ -76,5 +83,9 @@ protected:
 };
 
 }   // namespace aries
+
+
+
+std::ostream& operator << (std::ostream& os, const aries::Polygon& p);
 
 #endif   // _ARIES_POLYGON_H

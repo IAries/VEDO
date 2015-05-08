@@ -56,12 +56,12 @@ void svg(const vedo::DOWorld* World, std::string filename)
 		= min_element
 			(MTab.begin(), MTab.end(), vedo::DOMap::ComY)->cpdos()->GetPosition().y();
 
-	aries::Vector3df center
+	vedo::Vector3df center
 		(400.0 * (maxX + minX) / (maxX-minX),
 		-300.0 * (maxY + minY) / (maxY- minY),
 		0.0);
 
-    aries::Vector3df v(400.0, -300.0, 0.0);
+    vedo::Vector3df v(400.0, -300.0, 0.0);
 
 	center = v - center;
 

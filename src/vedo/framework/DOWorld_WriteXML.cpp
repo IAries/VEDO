@@ -399,7 +399,7 @@ void DOWorld::WriteXMLIactRecordTab(const std::string filename, const IactRecord
 		ofXML << "\t<IactStatusTab>" << std::endl;
 		std::map<std::pair<_uint_t, _uint_t>, ImpactStatus>::const_iterator mmapImStatus;
 		const ImpactStatus* isp;
-		aries::Vector3df vShearForce, vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
+		Vector3df vShearForce, vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
 		const _float_t* dpUDV;
 		for (mmapImStatus=(mapImStatusP->begin()); mmapImStatus!=(mapImStatusP->end()); mmapImStatus++)
 		{

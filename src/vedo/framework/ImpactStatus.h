@@ -17,22 +17,22 @@ public:
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const _float_t& Kn, const _float_t& InitialVelocity,
-         const aries::Vector3df& ShearForce, const _float_t* UDVp                                          );
+         const Vector3df& ShearForce, const _float_t* UDVp                                          );
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const _float_t& Kn, const _float_t& InitialVelocity,
-		 const aries::Vector3df& ShearForce                                                                    );
+		 const Vector3df& ShearForce                                                                    );
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const _float_t& Kn, const _float_t& InitialVelocity,
-         const aries::Vector3df& ShearForce, const aries::Vector3df& ImpactPoint, const aries::Vector3df& ImpactDirection,
-         const aries::Vector3df& ImpactToMaster, const aries::Vector3df& AngularImpactToMaster,
+         const Vector3df& ShearForce, const Vector3df& ImpactPoint, const Vector3df& ImpactDirection,
+         const Vector3df& ImpactToMaster, const Vector3df& AngularImpactToMaster,
          const _float_t& Overlap, const _float_t* UDVp                                                   );
 
 	ImpactStatus
         (const bool& Contact, const bool& Bond, const _float_t& Kn, const _float_t& InitialVelocity,
-		 const aries::Vector3df& ShearForce, const aries::Vector3df& ImpactPoint, const aries::Vector3df& ImpactDirection,
-         const aries::Vector3df& ImpactToMaster, const aries::Vector3df& AngularImpactToMaster,
+		 const Vector3df& ShearForce, const Vector3df& ImpactPoint, const Vector3df& ImpactDirection,
+         const Vector3df& ImpactToMaster, const Vector3df& AngularImpactToMaster,
          const _float_t& Overlap                                                                             );
 
 	ImpactStatus(const ImpactStatus&);
@@ -101,60 +101,60 @@ public:
 		dInitialVelocity = dV;
 	}
 
-	inline aries::Vector3df ShearForce() const
+	inline Vector3df ShearForce() const
 	{
 		return vShearForce;
 	}
 
-	inline void SetShearForce(aries::Vector3df& vS)
+	inline void SetShearForce(Vector3df& vS)
 	{
 		vShearForce = vS;
 	}
 
 	void CleanShearForce();
 
-	inline aries::Vector3df ImpactPoint() const
+	inline Vector3df ImpactPoint() const
 	{
 		return vImpactPoint;
 	}
 
-	inline void SetImpactPoint(aries::Vector3df& vI)
+	inline void SetImpactPoint(Vector3df& vI)
 	{
 		vImpactPoint = vI;
 	}
 
 	void CleanImpactPoint();
 
-	inline aries::Vector3df ImpactDirection() const
+	inline Vector3df ImpactDirection() const
 	{
 		return vImpactDirection;
 	}
 
-	inline void SetImpactDirection(aries::Vector3df& vI)
+	inline void SetImpactDirection(Vector3df& vI)
 	{
 		vImpactDirection = vI;
 	}
 
 	void CleanImpactDirection();
 
-	inline aries::Vector3df ImpactToMaster() const
+	inline Vector3df ImpactToMaster() const
 	{
 		return vImpactToMaster;
 	}
 
-	inline void SetImpactToMaster(aries::Vector3df& vI)
+	inline void SetImpactToMaster(Vector3df& vI)
 	{
 		vImpactToMaster = vI;
 	}
 
 	void CleanImpactToMaster();
 
-	inline aries::Vector3df AngularImpactToMaster() const
+	inline Vector3df AngularImpactToMaster() const
 	{
 		return vAngularImpactToMaster;
 	}
 
-	inline void SetAngularImpactToMaster(aries::Vector3df& vA)
+	inline void SetAngularImpactToMaster(Vector3df& vA)
 	{
 		vAngularImpactToMaster = vA;
 	}
@@ -179,7 +179,7 @@ public:
 
     void SetContactInformation(const ContactInfo*);
 
-    void SetImpactInformation(const aries::Vector3df& ImpactToMaster, const aries::Vector3df& AngularImpactToMaster);
+    void SetImpactInformation(const Vector3df& ImpactToMaster, const Vector3df& AngularImpactToMaster);
 
 	void SetUserDefinedValue(_uint_t u, _float_t d);
 
@@ -217,15 +217,15 @@ private:
 
 	_float_t  dInitialVelocity;         // Initial velocity
 
-	aries::Vector3df vShearForce;              // Shear force
+	Vector3df vShearForce;              // Shear force
 
-	aries::Vector3df vImpactPoint;             // Impact point
+	Vector3df vImpactPoint;             // Impact point
 
-	aries::Vector3df vImpactDirection;         // Impact direction
+	Vector3df vImpactDirection;         // Impact direction
 
-	aries::Vector3df vImpactToMaster;          // Impact to master
+	Vector3df vImpactToMaster;          // Impact to master
 
-	aries::Vector3df vAngularImpactToMaster;   // Angular impact to master
+	Vector3df vAngularImpactToMaster;   // Angular impact to master
 
     _float_t  dOverlap;                 // Overlap
 

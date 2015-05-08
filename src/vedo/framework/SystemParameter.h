@@ -20,7 +20,7 @@ public:
 		 const _float_t& TimeStop,
 		 const _float_t& TimeInterval,
 		 const _float_t& TimeCurrent,
-		 const aries::Vector3df& FieldAcceleration,
+		 const Vector3df& FieldAcceleration,
 		 const Boundary& ZOI,
 		 const Boundary& PBC                    );
 
@@ -80,7 +80,7 @@ public:
 		ulMaxIDofDO = n;
 	}
 
-	inline aries::Vector3df GetFieldAcceleration() const
+	inline Vector3df GetFieldAcceleration() const
 	{
 		return vFieldAcceleration;
 	}
@@ -115,7 +115,7 @@ public:
 		dTimeCurrent += dTimeInterval;
 	}
 
-	inline void SetFieldAcceleration(const aries::Vector3df& FieldAcceleration)
+	inline void SetFieldAcceleration(const Vector3df& FieldAcceleration)
 	{
 		vFieldAcceleration = FieldAcceleration;
 	}
@@ -145,12 +145,12 @@ public:
 		return dEnergyRotation;
 	}
 
-	inline aries::Vector3df GetMomentumAvg() const
+	inline Vector3df GetMomentumAvg() const
 	{
 		return vMomentumAvg;
 	}
 
-	inline aries::Vector3df GetAngularMomentumAvg() const
+	inline Vector3df GetAngularMomentumAvg() const
 	{
 		return vAngularMomentumAvg;
 	}
@@ -200,12 +200,12 @@ public:
 		dEnergyRotation = e;
 	}
 
-	inline void SetMomentumAvg(const aries::Vector3df& v)
+	inline void SetMomentumAvg(const Vector3df& v)
 	{
 		vMomentumAvg = v;
 	}
 
-	inline void SetAngularMomentumAvg(const aries::Vector3df& v)
+	inline void SetAngularMomentumAvg(const Vector3df& v)
 	{
 		vAngularMomentumAvg = v;
 	}
@@ -270,7 +270,7 @@ private:
 	_uint_t ulIactNumber;   // Aries: I have not finished this part
 
 	// The global field acceleration
-	aries::Vector3df vFieldAcceleration;
+	Vector3df vFieldAcceleration;
 
 	Boundary ZoneOfInterest;               // Zone of Interest (ZOI)
 	Boundary PeriodicBoundaryConditions;   // Periodic Boundary Condition (PBC)
@@ -279,8 +279,8 @@ private:
 	_float_t dEnergyTranslation;       // Kinetic energy (Total, Translation part)
 	_float_t dEnergyRotation;          // Kinetic energy (Total, Rotation part)
 
-	aries::Vector3df vMomentumAvg;            // Average momentum
-	aries::Vector3df vAngularMomentumAvg;     // Average angular momentum
+	Vector3df vMomentumAvg;            // Average momentum
+	Vector3df vAngularMomentumAvg;     // Average angular momentum
 
 	_float_t dMomentumNorm;            // Norm of momentum (Total)
 	_float_t dAngularMomentumNorm;     // Norm of angular momentum (Total)

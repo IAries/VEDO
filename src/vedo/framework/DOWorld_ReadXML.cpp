@@ -36,10 +36,10 @@ std::ostream& operator <<
 }
 */
 
-aries::Vector3df Node2Vector3d(boost::property_tree::ptree& pt)
+vedo::Vector3df Node2Vector3d(boost::property_tree::ptree& pt)
 {
 	boost::property_tree::ptree* pt2 = &(pt.get_child("<xmlattr>"));
-	return aries::Vector3df(pt2->get<_float_t>("x"), pt2->get<_float_t>("y"), pt2->get<_float_t>("z"));
+	return vedo::Vector3df(pt2->get<_float_t>("x"), pt2->get<_float_t>("y"), pt2->get<_float_t>("z"));
 }
 
 njr::HalfSpace Node2HalfSpace(boost::property_tree::ptree& pt)
@@ -188,7 +188,7 @@ static vedo::SystemParameter* Node2SystemParameter(boost::property_tree::ptree& 
 	std::string sName;
 	boost::property_tree::ptree* pt2;
 	_float_t dTimeStart, dTimeStop, dTimeInterval, dTimeCurrent;
-	aries::Vector3df vFieldAcceleration, vLowerBoundaryZOI, vUpperBoundaryZOI, vLowerBoundaryPBC, vUpperBoundaryPBC;
+	vedo::Vector3df vFieldAcceleration, vLowerBoundaryZOI, vUpperBoundaryZOI, vLowerBoundaryPBC, vUpperBoundaryPBC;
 
 	if (pt.get_child_optional("SimConstant"))
 	{
@@ -384,7 +384,7 @@ static vedo::DOModel* Node2DOModel(boost::property_tree::ptree& pt)
 	vedo::DOShapeColor   cColor         = String2DOShapeColor(pt2->get<std::string>("Color", "bylayer"));
 	vedo::DOScopeType    eScope         = String2ScopeType(pt2->get<std::string>("Scope", "undefined"), eBehavior);
 
-	aries::Vector3df vExternalForce;
+	vedo::Vector3df vExternalForce;
 	if (pt.get_child_optional("ExternalForce"))
 	{
 		vExternalForce = Node2Vector3d(pt.get_child("ExternalForce"));
@@ -469,19 +469,19 @@ static vedo::IactModel* Node2IactModel(boost::property_tree::ptree& pt)
 static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)
 {
 	std::string sDOName = pt.get<std::string>("<xmlattr>.DOName");
-	aries::Vector3df vPosition        = Node2Vector3d(pt.get_child("Position"       ));
-	aries::Vector3df vVelocity        = Node2Vector3d(pt.get_child("Velocity"       ));
-	aries::Vector3df vOrientationX    = Node2Vector3d(pt.get_child("OrientationX"   ));
-	aries::Vector3df vOrientationZ    = Node2Vector3d(pt.get_child("OrientationZ"   ));
-	aries::Vector3df vAngularVelocity = Node2Vector3d(pt.get_child("AngularVelocity"));
+	vedo::Vector3df vPosition        = Node2Vector3d(pt.get_child("Position"       ));
+	vedo::Vector3df vVelocity        = Node2Vector3d(pt.get_child("Velocity"       ));
+	vedo::Vector3df vOrientationX    = Node2Vector3d(pt.get_child("OrientationX"   ));
+	vedo::Vector3df vOrientationZ    = Node2Vector3d(pt.get_child("OrientationZ"   ));
+	vedo::Vector3df vAngularVelocity = Node2Vector3d(pt.get_child("AngularVelocity"));
 
-	aries::Vector3df vImpact;
+	vedo::Vector3df vImpact;
 	if (pt.get_child_optional("Impact"))
 	{
 		vImpact = Node2Vector3d(pt.get_child("Impact"));
 	}
 
-	aries::Vector3df vAngularImpact;
+	vedo::Vector3df vAngularImpact;
 	if (pt.get_child_optional("AngularImpact"))
 	{
 		vAngularImpact = Node2Vector3d(pt.get_child("AngularImpact"));
@@ -517,11 +517,11 @@ static std::pair<std::pair<_uint_t, _uint_t>, vedo::ImpactStatus*>
 	_float_t dInitialVelocity       = pt2->get<_float_t>("InitialVelocity");
 	_float_t dOverlap               = pt2->get<_float_t>("Overlap"        );
 
-	aries::Vector3df      vShearForce            = Node2Vector3d(pt.get_child("ShearForce"           ));
-	aries::Vector3df      vImpactPoint           = Node2Vector3d(pt.get_child("ImpactPoint"          ));
-	aries::Vector3df      vImpactDirection       = Node2Vector3d(pt.get_child("ImpactDirection"      ));
-	aries::Vector3df      vImpactToMaster        = Node2Vector3d(pt.get_child("ImpactToMaster"       ));
-	aries::Vector3df      vAngularImpactToMaster = Node2Vector3d(pt.get_child("AngularImpactToMaster"));
+	vedo::Vector3df      vShearForce            = Node2Vector3d(pt.get_child("ShearForce"           ));
+	vedo::Vector3df      vImpactPoint           = Node2Vector3d(pt.get_child("ImpactPoint"          ));
+	vedo::Vector3df      vImpactDirection       = Node2Vector3d(pt.get_child("ImpactDirection"      ));
+	vedo::Vector3df      vImpactToMaster        = Node2Vector3d(pt.get_child("ImpactToMaster"       ));
+	vedo::Vector3df      vAngularImpactToMaster = Node2Vector3d(pt.get_child("AngularImpactToMaster"));
 
 	_uint_t uNumUDDImpactStatus = aries::Constants::Instance()->NumUDDImpactStatus();
 	if (uNumUDDImpactStatus != 0)

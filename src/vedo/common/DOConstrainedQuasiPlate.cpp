@@ -12,20 +12,20 @@ DOConstrainedQuasiPlate::DOConstrainedQuasiPlate(const DOStatus* cpdos, const DO
 	dVolume             = cpdoml->GetVolume();
 	dMass               = cpdoml->GetMass();
 	dSudoMass           = cpdoml->GetSudoMass();
-	vMassMomentInertia  = aries::Vector3df();
+	vMassMomentInertia  = Vector3df();
 }
 
 void DOConstrainedQuasiPlate::Response(_float_t dt)
 {
-	aries::Vector3df V   = pDOStatus->GetVelocity();
-	aries::Vector3df AV  = pDOStatus->GetAngularVelocity();
-	aries::Vector3df P   = pDOStatus->GetPosition();
-	aries::Vector3df Ox  = pDOStatus->GetOrientationX();
-	aries::Vector3df Oz  = pDOStatus->GetOrientationZ();
+	Vector3df V   = pDOStatus->GetVelocity();
+	Vector3df AV  = pDOStatus->GetAngularVelocity();
+	Vector3df P   = pDOStatus->GetPosition();
+	Vector3df Ox  = pDOStatus->GetOrientationX();
+	Vector3df Oz  = pDOStatus->GetOrientationZ();
 
-	aries::Vector3df dv  = 1.0 / dSudoMass * (vImpact.dot(Oz) * (Oz.direction()));
-	aries::Vector3df dp  = dt * (V + (0.5 * dv));
-	aries::Vector3df dw  = AV * dt;
+	Vector3df dv  = 1.0 / dSudoMass * (vImpact.dot(Oz) * (Oz.direction()));
+	Vector3df dp  = dt * (V + (0.5 * dv));
+	Vector3df dw  = AV * dt;
 
 	pDOStatus->SetPosition(P + dp);
 	pDOStatus->SetOrientation(Ox.RotateAround(dw), Oz.RotateAround(dw));

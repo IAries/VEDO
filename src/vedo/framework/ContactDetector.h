@@ -11,15 +11,17 @@ namespace vedo
 
 struct ContactInfo
 {
-	aries::Vector3df vImpactDirection;
-	aries::Vector3df vSlideDirection;
-	aries::Vector3df vCenterToCenter;
-	aries::Vector3df vImpactPoint;
+	Vector3df vImpactDirection;
+	Vector3df vSlideDirection;
+	Vector3df vCenterToCenter;
+	Vector3df vImpactPoint;
 	_float_t  dImpactDepth;
 	_float_t  dDistance;
 	_float_t  dOverlapArea;
-	bool          bActive;
-	bool          bUnBalance;
+	bool      bActive;
+	bool      bUnBalance;
+	_uint_t   uShapeTypeMaster;
+	_uint_t   uShapeTypeSlave;
 };
 
 

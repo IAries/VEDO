@@ -60,13 +60,11 @@ Assembler* CreateNewAssembler()
 	pAssembler->AddIS(new IScf<ISwH>("ISwH"));
 	pAssembler->AddIS(new IScf<ISwHertz>("ISwHertz"));
 
-    pAssembler->AddCD(new CDcf<CDQuasiCylinder_QuasiCylinder>       (QuasiCylinder, QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
-    pAssembler->AddCD(new CDcf<CDSphere_Sphere>                     (Sphere       , Sphere                    , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
-    pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinder>              (Sphere       , QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
+	pAssembler->AddCD(new CDcf<CDQuasiCylinder_QuasiCylinder>       (QuasiCylinder, QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
+	pAssembler->AddCD(new CDcf<CDSphere_Sphere>                     (Sphere       , Sphere                    , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
+	pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinder>              (Sphere       , QuasiCylinder             , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
 	pAssembler->AddCD(new CDcf<CDSphere_QuasiPlate>                 (Sphere       , QuasiPlate                , "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
 	pAssembler->AddCD(new CDcf<CDSphere_QuasiPlateWithCircularHole> (Sphere       , QuasiPlateWithCircularHole, "List- <CT>ISwBSDBF <CT>ISwBtSDBF <CT>ISwH <CT>ISwHertz"));
-	//pAssembler->AddCD(new CDcf<CDSphere_SphereAT>                   (Sphere       , Sphere                    , "List- <CT>ISwLSDAT"                                                                          ));
-	//pAssembler->AddCD(new CDcf<CDSphere_QuasiCylinderAT>            (Sphere       , QuasiCylinder             , "List- <CT>ISwLSDAT"                                                                          ));
 
     return pAssembler;
 }

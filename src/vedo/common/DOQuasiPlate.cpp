@@ -17,20 +17,20 @@ DOQuasiPlate::DOQuasiPlate(const DOStatus* cpdos, const DOModel* cpdoml): Discre
 
 void DOQuasiPlate::Response(_float_t dt)
 {
-	aries::Vector3df V  = pDOStatus->GetVelocity();
-	aries::Vector3df AV = pDOStatus->GetAngularVelocity();
-	aries::Vector3df P  = pDOStatus->GetPosition();
-	aries::Vector3df Ox = pDOStatus->GetOrientationX();
-	aries::Vector3df Oz = pDOStatus->GetOrientationZ();
+	Vector3df V  = pDOStatus->GetVelocity();
+	Vector3df AV = pDOStatus->GetAngularVelocity();
+	Vector3df P  = pDOStatus->GetPosition();
+	Vector3df Ox = pDOStatus->GetOrientationX();
+	Vector3df Oz = pDOStatus->GetOrientationZ();
 
-	aries::Vector3df dv = 1.0 / dSudoMass * vImpact;
-	aries::Vector3df dav
+	Vector3df dv = 1.0 / dSudoMass * vImpact;
+	Vector3df dav
 		(vAngularImpact.dot(Ox)           / vMassMomentInertia.x(),
 		 vAngularImpact.dot(Oz.cross(Ox)) / vMassMomentInertia.y(),
 		 vAngularImpact.dot(Oz)           / vMassMomentInertia.z() );
 
-	aries::Vector3df dp = dt * (V  + (0.5 * dv ));
-	aries::Vector3df dw = dt * (AV + (0.5 * dav));
+	Vector3df dp = dt * (V  + (0.5 * dv ));
+	Vector3df dw = dt * (AV + (0.5 * dav));
 
 	pDOStatus->SetPosition(P + dp);
 	pDOStatus->SetOrientation(Ox.RotateAround(dw), Oz.RotateAround(dw));

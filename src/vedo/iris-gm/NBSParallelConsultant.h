@@ -127,7 +127,7 @@ void NBSParallelConsultant::subReset
 	const SystemParameter* csp = Consultant::pDOWorld->GetSystemParameter();
 
 	_uint_t   numberDO           = csp->GetDONumber();
-	aries::Vector3df vFieldAcceleration = csp->GetFieldAcceleration();
+	vedo::Vector3df vFieldAcceleration = csp->GetFieldAcceleration();
 	_float_t  dt                 = culUpIact * csp->GetTimeInterval();
 
 	std::vector<DOMap> vDOMap;
@@ -209,7 +209,7 @@ void NBSParallelConsultant::subReset
 	//std::map<Trir, std::vector<DOMap>* > locMap;
 	std::vector<DOMap> GlobalElement;
 
-	aries::Vector3df pos;
+	vedo::Vector3df pos;
 	// Aries: The following loop can be merged with the least loop
 	for (_uint_t i=0; i<numberDO; ++i)
 	{

@@ -32,7 +32,7 @@ public:
 		return dSudoMass;
 	}
 
-	inline aries::Vector3df GetMassMomentInertia() const
+	inline Vector3df GetMassMomentInertia() const
 	{
 		return vMassMomentInertia;
 	}
@@ -57,43 +57,48 @@ public:
 		return pDOStatus;
 	}
 
-	inline const aries::Vector3df& GetImpact() const
+	inline void SetDOStatus(const DOStatus& dos)
+	{
+		*pDOStatus = dos;
+	}
+
+	inline const Vector3df& GetImpact() const
 	{
 		return vImpact;
 	}
 
-	inline const aries::Vector3df& GetAngularImpact() const
+	inline const Vector3df& GetAngularImpact() const
 	{
 		return vAngularImpact;
 	}
 
-	inline void SetVelocity(const aries::Vector3df& vV)
+	inline void SetVelocity(const Vector3df& vV)
 	{
 		pDOStatus->SetVelocity(vV);
 	}
 
-	inline void SetAngularVelocity(const aries::Vector3df& vAV)
+	inline void SetAngularVelocity(const Vector3df& vAV)
 	{
 		pDOStatus->SetAngularVelocity(vAV);
 	}
 
-	void ModifyVelocity(const aries::Vector3df& vdv);
+	void ModifyVelocity(const Vector3df& vdv);
 
-	void ModifyPosition(const aries::Vector3df& vdp);
+	void ModifyPosition(const Vector3df& vdp);
 
 	void ClearImpact();
 
-	virtual void AddImpact(const aries::Vector3df& vImpact, const aries::Vector3df& vAngularImpact);
+	virtual void AddImpact(const Vector3df& vImpact, const Vector3df& vAngularImpact);
 
-	virtual void AddImpact(const aries::Vector3df& vImpact);
+	virtual void AddImpact(const Vector3df& vImpact);
 
 /*
-	inline aries::Vector3df GetFieldImpact() const
+	inline Vector3df GetFieldImpact() const
 	{
 		return pDOStatus->GetFieldImpact();
 	}
 
-	inline void SetFieldImpact(const aries::Vector3df& vi)
+	inline void SetFieldImpact(const Vector3df& vi)
 	{
 		pDOStatus->SetFieldImpact(vi);
 	}
@@ -122,9 +127,9 @@ protected:
 
 	DOStatus*      pDOStatus;
 
-	aries::Vector3df  vImpact;
+	Vector3df  vImpact;
 
-	aries::Vector3df  vAngularImpact;
+	Vector3df  vAngularImpact;
 
 	_float_t   dVolume;
 
@@ -132,7 +137,7 @@ protected:
 
 	_float_t   dSudoMass;
 
-	aries::Vector3df  vMassMomentInertia;
+	Vector3df  vMassMomentInertia;
 
 	DiscreteObject(const DOStatus* cpdos, const DOModel* cpdoml);
 

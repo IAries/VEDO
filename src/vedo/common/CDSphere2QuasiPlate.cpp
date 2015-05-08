@@ -6,21 +6,27 @@
 namespace vedo
 {
 
+CDSphere_QuasiPlate::CDSphere_QuasiPlate(): ContactDetector()
+{
+	cInfo.uShapeTypeSlave  = DOShapeType::Sphere;
+	cInfo.uShapeTypeMaster = DOShapeType::QuasiPlate;
+}
+
 void CDSphere_QuasiPlate::CalDistance(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	aries::Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
+	Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiPlate)
-	aries::Vector3df vCb = pdoMaster->GetDOStatus()->GetPosition();
+	Vector3df vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Local axials of Master (QuasiPlate)
-	aries::Vector3df vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
-	aries::Vector3df vOx = pdoMaster->GetDOStatus()->GetOrientationX();
-	aries::Vector3df vOy = vOz.cross(vOx);
+	Vector3df vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
+	Vector3df vOx = pdoMaster->GetDOStatus()->GetOrientationX();
+	Vector3df vOy = vOz.cross(vOx);
 
 	// The projection of Ca on Vaxial
-	aries::Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
+	Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
 
 	// Half height of Master
 	_float_t dHHb = 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplate.height;
@@ -51,8 +57,8 @@ void CDSphere_QuasiPlate::CalDistance(const DiscreteObject* pdoSlave, const Disc
 	}
 
     // The distance from vCaps to vCa is the shortest distance between surface of Slave and Master
-	aries::Vector3df vCaps    = (vOx * Dapx) + (vOy * Dapy) + vCb;
-	aries::Vector3df vIm      = vCaps - vCa;
+	Vector3df vCaps    = (vOx * Dapx) + (vOy * Dapy) + vCb;
+	Vector3df vIm      = vCaps - vCa;
 	cInfo.vCenterToCenter  = vIm;
 
 	_float_t dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
@@ -75,11 +81,11 @@ void CDSphere_QuasiPlate::Detect(const DiscreteObject* pdoSlave, const DiscreteO
 {
 	CDSphere_QuasiPlate::CalDistance(pdoSlave, pdoMaster);
 
+    cInfo.vImpactPoint
+		= pdoSlave->GetDOStatus()->GetPosition()
+		+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 	if (cInfo.dImpactDepth > 0)
 	{
-	    cInfo.vImpactPoint
-			= pdoSlave->GetDOStatus()->GetPosition()
-			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 		cInfo.bUnBalance = (cInfo.bActive == false);
 		cInfo.bActive    = true;
 	}

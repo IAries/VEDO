@@ -14,13 +14,13 @@ public:
 
 	Boundary();
 
-	Boundary(std::string, const bool*, const aries::Vector3df, const aries::Vector3df);
+	Boundary(std::string, const bool*, const Vector3df, const Vector3df);
 
-	Boundary(const bool*, const aries::Vector3df, const aries::Vector3df);
+	Boundary(const bool*, const Vector3df, const Vector3df);
 
-	Boundary(std::string, const aries::Vector3df, const aries::Vector3df);
+	Boundary(std::string, const Vector3df, const Vector3df);
 
-	Boundary(const aries::Vector3df, const aries::Vector3df);
+	Boundary(const Vector3df, const Vector3df);
 
 	Boundary(const Boundary&);
 
@@ -53,31 +53,31 @@ public:
 		return bSwitch[i];
 	}
 
-	void SetCenter(const aries::Vector3df*);
+	void SetCenter(const Vector3df*);
 
-	inline void SetBoxCenter(const aries::Vector3df* vNewCenter)
+	inline void SetBoxCenter(const Vector3df* vNewCenter)
 	{
 		SetCenter(vNewCenter);
 	}
 
-	void SetRange(const aries::Vector3df*);
+	void SetRange(const Vector3df*);
 
-	inline void SetLength(const aries::Vector3df* vNewRange)
+	inline void SetLength(const Vector3df* vNewRange)
 	{
 		SetRange(vNewRange);
 	}
 
-	inline const aries::Vector3df& GetLength() const
+	inline const Vector3df& GetLength() const
 	{
 		return vRange;
 	}
 
-	inline const aries::Vector3df& GetRange() const
+	inline const Vector3df& GetRange() const
 	{
 		return vRange;
 	}
 
-	inline const aries::Vector3df& GetCenter() const
+	inline const Vector3df& GetCenter() const
 	{
 		return vCenter;
 	};
@@ -87,37 +87,37 @@ public:
 		return dVolume;
 	};
 
-	void SetLowerPoint(const aries::Vector3df*);
+	void SetLowerPoint(const Vector3df*);
 
-	inline void SetLowerEdge(const aries::Vector3df* vNewEdge)
+	inline void SetLowerEdge(const Vector3df* vNewEdge)
 	{
 		SetLowerPoint(vNewEdge);
 	}
 
-	void SetUpperPoint(const aries::Vector3df*);
+	void SetUpperPoint(const Vector3df*);
 
-	inline void SetUpperEdge(const aries::Vector3df* vNewEdge)
+	inline void SetUpperEdge(const Vector3df* vNewEdge)
 	{
 		SetUpperPoint(vNewEdge);
 	}
 
-	inline const aries::Vector3df& GetLowerPoint() const
+	inline const Vector3df& GetLowerPoint() const
 	{
 		return vLowerPoint;
 	}
 
-	inline const aries::Vector3df& GetUpperPoint() const
+	inline const Vector3df& GetUpperPoint() const
 	{
 		return vUpperPoint;
 	}
 
-	bool InBoundary(const aries::Vector3df) const;
+	bool InBoundary(const Vector3df) const;
 
-	bool InBoundary(const aries::Vector3df, const _float_t) const;
+	bool InBoundary(const Vector3df, const _float_t) const;
 
-	void EnforceBoundaryConditions(aries::Vector3df*) const;
+	void EnforceBoundaryConditions(Vector3df*) const;
 
-	void DifferenceBoundaryConditions(aries::Vector3df*) const;
+	void DifferenceBoundaryConditions(Vector3df*) const;
 
 	void print() const;
 
@@ -131,15 +131,15 @@ private:
 
 	bool          bSwitch[3];    // Open or close
 
-	aries::Vector3df vLowerPoint;   // Lower boundary
+	Vector3df vLowerPoint;   // Lower boundary
 
-	aries::Vector3df vUpperPoint;   // Upper boundary
+	Vector3df vUpperPoint;   // Upper boundary
 
-	aries::Vector3df vCenter;       // Center
+	Vector3df vCenter;       // Center
 
 	_float_t  dVolume;       // Volume (space inside the boundary)
 
-	aries::Vector3df vRange;        // Range (length in x, y, z directions)
+	Vector3df vRange;        // Range (length in x, y, z directions)
 };
 
 }   // namespace vedo

@@ -20,6 +20,7 @@ namespace math
 //#include <math.h>
 //static const _float_t _PI             = M_PI;
 static const _float_t _PI             = 4.0 * std::atan(1.0);
+static const _float_t _SquarePI       = _PI * _PI;
 static const _float_t _OneTwelfthPI   = _PI / 12.0;
 static const _float_t _OneEighthPI    = 0.125 * _PI;   // _PI/8
 static const _float_t _OneSixthPI     = _PI / 6.0;
@@ -38,9 +39,9 @@ static const _float_t _Degree2PI      = 1.0 / 180.0 * _PI;
 namespace information
 {
 
-static const std::string _ReleaseDate = "2015-03-26";
+static const std::string _ReleaseDate = "2015-05-08";
 
-static const std::string _Version     = "X5 build 326";
+static const std::string _Version     = "X5 build 508";
 
 #ifdef _DEBUG
 	static const std::string _DebugMode = "debug";

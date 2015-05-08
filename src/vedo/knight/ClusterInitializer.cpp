@@ -36,13 +36,13 @@ void ClusterInitializer::Create(std::string doName, vedo::DOWorld* pWorld)
 
 	vedo::DOStatus dos
 		(doName,
-		aries::Vector3df(),
-		aries::Vector3df(),
-		aries::Vector3df(1.0, 0.0, 0.0),
-		aries::Vector3df(0.0, 0.0, 1.0),
-		aries::Vector3df(),
-		aries::Vector3df(),
-		aries::Vector3df()              );
+		vedo::Vector3df(),
+		vedo::Vector3df(),
+		vedo::Vector3df(1.0, 0.0, 0.0),
+		vedo::Vector3df(0.0, 0.0, 1.0),
+		vedo::Vector3df(),
+		vedo::Vector3df(),
+		vedo::Vector3df()              );
 
     // Recursion to work in general 3:
     MakeSlab(zeroCenter, 3, dos, pWorld);
@@ -94,7 +94,7 @@ void ClusterInitializer::MakeSlab(vedo::_uint_t center[3],
                 if (Inside(potentialPos))
                 {
 					dos.SetPosition
-						(aries::Vector3df
+						(vedo::Vector3df
 							(potentialPos[0],
 							 potentialPos[1],
 							 potentialPos[2]));

@@ -30,7 +30,7 @@ public:
 
 	Matrix(const Matrix& m): Matrix()
 	{
-		(*this) = m;
+		*this = m;
 	}
 
 	const Matrix& operator = (const Matrix& m)
@@ -136,7 +136,9 @@ public:
 	{
 		if ((_columns != m._columns) || (_rows != m._rows))
 		{
-			std::cerr << "Error!! Code: aries::Matrix::operator + (const Matrix&)" << std::endl;
+			std::cerr
+				<< "Error!! Code: aries::Matrix::operator + (const Matrix&)" << std::endl
+				<< "        Note: Matrix: (" << _rows << "x" << _columns << ") + (" << m._rows << "x" << m._columns << ")" << std::endl;
 			exit(-1);
 		}
 		else
@@ -182,7 +184,9 @@ public:
 	{
 		if ((_columns != m._columns) || (_rows != m._rows))
 		{
-			std::cerr << "Error!! Code: aries::Matrix::operator - (const Matrix&)" << std::endl;
+			std::cerr
+				<< "Error!! Code: aries::Matrix::operator - (const Matrix&)" << std::endl
+				<< "        Note: Matrix: (" << _rows << "x" << _columns << ") - (" << m._rows << "x" << m._columns << ")" << std::endl;
 			exit(-1);
 		}
 		else
@@ -231,7 +235,9 @@ public:
 
 		if (_columns != M._rows)
 		{
-			std::cerr << "Error!! Code: aries::Matrix::operator * (const Matrix&)" << std::endl;
+			std::cerr
+				<< "Error!! Code: aries::Matrix::operator * (const Matrix&)" << std::endl
+				<< "        Note: Matrix: (" << _rows << "x" << _columns << ") * (" << M._rows << "x" << M._columns << ")" << std::endl;
 			exit(-1);
 		}
 		else
@@ -317,7 +323,9 @@ public:
 
 		if (_columns < len)
 		{
-			std::cerr << "Error!! Code: aries::Matrix::select(_uint_t*, _uint_t)" << std::endl;
+			std::cerr
+				<< "Error!! Code: aries::Matrix::select(_uint_t*, _uint_t)" << std::endl
+				<< "        Note: Matrix: (" << _rows << "x" << _columns << "), select: " << len << std::endl;
 			exit(-1);
 		}
 
@@ -336,7 +344,7 @@ public:
 			{
 				std::cerr
 					<< "Error!! Code: aries::Matrix::select(_uint_t*, _uint_t)" << std::endl
-					<< "        Note: Selected columns out of range"      << std::endl;
+					<< "        Note: Selected columns out of range" << std::endl;
 				exit(-1);
 			}
 		}
@@ -344,7 +352,7 @@ public:
 		return c;
 	}
 
-	const char* characteristic() const
+	const std::string characteristic() const
 	{
 		if ((_rows == 1) && (_columns == 1))
 		{
@@ -377,7 +385,7 @@ public:
 		return m;
 	}
 
-	const Matrix& Transpose()
+	Matrix Transpose() const
 	{
 		return this->transpose();
 	}
@@ -423,8 +431,8 @@ public:
 		else
 		{
 			std::cerr
-				<< "Error!! Code: T aries::Matrix::determine()"      << std::endl
-				<< "        Note: Nonsquare matrix has no determine" << std::endl;
+				<< "Error!! Code: T aries::Matrix::determine()" << std::endl
+				<< "        Note: Nonsquare matrix (" << _rows << "x" << _columns << ") has no determine" << std::endl;
 			exit(-1);
 		}
 	}
@@ -456,7 +464,7 @@ public:
 				{
 					for (_uint_t uj=0; uj<_columns; uj++)
 					{
-						uRank = std::max(uRank, (this->adjoint(ui, uj).rank()));
+						uRank = std::max(uRank, (this->SubMatrix(ui, uj).rank()));
 					}
 				}
 				return uRank;
@@ -465,8 +473,8 @@ public:
 		else
 		{
 			std::cerr
-				<< "Error!! Code: T aries::Matrix::rank()"      << std::endl
-				<< "        Note: Nonsquare matrix has no rank" << std::endl;
+				<< "Error!! Code: T aries::Matrix::rank()" << std::endl
+				<< "        Note: Nonsquare matrix (" << _rows << "x" << _columns << ") has no rank" << std::endl;
 			exit(-1);
 		}
 	}
@@ -513,7 +521,7 @@ public:
 		{
 			std::cerr
 				<< "Error!! Code: Matrix aries::Matrix::adjoint(const _uint_t&, const _uint_t&)" << std::endl
-				<< "        Note: Nonsquare matrix has no adjoint matrix"                        << std::endl;
+				<< "        Note: Nonsquare matrix (" << _rows << "x" << _columns << ") has no adjoint matrix" << std::endl;
 			exit(-1);
 		}
 	}
@@ -549,7 +557,7 @@ public:
 					{
 						source_column = uc + 1;
 					}
-						m(ur, uc) = _matrix[source_row][source_column];
+					m(ur, uc) = _matrix[source_row][source_column];
 				}
 			}
 			return m;
@@ -572,25 +580,19 @@ public:
 			{
 				std::cout
 					<< "Caution!! Code: Matrix aries::Matrix::inverse()" << std::endl
-					<< "          Note: No inverse matrix"               << std::endl;
+					<< "          Note: No inverse matrix" << std::endl;
 				return (*this);
 			}
 			else
 			{
-				std::cout << "¦ñÀH¯x°}¡G" << std::endl;
-				this->adjoint().print();
-				std::cout << "¦æ¦C¦¡¡G" << det << std::endl;
-				std::cout << "¤Ï¯x°}¡G" << std::endl;
-				((this->adjoint()) / det).print();
-
 				return (this->adjoint()) / det;
 			}
 		}
 		else
 		{
 			std::cerr
-				<< "Error!! Code: Matrix aries::Matrix::inverse()"        << std::endl
-				<< "        Note: Nonsquare matrix has no inverse matrix" << std::endl;
+				<< "Error!! Code: Matrix aries::Matrix::inverse()" << std::endl
+				<< "        Note: Nonsquare matrix (" << _rows << "x" << _columns << ") has no inverse matrix" << std::endl;
 			exit(-1);
 		}
 	}
@@ -697,7 +699,7 @@ std::ostream& operator << (std::ostream& os, const aries::Matrix<T>& m)
 	{
 		for (aries::_uint_t j=0; j<m.columns(); ++j)
 		{
-			os << std::setiosflags(std::ios::scientific) << std::setprecision(6) << m.get(i,j);
+			os << std::setiosflags(std::ios::scientific) << std::setprecision(6) << m.get(i, j);
 			if (j == m.columns()-1)
 			{
 				os << std::endl;
@@ -713,4 +715,4 @@ std::ostream& operator << (std::ostream& os, const aries::Matrix<T>& m)
 	return os;
 }
 
-#endif // _ARIES_MATRIX_H
+#endif   // _ARIES_MATRIX_H

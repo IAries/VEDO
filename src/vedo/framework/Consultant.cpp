@@ -255,7 +255,7 @@ const ImpactStatus* Consultant::RetrieveImpactStatus(_uint_t lcMaster, _uint_t l
 
 bool Consultant::InBoundary(_uint_t i) const
 {
-	aries::Vector3df p = (pDOWorld->GetDOStatus())[i]->GetPosition();
+	Vector3df p = (pDOWorld->GetDOStatus())[i]->GetPosition();
 	return pDOWorld->GetSystemParameter()->GetZoneOfInterest().InBoundary(p);
 }
 

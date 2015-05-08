@@ -15,7 +15,7 @@ public:
 
 	NJRpolygon();
 
-	explicit NJRpolygon(const std::vector<aries::Vector3df>&);
+	explicit NJRpolygon(const std::vector<Vector3df>&);
 
 	NJRpolygon(const NJRpolygon &p);
 
@@ -31,12 +31,12 @@ public:
 		return _edge_length;
 	}
 
-	inline const std::vector<aries::Vector3df>& vertexes () const
+	inline const std::vector<Vector3df>& vertexes () const
 	{
 		return _vertexes;
 	}
 
-	inline aries::Vector3df center() const
+	inline Vector3df center() const
 	{
 		return _center;
 	}
@@ -45,13 +45,13 @@ public:
 
 private:
 
-	aries::Vector3df _center;
+	Vector3df _center;
 
 	_float_t _area ;
 
 	_float_t _edge_length;
 
-	std::vector<aries::Vector3df> _vertexes;
+	std::vector<Vector3df> _vertexes;
 
 	// Remove the one of vertexs from two nearly vertexs
 	void PureVertex();

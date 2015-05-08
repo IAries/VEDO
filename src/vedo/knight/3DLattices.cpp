@@ -35,19 +35,19 @@ void CubicLattice::SetLatticeConstant(vedo::_float_t a)
 
 FCCLattice::FCCLattice(vedo::_float_t a): CubicLattice(a)
 {
-    std::vector<aries::Vector3df> atomsCoord;
-    atomsCoord.push_back(aries::Vector3df());
+    std::vector<vedo::Vector3df> atomsCoord;
+    atomsCoord.push_back(vedo::Vector3df());
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
-void FCCLattice::AddAtomInCell(aries::Vector3df atomCoord, std::string name)
+void FCCLattice::AddAtomInCell(vedo::Vector3df atomCoord, std::string name)
 {
     vedo::_float_t shifts[4][3] = {{0.,0.,0.},{0.,0.5,0.5},{0.5,0.,0.5},{0.5,0.5,0.}};
     for(vedo::_uint_t at=0; at<4; ++at)
 	{
 		BravaisLatticeWithBasis::AddAtomInCell
-			(atomCoord+aries::Vector3df(shifts[at][0], shifts[at][1], shifts[at][2]),
+			(atomCoord+vedo::Vector3df(shifts[at][0], shifts[at][1], shifts[at][2]),
 			 name);
 	}
 }
@@ -101,19 +101,19 @@ void PrimitiveFCCLattice::SetLatticeConstant(vedo::_float_t a)
 
 BCCLattice::BCCLattice(vedo::_float_t a): CubicLattice(a)
 {
-    std::vector<aries::Vector3df> atomsCoord;
-    atomsCoord.push_back(aries::Vector3df(0., 0., 0.));
+    std::vector<vedo::Vector3df> atomsCoord;
+    atomsCoord.push_back(vedo::Vector3df(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
-void BCCLattice::AddAtomInCell(aries::Vector3df atomCoord, std::string name)
+void BCCLattice::AddAtomInCell(vedo::Vector3df atomCoord, std::string name)
 {
     vedo::_float_t shifts[2][3] = {{0.,0.,0.},{0.5,0.5,0.5}};
     for(vedo::_uint_t at=0; at<2; ++at)
 	{
         BravaisLatticeWithBasis::AddAtomInCell
-        	(atomCoord+aries::Vector3df(shifts[at][0], shifts[at][1], shifts[at][2]),
+        	(atomCoord+vedo::Vector3df(shifts[at][0], shifts[at][1], shifts[at][2]),
         	 name);
 	}
 }
@@ -123,21 +123,21 @@ void BCCLattice::AddAtomInCell(aries::Vector3df atomCoord, std::string name)
 
 DiamondLattice::DiamondLattice(vedo::_float_t a): FCCLattice(a)
 {
-    std::vector<aries::Vector3df> atomsCoord;
-    atomsCoord.push_back(aries::Vector3df(0., 0., 0.));
+    std::vector<vedo::Vector3df> atomsCoord;
+    atomsCoord.push_back(vedo::Vector3df(0., 0., 0.));
     SetAtomsCoordinatesInCell(atomsCoord);
     UpdateMemberVariables();
 }
 
 
 void DiamondLattice::AddAtomInCell
-	(aries::Vector3df atomCoord, std::string name)
+	(vedo::Vector3df atomCoord, std::string name)
 {
     vedo::_float_t shifts[2][3] = {{0.,0.,0.},{0.25,0.25,0.25}};
 	FCCLattice::AddAtomInCell
-		(atomCoord+aries::Vector3df(shifts[0][0], shifts[0][1], shifts[0][2]), name);
+		(atomCoord+vedo::Vector3df(shifts[0][0], shifts[0][1], shifts[0][2]), name);
     FCCLattice::AddAtomInCell
-    	(atomCoord+aries::Vector3df(shifts[1][0], shifts[1][1], shifts[1][2]), name);
+    	(atomCoord+vedo::Vector3df(shifts[1][0], shifts[1][1], shifts[1][2]), name);
 }
 
 

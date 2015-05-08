@@ -86,8 +86,8 @@ public:
 
 	const TVALUE& operator () (const TNAME& tName) const
 	{
-		return _mttParameter.at(tName);
-/*
+		//return _mttParameter.at(tName);
+///*
 		#ifdef _STD_CPP_11
 			typename std::unordered_map<TNAME, TVALUE>::const_iterator _mIterator;
 		#else
@@ -105,7 +105,7 @@ public:
 			<< " doesn't exist!!"
 			<< std::endl;
 		std::exit(-1);
-*/
+//*/
 	}
 
 	TVALUE& operator[] (const TNAME& tName)

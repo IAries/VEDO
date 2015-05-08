@@ -96,32 +96,32 @@ bool ISwModels::NormalBond
 	}
 }
 
-aries::Vector3df ISwModels::NormalForceHertzSpring
+Vector3df ISwModels::NormalForceHertzSpring
 	(const _float_t& dKn, const _float_t& dCn, const _float_t& dImpactDepth,
-	 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity)
+	 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity)
 {
-	return aries::Vector3df(- dKn * pow(dImpactDepth, 1.5) * vImpactDirection - dCn * vRelativeNormalVelocity);
+	return Vector3df(- dKn * pow(dImpactDepth, 1.5) * vImpactDirection - dCn * vRelativeNormalVelocity);
 }
 
-aries::Vector3df ISwModels::NormalForce
+Vector3df ISwModels::NormalForce
 	(const _float_t& dKn, const _float_t& dCn, const _float_t& dImpactDepth,
-	 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity)
+	 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity)
 {
-	return aries::Vector3df(- dKn * dImpactDepth * vImpactDirection - dCn * vRelativeNormalVelocity);
+	return Vector3df(- dKn * dImpactDepth * vImpactDirection - dCn * vRelativeNormalVelocity);
 }
 
-aries::Vector3df ISwModels::NormalForceNoTension
+Vector3df ISwModels::NormalForceNoTension
 	(const _float_t& dKn, const _float_t& dCn, const _float_t& dImpactDepth,
-	 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity)
+	 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity)
 {
 	if ((vRelativeNormalVelocity.dot(vImpactDirection)) < 0.0)
 	{
 		// Elements move far away from each others
-		aries::Vector3df vSpringForce = - dKn * dImpactDepth * vImpactDirection;
-		aries::Vector3df vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
+		Vector3df vSpringForce = - dKn * dImpactDepth * vImpactDirection;
+		Vector3df vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
 		if (vShearViscousDampingForce.length() > vSpringForce.length())
 		{
-			return aries::Vector3df();
+			return Vector3df();
 		}
 		else
 		{
@@ -131,38 +131,38 @@ aries::Vector3df ISwModels::NormalForceNoTension
 	else
 	{
 		// Elements move colser to each others
-		return aries::Vector3df(- dKn * dImpactDepth * vImpactDirection - dCn * vRelativeNormalVelocity);
+		return Vector3df(- dKn * dImpactDepth * vImpactDirection - dCn * vRelativeNormalVelocity);
 	}
 }
 
-aries::Vector3df ISwModels::NormalForce
+Vector3df ISwModels::NormalForce
 	(const _float_t& dKn, const _float_t& dCn, const _float_t& dBn, const _float_t& dImpactDepth,
-	 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity                         )
+	 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity                         )
 {
 	if ((vRelativeNormalVelocity.dot(vImpactDirection)) < 0.0)
 	{
 		// Elements move far away from each others
-		return aries::Vector3df(- dKn * dImpactDepth * vImpactDirection - dCn * vRelativeNormalVelocity);
+		return Vector3df(- dKn * dImpactDepth * vImpactDirection - dCn * vRelativeNormalVelocity);
 	}
 	else
 	{
 		// Elements move colser to each others
-		return aries::Vector3df(- dCn * vRelativeNormalVelocity);
+		return Vector3df(- dCn * vRelativeNormalVelocity);
 	}
 }
 
-aries::Vector3df ISwModels::NormalForceNoTension
+Vector3df ISwModels::NormalForceNoTension
 	(const _float_t& dKn, const _float_t& dCn, const _float_t& dBn, const _float_t& dImpactDepth,
-	 const aries::Vector3df& vImpactDirection, const aries::Vector3df& vRelativeNormalVelocity                         )
+	 const Vector3df& vImpactDirection, const Vector3df& vRelativeNormalVelocity                         )
 {
 	if ((vRelativeNormalVelocity.dot(vImpactDirection)) < 0.0)
 	{
 		// Elements move far away from each others
-		aries::Vector3df vSpringForce = - dKn * dImpactDepth * vImpactDirection;
-		aries::Vector3df vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
+		Vector3df vSpringForce = - dKn * dImpactDepth * vImpactDirection;
+		Vector3df vShearViscousDampingForce = - dCn * vRelativeNormalVelocity;
 		if (vShearViscousDampingForce.length() > vSpringForce.length())
 		{
-			return aries::Vector3df();
+			return Vector3df();
 		}
 		else
 		{
@@ -172,7 +172,7 @@ aries::Vector3df ISwModels::NormalForceNoTension
 	else
 	{
 		// Elements move colser to each others
-		return aries::Vector3df(- dCn * vRelativeNormalVelocity);
+		return Vector3df(- dCn * vRelativeNormalVelocity);
 	}
 }
 
@@ -232,15 +232,15 @@ std::pair<bool, std::pair<_float_t, _float_t> > ISwModels::FrictionForce
 	}
 }
 
-aries::Vector3df ISwModels::ShearForceRotation(const aries::Vector3df& vShearForce, const aries::Vector3df& vNewDirection)
+Vector3df ISwModels::ShearForceRotation(const Vector3df& vShearForce, const Vector3df& vNewDirection)
 {
 	if (vShearForce.dot(vNewDirection) <= 0.0)
 	{
-		return aries::Vector3df(-vShearForce.length() * vNewDirection.direction());
+		return Vector3df(-vShearForce.length() * vNewDirection.direction());
 	}
 	else
 	{
-		return aries::Vector3df(vShearForce.length() * vNewDirection.direction());
+		return Vector3df(vShearForce.length() * vNewDirection.direction());
 	}
 }
 

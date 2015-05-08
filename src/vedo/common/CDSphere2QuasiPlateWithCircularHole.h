@@ -11,6 +11,8 @@ class CDSphere_QuasiPlateWithCircularHole: public ContactDetector
 
 public:
 
+	CDSphere_QuasiPlateWithCircularHole();
+
 	void CalDistance(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);

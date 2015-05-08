@@ -7,21 +7,27 @@
 namespace vedo
 {
 
+CDSphere_QuasiPlateWithCircularHole::CDSphere_QuasiPlateWithCircularHole(): ContactDetector()
+{
+	cInfo.uShapeTypeSlave  = DOShapeType::Sphere;
+	cInfo.uShapeTypeMaster = DOShapeType::QuasiPlateWithCircularHole;
+}
+
 void CDSphere_QuasiPlateWithCircularHole::CalDistance(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	aries::Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
+	Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiPlateWithCircularHole)
-	aries::Vector3df vCb = pdoMaster->GetDOStatus()->GetPosition();
+	Vector3df vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Local axials of Master (QuasiPlateWithCircularHole)
-	aries::Vector3df vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
-	aries::Vector3df vOx = pdoMaster->GetDOStatus()->GetOrientationX();
-	aries::Vector3df vOy = vOz.cross(vOx);
+	Vector3df vOz = pdoMaster->GetDOStatus()->GetOrientationZ();
+	Vector3df vOx = pdoMaster->GetDOStatus()->GetOrientationX();
+	Vector3df vOy = vOz.cross(vOx);
 
 	// The projection of Ca on Vaxial
-	aries::Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
+	Vector3df vCap = vCa - (vCa - vCb).project_on(vOz);
 
 	// Half height of Master
 	_float_t dHHb         = 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasiplatewithcircularhole.height;
@@ -37,8 +43,8 @@ void CDSphere_QuasiPlateWithCircularHole::CalDistance(const DiscreteObject* pdoS
 	_float_t dHoleYOffset = pdoMaster->GetDOModel()->GetShapeAttributes().quasiplatewithcircularhole.holeyoffset;
 
 	// Center of hole
-	aries::Vector3df vCh  = vCb + aries::Vector3df(dHoleXOffset, dHoleYOffset, 0.0);
-    aries::Vector3df vCha = vCa - vCh;
+	Vector3df vCh  = vCb + Vector3df(dHoleXOffset, dHoleYOffset, 0.0);
+    Vector3df vCha = vCa - vCh;
 
 	_float_t Dapx = (vCap - vCb).dot(vOx);
 	if (Dapx < -dHWb)
@@ -79,8 +85,8 @@ void CDSphere_QuasiPlateWithCircularHole::CalDistance(const DiscreteObject* pdoS
     }
 
     // The distance from vCaps to vCa is the shortest distance between surface of Slave and Master
-	aries::Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
-	aries::Vector3df vIm = vCaps - vCa;
+	Vector3df vCaps = (vOx * Dapx) + (vOy * Dapy) + vCb;
+	Vector3df vIm = vCaps - vCa;
 	cInfo.vCenterToCenter = vIm;
 
 	_float_t dRa = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
@@ -110,11 +116,11 @@ void CDSphere_QuasiPlateWithCircularHole::Detect(const DiscreteObject* pdoSlave,
 {
 	CDSphere_QuasiPlateWithCircularHole::CalDistance(pdoSlave, pdoMaster);
 
+    cInfo.vImpactPoint
+		= pdoSlave->GetDOStatus()->GetPosition()
+		+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 	if (cInfo.dImpactDepth > 0)
 	{
-	    cInfo.vImpactPoint
-			= pdoSlave->GetDOStatus()->GetPosition()
-			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 		cInfo.bUnBalance = (cInfo.bActive == false);
 		cInfo.bActive    = true;
 	}

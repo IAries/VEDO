@@ -24,7 +24,7 @@ public:
 		return _dHeight;
 	}
 
-	bool Inside(const aries::Vector3df&);
+	bool Inside(const Vector3df&);
 
 protected:
 

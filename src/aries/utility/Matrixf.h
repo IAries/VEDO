@@ -63,4 +63,4 @@ protected:
 
 }   // namespace aries
 
-#endif // _ARIES_MATRIX_FLOAT_H
+#endif   // _ARIES_MATRIX_FLOAT_H

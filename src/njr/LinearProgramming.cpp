@@ -8,7 +8,7 @@
 namespace njr
 {
 
-aries::Vector3df BMvector(1e6, 1e6, 1e6);
+Vector3df BMvector(1e6, 1e6, 1e6);
 
 void LinearProgramming::Clear()
 {
@@ -532,7 +532,7 @@ void LinearProgramming::print() const
 
 NJRpolygon LinearProgramming::GetPolygon()
 {
-	std::vector<aries::Vector3df>vertexes(0);
+	std::vector<Vector3df>vertexes(0);
 
 	if (_polygon == false)
 	{
@@ -607,7 +607,7 @@ NJRpolygon LinearProgramming::GetPolygon()
 			}
 		}
 
-		vertexes.push_back(aries::Vector3df(x,y,z) - BMvector);
+		vertexes.push_back(Vector3df(x,y,z) - BMvector);
 		BIA = BI * (A.Select(nonbasis + 2 ,1));
 
 		ch[0] = 1e24;
@@ -657,27 +657,27 @@ bool LinearProgramming::GetExtremeValue
 	}
 
 	obj(0,0) = 1.0;
-	maxX     =  LinearProgramming::GetObjValue() - BMvector.dot(aries::Vector3df(1.0, 0.0, 0.0));
+	maxX     =  LinearProgramming::GetObjValue() - BMvector.dot(Vector3df(1.0, 0.0, 0.0));
 
 	obj(0,0) = -1.0;
-	minX     = -LinearProgramming::GetObjValue() - BMvector.dot(aries::Vector3df(1.0, 0.0, 0.0));
+	minX     = -LinearProgramming::GetObjValue() - BMvector.dot(Vector3df(1.0, 0.0, 0.0));
 
 	obj(0,0) = 0.0;
 
 	obj(0,1) = 1.0;
-	maxY     =  LinearProgramming::GetObjValue() - BMvector.dot(aries::Vector3df(0.0, 1.0, 0.0));
+	maxY     =  LinearProgramming::GetObjValue() - BMvector.dot(Vector3df(0.0, 1.0, 0.0));
 
 	obj(0,1) = -1.0;
-	minY     = -LinearProgramming::GetObjValue() - BMvector.dot(aries::Vector3df(0.0, 1.0, 0.0));
+	minY     = -LinearProgramming::GetObjValue() - BMvector.dot(Vector3df(0.0, 1.0, 0.0));
 
 	obj(0,1) = 0.0;
 
 	obj(0,2) = 1.0;
-	maxZ     = LinearProgramming::GetObjValue() - BMvector.dot(aries::Vector3df(0.0, 0.0, 1.0));
+	maxZ     = LinearProgramming::GetObjValue() - BMvector.dot(Vector3df(0.0, 0.0, 1.0));
 
 	obj(0,2) = -1.0;
 
-	minZ     = -LinearProgramming::GetObjValue() - BMvector.dot(aries::Vector3df(0.0, 0.0, 1.0));
+	minZ     = -LinearProgramming::GetObjValue() - BMvector.dot(Vector3df(0.0, 0.0, 1.0));
 
 	obj(0,2) = 0.0;
 

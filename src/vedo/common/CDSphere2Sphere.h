@@ -11,6 +11,8 @@ class CDSphere_Sphere: public ContactDetector
 
 public:
 
+	CDSphere_Sphere();
+
 	void CalDistance(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);
 
 	void Detect(const DiscreteObject* pdoslave, const DiscreteObject* pdomaster);

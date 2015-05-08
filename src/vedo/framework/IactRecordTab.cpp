@@ -279,7 +279,7 @@ void IactRecordTab::DumpIactStatus(const _float_t& time, const char* filename) c
 
     const std::pair<_uint_t, _uint_t> * ppulul;
     const ImpactStatus* pis;
-    aries::Vector3df vV;
+    Vector3df vV;
     for(std::map<std::pair<_uint_t, _uint_t>, ImpactStatus>::const_iterator
         pmapImStatus = mapImStatus.begin(); pmapImStatus != mapImStatus.end(); pmapImStatus++)
     {
@@ -355,7 +355,7 @@ std::ofstream& IactRecordTab::operator >> (std::ofstream& idof) const
 	const ImpactStatus* isp;
 	bool                bTemp;
 	_float_t        dTemp;
-	aries::Vector3df       vTemp;
+	Vector3df       vTemp;
 
 	aries::Constants* aries_cp = aries::Constants::Instance();
 	_uint_t uNumUDDImpactStatus = aries_cp->NumUDDImpactStatus();
@@ -443,7 +443,7 @@ std::ifstream& IactRecordTab::operator << (std::ifstream& idof)
 	_uint_t   ulElementsMaster, ulElementsSlave;
 	bool          bContact, bBond;
 	_float_t  dKn, dInitialVelocity, dOverlap;
-	aries::Vector3df vShearForce, vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
+	Vector3df vShearForce, vImpactPoint, vImpactDirection, vImpactToMaster, vAngularImpactToMaster;
 	ImpactStatus  is;
 
 	aries::Constants* aries_cp = aries::Constants::Instance();

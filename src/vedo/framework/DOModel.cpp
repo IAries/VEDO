@@ -26,7 +26,7 @@ void DOModel::Analysis()
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 			dmmi                     = 0.4 * dMass * r * r;
-			vMassMomentInertia       = aries::Vector3df(dmmi, dmmi, dmmi);
+			vMassMomentInertia       = Vector3df(dmmi, dmmi, dmmi);
 			break;
 		case Ellipsoid:
 			x                        = uAttributes.ellipsoid.xlength;
@@ -36,7 +36,7 @@ void DOModel::Analysis()
 			dVolume		             = aries::math::_OneSixthPI * x * y * z;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
-			vMassMomentInertia       = 0.05 * dMass * aries::Vector3df(y * y + z * z, z * z + x * x, x * x + y * y);
+			vMassMomentInertia       = 0.05 * dMass * Vector3df(y * y + z * z, z * z + x * x, x * x + y * y);
 			break;
 		case QuasiCylinder:
 			r                        = uAttributes.quasicylinder.radius;
@@ -51,7 +51,7 @@ void DOModel::Analysis()
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
 			dmmi                     = dMass * (3.0 * r * r + h * h) / 12.0;
-			vMassMomentInertia       = aries::Vector3df(dmmi, dmmi, 0.5 * dMass * r * r);
+			vMassMomentInertia       = Vector3df(dmmi, dmmi, 0.5 * dMass * r * r);
 			break;
 		case QuasiPlate:
 			w                        = uAttributes.quasiplate.width;
@@ -70,7 +70,7 @@ void DOModel::Analysis()
 			dVolume                  = w * h * l;
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
-			vMassMomentInertia       = dMass / 12.0 * aries::Vector3df(h * h + l * l, w * w + l * l, h * h + w * w);
+			vMassMomentInertia       = dMass / 12.0 * Vector3df(h * h + l * l, w * w + l * l, h * h + w * w);
 			break;
 		case QuasiPlateWithCircularHole:
 			w                        = uAttributes.quasiplatewithcircularhole.width;
@@ -101,35 +101,35 @@ void DOModel::Analysis()
 
 			dMass                    = dDensity * dVolume;
 			dSudoMass                = dDensityFactor * dMass;
-			vMassMomentInertia       = aries::Vector3df();   // Need to be modified.
+			vMassMomentInertia       = Vector3df();   // Need to be modified.
 			break;
 		case Polyhedra:
 			dRange                   = 0.0;
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = aries::Vector3df();   // Need to be modified.
+			vMassMomentInertia       = Vector3df();   // Need to be modified.
 			break;
 		case DMSphere:
 			dRange                   = 0.0;
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = aries::Vector3df();   // Need to be modified.
+			vMassMomentInertia       = Vector3df();   // Need to be modified.
 			break;
 		case PolyhedraBRep:
 			dRange                   = 0.0;
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = aries::Vector3df();   // Need to be modified.
+			vMassMomentInertia       = Vector3df();   // Need to be modified.
 			break;
 		default:
 			dRange                   = 0.0;
 			dVolume                  = 0.0;
 			dMass                    = 0.0;
 			dSudoMass                = 0.0;
-			vMassMomentInertia       = aries::Vector3df();
+			vMassMomentInertia       = Vector3df();
 	}
 }
 
@@ -146,7 +146,7 @@ DOModel::DOModel(const std::string& DOName) : matAttributes(0)
 
 DOModel::DOModel
 	(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-	 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+	 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 	 const DOShapeType& type, const DOShapeAttributes& attributes, const DOShapeColor& color                         ):
 		matAttributes(0)
 {
@@ -165,7 +165,7 @@ DOModel::DOModel
 
 DOModel::DOModel
 	(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-	 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+	 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 	 const DOShapeType& type, const DOShapeAttributes& attributes, const DOShapeColor& color,
 	 const std::vector<DOMaterialAttribute>& mats                                                                    ):
 		matAttributes(0)
@@ -186,7 +186,7 @@ DOModel::DOModel
 
 DOModel::DOModel
 	(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-	 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+	 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 	 const njr::NJRpolyhedra& poly, const DOShapeColor& color                                                        ):
 		matAttributes(0)
 {
@@ -205,7 +205,7 @@ DOModel::DOModel
 
 DOModel::DOModel
 	(const std::string& DOName, const std::string& DOGroup, const DOBehaviorType& Behavior, const DOScopeType& Scope,
-	 const _float_t& Density, const _float_t& DensityFactor, const aries::Vector3df& ExternalForce,
+	 const _float_t& Density, const _float_t& DensityFactor, const Vector3df& ExternalForce,
 	 const njr::NJRpolyhedra& poly, const DOShapeColor& color, const std::vector<DOMaterialAttribute>& mats          ):
 		matAttributes(0)
 {
@@ -260,7 +260,7 @@ std::ofstream& DOModel::operator >> (std::ofstream& idof) const
 	idof.write((const char*) &eScope        , sizeof(_uint_t      ));
 	idof.write((const char*) &dDensity,       sizeof(_float_t     ));
 	idof.write((const char*) &dDensityFactor, sizeof(_float_t     ));
-	idof.write((const char*) &vExternalForce, sizeof(aries::Vector3df    ));
+	idof.write((const char*) &vExternalForce, sizeof(Vector3df    ));
 	idof.write((const char*) &eColor        , sizeof(_uint_t      ));
 	idof.write((const char*) &eType         , sizeof(_uint_t      ));
 	idof.write((const char*) &uAttributes   , sizeof(DOShapeAttributes));
@@ -301,7 +301,7 @@ std::ifstream& DOModel::operator << (std::ifstream &idof)
  	idof.read((char*) &eScope        , sizeof(_uint_t      ));
 	idof.read((char*) &dDensity      , sizeof(_float_t     ));
 	idof.read((char*) &dDensityFactor, sizeof(_float_t     ));
-	idof.read((char*) &vExternalForce, sizeof(aries::Vector3df    ));
+	idof.read((char*) &vExternalForce, sizeof(Vector3df    ));
  	idof.read((char*) &eColor        , sizeof(_uint_t      ));
 	idof.read((char*) &eType         , sizeof(_uint_t      ));
 	idof.read((char*) &uAttributes   , sizeof(DOShapeAttributes));
@@ -347,10 +347,10 @@ _float_t DOModel::GetMaterialAttribute(std::string Name) const
 }
 
 _float_t DOModel::CrossAreaToSurface
-	(const aries::Vector3df& vP, const _float_t& a, const _float_t& b, const _float_t& c, const _float_t& d) const
+	(const Vector3df& vP, const _float_t& a, const _float_t& b, const _float_t& c, const _float_t& d) const
 {
 	_float_t dSphere2Surface, r;
-	aries::Vector3df vSurfaceNormal(a, b, c);   // Surface: ax+by+cz=d
+	Vector3df vSurfaceNormal(a, b, c);   // Surface: ax+by+cz=d
 	switch (eType)
 	{
 		case Sphere:
@@ -450,8 +450,8 @@ void FixBoundaryForVolumeInsideBoundary
 	}
 }
 
-std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
-	(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
+std::pair<_float_t, Vector3df> DOModel::VolumeInsideBoundary
+	(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
 {
 	_float_t Lx = pBC->GetLowerPoint().x();
 	_float_t Ly = pBC->GetLowerPoint().y();
@@ -470,7 +470,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
 			R = uAttributes.sphere.radius;
 			if ((Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R)) || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)))
 			{
-				return std::make_pair(0.0, aries::Vector3df());
+				return std::make_pair(0.0, Vector3df());
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
@@ -482,7 +482,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
 				FixBoundaryForVolumeInsideBoundary(&Ly, &Uy, &Py, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Lz, &Uz, &Pz, &R, &dMeshSize);
 
-				aries::Vector3df vT;
+				Vector3df vT;
 				_float_t dVolumeInsideBoundary = 0.0;
 				_float_t dMeshVolume  = pow(dMeshSize, 3.0);
 				_float_t dMassCenterX = 0.0;
@@ -516,7 +516,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
 				{
 					dMassCenterX = dMassCenterY = dMassCenterZ = 0.0;
 				}
-				return std::make_pair(dVolumeInsideBoundary, aries::Vector3df(dMassCenterX, dMassCenterY, dMassCenterZ));
+				return std::make_pair(dVolumeInsideBoundary, Vector3df(dMassCenterX, dMassCenterY, dMassCenterZ));
 			}
 			break;
 		case Ellipsoid:
@@ -525,7 +525,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiCylinder:
 /******************************************************************************
@@ -533,7 +533,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlate:
 /******************************************************************************
@@ -541,7 +541,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlateWithCircularHole:
 /******************************************************************************
@@ -549,7 +549,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    QuasiPlateWithCircularHole, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case Polyhedra:
 /******************************************************************************
@@ -557,7 +557,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case DMSphere:
 /******************************************************************************
@@ -565,7 +565,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case PolyhedraBRep:
 /******************************************************************************
@@ -573,15 +573,15 @@ std::pair<_float_t, aries::Vector3df> DOModel::VolumeInsideBoundary
  *
  *    PolyhedraBRep, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		default:
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 	}
 }
 
-std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
-	(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
+std::pair<_float_t, Vector3df> DOModel::ProjectedAreaOnXYPlane
+	(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
 {
 	_float_t Lx = pBC->GetLowerPoint().x();
 	_float_t Ly = pBC->GetLowerPoint().y();
@@ -600,7 +600,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
 			R = uAttributes.sphere.radius;
 			if ((Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R)) || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)))
 			{
-				return std::make_pair(0.0, aries::Vector3df());
+				return std::make_pair(0.0, Vector3df());
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
@@ -610,7 +610,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
 			{
 				FixBoundaryForVolumeInsideBoundary(&Lx, &Ux, &Px, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Ly, &Uy, &Py, &R, &dMeshSize);
-				aries::Vector3df vT;
+				Vector3df vT;
 				_float_t dProjectedArea = 0.0;
 				_float_t dMeshArea      = dMeshSize * dMeshSize;
 				_float_t dCentroidX     = 0.0;
@@ -638,7 +638,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
 				{
 					dCentroidX = dCentroidY = 0.0;
 				}
-				return std::make_pair(dProjectedArea, aries::Vector3df(dCentroidX, dCentroidY, vP.z()));
+				return std::make_pair(dProjectedArea, Vector3df(dCentroidX, dCentroidY, vP.z()));
 			}
 			break;
 		case Ellipsoid:
@@ -647,7 +647,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiCylinder:
 /******************************************************************************
@@ -655,7 +655,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlate:
 /******************************************************************************
@@ -663,7 +663,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlateWithCircularHole:
 /******************************************************************************
@@ -671,7 +671,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    QuasiPlateWithCircularHole, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case Polyhedra:
 /******************************************************************************
@@ -679,7 +679,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case DMSphere:
 /******************************************************************************
@@ -687,7 +687,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case PolyhedraBRep:
 /******************************************************************************
@@ -695,15 +695,15 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXYPlane
  *
  *    PolyhedraBRep, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		default:
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 	}
 }
 
-std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
-	(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
+std::pair<_float_t, Vector3df> DOModel::ProjectedAreaOnYZPlane
+	(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
 {
 	_float_t Lx = pBC->GetLowerPoint().x();
 	_float_t Ly = pBC->GetLowerPoint().y();
@@ -722,7 +722,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
 			R = uAttributes.sphere.radius;
 			if ((Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R)) || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)))
 			{
-				return std::make_pair(0.0, aries::Vector3df());
+				return std::make_pair(0.0, Vector3df());
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
@@ -733,7 +733,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
 				FixBoundaryForVolumeInsideBoundary(&Ly, &Uy, &Py, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Lz, &Uz, &Pz, &R, &dMeshSize);
 
-				aries::Vector3df vT;
+				Vector3df vT;
 				_float_t  dProjectedArea = 0.0;
 				_float_t  dMeshArea      = dMeshSize * dMeshSize;
 				_float_t  dCentroidY     = 0.0;
@@ -761,7 +761,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
 				{
 					dCentroidY = dCentroidZ = 0.0;
 				}
-				return std::make_pair(dProjectedArea, aries::Vector3df(vP.x(), dCentroidY, dCentroidZ));
+				return std::make_pair(dProjectedArea, Vector3df(vP.x(), dCentroidY, dCentroidZ));
 			}
 			break;
 		case Ellipsoid:
@@ -770,7 +770,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiCylinder:
 /******************************************************************************
@@ -778,7 +778,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlate:
 /******************************************************************************
@@ -786,7 +786,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlateWithCircularHole:
 /******************************************************************************
@@ -794,7 +794,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    QuasiPlateWithCircularHole, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case Polyhedra:
 /******************************************************************************
@@ -802,7 +802,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case DMSphere:
 /******************************************************************************
@@ -810,7 +810,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case PolyhedraBRep:
 /******************************************************************************
@@ -818,15 +818,15 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnYZPlane
  *
  *    PolyhedraBRep, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		default:
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 	}
 }
 
-std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
-	(const aries::Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
+std::pair<_float_t, Vector3df> DOModel::ProjectedAreaOnXZPlane
+	(const Vector3df& vP, const Boundary* pBC, const _float_t& dMeshSize) const
 {
 	_float_t Lx = pBC->GetLowerPoint().x();
 	_float_t Ly = pBC->GetLowerPoint().y();
@@ -845,7 +845,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
 			R = uAttributes.sphere.radius;
 			if ((Lx>(Px+R)) || (Ly>(Py+R)) || (Lz>(Pz+R)) || (Ux<(Px-R)) || (Uy<(Py-R)) || (Uz<(Pz-R)))
 			{
-				return std::make_pair(0.0, aries::Vector3df());
+				return std::make_pair(0.0, Vector3df());
 			}
 			else if ((Lx<=(Px-R)) && (Ly<=(Py-R)) && (Lz<=(Pz-R)) && (Ux>=(Px+R)) && (Uy>=(Py+R)) && (Uz>=(Pz+R)))
 			{
@@ -856,7 +856,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
 				FixBoundaryForVolumeInsideBoundary(&Lx, &Ux, &Px, &R, &dMeshSize);
 				FixBoundaryForVolumeInsideBoundary(&Lz, &Uz, &Pz, &R, &dMeshSize);
 
-				aries::Vector3df vT;
+				Vector3df vT;
 				_float_t  dProjectedArea = 0.0;
 				_float_t  dMeshArea      = dMeshSize * dMeshSize;
 				_float_t  dCentroidX     = 0.0;
@@ -884,7 +884,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
 				{
 					dCentroidX = dCentroidZ = 0.0;
 				}
-				return std::make_pair(dProjectedArea, aries::Vector3df(dCentroidX, vP.y(), dCentroidZ));
+				return std::make_pair(dProjectedArea, Vector3df(dCentroidX, vP.y(), dCentroidZ));
 			}
 			break;
 		case Ellipsoid:
@@ -893,7 +893,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    Ellipsoid, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiCylinder:
 /******************************************************************************
@@ -901,7 +901,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    QuasiCylinder, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlate:
 /******************************************************************************
@@ -909,7 +909,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    QuasiPlate, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case QuasiPlateWithCircularHole:
 /******************************************************************************
@@ -917,7 +917,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    QuasiPlateWithCircularHole, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case Polyhedra:
 /******************************************************************************
@@ -925,7 +925,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    Polyhedra, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case DMSphere:
 /******************************************************************************
@@ -933,7 +933,7 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    DMSphere, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case PolyhedraBRep:
 /******************************************************************************
@@ -941,10 +941,10 @@ std::pair<_float_t, aries::Vector3df> DOModel::ProjectedAreaOnXZPlane
  *
  *    PolyhedraBRep, need to modify.
  ******************************************************************************/
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 			break;
 		default:
-			return std::make_pair(0.0, aries::Vector3df());
+			return std::make_pair(0.0, Vector3df());
 	}
 }
 

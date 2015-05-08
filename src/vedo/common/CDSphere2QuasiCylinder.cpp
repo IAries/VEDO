@@ -7,19 +7,25 @@
 namespace vedo
 {
 
+CDSphere_QuasiCylinder::CDSphere_QuasiCylinder(): ContactDetector()
+{
+	cInfo.uShapeTypeSlave  = DOShapeType::Sphere;
+	cInfo.uShapeTypeMaster = DOShapeType::QuasiCylinder;
+}
+
 void CDSphere_QuasiCylinder::CalDistance(const DiscreteObject* pdoSlave, const DiscreteObject* pdoMaster)
 {
 	// Center of Slave (Sphere)
-	aries::Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
+	Vector3df vCa = pdoSlave->GetDOStatus()->GetPosition();
 
 	// Center of Master (QuasiCylinder)
-	aries::Vector3df vCb = pdoMaster->GetDOStatus()->GetPosition();
+	Vector3df vCb = pdoMaster->GetDOStatus()->GetPosition();
 
 	// Half height of Master
 	_float_t dHHb = 0.5 * pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.height;
 
 	// The center axial of Master (QuasiCylinder)
-	aries::Vector3df vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
+	Vector3df vAxial = pdoMaster->GetDOStatus()->GetOrientationZ();
 
 	// The projected point of vCa on vAxial
 	_float_t Dap = (vCa - vCb).dot(vAxial);
@@ -33,8 +39,8 @@ void CDSphere_QuasiCylinder::CalDistance(const DiscreteObject* pdoSlave, const D
 	}
 
     // The distance from vCaps to vCa is the shortest distance between surface of Slave and Master
-	aries::Vector3df vCaps = vCb + Dap * vAxial;
-	aries::Vector3df vIm   = vCaps - vCa;
+	Vector3df vCaps = vCb + Dap * vAxial;
+	Vector3df vIm   = vCaps - vCa;
 
 	_float_t dRs = pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius;
 	_float_t dRc = pdoMaster->GetDOModel()->GetShapeAttributes().quasicylinder.radius;
@@ -58,11 +64,11 @@ void CDSphere_QuasiCylinder::Detect(const DiscreteObject* pdoSlave, const Discre
 {
 	CDSphere_QuasiCylinder::CalDistance(pdoSlave, pdoMaster);
 
+	cInfo.vImpactPoint
+		= pdoSlave->GetDOStatus()->GetPosition()
+		+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 	if (cInfo.dImpactDepth > 0.0)
 	{
-		cInfo.vImpactPoint
-			= pdoSlave->GetDOStatus()->GetPosition()
-			+ (pdoSlave->GetDOModel()->GetShapeAttributes().sphere.radius - 0.5 * cInfo.dImpactDepth) * cInfo.vImpactDirection;
 		cInfo.bUnBalance = (cInfo.bActive == false);
 		cInfo.bActive    = true;
 	}

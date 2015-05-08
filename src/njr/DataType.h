@@ -7,9 +7,10 @@
 namespace njr
 {
 
-typedef aries::_uint_t  _uint_t  ;
-typedef aries::_int_t   _int_t   ;
-typedef aries::_float_t _float_t ;
+typedef aries::_uint_t   _uint_t  ;
+typedef aries::_int_t    _int_t   ;
+typedef aries::_float_t  _float_t ;
+typedef aries::Vector3df Vector3df;
 
 }   // namespace njr
 
@@ -18,9 +19,10 @@ typedef aries::_float_t _float_t ;
 namespace njrdxf
 {
 
-typedef aries::_uint_t  _uint_t  ;
-typedef aries::_int_t   _int_t   ;
-typedef aries::_float_t _float_t ;
+typedef aries::_uint_t   _uint_t  ;
+typedef aries::_int_t    _int_t   ;
+typedef aries::_float_t  _float_t ;
+typedef aries::Vector3df Vector3df;
 
 }   // namespace njr
 

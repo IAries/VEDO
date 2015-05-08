@@ -52,7 +52,7 @@ public:
 
 	void Set
 		(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -73,7 +73,7 @@ public:
 
 	void Set
 		(const _float_t& dlx, const _float_t& dly, const _float_t& dlz,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -95,7 +95,7 @@ public:
 
 	void Set
 		(const _float_t& dRadius,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -117,7 +117,7 @@ public:
 
 	void Set
 		(const _float_t& dRadius, const _float_t& dHeight,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -139,7 +139,7 @@ public:
 
 	void Set
 		(const _float_t& dRadius, const _float_t& dHeight,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -161,7 +161,7 @@ public:
 
 	void Set
 		(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -184,7 +184,7 @@ public:
 
 	void Set
 		(const _float_t& dWidth, const _float_t& dLength, const _float_t& dHeight,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color& color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color& color);
 
 private:
 
@@ -206,7 +206,7 @@ public:
 
 	void Set
 		(const njr::NJRpolygon&,
-		 const aries::Vector3df& vP, const aries::Vector3df& vOX, const aries::Vector3df& vOZ, const char* layer, const Color &color);
+		 const Vector3df& vP, const Vector3df& vOX, const Vector3df& vOZ, const char* layer, const Color &color);
 
 private:
 
