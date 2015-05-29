@@ -473,6 +473,15 @@ static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)
 	vedo::Vector3df vVelocity        = Node2Vector3d(pt.get_child("Velocity"       ));
 	vedo::Vector3df vOrientationX    = Node2Vector3d(pt.get_child("OrientationX"   ));
 	vedo::Vector3df vOrientationZ    = Node2Vector3d(pt.get_child("OrientationZ"   ));
+	vOrientationX.normalized();
+	vOrientationZ.normalized();
+	if (vOrientationZ.dot(vOrientationZ) >= 1.0e-6)
+	{
+		std::cerr
+			<< "Error!! Code: static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)" << std::endl
+			<< "        Note: OrientationX and OrientationZ are not orthogonal vector!!"             << std::endl;
+		exit(-1);
+	}
 	vedo::Vector3df vAngularVelocity = Node2Vector3d(pt.get_child("AngularVelocity"));
 
 	vedo::Vector3df vImpact;
