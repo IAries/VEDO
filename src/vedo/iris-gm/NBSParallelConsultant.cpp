@@ -22,7 +22,7 @@ aries::Constants* aries_cp = aries::Constants::Instance();
 
 _uint_t NBSParallelConsultant::GetDONum() const
 {
-	return (_uint_t)DOTab.size();
+	return (_uint_t)vuDOGlobalID.size();
 }
 
 _uint_t NBSParallelConsultant::GetIactNum() const
@@ -32,7 +32,7 @@ _uint_t NBSParallelConsultant::GetIactNum() const
 
 _uint_t NBSParallelConsultant::GetDO(_uint_t i) const
 {
-	return DOTab[i];
+	return vuDOGlobalID[i];
 }
 
 _uint_t NBSParallelConsultant::GetIactMaster (_uint_t i) const
@@ -179,7 +179,7 @@ NBSParallelConsultant::~NBSParallelConsultant()
 
 void NBSParallelConsultant::ConstructDOandOverLapTab()
 {
-	DOTab.clear();
+	vuDOGlobalID.clear();
 	_uint_t DONum = pDOWorld->GetSystemParameter()->GetDONumber();
 	G2LTab.reserve(DONum);
 	G2LTab.assign(DONum, DONum);
@@ -195,14 +195,16 @@ void NBSParallelConsultant::ConstructDOandOverLapTab()
 		G2LTab[IactPairTab[i].second] = 0;
 	}
 
-	for(_uint_t i=0; i<DONum; i++)
+	for (_uint_t i=0; i<DONum; i++)
     {
-		if(G2LTab[i] == DONum)
-        {
+		//if ((G2LTab[i] == DONum) && (pDOWorld->GetDOModel(pDOWorld->GetDOName(i))->GetScope() != DOScopeType::global))
+		if (G2LTab[i] == DONum)
+		{
+			//G2LTab[i] = 0;
 			continue;
         }
-		DOTab.push_back(i);
-		G2LTab[i] = DOTab.size() - 1;
+		vuDOGlobalID.push_back(i);
+		G2LTab[i] = vuDOGlobalID.size() - 1;
 	}
 
 	char* occur    = new char[DONum   ];
@@ -243,8 +245,8 @@ void NBSParallelConsultant::ConstructDOandOverLapTab()
             }
 			if (sum == 0)
             {
-				DOTab.push_back(i);
-				G2LTab[i] = DOTab.size()-1;
+				vuDOGlobalID.push_back(i);
+				G2LTab[i] = vuDOGlobalID.size()-1;
 			}
 		}
 	}
@@ -359,7 +361,7 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 	{
 		EnsureLength
 			(21,
-			DOTab.size(),
+			vuDOGlobalID.size(),
 			syncSendBufVec[0].first,
 			syncSendBufVec[0].second);
 	}
@@ -384,7 +386,7 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 	for (_uint_t i=0; i<s; ++i)
     {
 		SourceDOStatus = vDO[i]->GetDOStatus();
-		TargetDOStatus = (pDOWorld->GetDOStatus())[ DOTab[i] ];
+		TargetDOStatus = (pDOWorld->GetDOStatus())[ vuDOGlobalID[i] ];
 		TargetDOStatus->SetPosition(SourceDOStatus->GetPosition());
 		TargetDOStatus->SetVelocity(SourceDOStatus->GetVelocity());
 		TargetDOStatus->SetImpact(SourceDOStatus->GetImpact());
@@ -397,7 +399,7 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 	// Send the information to the other processors
 	MPI_Request* reqArray    = new MPI_Request[2*NP-2];
 	MPI_Status*  statusArray = new MPI_Status [2*NP-2];
-	_uint_t      sedCnt      = DOTab.size();
+	_uint_t      sedCnt      = vuDOGlobalID.size();
 	_uint_t*     sedID       = syncSendBufVec[0].second.first;
 	_float_t*    sedStatus   = syncSendBufVec[0].second.second;
     _uint_t      idxReq      = 0;
@@ -411,7 +413,7 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 /*
 		for (_uint_t j=0; j<sedCnt; ++j)
 		{
-			sedID[j] = DOTab[j];
+			sedID[j] = vuDOGlobalID[j];
 			const DOStatus* dos = vDO[j]->GetDOStatus();
 			sedStatus[21*j]     = dos->GetPosition().x();
 			sedStatus[21*j+1]   = dos->GetPosition().y();
@@ -438,7 +440,7 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 */
 		for (_uint_t j=0, j0=0; j<sedCnt; ++j)
 		{
-			sedID[j] = DOTab[j];
+			sedID[j] = vuDOGlobalID[j];
 			const DOStatus* dos = vDO[j]->GetDOStatus();
 			sedStatus[j0++] = dos->GetPosition().x();
 			sedStatus[j0++] = dos->GetPosition().y();
@@ -520,7 +522,7 @@ void NBSParallelConsultant::SyncWorld(DOContainer& vDO)
 		for (_uint_t j=0; j<recCnt[i]; ++j)
         {
 			ridx = recID[j];
-			if ((G2LTab[ridx] >= 0) && (G2LTab[ridx] < DOTab.size()))
+			if ((G2LTab[ridx] >= 0) && (G2LTab[ridx] < vuDOGlobalID.size()))
             {
 				continue;
 			}
@@ -741,7 +743,7 @@ bool NBSParallelConsultant::CleanUp(DOContainer &cDO, IactContainer &cIact)
 		std::map<_uint_t, _uint_t> ElementMappingJumpGlobal;
 
 		_uint_t numberDOGlobal = csp->GetDONumber();
-		_uint_t numberDOLocal  = DOTab.size();
+		_uint_t numberDOLocal  = vuDOGlobalID.size();
 
 		const DOStatus* pdos  = 0;
 		const DOModel*  pdoml = 0;
@@ -914,7 +916,7 @@ void NBSParallelConsultant::DistributeIactPair()
 
 const ImpactStatus* NBSParallelConsultant::RetrieveImpactStatus(_uint_t lcMaster, _uint_t lcSlave) const
 {
-	return pIRTbl->GetImpactStatus(DOTab[lcMaster], DOTab[lcSlave]);
+	return pIRTbl->GetImpactStatus(vuDOGlobalID[lcMaster], vuDOGlobalID[lcSlave]);
 }
 
 void NBSParallelConsultant::CollectUserDefinedData(IactContainer& cIact)

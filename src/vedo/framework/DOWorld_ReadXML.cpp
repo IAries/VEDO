@@ -475,7 +475,7 @@ static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)
 	vedo::Vector3df vOrientationZ    = Node2Vector3d(pt.get_child("OrientationZ"   ));
 	vOrientationX.normalized();
 	vOrientationZ.normalized();
-	if (vOrientationZ.dot(vOrientationX) >= 1.0e-6)
+	if (vOrientationZ.dot(vOrientationX) >= 1.0e-5)
 	{
 		std::cerr
 			<< "Error!! Code: static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)" << std::endl

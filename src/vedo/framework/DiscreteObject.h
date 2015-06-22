@@ -127,17 +127,17 @@ protected:
 
 	DOStatus*      pDOStatus;
 
-	Vector3df  vImpact;
+	Vector3df      vImpact;
 
-	Vector3df  vAngularImpact;
+	Vector3df      vAngularImpact;
 
-	_float_t   dVolume;
+	_float_t       dVolume;
 
-	_float_t   dMass;
+	_float_t       dMass;
 
-	_float_t   dSudoMass;
+	_float_t       dSudoMass;
 
-	Vector3df  vMassMomentInertia;
+	Vector3df      vMassMomentInertia;
 
 	DiscreteObject(const DOStatus* cpdos, const DOModel* cpdoml);
 

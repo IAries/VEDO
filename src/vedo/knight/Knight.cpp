@@ -323,6 +323,39 @@ void usage()
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
+		<< "* Knight -erase_elements"                                << std::endl
+		<< "         <element name>"                                 << std::endl
+		<< "         <number of faces>"                              << std::endl
+		<< "	     <a1> <b1> <c1> <d1> "                           << std::endl
+		<< "             (Elements in a1 x+b1 y+c1 z>d1 will be erased)"    << std::endl
+		<< "	     <a2> <b2> <c2> <d2> "                           << std::endl
+		<< "             (Elements in a2 x+b2 y+c2 z>d2 will be erased)"    << std::endl
+		<< "	     <a3> <b3> <c3> <d3> "                           << std::endl
+		<< "             (Elements in a3 x+b3 y+c3 z>d3 will be erased)"    << std::endl
+		<< "	     :"                                              << std::endl
+		<< "	     :"                                              << std::endl
+		<< "	     <an> <bn> <cn> <dn> "                           << std::endl
+		<< "             (Elements in an x+bn y+cn z>dn will be erased)"    << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
+		<< "* Knight -changeDOModel"                                 << std::endl
+		<< "         <old element name>"                             << std::endl
+		<< "         <new element name>"                             << std::endl
+		<< "         <number of faces>"                              << std::endl
+		<< "	     <a1> <b1> <c1> <d1> "                           << std::endl
+		<< "             (Elements in a1 x+b1 y+c1 z>d1 will be replace its model)" << std::endl
+		<< "	     <a2> <b2> <c2> <d2> "                           << std::endl
+		<< "             (Elements in a2 x+b2 y+c2 z>d2 will be replace its model)" << std::endl
+		<< "	     <a3> <b3> <c3> <d3> "                           << std::endl
+		<< "             (Elements in a3 x+b3 y+c3 z>d3 will be replace its model)" << std::endl
+		<< "	     :"                                              << std::endl
+		<< "	     :"                                              << std::endl
+		<< "	     <an> <bn> <cn> <dn> "                           << std::endl
+		<< "             (Elements in an x+bn y+cn z>dn will be replace its model)" << std::endl
+		<< "         <reference .xml | .ido>"                        << std::endl
+		<< "         <destination .xml | .ido>"                      << std::endl
+		<< std::endl
 		<< "* Knight -erase_spherical_elements"                      << std::endl
 		<< "	     <a> <b> <c> <d> "                               << std::endl
 		<< "             (Spherical elements in ax+by+cz>d will be erased)" << std::endl
@@ -463,10 +496,10 @@ void usage()
 		<< "         <reference .xml | .ido>"                        << std::endl
 		<< "         <destination .xml | .ido>"                      << std::endl
 		<< std::endl
-/*
 		<< "	-sort: sort elements" << std::endl
 		<< "* Knight -sort (Original)<.xml | .ido> (New)<.xml | .ido>" << std::endl
 		<< std::endl
+/*
 		<< "	-sort_distance: sort elements by the distance to a reference point" << std::endl
 		<< "* Knight -sort_distance <Px> <Py> <Pz> <.xml | .ido>" << std::endl
 		<< std::endl
@@ -4336,6 +4369,154 @@ int main(int argc, char* argv[])
 		delete WriteDOWorld(arg[8], pWorld, pIactRecordTab);
 		delete pIactRecordTab;
 	}
+
+	else if ((arg[1] == "-erase_elements") && (arg.size() >= 10))
+	{
+		std::string sDOName = arg[2];
+		vedo::_uint_t fFaceNumber = aries::String2T<vedo::_uint_t>(arg[3]);
+		//std::cout << "fFaceNumber = " << fFaceNumber << std::endl;
+		if (arg.size() < (6 + fFaceNumber * 4))
+		{
+			std::cerr
+				<< "Error!! Code: Knight.cpp (-erase_elements)" << std::endl
+				<< "        Note: Number of cutting faces is wrong!!" << std::endl;
+			exit(-1);
+		}
+		std::vector<vedo::_float_t> vfa, vfb, vfc, vfd;
+		for (vedo::_uint_t u=0; u<fFaceNumber; u++)
+		{
+			vfa.push_back(aries::String2T<vedo::_float_t>(arg[4+u*4]));
+			vfb.push_back(aries::String2T<vedo::_float_t>(arg[5+u*4]));
+			vfc.push_back(aries::String2T<vedo::_float_t>(arg[6+u*4]));
+			vfd.push_back(aries::String2T<vedo::_float_t>(arg[7+u*4]));
+		}
+		//for (vedo::_uint_t u=0; u<fFaceNumber; u++)
+		//{
+		//	std::cout << vfa[u] << " x + (" << vfb[u] << ") y + (" << vfc[u] << ") z > " << vfd[u] << std::endl;
+		//}
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[4+fFaceNumber*4], pIactRecordTab);
+		std::string idofilename = arg[4+fFaceNumber*4];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		std::vector<vedo::_uint_t> ulIDList;
+		const vedo::DOStatus* dosp;
+		vedo::Vector3df vPosition;
+		bool bShouldBeRemoved;
+		for
+			(vedo::_uint_t ul=0;
+			 ul<(pWorld->GetSystemParameter()->GetDONumber());
+			 ul++                                           )
+		{
+			dosp = pWorld->GetDOStatus(ul);
+			if (dosp->GetDOName() == sDOName)
+			{
+				vPosition = dosp->GetPosition();
+				bShouldBeRemoved = true;
+				//std::cout << "Ball: " << vPosition;
+				for (vedo::_uint_t ul2=0; ul2<fFaceNumber; ul2++)
+				{
+					//std::cout << "Check cutting face " << ul2 << ": ";
+					if (vfa[ul2]*vPosition.x()+vfb[ul2]*vPosition.y()+vfc[ul2]*vPosition.z()<=vfd[ul2])
+					{
+						//std::cout << "Safe" << std::endl;
+						bShouldBeRemoved = false;
+						break;
+					}
+					//else
+					//{
+					//	std::cout << "X" << std::endl;
+					//}
+				}
+				if (bShouldBeRemoved)
+				{
+					//std::cout << "Should be removed" << std::endl;
+					ulIDList.push_back(ul);
+				}
+				//else
+				//{
+					//std::cout << "Should be keeped" << std::endl;
+				//}
+				//system("pause");
+			}
+		}
+		pConsultant->EraseElements(ulIDList);
+		delete WriteDOWorld(arg[5+fFaceNumber*4], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
+	else if ((arg[1] == "-changeDOModel") && (arg.size() >= 11))
+	{
+		std::string sDONameOld = arg[2];
+		std::string sDONameNew = arg[3];
+		vedo::_uint_t fFaceNumber = aries::String2T<vedo::_uint_t>(arg[4]);
+		if (arg.size() < (7 + fFaceNumber * 4))
+		{
+			std::cerr
+				<< "Error!! Code: Knight.cpp (-erase_elements)" << std::endl
+				<< "        Note: Number of cutting faces is wrong!!" << std::endl;
+			exit(-1);
+		}
+		std::vector<vedo::_float_t> vfa, vfb, vfc, vfd;
+		for (vedo::_uint_t u=0; u<fFaceNumber; u++)
+		{
+			vfa.push_back(aries::String2T<vedo::_float_t>(arg[5+u*4]));
+			vfb.push_back(aries::String2T<vedo::_float_t>(arg[6+u*4]));
+			vfc.push_back(aries::String2T<vedo::_float_t>(arg[7+u*4]));
+			vfd.push_back(aries::String2T<vedo::_float_t>(arg[8+u*4]));
+		}
+		//for (vedo::_uint_t u=0; u<fFaceNumber; u++)
+		//{
+		//	std::cout << vfa[u] << " x + (" << vfb[u] << ") y + (" << vfc[u] << ") z > " << vfd[u] << std::endl;
+		//}
+		vedo::IactRecordTab* pIactRecordTab = new vedo::IactRecordTab();
+		vedo::DOWorld* pWorld = ReadDOWorld(arg[5+fFaceNumber*4], pIactRecordTab);
+		std::string idofilename = arg[5+fFaceNumber*4];
+		vedo::Consultant* pConsultant
+			= new vedo::Consultant(pWorld, pIactRecordTab, idofilename, 1);
+		std::vector<vedo::_uint_t> ulIDList;
+		const vedo::DOStatus* dosp;
+		vedo::Vector3df vPosition;
+		bool bShouldBeChanged;
+		for
+			(vedo::_uint_t ul=0;
+			 ul<(pWorld->GetSystemParameter()->GetDONumber());
+			 ul++                                           )
+		{
+			dosp = pWorld->GetDOStatus(ul);
+			if (dosp->GetDOName() == sDONameOld)
+			{
+				vPosition = dosp->GetPosition();
+				bShouldBeChanged = true;
+				//std::cout << "Ball: " << vPosition;
+				for (vedo::_uint_t ul2=0; ul2<fFaceNumber; ul2++)
+				{
+					//std::cout << "Check cutting face " << ul2 << ": ";
+					if (vfa[ul2]*vPosition.x()+vfb[ul2]*vPosition.y()+vfc[ul2]*vPosition.z()<=vfd[ul2])
+					{
+						//std::cout << "Safe" << std::endl;
+						bShouldBeChanged = false;
+						break;
+					}
+					//else
+					//{
+					//	std::cout << "X" << std::endl;
+					//}
+				}
+				if (bShouldBeChanged)
+				{
+					//std::cout << "Should be removed" << std::endl;
+					pWorld->ChangeDOStatusName(ul, sDONameNew);
+				}
+				//else
+				//{
+					//std::cout << "Should be keeped" << std::endl;
+				//}
+				//system("pause");
+			}
+		}
+		delete WriteDOWorld(arg[6+fFaceNumber*4], pWorld, pIactRecordTab);
+		delete pIactRecordTab;
+	}
 	else if ((arg[1] == "-erase_spherical_elements") && (arg.size() == 8))
 	{
 		vedo::_float_t da, db, dc, dd;
@@ -5099,7 +5280,6 @@ int main(int argc, char* argv[])
 		delete WriteDOWorld (arg[6], oWorld, pIactRecordTab);
         delete pIactRecordTab;
 	}
-/*
 	else if ((arg[1] == "-sort") && (arg.size() == 4))
 	{
 	    // We have not deal with the interactions. At here, we clear all of them.
@@ -5107,6 +5287,7 @@ int main(int argc, char* argv[])
 		oWorld->SortingDOStatus();
 		delete WriteDOWorld (arg[3], oWorld);
 	}
+/*
 	else if ((arg[1] == "-sort_distance") && (arg.size() == 6))
 	{
 		vedo::_float_t dX, dY, dZ;

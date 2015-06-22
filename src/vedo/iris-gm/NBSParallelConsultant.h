@@ -86,8 +86,7 @@ private:
 
 	void DistributeIactPair();
 
-	// The global ID of "Discrete Element (Object)"
-	std::vector<_uint_t> DOTab;
+	std::vector<_uint_t> vuDOGlobalID;   // The global ID of "Discrete Element (Object)"
 
 	std::vector< std::vector<_uint_t> > overlapTab;
 

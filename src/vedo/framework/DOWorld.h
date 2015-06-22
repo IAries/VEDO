@@ -47,6 +47,8 @@ public:
 
 	const DOStatus* GetDOStatus(const _uint_t&) const;
 
+	void ChangeDOStatusName(const _uint_t&, const std::string&);
+
 	void SetDOStatus(const _uint_t&, const DOStatus&);
 
 	void SetDOStatusVelocityAndAngularVelocity

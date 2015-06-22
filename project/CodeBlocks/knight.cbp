@@ -20,7 +20,7 @@
 					<Add library="../../lib/CodeBlocks64/libvedo-framework-debug.a" />
 					<Add library="../../lib/CodeBlocks64/libnjr-debug.a" />
 					<Add library="../../lib/CodeBlocks64/libaries-utility-debug.a" />
-					<Add library="C:/usr/mingw-w64/x86_64-posix-seh/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/libstdc++.a" />
+					<Add library="C:/usr/mingw-w64/x86_64-posix-seh/mingw64/lib/gcc/x86_64-w64-mingw32/5.1.0/libstdc++.a" />
 				</Linker>
 			</Target>
 			<Target title="Debug32">
@@ -54,7 +54,7 @@
 					<Add library="../../lib/CodeBlocks64/libvedo-framework.a" />
 					<Add library="../../lib/CodeBlocks64/libnjr.a" />
 					<Add library="../../lib/CodeBlocks64/libaries-utility.a" />
-					<Add library="C:/usr/mingw-w64/x86_64-posix-seh/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/libstdc++.a" />
+					<Add library="C:/usr/mingw-w64/x86_64-posix-seh/mingw64/lib/gcc/x86_64-w64-mingw32/5.1.0/libstdc++.a" />
 				</Linker>
 			</Target>
 			<Target title="Release32">

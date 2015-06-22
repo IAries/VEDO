@@ -93,7 +93,7 @@ PROJECT_LIB         = ${PREFIX}lib/${CXX_MODE}/
 ifeq ($(CXX_MODE), MS-Win64-Adm-GCC)
     CXX_ROOT      = /mingw64/
     CXX_INC       = ${CXX_ROOT}include/
-    CXX_LIB       = ${CXX_ROOT}lib/gcc/x86_64-w64-mingw32/4.9.2/
+    CXX_LIB       = ${CXX_ROOT}lib/gcc/x86_64-w64-mingw32/5.1.0/
     CXX           = ${CXX_ROOT}bin/g++
     CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
     CXX11_FLAG    = -D_STD_CPP_11 -std=c++11

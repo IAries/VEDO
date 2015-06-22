@@ -80,6 +80,11 @@ public:
 		return sDOName;
 	}
 
+	inline void ChangeDOName(const std::string& NewDOName)
+	{
+		sDOName = NewDOName;
+	}
+
 	inline void SetID(const _uint_t id)
 	{
 		ulID = id;
@@ -194,7 +199,7 @@ public:
 
 private:
 
-	std::string	  sDOName;
+	std::string	sDOName;
 
 	_uint_t ulID;   // ID during simulation (not equals to the serial number in DOContainer
 
@@ -216,7 +221,7 @@ private:
 
 	_float_t  dGranularTemperatureAV;   // Granular Temperature (Angular Velocity)
 
-	bool          beMonitored;              // Should be monotored or not;
+	bool      beMonitored;              // Should be monotored or not;
 
 	//Vector3df vFieldImpact;           // Field Impact
 

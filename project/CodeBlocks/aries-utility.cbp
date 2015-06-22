@@ -85,6 +85,8 @@
 		<Unit filename="../../src/aries/utility/EFSTimeHistory.h" />
 		<Unit filename="../../src/aries/utility/ExplicitFunction.h" />
 		<Unit filename="../../src/aries/utility/Matrix.h" />
+		<Unit filename="../../src/aries/utility/MatrixFs.cpp" />
+		<Unit filename="../../src/aries/utility/MatrixFs.h" />
 		<Unit filename="../../src/aries/utility/Matrixf.cpp" />
 		<Unit filename="../../src/aries/utility/Matrixf.h" />
 		<Unit filename="../../src/aries/utility/ParameterSet.h" />

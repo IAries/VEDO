@@ -71,6 +71,14 @@ const DOStatus* DOWorld::GetDOStatus(const _uint_t& odo) const
 	return(odo < pSystemParameter->GetDONumber()) ? cDOStatus[odo] : 0;
 }
 
+void DOWorld::ChangeDOStatusName(const _uint_t& odo, const std::string& NewDOName)
+{
+	if (odo < pSystemParameter->GetDONumber())
+	{
+		cDOStatus[odo]->ChangeDOName(NewDOName);
+	}
+}
+
 void DOWorld::SetDOStatus(const _uint_t& odo, const DOStatus& dos)
 {
 	if (odo < pSystemParameter->GetDONumber())

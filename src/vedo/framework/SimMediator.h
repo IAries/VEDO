@@ -29,6 +29,8 @@ public:
 
 	virtual bool Run(const std::vector<std::pair<Vector3df, Vector3df> >&);
 
+	virtual bool Run(const std::map<_uint_t, DOStatus>&);
+
 	virtual bool ReDistribute();
 
 	virtual void Initiate();
@@ -61,9 +63,9 @@ public:
 
 	void CalculateSystemEnergy();
 
-	std::time_t  starttime;              // Starting time
+	std::time_t  starttime;          // Starting time
 
-	std::time_t  endtime;                // Endind time
+	std::time_t  endtime;            // Endind time
 
 	_float_t timeSystem;             // Time of system preparing, starting and ending
 
@@ -95,13 +97,13 @@ private:
 
 	const Assembler* cpAssembler;
 
-	DOContainer      cDO;
+	DOContainer      cDO;                   // Local discrete objects in each computing unit
 
-	IactContainer    cIact;
+	IactContainer    cIact;                 // Local interactions in each computing unit
 
-	_uint_t      rank;                  // Rank of processores
+	_uint_t          rank;                  // Rank of processores
 
-	_uint_t      NP;                    // Number of processores
+	_uint_t          NP;                    // Number of processores
 
 	std::ofstream    FileLog;               // Log file
 

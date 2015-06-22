@@ -181,29 +181,29 @@ protected:
 
 	IactRecordTab*           pIRTbl;
 
-	std::vector<_uint_t> vcDO;
+	std::vector<_uint_t>     vcDO;           // All discrete objects (even in parallel computing)
 
-	std::vector<_uint_t> vcIactMaster;
+	std::vector<_uint_t>     vcIactMaster;   // All (master) interactions (even in parallel computing)
 
-	std::vector<_uint_t> vcIactSlave;
+	std::vector<_uint_t>     vcIactSlave;    // All (slave) interactions (even in parallel computing)
 
-	const _uint_t        culRecord;
+	std::vector<IactPair>    IactPairTab;    // Local interactions in each computing unit
 
-	_uint_t              culUpIact;
+	const _uint_t            culRecord;
 
-	_uint_t              ulRecordCount;
+	_uint_t                  culUpIact;
 
-	_uint_t              ulRoundCount;
+	_uint_t                  ulRecordCount;
+
+	_uint_t                  ulRoundCount;
 
 	std::string              sfilename;
 
-	_uint_t              rank;   // Rank   of processores
+	_uint_t                  rank;           // Rank of computing unit
 
-	_uint_t              NP;     // Number of processores
+	_uint_t                  NP;             // Number of toal computing units
 
-	_uint_t              ImpactBufferSize;
-
-	std::vector<IactPair>    IactPairTab;
+	_uint_t                  ImpactBufferSize;
 
 	virtual void BuildIactTab(std::vector<DOMap>& v1, std::vector<DOMap>& v2);
 
