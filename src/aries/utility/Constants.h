@@ -39,9 +39,9 @@ static const _float_t _Degree2PI      = 1.0 / 180.0 * _PI;
 namespace information
 {
 
-static const std::string _ReleaseDate = "2015-06-22";
+static const std::string _ReleaseDate = "2015-07-06";
 
-static const std::string _Version     = "X5 build 622";
+static const std::string _Version     = "X5 build 706";
 
 #ifdef _DEBUG
 	static const std::string _DebugMode = "debug";

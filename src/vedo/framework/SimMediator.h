@@ -27,6 +27,8 @@ public:
 
 	virtual bool Run();
 
+	virtual bool Run(const std::map<_uint_t, DOStatus>&, const std::vector<std::pair<Vector3df, Vector3df> >&);
+
 	virtual bool Run(const std::vector<std::pair<Vector3df, Vector3df> >&);
 
 	virtual bool Run(const std::map<_uint_t, DOStatus>&);

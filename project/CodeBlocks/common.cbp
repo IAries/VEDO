@@ -71,7 +71,6 @@
 		<Linker>
 			<Add option="-r" />
 		</Linker>
-		<Unit filename="../../src/vedo/common/CDQuasiCylinder2QuasiCylinder.cpp" />
 		<Unit filename="../../src/vedo/common/CDSphere2QuasiCylinder.cpp" />
 		<Unit filename="../../src/vedo/common/CDSphere2QuasiCylinderAT.cpp" />
 		<Unit filename="../../src/vedo/common/CDSphere2QuasiPlate.cpp" />
@@ -103,7 +102,6 @@
 		<Unit filename="../../src/vedo/common/NBSConsultant.cpp" />
 		<Unit filename="../../src/vedo/common/NearConsultant.cpp" />
 		<Unit filename="../../src/vedo/common/SafeConsultant.cpp" />
-		<Unit filename="../../src/vedo/common/CDQuasiCylinder2QuasiCylinder.h" />
 		<Unit filename="../../src/vedo/common/CDSphere2QuasiCylinder.h" />
 		<Unit filename="../../src/vedo/common/CDSphere2QuasiCylinderAT.h" />
 		<Unit filename="../../src/vedo/common/CDSphere2QuasiPlate.h" />

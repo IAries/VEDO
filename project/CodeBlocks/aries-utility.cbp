@@ -84,6 +84,10 @@
 		<Unit filename="../../src/aries/utility/EFSExtrapolation.h" />
 		<Unit filename="../../src/aries/utility/EFSTimeHistory.h" />
 		<Unit filename="../../src/aries/utility/ExplicitFunction.h" />
+		<Unit filename="../../src/aries/utility/Line3d.cpp" />
+		<Unit filename="../../src/aries/utility/Line3d.h" />
+		<Unit filename="../../src/aries/utility/Line3df.cpp" />
+		<Unit filename="../../src/aries/utility/Line3df.h" />
 		<Unit filename="../../src/aries/utility/Matrix.h" />
 		<Unit filename="../../src/aries/utility/MatrixFs.cpp" />
 		<Unit filename="../../src/aries/utility/MatrixFs.h" />

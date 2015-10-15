@@ -274,6 +274,11 @@ public:
 		return ((_v[0]==vR._v[0]) && (_v[1]==vR._v[1]) && (_v[2]==vR._v[2]));
 	}
 
+	bool operator != (Vector3d& vR) const
+	{
+		return ((_v[0]!=vR._v[0]) || (_v[1]!=vR._v[1]) || (_v[2]!=vR._v[2]));
+	}
+
 	// Transform a Vector3d from local coordinate to global coordinate
 	void CoordinateTransformation
 		(const Vector3d& LocalOrentationX, const Vector3d& LocalOrentationY, const Vector3d& LocalOrentationZ)
@@ -283,6 +288,11 @@ public:
 			 LocalOrentationX.y() * _v[0] + LocalOrentationY.y() * _v[1] + LocalOrentationZ.y() * _v[2],
 			 LocalOrentationX.z() * _v[0] + LocalOrentationY.z() * _v[1] + LocalOrentationZ.z() * _v[2] );
 		*this = NewVector3d;
+	}
+
+	void print() const
+	{
+		std::cout << '(' << _v[0] << ", " << _v[1] << ", " << _v[2] << ')' << std::endl;
 	}
 
 protected:
@@ -301,7 +311,7 @@ aries::Vector3d<T> operator - (const aries::Vector3d<T>& v)
 }
 
 template <typename T>
-aries::Vector3d<T> operator * (const T& s , const aries::Vector3d<T>& v)
+aries::Vector3d<T> operator * (const T s , const aries::Vector3d<T> v)
 {
 	return aries::Vector3d<T>(s * v.x(), s * v.y(), s * v.z());
 }

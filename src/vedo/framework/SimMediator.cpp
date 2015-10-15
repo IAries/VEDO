@@ -840,6 +840,149 @@ bool SimMediator::Run()
 		 (pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop()   )   );
 }
 
+bool SimMediator::Run(const std::map<_uint_t, DOStatus>& AssignedDOStatus, const std::vector<std::pair<Vector3df, Vector3df> >& vvExternalImpact)
+{
+	time(&starttime);
+
+	const DOWorld*         cpDOWorld = pConsultant->GetDOWorld();
+	const SystemParameter* csp       = cpDOWorld->GetSystemParameter();
+
+	time(&endtime);
+	timeSystem += (endtime - starttime);
+	starttime   = endtime;
+
+	cIact.CalculateImpact(csp->GetTimeInterval());
+
+	time(&endtime);
+	timeImpactSolving += (endtime - starttime);
+	starttime = endtime;
+
+	// Attention synchronize external impact
+	pConsultant->SyncDOContainer(cDO);
+
+	time(&endtime);
+	timeSyncDOContainer += (endtime - starttime);
+	starttime = endtime;
+
+	cDO.AddFieldImpact(csp->GetFieldAcceleration() * csp->GetTimeInterval());
+	cDO.AddConstrainedImpact(csp->GetTimeInterval());
+	for (_uint_t i=0; i<cDO.size(); i++)
+	{
+		cDO.AddImpact(i, vvExternalImpact[pConsultant->GetDO(i)].first, vvExternalImpact[pConsultant->GetDO(i)].second);
+	}
+
+	time(&endtime);
+	timeFieldForceAdding += (endtime - starttime);
+	starttime             = endtime;
+
+	cDO.Response(csp->GetTimeInterval());
+	std::map<_uint_t, DOStatus>::const_iterator musPos;
+	for (_uint_t i=0; i<cDO.size(); i++)
+	{
+		musPos = AssignedDOStatus.find(pConsultant->GetDO(i));
+		if (musPos != AssignedDOStatus.end())
+		{
+			cDO.SetDOStatus(i, musPos->second);
+		}
+	}
+	cDO.EnforcePeriodicBoundaryConditions(csp->GetPeriodicBoundaryConditions());
+
+	time(&endtime);
+	timeResponseUpdating += (endtime - starttime);
+	starttime             = endtime;
+
+	cIact.CheckContactStatus();
+
+	time(&endtime);
+	timeContactDetection += (endtime - starttime);
+	starttime             = endtime;
+
+	pConsultant->ResetTimePartitioning();
+	bool bContinue = pConsultant->NextStep(cDO, cIact);
+
+	time(&endtime);
+	timePartitioning += (pConsultant->timePartitioning);
+	timeNextStep     += (endtime - starttime - (pConsultant->timePartitioning));
+	starttime         = endtime;
+
+	if (pConsultant->ISRecord() || pConsultant->ISReset())
+	{
+		if (rank == 0)
+		{
+			std::cout << "Simulated time: " << csp->GetTimeCurrent() << " / " << csp->GetTimeStop() << std::endl;
+		}
+		CalculateSystemEnergy();
+	}
+
+	// Attention check if it has to rebuilder
+	if (pConsultant->ISReset())
+	{
+		Initiate();
+	}
+
+	time(&endtime);
+	timeSystem += (endtime - starttime);
+
+	if (pConsultant->ISRecord())
+	{
+		timeComputing     = timeSystem + timeImpactSolving + timeFieldForceAdding + timeResponseUpdating + timeContactDetection;
+		timeCommunication = timeSyncDOContainer + timePartitioning;
+		if (NP == 1)
+		{
+			timeComputing += timeNextStep;
+		}
+		else
+		{
+			timeCommunication += timeNextStep;
+		}
+		timeTotal = timeComputing + timeCommunication;
+		FileLog
+			<< rank                                                              << ", "
+			<< pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent() << ", "
+			<< timeSystem                                                        << ", "
+			<< timeImpactSolving                                                 << ", "
+			<< timeFieldForceAdding                                              << ", "
+			<< timeResponseUpdating                                              << ", "
+			<< timeContactDetection                                              << ", "
+			<< timeNextStep                                                      << ", "
+			<< timeSyncDOContainer                                               << ", "
+			<< timePartitioning                                                  << ", "
+			<< timeComputing                                                     << ", "
+			<< timeCommunication                                                 << ", "
+			<< timeTotal                                                         << ", ";
+        if (timeTotal != 0.0)
+        {
+            FileLog
+			<< timeSystem/timeTotal                                              << ", "
+			<< timeImpactSolving/timeTotal                                       << ", "
+			<< timeFieldForceAdding/timeTotal                                    << ", "
+			<< timeResponseUpdating/timeTotal                                    << ", "
+			<< timeContactDetection/timeTotal                                    << ", "
+			<< timeNextStep/timeTotal                                            << ", "
+			<< timeSyncDOContainer/timeTotal                                     << ", "
+			<< timePartitioning/timeTotal                                        << ", "
+			<< timeComputing/timeTotal                                           << ", "
+			<< timeCommunication/timeTotal                                       << std::endl;
+        }
+        else
+        {
+            FileLog
+			<< "0, 0, 0, 0, 0, 0, 0, 0, 0, 0"                                    << std::endl;
+        }
+	}
+
+	if (!bContinue)
+	{
+//		pConsultant->GetDOWorld()->WriteXML("terminate.xml");
+		pConsultant->GetDOWorld()->WriteIDO("terminate.ido", pConsultant->GetIactRecordTab());
+		return false;
+	}
+
+	return
+		((pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeCurrent()) <
+		 (pConsultant->GetDOWorld()->GetSystemParameter()->GetTimeStop()   )   );
+}
+
 bool SimMediator::Run(const std::vector<std::pair<Vector3df, Vector3df> >& vvExternalImpact)
 {
 	time(&starttime);
@@ -898,6 +1041,10 @@ bool SimMediator::Run(const std::vector<std::pair<Vector3df, Vector3df> >& vvExt
 
 	if (pConsultant->ISRecord() || pConsultant->ISReset())
 	{
+		if (rank == 0)
+		{
+			std::cout << "Simulated time: " << csp->GetTimeCurrent() << " / " << csp->GetTimeStop() << std::endl;
+		}
 		CalculateSystemEnergy();
 	}
 
@@ -1033,6 +1180,10 @@ bool SimMediator::Run(const std::map<_uint_t, DOStatus>& AssignedDOStatus)
 
 	if (pConsultant->ISRecord() || pConsultant->ISReset())
 	{
+		if (rank == 0)
+		{
+			std::cout << "Simulated time: " << csp->GetTimeCurrent() << " / " << csp->GetTimeStop() << std::endl;
+		}
 		CalculateSystemEnergy();
 	}
 

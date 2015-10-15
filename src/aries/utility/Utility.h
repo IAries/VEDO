@@ -11,6 +11,8 @@
 #include <aries/utility/EFSExtrapolation.h>
 #include <aries/utility/EFSTimeHistory.h>
 #include <aries/utility/ExplicitFunction.h>
+#include <aries/utility/Line3d.h>
+#include <aries/utility/Line3df.h>
 #include <aries/utility/Matrix.h>
 #include <aries/utility/Matrixf.h>
 #include <aries/utility/MatrixFs.h>
