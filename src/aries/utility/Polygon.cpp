@@ -15,10 +15,9 @@ Polygon::Polygon()
 const Polygon& Polygon::operator = (const Polygon& p)
 {
 	_Vertex       = p._Vertex;
-	_Edge         = p._Edge;
 	_EdgeVertexSN = p._EdgeVertexSN;
-	_Face         = p._Face;
 	_FaceVertexSN = p._FaceVertexSN;
+	ReBuildEdgeAndFace();
 	return *this;
 }
 
@@ -91,21 +90,27 @@ std::pair<_uint_t, _uint_t> Polygon::GetEdgeVertexSN(const _uint_t& u) const
 	}
 }
 
-void Polygon::AddEdge(const Vector3df* v1, const Vector3df* v2)
+void Polygon::AddEdge(const _uint_t& ui, const _uint_t& uj)
 {
-	_Edge.push_back(std::make_pair(v1, v2));
+	if (std::max(ui, uj) < (_uint_t)_Vertex.size())
+	{
+		_Edge.push_back(std::make_pair(&(_Vertex[ui]), &(_Vertex[uj])));
+		_EdgeVertexSN.push_back(std::make_pair(ui, uj));
+	}
+	else
+	{
+		std::cout
+			<< "Caution!! void Polygon::AddEdge(const _uint_t&, const _uint_t&)" << std::endl
+			<< "          Condition: index error!!"                              << std::endl;
+		std::exit(-1);
+	}
 }
 
-void Polygon::AddEdgeVertexSN(const _uint_t& ui, const _uint_t& uj)
-{
-	_EdgeVertexSN.push_back(std::make_pair(ui, uj));
-}
-
-const Vector3df* Polygon::GetFace(const _uint_t& u) const
+std::vector<const Vector3df* > Polygon::GetFace(const _uint_t& u) const
 {
 	if (u < (_uint_t)_Face.size())
 	{
-		return _Face[u][0];
+		return _Face[u];
 	}
 	else
 	{
@@ -131,22 +136,28 @@ const _uint_t* Polygon::GetFaceVertexSN(const _uint_t& u) const
 	}
 }
 
-void Polygon::AddFace(const Vector3df* FirstVertex, const Vector3df* SecondVertex, const Vector3df* ThirdVertex)
+void Polygon::AddFace(const _uint_t& ui, const _uint_t& uj, const _uint_t& uk)
 {
-	std::vector<const Vector3df* > SingleFace;
-	SingleFace.push_back(FirstVertex );
-	SingleFace.push_back(SecondVertex);
-	SingleFace.push_back(ThirdVertex );
-	_Face.push_back(SingleFace);
-}
-
-void Polygon::AddFaceVertexSN(const _uint_t& ui, const _uint_t& uj, const _uint_t& uk)
-{
-	std::vector<_uint_t> SingleFace;
-	SingleFace.push_back(ui);
-	SingleFace.push_back(uj);
-	SingleFace.push_back(uk);
-	_FaceVertexSN.push_back(SingleFace);
+	if (std::max(std::max(ui, uj), uk) < (_uint_t)_Vertex.size())
+	{
+		std::vector<const Vector3df* > SingleFace;
+		SingleFace.push_back(&(_Vertex[ui]));
+		SingleFace.push_back(&(_Vertex[uj]));
+		SingleFace.push_back(&(_Vertex[uk]));
+		_Face.push_back(SingleFace);
+		std::vector<_uint_t> SingleFaceSN;
+		SingleFaceSN.push_back(ui);
+		SingleFaceSN.push_back(uj);
+		SingleFaceSN.push_back(uk);
+		_FaceVertexSN.push_back(SingleFaceSN);
+	}
+	else
+	{
+		std::cout
+			<< "Caution!! void Polygon::AddFace(const _uint_t&, const _uint_t&, const _uint_t&)" << std::endl
+			<< "          Condition: index error!!"                                              << std::endl;
+		std::exit(-1);
+	}
 }
 
 void Polygon::CoordinateTransformation(const Vector3df& LocalX, const Vector3df& LocalY, const Vector3df& LocalZ)
@@ -179,6 +190,30 @@ void Polygon::Clear()
 Polygon::Polygon(const Polygon& p)
 {
 	*this = p;
+}
+
+void Polygon::ReBuildEdgeAndFace()
+{
+	std::pair<_uint_t, _uint_t> uvsn;
+	_Edge.clear();
+	for (_uint_t u=0; u<(_uint_t)_EdgeVertexSN.size(); u++)
+	{
+		uvsn = _EdgeVertexSN[u];
+		_Edge.push_back(std::make_pair(&(_Vertex[uvsn.first]), &(_Vertex[uvsn.second])));
+	}
+
+	std::vector<const Vector3df* > SingleFace;
+	std::vector<_uint_t> uvsnv;
+	_Face.clear();
+	for (_uint_t u=0; u<(_uint_t)_FaceVertexSN.size(); u++)
+	{
+		uvsnv = _FaceVertexSN[u];
+		SingleFace.clear();
+		SingleFace.push_back(&(_Vertex[uvsnv[0]]));
+		SingleFace.push_back(&(_Vertex[uvsnv[1]]));
+		SingleFace.push_back(&(_Vertex[uvsnv[2]]));
+		_Face.push_back(SingleFace);
+	}
 }
 
 }   // namespace aries

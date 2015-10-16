@@ -43,22 +43,18 @@ public:
 
 	std::pair<_uint_t, _uint_t> GetEdgeVertexSN(const _uint_t&) const;
 
-	void AddEdge(const Vector3df* v1, const Vector3df* v2);
-
-	void AddEdgeVertexSN(const _uint_t& ui, const _uint_t& uj);
+	void AddEdge(const _uint_t& ui, const _uint_t& uj);
 
 	inline _uint_t FaceNumber() const
 	{
 		return (_uint_t)_Face.size();
 	}
 
-	const Vector3df* GetFace(const _uint_t&) const;
+	std::vector<const Vector3df* > GetFace(const _uint_t&) const;
 
 	const _uint_t* GetFaceVertexSN(const _uint_t&) const;
 
-	void AddFace(const Vector3df* FirstVertex, const Vector3df* SecondVertex, const Vector3df* ThirdVertex);
-
-	void AddFaceVertexSN(const _uint_t& ui, const _uint_t& uj, const _uint_t& uk);
+	void AddFace(const _uint_t& ui, const _uint_t& uj, const _uint_t& uk);
 
 	void CoordinateTransformation(const Vector3df& LocalX, const Vector3df& LocalY, const Vector3df& LocalZ);
 
@@ -80,6 +76,8 @@ protected:
 	std::vector<std::vector<const Vector3df* > > _Face;
 
 	std::vector<std::vector<_uint_t> > _FaceVertexSN;
+
+	void ReBuildEdgeAndFace();
 };
 
 }   // namespace aries

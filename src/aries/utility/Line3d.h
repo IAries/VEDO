@@ -89,9 +89,9 @@ public:
 	bool InCoverSpace(const Vector3d<T>& p) const
 	{
 		Vector3d<T> dir = this->direction();
-		T tStart = _p1.x() * dir.x() + _p1.y() * dir.y() + _p1.z() * dir.z();
-		T tEnd   = _p2.x() * dir.x() + _p2.y() * dir.y() + _p2.z() * dir.z();
-		T tPoint =   p.x() * dir.x() +   p.y() * dir.y() +   p.z() * dir.z();
+		T tStart = _p1.dot(dir);
+		T tEnd   = _p2.dot(dir);
+		T tPoint = p.dot(dir);
 		if (tStart <= tEnd)
 		{
 			return ((tPoint >= tStart) && (tEnd >= tPoint));
