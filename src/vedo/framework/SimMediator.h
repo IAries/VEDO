@@ -67,7 +67,7 @@ public:
 
 	std::time_t  starttime;          // Starting time
 
-	std::time_t  endtime;            // Endind time
+	std::time_t  endtime;            // Ending time
 
 	_float_t timeSystem;             // Time of system preparing, starting and ending
 
