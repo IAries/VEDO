@@ -63,7 +63,7 @@ public:
 			typename boost::unordered_map<TNAME, TVALUE>::iterator it = _mttParameter.find(tName);
 		#endif
 
-		if(it != _mttParameter.end())
+		if (it != _mttParameter.end())
 		{
 			_mttParameter.erase(it);
 			return true;
@@ -95,7 +95,7 @@ public:
 		#endif
 		for (_mIterator = _mttParameter.begin(); _mIterator != _mttParameter.end(); _mIterator++)
 		{
-			if(_mIterator->first == tName)
+			if (_mIterator->first == tName)
 				return _mIterator->second;
 		}
 
@@ -187,7 +187,7 @@ public:
 		}
 	}
 
-	const TVALUE* GetData(const _uint_t& u) const
+	const TVALUE* GetConstData(const _uint_t& u) const
 	{
 		if (u < _mttParameter.size())
 		{
@@ -195,6 +195,28 @@ public:
 				typename std::unordered_map<TNAME, TVALUE>::const_iterator _mIterator = _mttParameter.begin();
 			#else
 				typename boost::unordered_map<TNAME, TVALUE>::const_iterator _mIterator = _mttParameter.begin();
+			#endif
+			for (_uint_t uCounter=0; uCounter<u; uCounter++)
+			{
+				_mIterator++;
+			}
+
+			return &(_mIterator->second);
+		}
+		else
+		{
+			return new TVALUE();
+		}
+	}
+
+	TVALUE* GetData(const _uint_t& u)
+	{
+		if (u < _mttParameter.size())
+		{
+			#ifdef _STD_CPP_11
+				typename std::unordered_map<TNAME, TVALUE>::iterator _mIterator = _mttParameter.begin();
+			#else
+				typename boost::unordered_map<TNAME, TVALUE>::iterator _mIterator = _mttParameter.begin();
 			#endif
 			for (_uint_t uCounter=0; uCounter<u; uCounter++)
 			{
