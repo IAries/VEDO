@@ -18,12 +18,12 @@ public:
 
 	virtual DOShapeType shapetype() const
 	{
-		return NoType;
+		return NoShapeType;
 	}
 
 	virtual DOBehaviorType behavior() const
 	{
-		return NoDOBehaviorType;
+		return NoBehaviorType;
 	}
 
 	virtual DiscreteObject* Create(const DOModel* pdoml, const DOStatus* pdos) const = 0;

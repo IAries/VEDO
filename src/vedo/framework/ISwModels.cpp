@@ -57,6 +57,34 @@ _float_t ISwModels::CriticalDamping(const _float_t& dMa, const _float_t& dMb, co
 	return 2.0 * sqrt(dMe * dKn);
 }
 
+/*
+_float_t ISwModels::EffectiveRadius(const _float_t& fRadiusA, const _float_t& fRadiusB)
+{
+	if (fRadiusA == 0.0)
+	{
+		if (fRadiusB == 0.0)
+		{
+			return 0.0;
+		}
+		else
+		{
+			return fRadiusB;
+		}
+	}
+	else
+	{
+		if (fRadiusB == 0.0)
+		{
+			return fRadiusA;
+		}
+		else
+		{
+			return (fRadiusA * fRadiusB / (fRadiusA + fRadiusB));
+		}
+	}
+}
+*/
+
 std::pair<_float_t, _float_t> ISwModels::CriticalDamping
 	(const _float_t& dMa, const _float_t& dMb, const _float_t& dKn, const _float_t& dKs)
 {

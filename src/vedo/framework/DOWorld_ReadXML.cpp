@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <cmath>
 #include <cstdlib>
 
 typedef vedo::_float_t _float_t;
@@ -77,6 +78,8 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttribu
 {
 	vedo::DOShapeType       st;
 	vedo::DOShapeAttributes sa;
+	vedo::Vector3df         vN, vP0, vP1, vP2;
+	_float_t                f0, f1, f2;
 
 	boost::property_tree::ptree* pt2;
 
@@ -90,6 +93,35 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttribu
 			std::cout
 				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree&)" << std::endl
 				<< "        Note: parameter of \"sphere\" is wrong!!" << std::endl;
+			exit(0);
+		}
+	}
+	else if (pt.get_child_optional("Triangle"))
+	{
+		pt2 = &(pt.get_child("Triangle"));
+		st = vedo::Triangle;
+		//sa.triangle.range   = pt2->get<_float_t>("<xmlattr>.Range"  , 0.0);
+		sa.triangle.point0x = pt2->get<_float_t>("<xmlattr>.Point0X", 0.0);
+		sa.triangle.point0y = pt2->get<_float_t>("<xmlattr>.Point0Y", 0.0);
+		sa.triangle.point0z = pt2->get<_float_t>("<xmlattr>.Point0Z", 0.0);
+		sa.triangle.point1x = pt2->get<_float_t>("<xmlattr>.Point1X", 0.0);
+		sa.triangle.point1y = pt2->get<_float_t>("<xmlattr>.Point1Y", 0.0);
+		sa.triangle.point1z = pt2->get<_float_t>("<xmlattr>.Point1Z", 0.0);
+		sa.triangle.point2x = pt2->get<_float_t>("<xmlattr>.Point2X", 0.0);
+		sa.triangle.point2y = pt2->get<_float_t>("<xmlattr>.Point2Y", 0.0);
+		sa.triangle.point2z = pt2->get<_float_t>("<xmlattr>.Point2Z", 0.0);
+		vP0.set(sa.triangle.point0x, sa.triangle.point0y, sa.triangle.point0z);
+		vP1.set(sa.triangle.point1x, sa.triangle.point1y, sa.triangle.point1z);
+		vP2.set(sa.triangle.point2x, sa.triangle.point2y, sa.triangle.point2z);
+		f0 = (vP1-vP0).length();
+		f1 = (vP2-vP1).length();
+		f2 = (vP0-vP2).length();
+		sa.triangle.range = 0.5 * std::max(std::max(f0, f1), f2);
+		if (sa.triangle.range <= 0.0)
+		{
+			std::cout
+				<< "Error!! Code: DOWorld_ReadXML.cpp: std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttributes(boost::property_tree::ptree*)" << std::endl
+				<< "        Note: parameter of \"Triangle\" is wrong!!" << std::endl;
 			exit(0);
 		}
 	}
@@ -175,7 +207,7 @@ std::pair<vedo::DOShapeType, vedo::DOShapeAttributes> Node2DOShapeTypeAndAttribu
 	}
 	else
 	{
-		st = vedo::NoType;
+		st = vedo::NoShapeType;
 	}
 
 	return std::make_pair(st, sa);
@@ -475,12 +507,13 @@ static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)
 	vedo::Vector3df vOrientationZ    = Node2Vector3d(pt.get_child("OrientationZ"   ));
 	vOrientationX.normalized();
 	vOrientationZ.normalized();
-	if (vOrientationZ.dot(vOrientationX) >= 1.0e-5)
+	if (vOrientationZ.dot(vOrientationX) >= 1.0e-3)
 	{
 		std::cerr
 			<< "Error!! Code: static vedo::DOStatus* Node2DOStatus(boost::property_tree::ptree& pt)" << std::endl
-			<< "        Note: OrientationX and OrientationZ are not orthogonal vector!!"             << std::endl;
-		exit(-1);
+			<< "        Note: OrientationX and OrientationZ are not orthogonal vector!!"             << std::endl
+			<< "              (OrientationZ dot OrientationX = " << vOrientationZ.dot(vOrientationX) << std::endl;
+		//exit(-1);
 	}
 	vedo::Vector3df vAngularVelocity = Node2Vector3d(pt.get_child("AngularVelocity"));
 

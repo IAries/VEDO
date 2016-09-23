@@ -67,6 +67,7 @@
 			<Add option="-D_STD_CPP_11" />
 			<Add option="-D_MS_WINDOWS" />
 			<Add directory="../../src" />
+			<Add directory="C:/usr/boost_1_60_0" />
 		</Compiler>
 		<Linker>
 			<Add option="-r" />

@@ -18,12 +18,12 @@ public:
 
 	virtual DOShapeType slavetype() const
 	{
-		return NoType;
+		return NoShapeType;
 	}
 
 	virtual DOShapeType mastertype() const
 	{
-		return NoType;
+		return NoShapeType;
 	}
 
 	virtual std::string equationtype() const

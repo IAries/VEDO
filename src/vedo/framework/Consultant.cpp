@@ -233,8 +233,10 @@ bool Consultant::NextStep(DOContainer &cDO, IactContainer& cIact)
 {
 	ulRoundCount++;
 	pDOWorld->NextStep();
+
 	if (ISRecord())
 	{
+		CleanUp(cDO, cIact);
 		pDOWorld->UpdateDOStatus(cDO.GetDOStatus());
 		RebuildIactRecordTab(cIact);
 		RecordIDO();

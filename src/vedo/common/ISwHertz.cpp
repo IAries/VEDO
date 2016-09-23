@@ -9,7 +9,7 @@ ISwHertz::ISwHertz(const DiscreteObject* cpdoSlave, const DiscreteObject* cpdoMa
 	ImpactSolver(cpiactml)
 {
 	kn = cpiactml->GetIactMechanism("NormalStiffness");
-	cn = cpiactml->GetIactMechanism("DampingCoefficient");
+	cn = cpiactml->GetIactMechanism("NormalDampingCoefficient");
 }
 
 bool ISwHertz::InitialStep(const ContactDetector *CInfo, DiscreteObject *pdoSlave, DiscreteObject *pdoMaster)

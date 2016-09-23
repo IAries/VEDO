@@ -616,7 +616,8 @@ void SimMediator::WriteInteractionForce
             wrapArr->addArray("FieldAcceleration", 3, fieldForce_vec);
             wrapArr->addArray("ExternalForce", 3, extForce_vec);
             wrapArr->addArray("TotalForce", 3, totalForce_vec);
-            pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
+            //pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename);
+            pConsultant->GetDOWorld()->WriteVTK<DataFieldVTKWriter>(filename, pConsultant->GetIactRecordTab());
         }
     #endif   // _STD_CPP_11
 }

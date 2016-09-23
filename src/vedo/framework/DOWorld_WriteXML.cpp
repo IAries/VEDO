@@ -214,6 +214,21 @@ void DOWorld::WriteXMLPrefix(const std::string filename) const
 					<< " Radius=\"" << (*idoml)->GetShapeAttributes().sphere.radius << "\""
 					<< "/>";
 				break;
+			case Triangle:
+				ofXML
+					<< "<Triangle"
+					<< " Range=\"" << (*idoml)->GetShapeAttributes().triangle.range << "\""
+					<< " Point0X=\"" << (*idoml)->GetShapeAttributes().triangle.point0x << "\""
+					<< " Point0Y=\"" << (*idoml)->GetShapeAttributes().triangle.point0y << "\""
+					<< " Point0Z=\"" << (*idoml)->GetShapeAttributes().triangle.point0z << "\""
+					<< " Point1X=\"" << (*idoml)->GetShapeAttributes().triangle.point1x << "\""
+					<< " Point1Y=\"" << (*idoml)->GetShapeAttributes().triangle.point1y << "\""
+					<< " Point1Z=\"" << (*idoml)->GetShapeAttributes().triangle.point1z << "\""
+					<< " Point2X=\"" << (*idoml)->GetShapeAttributes().triangle.point2x << "\""
+					<< " Point2Y=\"" << (*idoml)->GetShapeAttributes().triangle.point2y << "\""
+					<< " Point2Z=\"" << (*idoml)->GetShapeAttributes().triangle.point2z << "\""
+					<< "/>";
+				break;
 			case QuasiPlate:
 				ofXML
 					<< "<QuasiPlate"

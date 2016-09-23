@@ -22,13 +22,13 @@ typedef enum njrdxf::Color DOShapeColor;
 
 
 #ifdef _STD_CPP_11
-	enum DOShapeType   : _uint_t {NoType, Sphere, Ellipsoid, QuasiCylinder, QuasiPlate, QuasiPlateWithCircularHole, Polyhedra, DMSphere, PolyhedraBRep};
-	enum DOBehaviorType: _uint_t {NoDOBehaviorType, constrained, fixed, mobile, orbital};
-	enum DOScopeType   : _uint_t {NoDOScopeType, global, local};
+	enum DOShapeType   : _uint_t {NoShapeType, Sphere, DMSphere, Ellipsoid, Polyhedra, PolyhedraBRep, QuasiCylinder, QuasiPlate, QuasiPlateWithCircularHole, Triangle};
+	enum DOBehaviorType: _uint_t {NoBehaviorType, constrained, fixed, mobile, orbital};
+	enum DOScopeType   : _uint_t {NoScopeType, global, local};
 #else
-	enum DOShapeType    {NoType, Sphere, Ellipsoid, QuasiCylinder, QuasiPlate, QuasiPlateWithCircularHole, Polyhedra, DMSphere, PolyhedraBRep};
-	enum DOBehaviorType {NoDOBehaviorType, constrained, fixed, mobile, orbital};
-	enum DOScopeType    {NoDOScopeType, global, local};
+	enum DOShapeType    {NoShapeType, DMSphere, Ellipsoid, Polyhedra, PolyhedraBRep, QuasiCylinder, QuasiPlate, QuasiPlateWithCircularHole, Sphere, Triangle};
+	enum DOBehaviorType {NeBehaviorType, constrained, fixed, mobile, orbital};
+	enum DOScopeType    {NoScopeType, global, local};
 #endif   // _STD_CPP_11
 
 
@@ -37,7 +37,7 @@ union DOShapeAttributes
 {
 	struct
 	{
-	} notype;
+	} NoShapeType;
 
 	struct
 	{
@@ -73,6 +73,20 @@ union DOShapeAttributes
 		_float_t ylength;
 		_float_t zlength;
 	} ellipsoid;
+
+	struct
+	{
+		_float_t range;
+		_float_t point0x;
+		_float_t point0y;
+		_float_t point0z;
+		_float_t point1x;
+		_float_t point1y;
+		_float_t point1z;
+		_float_t point2x;
+		_float_t point2y;
+		_float_t point2z;
+	} triangle;
 
 	struct
 	{

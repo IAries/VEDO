@@ -605,6 +605,9 @@ vedo::DOWorld* info(vedo::DOWorld *oWorld)
 			case vedo::Sphere:
 				shape = "Sphere";
 				break;
+			case vedo::Triangle:
+				shape = "Triangle";
+				break;
 			case vedo::QuasiPlate:
 				shape = "QuasiPlate";
 				break;
@@ -740,7 +743,7 @@ vedo::DOWorld* WriteDOWorld (std::string filename, vedo::DOWorld* pw, vedo::Iact
 	else if (aries::CheckSubName(filename, ".vtu"))
 	{
 		#ifdef _STD_CPP_11
-			pw->WriteVTK<vedo::NullExternalFieldVTKWriter>(filename.c_str());
+			pw->WriteVTK<vedo::NullExternalFieldVTKWriter>(filename.c_str(), irtp);
 		#endif   // _STD_CPP_11
 	}
 	else if (aries::CheckSubName(filename, "_h.dxf"))

@@ -1,59 +1,59 @@
 # Switch of environment and compiler
 
-ENVIRONMENT_MODE = MS-Win64-Adm-GCC
+ENVIRONMENT_MODE = MS-Win${CPP_MODE}-Adm-GCC
 # (Rule of "ENVIRONMENT_MODE": ORG-Machine/OS-User-Compiler)
 
 # (Rule of "CXX_MODE": ORG-Machine/OS-Compiler)
 ifeq ($(ENVIRONMENT_MODE), MacOS-root-GCC)
-	PREFIX   = ${HOME}/vedo/
+    PREFIX   = ${HOME}/vedo/
     MAKE     = gmake
     CXX_MODE = GCC
     PLATFORM = MAC_OS
 else
 ifeq ($(ENVIRONMENT_MODE), MS-Win64-Adm-GCC)
-	PREFIX   = /opt/vedo/vedo/
+    PREFIX   = /opt/vedo/vedo/
     MAKE     = /bin/make.exe
     CXX_MODE = MS-Win64-Adm-GCC
     PLATFORM = MS_WINDOWS
 else
 ifeq ($(ENVIRONMENT_MODE), MS-Win32-Adm-GCC)
-	PREFIX   = /opt/vedo/vedo/
+    PREFIX   = /opt/vedo/vedo/
     MAKE     = /bin/make.exe
     CXX_MODE = MS-Win32-Adm-GCC
     PLATFORM = MS_WINDOWS
 else
 ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-Aries-Intel)
-	PREFIX   = /pkg/mech/vedo/
+    PREFIX   = /pkg/mech/vedo/
     MAKE     = /usr/bin/gmake
     CXX_MODE = NCHC-ALPS-Intel
     PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-User-Intel)
-	PREFIX   = ${HOME}/usr/local/vedo/
+    PREFIX   = ${HOME}/usr/local/vedo/
     MAKE     = /usr/bin/gmake
     CXX_MODE = NCHC-ALPS-Intel
     PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-Aries-GCC)
-	PREFIX   = /pkg/mech/vedo/
+    PREFIX   = /pkg/mech/vedo/
     MAKE     = /usr/bin/gmake
     CXX_MODE = NCHC-ALPS-GCC
     PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), NCHC-ALPS-User-GCC)
-	PREFIX   = ${HOME}/usr/local/vedo/
+    PREFIX   = ${HOME}/usr/local/vedo/
     MAKE     = /usr/bin/gmake
     CXX_MODE = NCHC-ALPS-GCC
     PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), CAECE-Cluster-User-Intel)
-	PREFIX   = ${HOME}/usr/local/vedo/
+    PREFIX   = ${HOME}/usr/local/vedo/
     MAKE     = /usr/bin/gmake
     CXX_MODE = CAECE-Cluster-Intel
     PLATFORM = UNIX_LIKE
 else
 ifeq ($(ENVIRONMENT_MODE), CAECE-Cluster-User-GCC)
-	PREFIX   = ${HOME}/usr/local/vedo/
+    PREFIX   = ${HOME}/usr/local/vedo/
     MAKE     = /usr/bin/gmake
     CXX_MODE = CAECE-Cluster-GCC
     PLATFORM = UNIX_LIKE
@@ -91,14 +91,15 @@ PROJECT_LIB         = ${PREFIX}lib/${CXX_MODE}/
 # Compiler
 # (ORG-Machine-User-Compiler)
 ifeq ($(CXX_MODE), MS-Win64-Adm-GCC)
-    CXX_ROOT      = /mingw64/
-    CXX_INC       = ${CXX_ROOT}include/
+    CXX_ROOT      = /tdmgcc64/
+    CXX_INC       = /tdmgcc64/x86_64-w64-mingw32/include/
     CXX_LIB       = ${CXX_ROOT}lib/gcc/x86_64-w64-mingw32/5.1.0/
     CXX           = ${CXX_ROOT}bin/g++
     CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
     CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
     GCC_FLAGd     = -Wall
     AR            = ${CXX_ROOT}bin/ar.exe
+    BOOST_INC     = /c/usr/boost_1_60_0/
     MPI_ROOT      = /c/usr/mpich2-64/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/
@@ -106,14 +107,15 @@ ifeq ($(CXX_MODE), MS-Win64-Adm-GCC)
     mCXX          = ${CXX}
 else
 ifeq ($(CXX_MODE), MS-Win32-Adm-GCC)
-    CXX_ROOT      = /mingw32/
+    CXX_ROOT      = /tdmgcc32/
     CXX_INC       = ${CXX_ROOT}include/
-    CXX_LIB       = ${CXX_ROOT}lib/gcc/i686-w64-mingw32/4.9.2/
+    CXX_LIB       = ${CXX_ROOT}lib/gcc/mingw32/5.1.0/
     CXX           = ${CXX_ROOT}bin/g++
     CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
     CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
     GCC_FLAGd     = -Wall
     AR            = ${CXX_ROOT}bin/ar.exe
+    BOOST_INC     = /c/usr/boost_1_60_0/
     MPI_ROOT      = /c/usr/mpich2-32/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/
@@ -121,6 +123,7 @@ ifeq ($(CXX_MODE), MS-Win32-Adm-GCC)
     mCXX          = ${CXX}
 else
 ifeq ($(CXX_MODE), NCHC-ALPS-Intel)
+    #CXX_ROOT      = /pkg/intel/12/
     CXX_ROOT      = /pkg/intel/2015/
     CXX_INC       = ${CXX_ROOT}include/
     CXX_LIB       = ${CXX_ROOT}lib/intel64/
@@ -128,6 +131,8 @@ ifeq ($(CXX_MODE), NCHC-ALPS-Intel)
     CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -limf
     CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
     AR            = /usr/bin/ar
+    BOOST_INC     = /c/usr/boost_1_60_0/
+    #MPI_ROOT      = /pkg/mpi/intel/12/mvapich2-1.8/
     MPI_ROOT      = /pkg/mpi/intel/2013/mvapich2/2.0/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/
@@ -143,6 +148,7 @@ ifeq ($(CXX_MODE), NCHC-ALPS-GCC)
     CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
     GCC_FLAGd     = -Wall
     AR            = /usr/bin/ar
+    BOOST_INC     = /c/usr/boost_1_60_0/
     MPI_ROOT      = /opt/platform_mpi/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/linux_amd64/
@@ -156,6 +162,7 @@ ifeq ($(CXX_MODE), CAECE-Cluster-Intel)
     CXX           = ${CXX_ROOT}bin/intel64/icpc
     CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -limf
     AR            = /usr/bin/ar
+    BOOST_INC     = /c/usr/boost_1_60_0/
     MPI_ROOT      = /opt/openmpi/1.6.5/intel/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/
@@ -163,15 +170,17 @@ ifeq ($(CXX_MODE), CAECE-Cluster-Intel)
     mCXX          = ${MPI_ROOT}bin/mpicxx
 else
 ifeq ($(CXX_MODE), CAECE-Cluster-GCC)
-    CXX_ROOT      = /usr/local/
-    CXX_INC       = ${CXX_ROOT}include/c++/4.8.2/
-    CXX_LIB       = ${CXX_ROOT}lib/gcc/x86_64-unknown-linux-gnu/4.8.2/
-    CXX           = ${CXX_ROOT}bin/gcc
-    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+    CXX_ROOT      = /opt/gcc/5.1.0/
+    CXX_INC       = ${CXX_ROOT}include
+    CXX_LIB       = ${CXX_ROOT}lib/
+    CXX           = ${CXX_ROOT}bin/g++
+    #CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -static -static-libgcc -static-libstdc++ -lstdc++
+    CXX_LNK_FLAG  = -L${PROJECT_LIB} -L${CXX_LIB} -fexceptions -lgcc
     CXX11_FLAG    = -D_STD_CPP_11 -std=c++11
     GCC_FLAGd     = -Wall
     AR            = /usr/bin/ar
-    MPI_ROOT      = /opt/openmpi/1.6.5/gnu482/
+    BOOST_INC     = ${HOME}/usr/local/boost_1_60_0/
+    MPI_ROOT      = /opt/openmpi/1.6.5/gnu510/
     MPI_INC       = ${MPI_ROOT}include/
     MPI_LIB       = ${MPI_ROOT}lib/
     MPI_LNK_FLAG  = -L${MPI_LIB} -lvt-mpi
@@ -185,8 +194,8 @@ endif
 
 
 
-CXX_FLAG   = -D_${PLATFORM} -D_INT${INTEGER_BITS} -D_FLOAT${FLOAT_BITS} ${OPTIMIZE_FLAG}  -I${PREFIX}src/ -I${CXX_INC} ${CXX11_FLAG}
-CXX_FLAGd  = -D_${PLATFORM} -D_INT${INTEGER_BITS} -D_FLOAT${FLOAT_BITS} ${OPTIMIZE_FLAGd} -I${PREFIX}src/ -I${CXX_INC} ${CXX11_FLAG} ${GCC_FLAGd}
+CXX_FLAG   = -D_${PLATFORM} -D_INT${INTEGER_BITS} -D_FLOAT${FLOAT_BITS} ${OPTIMIZE_FLAG}  -I${PREFIX}src/ -I${CXX_INC} -I${BOOST_INC} ${CXX11_FLAG}
+CXX_FLAGd  = -D_${PLATFORM} -D_INT${INTEGER_BITS} -D_FLOAT${FLOAT_BITS} ${OPTIMIZE_FLAGd} -I${PREFIX}src/ -I${CXX_INC} -I${BOOST_INC} ${CXX11_FLAG} ${GCC_FLAGd}
 
 LNK        = ${CXX}
 LNK_FLAG   = ${CXX_LNK_FLAG} -lvedo-common       -lvedo-framework       -lnjr       -laries-utility

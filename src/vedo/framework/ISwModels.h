@@ -18,6 +18,8 @@ public:
 
 	_float_t CriticalDamping(const _float_t& dMa, const _float_t& dMb, const _float_t& dKn);
 
+	//_float_t EffectiveRadius(const _float_t& fRa, const _float_t& fRb);
+
 	std::pair<_float_t, _float_t> CriticalDamping
 		(const _float_t& dMa, const _float_t& dMb, const _float_t& dKn, const _float_t& dKs);
 

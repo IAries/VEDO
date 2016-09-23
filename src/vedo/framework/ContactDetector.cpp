@@ -10,8 +10,8 @@ ContactDetector::ContactDetector()
 	cInfo.dOverlapArea     = 0.0;
 	cInfo.bActive          = true;
 	cInfo.bUnBalance       = false;
-	cInfo.uShapeTypeMaster = DOShapeType::NoType;
-	cInfo.uShapeTypeSlave  = DOShapeType::NoType;
+	cInfo.uShapeTypeMaster = DOShapeType::NoShapeType;
+	cInfo.uShapeTypeSlave  = DOShapeType::NoShapeType;
 	pBC                    = 0;
 
 }

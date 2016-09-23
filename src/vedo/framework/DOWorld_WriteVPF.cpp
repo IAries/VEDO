@@ -252,10 +252,11 @@ void DOWorld::WriteVPF(const std::string filename) const
 					<< (*idos)->GetOrientationZ().z() << std::endl;
 				break;
 			default:
-				std::cerr
-					<< "Error!! Code: DOWorld::WriteVPF(const char*)" << std::endl
-					<< "        Note: Unknown VPF shape"              << std::endl;
-				exit(-1);
+				break;
+				//std::cout
+				//	<< "Error!! Code: DOWorld::WriteVPF(const char*)" << std::endl
+				//	<< "        Note: Unknown VPF shape"              << std::endl;
+				//exit(-1);
 		}
 	}
 	ofVPF << "</DiscreteObject>" << std::endl;

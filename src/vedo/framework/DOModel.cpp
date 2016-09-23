@@ -28,6 +28,21 @@ void DOModel::Analysis()
 			dmmi                     = 0.4 * dMass * r * r;
 			vMassMomentInertia       = Vector3df(dmmi, dmmi, dmmi);
 			break;
+		case Triangle:
+			if (eScope == local)
+			{
+				dRange               = uAttributes.triangle.range;
+			}
+			else
+			{
+				dRange               = 0.0;
+			}
+			dVolume                  = 0.0;
+			dMass                    = 0.0;
+			dSudoMass                = 0.0;
+			dmmi                     = 0.0;
+			vMassMomentInertia       = Vector3df();
+			break;
 		case Ellipsoid:
 			x                        = uAttributes.ellipsoid.xlength;
 			y                        = uAttributes.ellipsoid.ylength;
@@ -365,6 +380,14 @@ _float_t DOModel::CrossAreaToSurface
 				return (r * r - dSphere2Surface * dSphere2Surface) * aries::math::_PI;
 			}
 			break;
+		case Triangle:
+/******************************************************************************
+ * Aries' Debug (2016/05/23)
+ *
+ *    Triangle, need to modify.
+ ******************************************************************************/
+			return 0.0;
+			break;
 		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2007/08/11)
@@ -519,6 +542,14 @@ std::pair<_float_t, Vector3df> DOModel::VolumeInsideBoundary
 				return std::make_pair(dVolumeInsideBoundary, Vector3df(dMassCenterX, dMassCenterY, dMassCenterZ));
 			}
 			break;
+		case Triangle:
+/******************************************************************************
+ * Aries' Debug (2016/05/23)
+ *
+ *    Triangle, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, Vector3df());
+			break;
 		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
@@ -640,6 +671,14 @@ std::pair<_float_t, Vector3df> DOModel::ProjectedAreaOnXYPlane
 				}
 				return std::make_pair(dProjectedArea, Vector3df(dCentroidX, dCentroidY, vP.z()));
 			}
+			break;
+		case Triangle:
+/******************************************************************************
+ * Aries' Debug (2016/05/23)
+ *
+ *    Triangle, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case Ellipsoid:
 /******************************************************************************
@@ -764,6 +803,14 @@ std::pair<_float_t, Vector3df> DOModel::ProjectedAreaOnYZPlane
 				return std::make_pair(dProjectedArea, Vector3df(vP.x(), dCentroidY, dCentroidZ));
 			}
 			break;
+		case Triangle:
+/******************************************************************************
+ * Aries' Debug (2016/05/23)
+ *
+ *    Triangle, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, Vector3df());
+			break;
 		case Ellipsoid:
 /******************************************************************************
  * Aries' Debug (2008/08/20)
@@ -886,6 +933,14 @@ std::pair<_float_t, Vector3df> DOModel::ProjectedAreaOnXZPlane
 				}
 				return std::make_pair(dProjectedArea, Vector3df(dCentroidX, vP.y(), dCentroidZ));
 			}
+			break;
+		case Triangle:
+/******************************************************************************
+ * Aries' Debug (2016/05/23)
+ *
+ *    Triangle, need to modify.
+ ******************************************************************************/
+			return std::make_pair(0.0, Vector3df());
 			break;
 		case Ellipsoid:
 /******************************************************************************

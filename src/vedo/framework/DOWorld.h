@@ -152,6 +152,9 @@ public:
     #ifdef _STD_CPP_11
         template<typename ExtFieldWriterT=NullExternalFieldVTKWriter>
         void WriteVTK (const std::string filename) const;
+
+        template<typename ExtFieldWriterT=NullExternalFieldVTKWriter>
+        void WriteVTK (const std::string filename, const IactRecordTab*) const;
     #endif   // _STD_CPP_11
 
 	inline void SetBoundary(const Boundary pBC)

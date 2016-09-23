@@ -76,14 +76,15 @@ _float_t IactModel::GetIactMechanism(std::string Name) const
 		}
 	}
 
-	std::cout
-		<< "Interaction between"
+	std::cerr
+		<< "Interaction between "
 		<< sMasterDOGroup.c_str()
 		<< " and "
 		<< sSlaveDOGroup.c_str()
 		<< " has no such interaction mechanism -- "
 		<< Name.c_str()
 		<< std::endl;
+	std::exit(0);
 
 	return 0.0;
 }
